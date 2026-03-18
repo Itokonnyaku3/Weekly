@@ -921,7 +921,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:53:15.943Z",
+  "savedAt": "2026-03-18T23:53:40.990Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1172,7 +1172,7 @@
         "id": "mmv5ynrmb4q",
         "text": "０９００ 店舗インフラ改善会議",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "html": "０９００ 店舗インフラ改善会議"
