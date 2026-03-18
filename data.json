@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:19:46.157Z",
+  "savedAt": "2026-03-18T23:19:54.257Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1202,8 +1202,17 @@
       },
       {
         "id": "mmwnxv9y0yh",
-        "text": "１４００ 週次 ",
-        "html": "１４００ 週次&nbsp;",
+        "text": "１４００ 週次 全体",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwnyt1tfqm",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
