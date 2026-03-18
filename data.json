@@ -888,7 +888,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T22:32:58.684Z",
+  "savedAt": "2026-03-18T22:33:04.585Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1007,12 +1007,21 @@
       },
       {
         "id": "mmvf1o8gj98",
-        "text": "\n 上限・下限温度をお教えください。 センサー名称\n\n\n現在惣菜作業場は4台設置されていますので、以下赤字のようにしたいと思いますがご希望の文言がありましたらお知らせください。\n 1128695384 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_寿司（冷蔵）  \n\n1375315150  大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_弁当（冷蔵）  \n\n1634886200 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_弁当（冷凍）  \n\n2024216472 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_天ぷら（冷蔵）\n\nXXXXXXXXX 大間々店          フロア1 惣菜     惣菜_作業場_クレープ（冷蔵）",
+        "text": "\n 上限・下限温度をお教えください。 センサー名称\n\n\n現在惣菜作業場は4台設置されていますので、以下赤字のようにしたいと思いますがご希望の文言がありましたらお知らせください。\n ",
         "indent": 7,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "\n 上限・下限温度をお教えください。<br>&nbsp;センサー名称\n\n\n現在惣菜作業場は4台設置されていますので、以下赤字のようにしたいと思いますがご希望の文言がありましたらお知らせください。\n&nbsp;1128695384 大間々店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\nフロア1 惣菜&nbsp;&nbsp;&nbsp;&nbsp;\n作業場&nbsp; 惣菜_作業場_寿司（冷蔵）&nbsp; \n\n1375315150&nbsp; 大間々店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\nフロア1 惣菜&nbsp;&nbsp;&nbsp;&nbsp;\n作業場&nbsp; 惣菜_作業場_弁当（冷蔵）&nbsp; \n\n1634886200 大間々店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\nフロア1 惣菜&nbsp;&nbsp;&nbsp;&nbsp;\n作業場&nbsp; 惣菜_作業場_弁当（冷凍）&nbsp; \n\n2024216472 大間々店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\nフロア1 惣菜&nbsp;&nbsp;&nbsp;&nbsp;\n作業場&nbsp; 惣菜_作業場_天ぷら（冷蔵）\n\nXXXXXXXXX 大間々店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; フロア1 惣菜&nbsp;&nbsp;&nbsp;&nbsp; 惣菜_作業場_クレープ（冷蔵）"
+        "html": ""
+      },
+      {
+        "id": "mmwmal3doe9",
+        "text": "1128695384 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_寿司（冷蔵）  \n\n1375315150  大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_弁当（冷蔵）  \n\n1634886200 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_弁当（冷凍）  \n\n2024216472 大間々店         \nフロア1 惣菜    \n作業場  惣菜_作業場_天ぷら（冷蔵）\n\nXXXXXXXXX 大間々店          フロア1 惣菜     惣菜_作業場_クレープ（冷蔵）",
+        "html": "",
+        "indent": 7,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mmvqvtx42o7",
