@@ -278,15 +278,6 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "OTの高温対応どうするか考える",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmw2cjz5hz7",
-            "collapsed": false
-          },
-          {
             "type": "log",
             "text": "小泉成器請求書 1,802,000円",
             "note": "3月9日付\nJ9139651 No.040678",
@@ -304,7 +295,7 @@
             "images": [],
             "today": false,
             "id": "emmw2cjz52ua",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -329,6 +320,16 @@
             "priority": "",
             "tags": [],
             "id": "emmw2cjz5mir",
+            "collapsed": false,
+            "parentId": "emmw2cjz52ua"
+          },
+          {
+            "type": "todo",
+            "text": "OTの高温対応どうするか考える",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emmw2cjz5hz7",
             "collapsed": false,
             "parentId": "emmw2cjz52ua"
           }
@@ -943,7 +944,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:36:49.410Z",
+  "savedAt": "2026-03-18T14:36:53.278Z",
   "dailyOutline": {
     "2026-3-18": [
       {
