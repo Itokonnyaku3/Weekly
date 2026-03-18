@@ -640,7 +640,11 @@
             "text": "サマリ",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmvt8msa9yh"
+            }
           }
         ]
       },
@@ -824,7 +828,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T12:50:08.250Z",
+  "savedAt": "2026-03-18T12:50:19.585Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1031,7 +1035,9 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "8:2026-3-16:2",
+        "linkedEntryText": "サマリ"
       },
       {
         "id": "mmvz9wz08d8",
