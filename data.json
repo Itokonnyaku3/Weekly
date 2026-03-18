@@ -118,11 +118,13 @@
           {
             "type": "log",
             "text": "リーダー会",
-            "note": "https://workflowy.com/#/e2e4884571c9",
-            "url": "",
+            "note": "",
+            "url": "https://workflowy.com/#/e2e4884571c9",
             "images": [],
             "today": false,
-            "id": "emmw2zro2tmy"
+            "id": "emmw2zro2tmy",
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-23": [
@@ -888,7 +890,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T22:35:15.669Z",
+  "savedAt": "2026-03-18T22:35:46.426Z",
   "dailyOutline": {
     "2026-3-18": [
       {
