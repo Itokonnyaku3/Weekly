@@ -28,33 +28,6 @@
             "id": "emmw2zro2wg3"
           },
           {
-            "type": "log",
-            "text": "グループの30期の目標",
-            "note": "グループとしての取組",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2ghi"
-          },
-          {
-            "type": "todo",
-            "text": "ソラカメ管理者パスワード",
-            "note": "テスト　あ",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmv5yjm63si"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2aqx",
-            "parentId": "emmw2zro2ghi"
-          },
-          {
             "type": "todo",
             "text": "30期案件整理",
             "note": "色々散らばっている案件情報を一元管理する",
@@ -76,6 +49,34 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro29eq"
+          },
+          {
+            "type": "log",
+            "text": "グループの30期の目標",
+            "note": "グループとしての取組",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2ghi",
+            "collapsed": true
+          },
+          {
+            "type": "todo",
+            "text": "ソラカメ管理者パスワード",
+            "note": "テスト　あ",
+            "url": "",
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmv5yjm63si"
+            },
+            "today": false,
+            "priority": "mid",
+            "tags": [],
+            "id": "emmw2zro2aqx",
+            "parentId": "emmw2zro2ghi"
           },
           {
             "type": "todo",
@@ -888,7 +889,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:10:41.152Z",
+  "savedAt": "2026-03-18T14:10:43.663Z",
   "dailyOutline": {
     "2026-3-18": [
       {
