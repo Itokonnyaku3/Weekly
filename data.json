@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:17:37.239Z",
+  "savedAt": "2026-03-18T23:17:49.939Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1148,8 +1148,8 @@
       },
       {
         "id": "mmwnvhmoozy",
-        "text": "0900 SASE導入に伴う",
-        "html": "0900 SASE導入に伴う",
+        "text": "0900 SASE導入に伴う非機能要件レビュー",
+        "html": "0900 SASE導入に伴う非機能要件レビュー",
         "indent": 0,
         "bold": false,
         "color": "",
