@@ -62,8 +62,7 @@
             "today": false,
             "priority": "mid",
             "tags": [],
-            "id": "emmw2zro2aqx",
-            "parentId": "emmw2zro2ghi"
+            "id": "emmw2zro2aqx"
           },
           {
             "type": "todo",
@@ -889,7 +888,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T22:35:01.079Z",
+  "savedAt": "2026-03-18T22:35:15.669Z",
   "dailyOutline": {
     "2026-3-18": [
       {
