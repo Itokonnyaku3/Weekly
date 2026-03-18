@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:20:05.726Z",
+  "savedAt": "2026-03-18T23:20:08.748Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1211,8 +1211,8 @@
       },
       {
         "id": "mmwnyt1tfqm",
-        "text": "1430 ",
-        "html": "1430&nbsp;",
+        "text": "1430 週次 ",
+        "html": "1430 週次&nbsp;",
         "indent": 0,
         "bold": false,
         "color": "",
