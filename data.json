@@ -894,7 +894,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:16:28.351Z",
+  "savedAt": "2026-03-18T14:16:31.397Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -940,23 +940,6 @@
         "text": "列1列2aaaaaaaaaaaaaa列3あｓだｓｄあｓだｓあｓだｓだあｓだｓだあさｓだあｓだｓだaa",
         "html": "<table><tbody><tr><th>列1</th><th>列2aaaaaaaa</th><th>aaaaaa列3</th></tr><tr><td>あｓだｓｄ</td><td>あｓだｓ</td><td>あｓだｓだ</td></tr><tr><td>あｓだｓだ</td><td>あさｓだ</td><td>あｓだｓだ</td></tr></tbody></table>aa",
         "indent": 3,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmv5zfizh6p",
-        "text": "あaaaa",
-        "indent": 4,
-        "bold": false,
-        "color": "#3498db",
-        "collapsed": false,
-        "html": "あaaaa"
-      },
-      {
-        "id": "mmvaxcvl6ve",
-        "text": "あああああ",
-        "indent": 5,
         "bold": false,
         "color": "",
         "collapsed": false
