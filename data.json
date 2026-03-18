@@ -260,15 +260,6 @@
           },
           {
             "type": "log",
-            "text": "小泉成器請求書 1,802,000円",
-            "note": "3月9日付\nJ9139651 No.040678",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2h7j"
-          },
-          {
-            "type": "log",
             "text": "その他メモ",
             "note": "太田丸山店…説明会には参加したがよくわからなかったのかデジタル推進本部全体にメールで問合せ。",
             "url": "",
@@ -284,6 +275,15 @@
             "images": [],
             "id": "emmw2zro21cn",
             "parentId": "emmw2zro2118"
+          },
+          {
+            "type": "log",
+            "text": "小泉成器請求書 1,802,000円",
+            "note": "3月9日付\nJ9139651 No.040678",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2h7j"
           },
           {
             "type": "todo",
@@ -305,8 +305,7 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2zpo",
-            "parentId": "emmw2zro2yfv"
+            "id": "emmw2zro2zpo"
           }
         ],
         "2026-3-23": [
@@ -891,7 +890,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:12:48.541Z",
+  "savedAt": "2026-03-18T14:13:10.397Z",
   "dailyOutline": {
     "2026-3-18": [
       {
