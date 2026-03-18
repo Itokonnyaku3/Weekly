@@ -828,7 +828,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T12:53:06.551Z",
+  "savedAt": "2026-03-18T12:53:11.571Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1069,9 +1069,9 @@
       {
         "id": "mmw1jmq2u0e",
         "text": "レジ",
-        "html": "",
+        "html": "レジ",
         "indent": 2,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -1105,9 +1105,9 @@
       {
         "id": "mmw1jzuuq43",
         "text": "モニタ",
-        "html": "",
+        "html": "モニタ",
         "indent": 2,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
