@@ -39,7 +39,8 @@
             "priority": "",
             "tags": [],
             "id": "emmw2cjz5f7i",
-            "collapsed": false
+            "collapsed": false,
+            "parentId": "emmw2cjz5ffb"
           },
           {
             "type": "log",
@@ -942,7 +943,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:18:50.081Z",
+  "savedAt": "2026-03-18T13:19:31.790Z",
   "dailyOutline": {
     "2026-3-18": [
       {
