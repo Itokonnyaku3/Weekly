@@ -57,7 +57,11 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro29eq"
+            "id": "emmw2zro29eq",
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmv5yjm63si"
+            }
           },
           {
             "type": "todo",
@@ -890,7 +894,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:14:56.811Z",
+  "savedAt": "2026-03-18T14:15:41.928Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -901,7 +905,8 @@
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "0:2026-3-16:3",
-        "html": "テスト　ああ<br>あああああ"
+        "html": "テスト　ああ<br>あああああ",
+        "linkedEntryText": "評価確認・承認"
       },
       {
         "id": "mmvqs9awegx",
