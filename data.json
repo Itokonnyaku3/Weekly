@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:18:40.442Z",
+  "savedAt": "2026-03-18T23:18:43.277Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1184,8 +1184,8 @@
       },
       {
         "id": "mmwnwu5ok31",
-        "text": "１３００ FHESL",
-        "html": "１３００ FHESL",
+        "text": "１３００ FHESL ",
+        "html": "１３００ FHESL&nbsp;",
         "indent": 0,
         "bold": false,
         "color": "",
