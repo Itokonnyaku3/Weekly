@@ -315,7 +315,8 @@
             "images": [],
             "today": false,
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": true
           }
         ],
         "2026-3-23": [
@@ -900,7 +901,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:38:25.683Z",
+  "savedAt": "2026-03-18T23:38:47.803Z",
   "dailyOutline": {
     "2026-3-18": [
       {
