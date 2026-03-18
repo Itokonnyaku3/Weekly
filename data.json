@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:18:59.259Z",
+  "savedAt": "2026-03-18T23:19:10.486Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1194,7 +1194,16 @@
       {
         "id": "mmwnxdk1ap7",
         "text": "１３４０ 根岸さん週次",
-        "html": "１３４０ 根岸さん週次",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwnxv9y0yh",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
