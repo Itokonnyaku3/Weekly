@@ -677,7 +677,8 @@
     {
       "name": "店舗DXサポート",
       "entries": {
-        "2026-3-16": [
+        "2026-3-16": [],
+        "2026-3-23": [
           {
             "type": "todo",
             "text": "眞下さんの録画再度確認",
@@ -921,7 +922,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:54:00.062Z",
+  "savedAt": "2026-03-18T23:54:38.405Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1181,7 +1182,7 @@
         "id": "mmwp6nlqetj",
         "text": "",
         "html": "",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
