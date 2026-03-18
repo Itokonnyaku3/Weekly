@@ -105,20 +105,6 @@
           },
           {
             "type": "todo",
-            "text": "出張申請処理！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": true,
-            "id": "emmw2cjz5n1n",
-            "priority": "",
-            "tags": [],
-            "parentId": "emmw2cjz5ffb",
-            "collapsed": false,
-            "done": false
-          },
-          {
-            "type": "todo",
             "text": "山下さん展示会FBもらう",
             "note": "",
             "url": "",
@@ -137,6 +123,20 @@
             "today": false,
             "id": "emmw2cjz5k40",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "出張申請処理！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": true,
+            "id": "emmw2cjz5n1n",
+            "priority": "",
+            "tags": [],
+            "parentId": "emmw2cjz5ffb",
+            "collapsed": false,
+            "done": false
           }
         ],
         "2026-3-23": [
@@ -942,7 +942,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:18:46.504Z",
+  "savedAt": "2026-03-18T13:18:50.081Z",
   "dailyOutline": {
     "2026-3-18": [
       {
