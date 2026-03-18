@@ -269,21 +269,21 @@
           },
           {
             "type": "todo",
-            "text": "OTの高温対応どうするか考える",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmw2cjz5hz7",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "[03.18[ 富士通に確認",
             "note": "ひろせとみなみ、どこにつけてどこにつけていないかの資料",
             "url": "",
             "images": [],
             "done": true,
             "id": "emmw2cjz5hio",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "OTの高温対応どうするか考える",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emmw2cjz5hz7",
             "collapsed": false
           },
           {
@@ -329,7 +329,8 @@
             "priority": "",
             "tags": [],
             "id": "emmw2cjz5mir",
-            "collapsed": false
+            "collapsed": false,
+            "parentId": "emmw2cjz52ua"
           }
         ],
         "2026-3-23": [
@@ -942,7 +943,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:36:44.401Z",
+  "savedAt": "2026-03-18T14:36:49.410Z",
   "dailyOutline": {
     "2026-3-18": [
       {
