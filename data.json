@@ -828,7 +828,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T12:54:03.302Z",
+  "savedAt": "2026-03-18T12:54:08.126Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1046,7 +1046,7 @@
         "indent": 1,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmw1ii1m84u",
@@ -1109,7 +1109,7 @@
         "indent": 2,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmw1k7f1yqc",
@@ -1136,7 +1136,7 @@
         "indent": 2,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmw1lpibaw0",
