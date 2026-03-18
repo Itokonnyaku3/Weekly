@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:17:14.959Z",
+  "savedAt": "2026-03-18T23:17:19.488Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1139,12 +1139,21 @@
     "2026-3-19": [
       {
         "id": "mmv5ynrmb4q",
-        "text": "０９００　",
+        "text": "０９００　店舗インフラ改善会議",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "０９００　"
+        "html": ""
+      },
+      {
+        "id": "mmwnvhmoozy",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mmwmcqmhc6x",
