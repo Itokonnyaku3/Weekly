@@ -894,7 +894,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:16:35.041Z",
+  "savedAt": "2026-03-18T14:16:45.002Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -955,12 +955,12 @@
       },
       {
         "id": "mmvqvgz3814",
-        "text": "間々店センサー送付",
-        "html": "間々店センサー送付",
+        "text": "",
+        "html": "<br>",
         "indent": 5,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmvf1jhcu4t",
