@@ -292,6 +292,15 @@
             "id": "emmw2zro2yfv"
           },
           {
+            "type": "log",
+            "text": "小泉成器請求書 1,802,000円",
+            "note": "3月9日付\nJ9139651 No.040678",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2h7j"
+          },
+          {
             "type": "todo",
             "text": "トラブルシュートガイドを確認",
             "note": "",
@@ -301,15 +310,6 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro2zpo"
-          },
-          {
-            "type": "log",
-            "text": "小泉成器請求書 1,802,000円",
-            "note": "3月9日付\nJ9139651 No.040678",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2h7j"
           }
         ],
         "2026-3-23": [
@@ -894,7 +894,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:19:40.424Z",
+  "savedAt": "2026-03-18T14:22:12.627Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -991,6 +991,15 @@
       },
       {
         "id": "mmw4o2dkysd",
+        "text": "",
+        "html": "",
+        "indent": 8,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmw4o33tgoo",
         "text": "",
         "html": "",
         "indent": 8,
