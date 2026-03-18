@@ -828,7 +828,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T12:50:35.334Z",
+  "savedAt": "2026-03-18T12:51:21.946Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1041,6 +1041,15 @@
       },
       {
         "id": "mmw1hhnk37q",
+        "text": "費用",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmw1ii1m84u",
         "text": "",
         "html": "",
         "indent": 1,
