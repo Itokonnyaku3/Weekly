@@ -55,6 +55,18 @@
             "done": false
           },
           {
+            "type": "log",
+            "text": "グループの30期の目標",
+            "note": "グループとしての取組",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2cjz53pb",
+            "collapsed": false
+          },
+          {
             "type": "todo",
             "text": "勤怠締め確認",
             "note": "",
@@ -76,19 +88,6 @@
             "priority": "",
             "tags": [],
             "id": "emmw2cjz5wuw",
-            "collapsed": false,
-            "parentId": "emmw2cjz5mo0"
-          },
-          {
-            "type": "log",
-            "text": "グループの30期の目標",
-            "note": "グループとしての取組",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2cjz53pb",
             "collapsed": false
           },
           {
@@ -942,7 +941,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:36:19.388Z",
+  "savedAt": "2026-03-18T14:36:22.101Z",
   "dailyOutline": {
     "2026-3-18": [
       {
