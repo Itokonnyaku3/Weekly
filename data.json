@@ -921,7 +921,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:53:49.254Z",
+  "savedAt": "2026-03-18T23:53:51.976Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1198,9 +1198,9 @@
       {
         "id": "mmwnwbq3pd6",
         "text": "1100 BGSデバイスサービス管理部定例",
-        "html": "",
+        "html": "1100 BGSデバイスサービス管理部定例",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -1209,16 +1209,16 @@
         "text": "１１３０ 週次報告 山下",
         "html": "１１３０ 週次報告 山下",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mmwnwu5ok31",
         "text": "１３００ FHESL 総合テスト検討",
-        "html": "",
+        "html": "１３００ FHESL 総合テスト検討",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -1227,25 +1227,25 @@
         "text": "１３４０ 週次 根岸",
         "html": "１３４０ 週次 根岸",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mmwnxv9y0yh",
         "text": "１４００ 週次 全体",
-        "html": "",
+        "html": "１４００ 週次 全体",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mmwnyt1tfqm",
         "text": "1430 週次 久保田",
-        "html": "",
+        "html": "1430 週次 久保田",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
