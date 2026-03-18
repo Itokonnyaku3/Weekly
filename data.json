@@ -39,7 +39,7 @@
             "priority": "",
             "tags": [],
             "id": "emmw2cjz5f7i",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -51,7 +51,6 @@
             "id": "emmw2cjz5n1n",
             "priority": "",
             "tags": [],
-            "parentId": "emmw2cjz5f7i",
             "collapsed": false,
             "done": false
           },
@@ -942,7 +941,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:27:14.479Z",
+  "savedAt": "2026-03-18T13:27:18.514Z",
   "dailyOutline": {
     "2026-3-18": [
       {
