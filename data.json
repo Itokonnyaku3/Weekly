@@ -28,17 +28,6 @@
             "id": "emmw2zro2wg3"
           },
           {
-            "type": "todo",
-            "text": "30期案件整理",
-            "note": "色々散らばっている案件情報を一元管理する",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2zx3"
-          },
-          {
             "type": "log",
             "text": "グループの30期の目標",
             "note": "グループとしての取組",
@@ -67,6 +56,17 @@
           },
           {
             "type": "todo",
+            "text": "30期案件整理",
+            "note": "色々散らばっている案件情報を一元管理する",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2zx3"
+          },
+          {
+            "type": "todo",
             "text": "評価確認・承認",
             "note": "",
             "url": "",
@@ -84,8 +84,7 @@
             "url": "",
             "images": [],
             "today": true,
-            "id": "emmw2zro2dgu",
-            "parentId": "emmw2zro29eq"
+            "id": "emmw2zro2dgu"
           },
           {
             "type": "todo",
@@ -889,7 +888,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:37:48.326Z",
+  "savedAt": "2026-03-18T14:10:41.152Z",
   "dailyOutline": {
     "2026-3-18": [
       {
