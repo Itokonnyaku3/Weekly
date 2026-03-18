@@ -55,6 +55,17 @@
           },
           {
             "type": "todo",
+            "text": "勤怠締め確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "done": true,
+            "id": "emmw2cjz5mo0",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
             "text": "評価確認・承認",
             "note": "",
             "url": "",
@@ -84,6 +95,16 @@
           },
           {
             "type": "todo",
+            "text": "All Hands出欠入力",
+            "note": "",
+            "url": "",
+            "images": [],
+            "done": true,
+            "id": "emmw2cjz5vxg",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
             "text": "出張申請処理！",
             "note": "",
             "url": "",
@@ -98,17 +119,6 @@
           },
           {
             "type": "todo",
-            "text": "勤怠締め確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "done": true,
-            "id": "emmw2cjz5mo0",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "山下さん展示会FBもらう",
             "note": "",
             "url": "",
@@ -116,16 +126,6 @@
             "today": false,
             "done": true,
             "id": "emmw2cjz5eal",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "All Hands出欠入力",
-            "note": "",
-            "url": "",
-            "images": [],
-            "done": true,
-            "id": "emmw2cjz5vxg",
             "collapsed": false
           },
           {
@@ -942,7 +942,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:18:40.726Z",
+  "savedAt": "2026-03-18T13:18:46.504Z",
   "dailyOutline": {
     "2026-3-18": [
       {
