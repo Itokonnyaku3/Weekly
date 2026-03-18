@@ -890,7 +890,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T14:14:53.032Z",
+  "savedAt": "2026-03-18T14:14:56.811Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -899,7 +899,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "linkedEntryRef": "0:2026-3-16:3",
         "html": "テスト　ああ<br>あああああ"
       },
@@ -1074,6 +1074,15 @@
       },
       {
         "id": "mmw4hwmg37g",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmw4hxy886v",
         "text": "",
         "html": "",
         "indent": 0,
