@@ -93,8 +93,7 @@
             "images": [],
             "today": false,
             "done": true,
-            "id": "emmw2zro2iyw",
-            "parentId": "emmw2zro2dgu"
+            "id": "emmw2zro2iyw"
           },
           {
             "type": "todo",
@@ -888,7 +887,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:33:23.587Z",
+  "savedAt": "2026-03-18T13:33:28.438Z",
   "dailyOutline": {
     "2026-3-18": [
       {
