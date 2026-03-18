@@ -84,20 +84,6 @@
           },
           {
             "type": "todo",
-            "text": "出張申請処理！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": true,
-            "id": "emmw2cjz5n1n",
-            "priority": "",
-            "tags": [],
-            "parentId": "emmw2cjz5ffb",
-            "collapsed": false,
-            "done": true
-          },
-          {
-            "type": "todo",
             "text": "勤怠締め確認",
             "note": "",
             "url": "",
@@ -137,6 +123,20 @@
             "today": false,
             "id": "emmw2cjz5k40",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "出張申請処理！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": true,
+            "id": "emmw2cjz5n1n",
+            "priority": "",
+            "tags": [],
+            "parentId": "emmw2cjz5ffb",
+            "collapsed": false,
+            "done": true
           }
         ],
         "2026-3-23": [
@@ -942,7 +942,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:18:13.942Z",
+  "savedAt": "2026-03-18T13:18:17.824Z",
   "dailyOutline": {
     "2026-3-18": [
       {
