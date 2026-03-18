@@ -27,7 +27,7 @@
               "タグ"
             ],
             "id": "emmw2cjz5ffb",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -93,7 +93,8 @@
             "priority": "",
             "tags": [],
             "parentId": "emmw2cjz5ffb",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           },
           {
             "type": "todo",
@@ -941,7 +942,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-18T13:16:37.437Z",
+  "savedAt": "2026-03-18T13:16:39.927Z",
   "dailyOutline": {
     "2026-3-18": [
       {
