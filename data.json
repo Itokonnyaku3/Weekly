@@ -890,7 +890,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:20:29.045Z",
+  "savedAt": "2026-03-18T23:20:39.469Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1229,8 +1229,17 @@
       },
       {
         "id": "mmwnzhtzvxe",
-        "text": "１６００",
-        "html": "１６００",
+        "text": "1600 温度点検説明会",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwnzrxpchs",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
