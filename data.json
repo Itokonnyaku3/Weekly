@@ -308,11 +308,14 @@
             "id": "emmw2zro2zpo"
           },
           {
-            "type": "todo",
+            "type": "log",
             "text": "説明会",
-            "note": "",
+            "note": "３／１８説明会、９店舗参加",
             "url": "",
-            "images": []
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-23": [
@@ -897,7 +900,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-18T23:37:57.838Z",
+  "savedAt": "2026-03-18T23:38:25.683Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1235,18 +1238,18 @@
         "collapsed": false
       },
       {
-        "id": "mmwnzrxpchs",
-        "text": "1700 FHESL定例？",
-        "html": "1700 FHESL定例？",
+        "id": "mmwnzhtzvxe",
+        "text": "1600 温度点検説明会",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mmwnzhtzvxe",
-        "text": "1600 温度点検説明会",
-        "html": "",
+        "id": "mmwnzrxpchs",
+        "text": "1700 FHESL定例？",
+        "html": "1700 FHESL定例？",
         "indent": 0,
         "bold": false,
         "color": "",
