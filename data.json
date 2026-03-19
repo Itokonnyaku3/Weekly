@@ -997,7 +997,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:45:54.271Z",
+  "savedAt": "2026-03-19T06:46:05.103Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1529,8 +1529,8 @@
         "html": "ふかやバイオーダー",
         "indent": 0,
         "bold": true,
-        "color": "",
-        "collapsed": false,
+        "color": "#27ae60",
+        "collapsed": true,
         "linkedEntryRef": "8:2026-3-23:0",
         "linkedEntryText": "まとめ"
       },
