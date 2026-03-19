@@ -384,6 +384,15 @@
           },
           {
             "type": "todo",
+            "text": "おおたモール久保田さんか根岸さんに",
+            "note": "",
+            "url": "",
+            "images": []
+          }
+        ],
+        "2026-3-30": [
+          {
+            "type": "todo",
             "text": "久保田さん育休いつとるか確認",
             "note": "計画、昇進プレゼント",
             "url": "",
@@ -391,13 +400,6 @@
             "today": false,
             "priority": "",
             "tags": []
-          },
-          {
-            "type": "todo",
-            "text": "おおたモール久保田さんか根岸さんに",
-            "note": "",
-            "url": "",
-            "images": []
           }
         ]
       },
@@ -995,7 +997,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:20:39.969Z",
+  "savedAt": "2026-03-19T06:45:47.891Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1589,11 +1591,11 @@
       {
         "id": "mmx2h8bzlnb",
         "text": "合計費用（HW）※税抜き",
-        "html": "",
+        "html": "合計費用（HW）※税抜き",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmx2hh0rlk4",
