@@ -766,7 +766,10 @@
             "linkedNote": {
               "date": "2026-3-19",
               "nodeId": "mmwqt2jdmq2"
-            }
+            },
+            "today": false,
+            "priority": "",
+            "tags": []
           }
         ]
       },
@@ -975,7 +978,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:03:47.886Z",
+  "savedAt": "2026-03-19T06:05:22.968Z",
   "dailyOutline": {
     "2026-3-18": [
       {
