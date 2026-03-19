@@ -733,7 +733,11 @@
             "text": "まとめ",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-19",
+              "nodeId": "mmwqt2jdmq2"
+            }
           }
         ]
       },
@@ -933,7 +937,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:40:31.557Z",
+  "savedAt": "2026-03-19T00:40:45.440Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1340,7 +1344,9 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "8:2026-3-23:0",
+        "linkedEntryText": "まとめ"
       },
       {
         "id": "mmwqtxs207j",
