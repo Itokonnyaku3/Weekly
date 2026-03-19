@@ -147,7 +147,8 @@
             "priority": "",
             "tags": [],
             "id": "emmx5rb3lh70",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           }
         ],
         "2026-3-23": [
@@ -1266,7 +1267,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T12:24:59.851Z",
+  "savedAt": "2026-03-19T12:25:24.684Z",
   "dailyOutline": {
     "2026-3-18": [
       {
