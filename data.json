@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:54:18.495Z",
+  "savedAt": "2026-03-19T00:54:24.043Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1267,8 +1267,17 @@
       },
       {
         "id": "mmwr9mdbfeg",
-        "text": "SASEを改めて説明して、これまで検討してきたがその方向で進めていいかをらう",
-        "html": "SASEを改めて説明して、これまで検討してきたがその方向で進めていいかをらう",
+        "text": "SASEを改めて説明して、これまで検討してきたがその方向で進めていいかをラウンジで説明したい",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwrcbvvpcl",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
