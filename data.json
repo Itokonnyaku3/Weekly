@@ -997,7 +997,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:45:47.891Z",
+  "savedAt": "2026-03-19T06:45:50.875Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1553,15 +1553,6 @@
         "collapsed": false
       },
       {
-        "id": "mmx2gln1xgv",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mmx2gltnjfs",
         "text": "ADSECは見積受領",
         "html": "",
@@ -1574,15 +1565,6 @@
         "id": "mmx2grv3c5k",
         "text": "NCRは、3.19正式見積もり依頼",
         "html": "NCRは、3.19正式見積もり依頼",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmwqvxnqmsz",
-        "text": "",
-        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
