@@ -307,6 +307,12 @@
           "name": "test",
           "color": "#2E7D32",
           "collapsed": false
+        },
+        {
+          "id": "sp_mmxdc0k0",
+          "name": "aaa",
+          "color": "#2E7D32",
+          "collapsed": false
         }
       ]
     },
@@ -1084,7 +1090,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:09:44.113Z",
+  "savedAt": "2026-03-19T11:10:00.912Z",
   "dailyOutline": {
     "2026-3-18": [
       {
