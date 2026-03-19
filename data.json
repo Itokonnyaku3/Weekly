@@ -770,6 +770,13 @@
             "today": false,
             "priority": "",
             "tags": []
+          },
+          {
+            "type": "todo",
+            "text": "NCR見積受領",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ]
       },
@@ -978,7 +985,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:07:38.555Z",
+  "savedAt": "2026-03-19T06:07:51.486Z",
   "dailyOutline": {
     "2026-3-18": [
       {
