@@ -84,17 +84,6 @@
           },
           {
             "type": "todo",
-            "text": "出張申請処理！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": true,
-            "id": "emmw2zro2dgu",
-            "done": true,
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "勤怠締め確認",
             "note": "",
             "url": "",
@@ -102,6 +91,17 @@
             "today": false,
             "done": true,
             "id": "emmw2zro2iyw",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "出張申請処理！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": true,
+            "id": "emmw2zro2dgu",
+            "done": true,
             "collapsed": false
           },
           {
@@ -180,18 +180,6 @@
           },
           {
             "type": "todo",
-            "text": "田口さん・久さん問題をリーダー会で相談",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmxcrheobzo",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "tetete",
             "note": "",
             "url": "",
@@ -211,6 +199,18 @@
             "url": "",
             "images": [],
             "done": true
+          },
+          {
+            "type": "todo",
+            "text": "田口さん・久さん問題をリーダー会で相談",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmxcrheobzo",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -260,16 +260,6 @@
             "parentId": "emmxfebkrq4r"
           },
           {
-            "type": "log",
-            "text": "黒田さん30日在宅",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2mh2",
-            "collapsed": false
-          },
-          {
             "type": "todo",
             "text": "tetete",
             "note": "",
@@ -307,6 +297,16 @@
             "images": [],
             "priority": "",
             "tags": []
+          },
+          {
+            "type": "log",
+            "text": "黒田さん30日在宅",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2mh2",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -1274,7 +1274,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:13:11.982Z",
+  "savedAt": "2026-03-19T12:13:15.809Z",
   "dailyOutline": {
     "2026-3-18": [
       {
