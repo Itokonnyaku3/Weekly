@@ -1175,7 +1175,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-19T14:20:00.309Z",
+  "savedAt": "2026-03-19T14:20:04.267Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1428,7 +1428,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "html": "０９００ 店舗インフラ改善会議"
       },
       {
@@ -1483,7 +1483,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmwr7tpnzd8",
