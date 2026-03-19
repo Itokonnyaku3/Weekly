@@ -172,7 +172,8 @@
             "images": [],
             "today": false,
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emmxcrheobzo"
           }
         ],
         "2026-3-30": [
@@ -1052,7 +1053,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T10:53:45.179Z",
+  "savedAt": "2026-03-19T10:54:11.543Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1581,9 +1582,18 @@
       {
         "id": "mmwnxdk1ap7",
         "text": "１73０ 週次 根岸",
-        "html": "１73０ 週次 根岸",
+        "html": "",
         "indent": 0,
         "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmxcro0n16f",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
         "color": "",
         "collapsed": false
       },
