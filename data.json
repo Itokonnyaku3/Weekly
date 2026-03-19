@@ -1051,8 +1051,8 @@
       "collapsed": false
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-03-19T09:22:08.617Z",
+  "wOff": 0,
+  "savedAt": "2026-03-19T09:22:19.950Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1747,15 +1747,6 @@
         "text": "※下道寺では当初2台でしたが、店舗からの要望で1台追加して3台になっています",
         "html": "",
         "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmwqxoyskih",
-        "text": "",
-        "html": "",
-        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
