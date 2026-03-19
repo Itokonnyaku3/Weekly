@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T08:34:25.115Z",
+  "savedAt": "2026-03-19T08:34:39.853Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1859,7 +1859,16 @@
       {
         "id": "mmx7rujjvky",
         "text": "根岸さん",
-        "html": "根岸さん",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmx7rxgxntj",
+        "text": "山下さんの運用を外出し、問い合わせを山下さんに集約",
+        "html": "山下さんの運用を外出し、問い合わせを山下さんに集約",
         "indent": 1,
         "bold": false,
         "color": "",
