@@ -1042,7 +1042,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T08:26:53.143Z",
+  "savedAt": "2026-03-19T08:26:56.274Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1756,7 +1756,7 @@
         "html": "バイオーダーレシートプリンタ",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
