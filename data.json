@@ -359,6 +359,13 @@
             "images": [],
             "id": "emmw2zro21cn",
             "done": false
+          },
+          {
+            "type": "todo",
+            "text": "おおたモール久保田さんか根岸さんに",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ]
       },
@@ -946,7 +953,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T04:03:16.710Z",
+  "savedAt": "2026-03-19T04:04:18.491Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1358,7 +1365,16 @@
       {
         "id": "mmwy30gqiln",
         "text": "5月末にボリュームテスト",
-        "html": "5月末にボリュームテスト",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwy38jziq1",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
