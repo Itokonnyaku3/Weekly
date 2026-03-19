@@ -280,24 +280,6 @@
             "id": "emmxfm9brik3"
           },
           {
-            "type": "todo",
-            "text": "tetete",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [],
-            "id": "emmxfm9br36m"
-          },
-          {
-            "type": "todo",
-            "text": "tetete",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmxfm9brgn7"
-          },
-          {
             "type": "log",
             "text": "黒田さん30日在宅",
             "note": "",
@@ -1286,7 +1268,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:14:01.445Z",
+  "savedAt": "2026-03-19T12:14:04.010Z",
   "dailyOutline": {
     "2026-3-18": [
       {
