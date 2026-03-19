@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T04:01:34.219Z",
+  "savedAt": "2026-03-19T04:01:42.088Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1294,9 +1294,9 @@
       },
       {
         "id": "mmwy11575go",
-        "text": "",
-        "html": "",
-        "indent": 0,
+        "text": "地域通貨の利用状況は",
+        "html": "地域通貨の利用状況は",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
