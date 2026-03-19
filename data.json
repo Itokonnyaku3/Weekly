@@ -1038,7 +1038,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T08:10:25.962Z",
+  "savedAt": "2026-03-19T08:16:10.574Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1047,7 +1047,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "0:2026-3-16:3",
         "html": "テスト　ああ<br>あああああ"
       },
@@ -1767,16 +1767,7 @@
       {
         "id": "mmwqxpa6pmb",
         "text": "スター精密株式会社 | 世界を変える星となる。",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmx6x2ju6gb",
-        "text": "",
-        "html": "",
+        "html": "<a href=\"https://star-m.jp/products/s_print/mcollection_shop/index.html\">スター精密株式会社 | 世界を変える星となる。</a>",
         "indent": 1,
         "bold": false,
         "color": "",
