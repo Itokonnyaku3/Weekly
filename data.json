@@ -183,7 +183,8 @@
             "images": [],
             "today": false,
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emmxdb486lgb"
           }
         ],
         "2026-3-30": [
@@ -299,7 +300,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "HACCP",
@@ -485,7 +487,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "FHラインESL導入",
@@ -532,7 +535,8 @@
       "links": [],
       "collapsed": false,
       "projEntries": [],
-      "projEntriesOpen": false
+      "projEntriesOpen": false,
+      "spanItems": []
     },
     {
       "name": "運用改善",
@@ -638,7 +642,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "上手い早い安い",
@@ -714,7 +719,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "商品業務推進部引継ぎ案件",
@@ -751,7 +757,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "📔新店改装店",
@@ -768,7 +775,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "店舗DXサポート",
@@ -797,7 +805,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "ふかやバイオーダー",
@@ -879,7 +888,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "その他細かいこと",
@@ -924,7 +934,8 @@
       "links": [],
       "projEntries": [],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "山下さん",
@@ -1001,7 +1012,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "根岸さん",
@@ -1026,7 +1038,8 @@
         }
       ],
       "projEntriesOpen": true,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     },
     {
       "name": "複合機改善",
@@ -1059,11 +1072,12 @@
       "links": [],
       "projEntries": [],
       "projEntriesOpen": false,
-      "collapsed": false
+      "collapsed": false,
+      "spanItems": []
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:09:14.237Z",
+  "savedAt": "2026-03-19T11:09:34.456Z",
   "dailyOutline": {
     "2026-3-18": [
       {
