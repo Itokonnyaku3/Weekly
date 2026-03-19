@@ -207,19 +207,6 @@
             "id": "emmw2zro2mh2"
           },
           {
-            "type": "log",
-            "text": "test",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmxdb486lgb",
-            "spanId": "sp_mmxdbnld",
-            "done": false
-          },
-          {
             "type": "todo",
             "text": "tesuto",
             "note": "",
@@ -231,7 +218,7 @@
             "tags": [],
             "endWk": "2026-4-13",
             "spanColor": "#00695C",
-            "spanCollapsed": true
+            "spanCollapsed": false
           }
         ],
         "2026-4-6": [
@@ -1112,7 +1099,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:08:44.538Z",
+  "savedAt": "2026-03-19T12:08:52.364Z",
   "dailyOutline": {
     "2026-3-18": [
       {
