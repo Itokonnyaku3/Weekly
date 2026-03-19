@@ -211,7 +211,8 @@
             "text": "実家にチェーンストアの本なかったっけ",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emmx7gbbat4u"
           }
         ],
         "2026-3-2": [
@@ -409,14 +410,16 @@
             ],
             "today": false,
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emmx7gbbaitw"
           },
           {
             "type": "todo",
             "text": "岡芹さんとアラート頻度再調整",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emmx7gbbaehl"
           }
         ],
         "2026-3-30": [
@@ -1039,7 +1042,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T08:17:20.691Z",
+  "savedAt": "2026-03-19T08:25:37.665Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1419,7 +1422,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmwy1frrd65",
