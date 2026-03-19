@@ -229,8 +229,7 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2mh2",
-            "collapsed": false,
-            "parentId": "emmx5rb3lb67"
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1260,7 +1259,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:10:37.582Z",
+  "savedAt": "2026-03-19T12:10:43.030Z",
   "dailyOutline": {
     "2026-3-18": [
       {
