@@ -185,7 +185,8 @@
             "priority": "",
             "tags": [],
             "id": "emmxdb486lgb",
-            "spanId": "sp_mmxdbnld"
+            "spanId": "sp_mmxdbnld",
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -217,6 +218,19 @@
             "priority": "",
             "tags": [],
             "id": "emmx5rb3lb67"
+          },
+          {
+            "type": "log",
+            "text": "test",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmxdb486lgb",
+            "spanId": "sp_mmxdbnld",
+            "done": false
           }
         ],
         "2026-4-6": [
@@ -1097,7 +1111,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:33:04.430Z",
+  "savedAt": "2026-03-19T11:33:10.071Z",
   "dailyOutline": {
     "2026-3-18": [
       {
