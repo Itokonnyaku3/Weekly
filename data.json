@@ -243,7 +243,8 @@
             "priority": "",
             "tags": [],
             "endWk": "2026-4-13",
-            "spanColor": "#00695C"
+            "spanColor": "#00695C",
+            "spanCollapsed": true
           }
         ],
         "2026-4-6": [
@@ -1124,7 +1125,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:07:47.739Z",
+  "savedAt": "2026-03-19T12:07:52.610Z",
   "dailyOutline": {
     "2026-3-18": [
       {
