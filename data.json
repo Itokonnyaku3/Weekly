@@ -242,21 +242,6 @@
           },
           {
             "type": "todo",
-            "text": "tesuto",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmxfebkrq4r",
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "endWk": "2026-4-13",
-            "spanColor": "#00695C",
-            "spanCollapsed": false,
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "tetete",
             "note": "",
             "url": "",
@@ -321,26 +306,7 @@
             "collapsed": false
           }
         ],
-        "2026-4-13": [
-          {
-            "type": "todo",
-            "text": "aaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emmxfebkrq4r",
-            "id": "emmxfm9brwfw"
-          },
-          {
-            "type": "todo",
-            "text": "aaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emmxfebkrq4r",
-            "id": "emmxfm9bri6m"
-          }
-        ]
+        "2026-4-13": []
       },
       "links": [],
       "projEntries": [
@@ -1232,7 +1198,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T14:05:06.023Z",
+  "savedAt": "2026-03-19T14:05:11.229Z",
   "dailyOutline": {
     "2026-3-18": [
       {
