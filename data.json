@@ -341,16 +341,6 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2118"
-          },
-          {
-            "type": "todo",
-            "text": "久保田さん育休",
-            "note": "計画、昇進プレゼント",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-3-23": [
@@ -391,6 +381,16 @@
             "images": [],
             "id": "emmw2zro21cn",
             "done": false
+          },
+          {
+            "type": "todo",
+            "text": "久保田さん育休",
+            "note": "計画、昇進プレゼント",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -995,7 +995,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:20:15.279Z",
+  "savedAt": "2026-03-19T06:20:22.567Z",
   "dailyOutline": {
     "2026-3-18": [
       {
