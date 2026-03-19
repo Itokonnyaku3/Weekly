@@ -307,7 +307,7 @@
           "id": "sp_mmxdbnld",
           "name": "test",
           "color": "#2E7D32",
-          "collapsed": true
+          "collapsed": false
         },
         {
           "id": "sp_mmxdc0k0",
@@ -1097,7 +1097,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:33:00.020Z",
+  "savedAt": "2026-03-19T11:33:04.430Z",
   "dailyOutline": {
     "2026-3-18": [
       {
