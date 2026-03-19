@@ -761,7 +761,7 @@
           "tags": []
         }
       ],
-      "projEntriesOpen": false,
+      "projEntriesOpen": true,
       "collapsed": false
     },
     {
@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:42:16.032Z",
+  "savedAt": "2026-03-19T00:42:21.175Z",
   "dailyOutline": {
     "2026-3-18": [
       {
