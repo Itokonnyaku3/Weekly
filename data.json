@@ -937,7 +937,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:41:24.131Z",
+  "savedAt": "2026-03-19T00:41:26.626Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1350,8 +1350,17 @@
       },
       {
         "id": "mmwqv892hdd",
-        "text": "[03.19] 安田さんから回答、モニタは天吊り、",
-        "html": "[03.19] 安田さんから回答、モニタは天吊り、",
+        "text": "[03.19] 安田さんから回答、モニタは天吊り、レジは1台。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwqvnr23rq",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
