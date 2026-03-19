@@ -196,6 +196,13 @@
             "note": "",
             "url": "",
             "images": []
+          },
+          {
+            "type": "todo",
+            "text": "aa",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-30": [
@@ -243,7 +250,7 @@
             "tags": [],
             "endWk": "2026-4-13",
             "spanColor": "#00695C",
-            "spanCollapsed": true,
+            "spanCollapsed": false,
             "collapsed": false
           },
           {
@@ -1259,7 +1266,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:10:54.044Z",
+  "savedAt": "2026-03-19T12:12:56.781Z",
   "dailyOutline": {
     "2026-3-18": [
       {
