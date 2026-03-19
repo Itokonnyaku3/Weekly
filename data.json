@@ -241,29 +241,6 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "tetete",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emmxfebkrq4r",
-            "id": "emmxfm9bruvs"
-          },
-          {
-            "type": "todo",
-            "text": "tetete",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmxfm9briez",
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "endWk": "2026-4-20",
-            "spanColor": "#3B5FBF",
-            "spanCollapsed": false
-          },
-          {
             "type": "log",
             "text": "黒田さん30日在宅",
             "note": "",
@@ -1198,7 +1175,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T12:47:45.779Z",
+  "savedAt": "2026-03-19T12:47:48.504Z",
   "dailyOutline": {
     "2026-3-18": [
       {
