@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:26:16.760Z",
+  "savedAt": "2026-03-19T09:27:02.652Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1432,7 +1432,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmwy1frrd65",
@@ -1553,8 +1553,8 @@
       },
       {
         "id": "mmwnzhtzvxe",
-        "text": "1600 温度点検説明会zzzz",
-        "html": "1600 温度点検説明会zzzz",
+        "text": "1600 温度点検説明会",
+        "html": "1600 温度点検説明会",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -1747,6 +1747,15 @@
         "text": "※下道寺では当初2台でしたが、店舗からの要望で1台追加して3台になっています",
         "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwqxoyskih",
+        "text": "",
+        "html": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
