@@ -1004,7 +1004,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T07:34:36.953Z",
+  "savedAt": "2026-03-19T07:35:53.843Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1723,8 +1723,17 @@
       },
       {
         "id": "mmx5mmwdqdy",
-        "text": "スター精密株式会社 | 世界を変える星となる。　既存のサービスでで",
-        "html": "<a href=\"https://star-m.jp/products/s_print/mcollection_shop/index.html\">スター精密株式会社 | 世界を変える星となる。</a>　既存のサービスでで",
+        "text": "スター精密株式会社 | 世界を変える星となる。　既存のサービスでデフォルト",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmx5n1t7t1b",
+        "text": "レシートプリンター｜製品情報｜エプソン",
+        "html": "<a href=\"https://www.epson.jp/products/receiptprinter/?fwlink=productstop_8\">レシートプリンター｜製品情報｜エプソン</a>",
         "indent": 1,
         "bold": false,
         "color": "",
