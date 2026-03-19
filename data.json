@@ -174,19 +174,6 @@
             "priority": "",
             "tags": [],
             "id": "emmxcrheobzo"
-          },
-          {
-            "type": "log",
-            "text": "test",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmxdb486lgb",
-            "spanId": "sp_mmxdbnld",
-            "done": false
           }
         ],
         "2026-3-30": [
@@ -1125,7 +1112,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:08:35.503Z",
+  "savedAt": "2026-03-19T12:08:44.538Z",
   "dailyOutline": {
     "2026-3-18": [
       {
