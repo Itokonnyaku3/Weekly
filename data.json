@@ -200,6 +200,17 @@
             "id": "emmw2zro2s6e"
           },
           {
+            "type": "todo",
+            "text": "久保田さん育休いつとるか確認",
+            "note": "計画、昇進プレゼント",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmx5rb3lb67"
+          },
+          {
             "type": "log",
             "text": "黒田さん30日在宅",
             "note": "",
@@ -223,14 +234,10 @@
           },
           {
             "type": "todo",
-            "text": "久保田さん育休いつとるか確認",
-            "note": "計画、昇進プレゼント",
+            "text": "tesuto",
+            "note": "",
             "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmx5rb3lb67"
+            "images": []
           }
         ],
         "2026-4-6": [
@@ -1111,7 +1118,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:33:16.583Z",
+  "savedAt": "2026-03-19T12:07:26.445Z",
   "dailyOutline": {
     "2026-3-18": [
       {
