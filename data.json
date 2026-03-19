@@ -953,7 +953,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T04:16:38.078Z",
+  "savedAt": "2026-03-19T04:17:41.264Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1356,7 +1356,16 @@
       {
         "id": "mmwyjy81zi1",
         "text": "アンテナを棒の先端に付けて上の方に置いた状態で、どこまで届くかのテストを行う",
-        "html": "アンテナを棒の先端に付けて上の方に置いた状態で、どこまで届くかのテストを行う",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwylrbkaza",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
