@@ -275,7 +275,7 @@
             "tags": [],
             "endWk": "2026-4-20",
             "spanColor": "#3B5FBF",
-            "spanCollapsed": true
+            "spanCollapsed": false
           },
           {
             "type": "log",
@@ -1265,8 +1265,8 @@
       "spanItems": []
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-03-19T12:14:16.451Z",
+  "wOff": -1,
+  "savedAt": "2026-03-19T12:24:59.851Z",
   "dailyOutline": {
     "2026-3-18": [
       {
