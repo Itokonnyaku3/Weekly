@@ -209,17 +209,6 @@
             "id": "emmw2zro2mh2"
           },
           {
-            "type": "todo",
-            "text": "久保田さん育休いつとるか確認",
-            "note": "計画、昇進プレゼント",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmx5rb3lb67"
-          },
-          {
             "type": "log",
             "text": "test",
             "note": "",
@@ -231,6 +220,17 @@
             "id": "emmxdb486lgb",
             "spanId": "sp_mmxdbnld",
             "done": false
+          },
+          {
+            "type": "todo",
+            "text": "久保田さん育休いつとるか確認",
+            "note": "計画、昇進プレゼント",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmx5rb3lb67"
           }
         ],
         "2026-4-6": [
@@ -1111,7 +1111,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:33:10.071Z",
+  "savedAt": "2026-03-19T11:33:16.583Z",
   "dailyOutline": {
     "2026-3-18": [
       {
