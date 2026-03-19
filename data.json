@@ -978,7 +978,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:06:59.192Z",
+  "savedAt": "2026-03-19T06:07:04.966Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1617,8 +1617,8 @@
       {
         "id": "mmx2i241wz9",
         "text": "設置費用…  174,250",
-        "html": "",
-        "indent": 2,
+        "html": "設置費用…&nbsp; 174,250",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
