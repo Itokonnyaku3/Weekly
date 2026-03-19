@@ -55,6 +55,17 @@
           },
           {
             "type": "todo",
+            "text": "出張申請処理！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": true,
+            "id": "emmw2zro2dgu",
+            "done": true,
+            "collapsed": false
+          },
+          {
+            "type": "todo",
             "text": "ソラカメ管理者パスワード",
             "note": "テスト　あ",
             "url": "",
@@ -67,17 +78,6 @@
             "priority": "mid",
             "tags": [],
             "id": "emmw2zro2aqx",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "出張申請処理！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": true,
-            "id": "emmw2zro2dgu",
-            "done": true,
             "collapsed": false
           },
           {
@@ -365,18 +365,6 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "トラブルシュートガイドを確認",
-            "note": "",
-            "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773809622340?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773809622340&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773809622340",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2zpo",
-            "collapsed": false
-          },
-          {
             "type": "log",
             "text": "説明会",
             "note": "３／１８説明会、９店舗参加\n\n- 伝えること\n　　競合したときは、冷ケースの温度計を正とし、その温度をシステムに登録することでエビデンスとする。\n調整期間中は見るだけで対応不要だが、紙の運用をやめたらエラーに対して確認し、対処済にするのと対処結果をコメントで残すこと。\n\n使い方\n一番左を見ればOK\nまとめて対応\n中継器はマップを見る\n\nよくわからない、上手くいかないときは相談してください。",
@@ -387,6 +375,18 @@
             "tags": [],
             "collapsed": false,
             "id": "emmwonusshz3"
+          },
+          {
+            "type": "todo",
+            "text": "トラブルシュートガイドを確認",
+            "note": "",
+            "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773809622340?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773809622340&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773809622340",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2zpo",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1166,7 +1166,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-19T14:22:11.179Z",
+  "savedAt": "2026-03-19T14:22:26.789Z",
   "dailyOutline": {
     "2026-3-18": [
       {
