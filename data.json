@@ -197,15 +197,6 @@
           },
           {
             "type": "todo",
-            "text": "aa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "done": true,
-            "id": "emmxfm9bri1w"
-          },
-          {
-            "type": "todo",
             "text": "田口さん・久さん問題をリーダー会で相談",
             "note": "",
             "url": "",
@@ -1175,7 +1166,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-19T14:20:13.619Z",
+  "savedAt": "2026-03-19T14:20:34.222Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1428,7 +1419,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "０９００ 店舗インフラ改善会議"
       },
       {
