@@ -373,12 +373,14 @@
           },
           {
             "type": "todo",
-            "text": "SDでの閲覧",
+            "text": "SDでの閲覧植田さん、長田さん確認",
             "note": "",
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2w9x"
+            "id": "emmw2zro2w9x",
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -1030,7 +1032,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T07:56:31.974Z",
+  "savedAt": "2026-03-19T07:56:45.532Z",
   "dailyOutline": {
     "2026-3-18": [
       {
