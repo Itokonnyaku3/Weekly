@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:27:36.766Z",
+  "savedAt": "2026-03-19T09:27:39.891Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1315,7 +1315,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmwr8juy4rg",
