@@ -953,7 +953,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T05:39:04.590Z",
+  "savedAt": "2026-03-19T05:39:10.454Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1427,9 +1427,9 @@
       },
       {
         "id": "mmx1ifbiug2",
-        "text": "",
-        "html": "",
-        "indent": 0,
+        "text": "ソラカメ引継ぎ、ｂ",
+        "html": "ソラカメ引継ぎ、ｂ",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
