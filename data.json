@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:30:12.008Z",
+  "savedAt": "2026-03-19T09:30:26.033Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1538,6 +1538,24 @@
         "text": "アスベスト対策、65万でOK",
         "html": "アスベスト対策、65万でOK",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mmx9ropxxoy",
+        "text": "aa",
+        "html": "aa",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmx9rq05vnh",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
