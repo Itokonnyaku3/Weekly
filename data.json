@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:51:47.809Z",
+  "savedAt": "2026-03-19T00:51:49.849Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1223,8 +1223,8 @@
       {
         "id": "mmwpv2q2uhb",
         "text": "最初は専門家に依頼して同行することでナレッジを貰ってからとか",
-        "html": "",
-        "indent": 1,
+        "html": "最初は専門家に依頼して同行することでナレッジを貰ってからとか",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -1232,8 +1232,8 @@
       {
         "id": "mmwpxephp2a",
         "text": "DLにハブを持っておいてもらう",
-        "html": "",
-        "indent": 1,
+        "html": "DLにハブを持っておいてもらう",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
