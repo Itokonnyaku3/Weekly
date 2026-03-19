@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:51:49.849Z",
+  "savedAt": "2026-03-19T00:51:53.787Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1209,7 +1209,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmwr8juy4rg",
@@ -1242,7 +1242,7 @@
         "id": "mmwr7wi0fak",
         "text": "→山下さんに個別で打合せセットしてもらい、しこでもう少し検討して方向性を決める",
         "html": "→山下さんに個別で打合せセットしてもらい、しこでもう少し検討して方向性を決める",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
