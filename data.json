@@ -937,7 +937,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:41:26.626Z",
+  "savedAt": "2026-03-19T00:41:39.110Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1359,6 +1359,15 @@
       },
       {
         "id": "mmwqvnr23rq",
+        "text": "要件をきちんと整理して、チャットに共有する",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwqvxnqmsz",
         "text": "",
         "html": "",
         "indent": 1,
