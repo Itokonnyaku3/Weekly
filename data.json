@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:25:40.872Z",
+  "savedAt": "2026-03-19T09:25:44.202Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1572,18 +1572,9 @@
       {
         "id": "mmwnxdk1ap7",
         "text": "１73０ 週次 根岸",
-        "html": "",
+        "html": "１73０ 週次 根岸",
         "indent": 0,
         "bold": true,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmx9lua0p7s",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
         "color": "",
         "collapsed": false
       },
