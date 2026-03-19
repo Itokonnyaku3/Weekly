@@ -922,7 +922,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:13:16.271Z",
+  "savedAt": "2026-03-19T00:14:48.245Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1190,7 +1190,16 @@
       {
         "id": "mmwpv2q2uhb",
         "text": "最初は専門家に依頼して同行することでナレッジを貰ってからとか",
-        "html": "最初は専門家に依頼して同行することでナレッジを貰ってからとか",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwpxephp2a",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
