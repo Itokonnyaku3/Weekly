@@ -301,7 +301,14 @@
       ],
       "projEntriesOpen": true,
       "collapsed": false,
-      "spanItems": []
+      "spanItems": [
+        {
+          "id": "sp_mmxdbnld",
+          "name": "test",
+          "color": "#2E7D32",
+          "collapsed": false
+        }
+      ]
     },
     {
       "name": "HACCP",
@@ -1077,7 +1084,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:09:34.456Z",
+  "savedAt": "2026-03-19T11:09:44.113Z",
   "dailyOutline": {
     "2026-3-18": [
       {
