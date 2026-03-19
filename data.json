@@ -243,7 +243,7 @@
             "tags": [],
             "endWk": "2026-4-13",
             "spanColor": "#00695C",
-            "spanCollapsed": true,
+            "spanCollapsed": false,
             "collapsed": false
           },
           {
@@ -283,6 +283,15 @@
             "note": "",
             "url": "",
             "images": []
+          },
+          {
+            "type": "todo",
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-4-6": [
@@ -1208,7 +1217,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:09:44.082Z",
+  "savedAt": "2026-03-19T12:10:04.761Z",
   "dailyOutline": {
     "2026-3-18": [
       {
