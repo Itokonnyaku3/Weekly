@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:27:55.485Z",
+  "savedAt": "2026-03-19T09:28:01.377Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1305,7 +1305,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "０９００ 店舗インフラ改善会議"
       },
       {
@@ -1315,7 +1315,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmwr8juy4rg",
@@ -1360,7 +1360,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmwr7tpnzd8",
@@ -1418,8 +1418,8 @@
       },
       {
         "id": "mmwnwpih588",
-        "text": "１１３０ 週次報告 山下ｋ",
-        "html": "１１３０ 週次報告 山下ｋ",
+        "text": "１１３０ 週次報告 山下",
+        "html": "１１３０ 週次報告 山下",
         "indent": 0,
         "bold": true,
         "color": "",
