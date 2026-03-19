@@ -71,6 +71,17 @@
           },
           {
             "type": "todo",
+            "text": "出張申請処理！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": true,
+            "id": "emmw2zro2dgu",
+            "done": true,
+            "collapsed": false
+          },
+          {
+            "type": "todo",
             "text": "評価確認・承認",
             "note": "",
             "url": "",
@@ -91,17 +102,6 @@
             "today": false,
             "done": true,
             "id": "emmw2zro2iyw",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "出張申請処理！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": true,
-            "id": "emmw2zro2dgu",
-            "done": true,
             "collapsed": false
           },
           {
@@ -1274,7 +1274,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:13:15.809Z",
+  "savedAt": "2026-03-19T12:13:18.241Z",
   "dailyOutline": {
     "2026-3-18": [
       {
