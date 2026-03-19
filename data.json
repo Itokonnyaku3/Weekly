@@ -1042,7 +1042,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T08:25:37.665Z",
+  "savedAt": "2026-03-19T08:25:43.602Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1436,11 +1436,11 @@
       {
         "id": "mmwy2bq3sto",
         "text": "4月上旬におおたモールで現地調査",
-        "html": "",
+        "html": "4月上旬におおたモールで現地調査",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmwyjy81zi1",
