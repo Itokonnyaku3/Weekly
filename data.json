@@ -978,7 +978,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T06:05:58.506Z",
+  "savedAt": "2026-03-19T06:06:08.495Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1562,8 +1562,17 @@
       },
       {
         "id": "mmwqvxnqmsz",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmx2h8bzlnb",
         "text": "合計費用（HW）※税抜きモニタが天吊りの場合…1,799,978モニタがスタンドの場合…1,631,978レジレジ本体…1,297,728設置費用…  174,250運送費用…  今回別のレジと一緒に運ぶので不要モニタスタンド・モニタにした場合の総額費用…100,000円天吊りにした場合…268,000円 下地工事等は含まずタブレット30,000×2台＝6万円　本体＋台座\n※下道寺では当初2台でしたが、店舗からの要望で1台追加して3台になっています",
-        "html": "<span data-teams=\"true\"><p><strong>合計費用（HW）※税抜き</strong></p><p>モニタが天吊りの場合…<span style=\"font-size: inherit;\">1,799,978</span></p><p>モニタがスタンドの場合…<span style=\"font-size: inherit;\">1,631,978</span></p><ul><li><strong>レジ</strong><ul><li><span style=\"font-size: inherit;\">レジ本体…1,297,728</span></li><li><span style=\"font-size: inherit;\">設置費用…&nbsp; 174,250</span></li><li><span style=\"font-size: inherit;\">運送費用…&nbsp; 今回別のレジと一緒に運ぶので不要</span></li></ul></li><li><span style=\"font-size: inherit;\"><strong>モニタ</strong></span><ul><li><span style=\"font-size: inherit;\">スタンド・モニタにした場合の総額費用…100,000円</span></li><li><span style=\"font-size: inherit;\">天吊りにした</span>場合…268,000円 下地工事等は含まず</li></ul></li><li><strong>タブレット</strong><ul><li>30,000×2台＝6万円　本体＋台座\n<ul><li>※下道寺では当初2台でしたが、店舗からの要望で1台追加して3台になっています</li></ul></li></ul></li></ul></span>",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
