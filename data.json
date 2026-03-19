@@ -183,13 +183,6 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2mh2"
-          },
-          {
-            "type": "todo",
-            "text": "実家にチェーンストアの本なかったっけ",
-            "note": "",
-            "url": "",
-            "images": []
           }
         ],
         "2026-4-6": [
@@ -201,6 +194,13 @@
             "images": [],
             "done": false,
             "id": "emmw2zro2tge"
+          },
+          {
+            "type": "todo",
+            "text": "実家にチェーンストアの本なかったっけ",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-2": [
@@ -1020,7 +1020,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-19T07:44:03.610Z",
+  "savedAt": "2026-03-19T07:44:09.521Z",
   "dailyOutline": {
     "2026-3-18": [
       {
