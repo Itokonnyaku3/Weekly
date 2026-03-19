@@ -723,7 +723,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmw2zro2cym"
+            "id": "emmw2zro2cym",
+            "done": true
           }
         ]
       },
@@ -923,7 +924,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:39:39.262Z",
+  "savedAt": "2026-03-19T00:39:51.333Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1317,15 +1318,6 @@
       {
         "id": "mmwmcqmhc6x",
         "text": "--------------------",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmwo8shm772",
-        "text": "店舗インフラ部_30期案件報告.xlsx",
         "html": "",
         "indent": 0,
         "bold": false,
