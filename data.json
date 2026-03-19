@@ -946,7 +946,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:54:36.506Z",
+  "savedAt": "2026-03-19T04:01:34.219Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1276,8 +1276,8 @@
       },
       {
         "id": "mmwrcbvvpcl",
-        "text": "世間一般的な費用",
-        "html": "世間一般的な費用",
+        "text": "世間一般的な費用を",
+        "html": "世間一般的な費用を",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -1286,9 +1286,18 @@
       {
         "id": "mmwnw59fdog",
         "text": "1000 IT稟議共有",
-        "html": "1000 IT稟議共有",
+        "html": "",
         "indent": 0,
         "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwy11575go",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
         "color": "",
         "collapsed": false
       },
