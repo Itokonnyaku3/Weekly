@@ -1053,7 +1053,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T10:54:20.575Z",
+  "savedAt": "2026-03-19T10:54:25.306Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1527,8 +1527,8 @@
       },
       {
         "id": "mmwnz6jgyyt",
-        "text": "1500 FHESLNW定例",
-        "html": "1500 FHESLNW定例",
+        "text": "1500 FHESLNW定例kk",
+        "html": "1500 FHESLNW定例kk",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -1585,15 +1585,6 @@
         "html": "",
         "indent": 0,
         "bold": true,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmxcrsljg9w",
-        "text": "１73０ 週次 根岸",
-        "html": "",
-        "indent": 0,
-        "bold": false,
         "color": "",
         "collapsed": false
       },
