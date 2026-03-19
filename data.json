@@ -1052,7 +1052,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T09:26:07.523Z",
+  "savedAt": "2026-03-19T09:26:13.675Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1553,8 +1553,8 @@
       },
       {
         "id": "mmwnzhtzvxe",
-        "text": "1600 温度点検説明会zzzz",
-        "html": "1600 温度点検説明会zzzz",
+        "text": "1600 温度点検説明会zzzz ",
+        "html": "1600 温度点検説明会zzzz&nbsp;",
         "indent": 0,
         "bold": true,
         "color": "",
