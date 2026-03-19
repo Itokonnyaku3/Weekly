@@ -953,7 +953,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T04:04:22.410Z",
+  "savedAt": "2026-03-19T04:04:26.960Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1400,9 +1400,9 @@
       },
       {
         "id": "mmwy4mx55v8",
-        "text": "",
-        "html": "",
-        "indent": 0,
+        "text": "おおたもー",
+        "html": "おおたもー",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
