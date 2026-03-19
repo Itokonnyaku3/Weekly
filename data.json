@@ -219,7 +219,7 @@
             "priority": "",
             "tags": [],
             "id": "emmx5rb3lb67",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "log",
@@ -229,7 +229,8 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2mh2",
-            "collapsed": false
+            "collapsed": false,
+            "parentId": "emmx5rb3lb67"
           },
           {
             "type": "todo",
@@ -1259,7 +1260,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:10:25.120Z",
+  "savedAt": "2026-03-19T12:10:31.779Z",
   "dailyOutline": {
     "2026-3-18": [
       {
