@@ -307,10 +307,16 @@
           "id": "sp_mmxdbnld",
           "name": "test",
           "color": "#2E7D32",
-          "collapsed": true
+          "collapsed": false
         },
         {
           "id": "sp_mmxdc0k0",
+          "name": "aaa",
+          "color": "#2E7D32",
+          "collapsed": false
+        },
+        {
+          "id": "sp_mmxe5ikf",
           "name": "aaa",
           "color": "#2E7D32",
           "collapsed": false
@@ -1091,7 +1097,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T11:10:49.349Z",
+  "savedAt": "2026-03-19T11:32:57.279Z",
   "dailyOutline": {
     "2026-3-18": [
       {
