@@ -922,7 +922,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T00:12:24.756Z",
+  "savedAt": "2026-03-19T00:12:59.402Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1180,8 +1180,17 @@
       },
       {
         "id": "mmwp6nlqetj",
-        "text": "名雪さんに店舗巡回してもらって",
-        "html": "名雪さんに店舗巡回してもらって",
+        "text": "名雪さんに店舗巡回してもらってコストを下げるのもあり。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmwpv2q2uhb",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
