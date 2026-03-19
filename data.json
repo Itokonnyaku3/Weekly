@@ -10,7 +10,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmw2zro2x8t"
+            "id": "emmw2zro2x8t",
+            "collapsed": false
           }
         ],
         "2026-3-16": [
@@ -25,7 +26,8 @@
             "tags": [
               "タグ"
             ],
-            "id": "emmw2zro2wg3"
+            "id": "emmw2zro2wg3",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -36,7 +38,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2zx3"
+            "id": "emmw2zro2zx3",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -47,7 +50,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2ghi"
+            "id": "emmw2zro2ghi",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -62,7 +66,8 @@
             "today": false,
             "priority": "mid",
             "tags": [],
-            "id": "emmw2zro2aqx"
+            "id": "emmw2zro2aqx",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -74,7 +79,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro29eq"
+            "id": "emmw2zro29eq",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -84,7 +90,8 @@
             "images": [],
             "today": true,
             "id": "emmw2zro2dgu",
-            "done": true
+            "done": true,
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -94,7 +101,8 @@
             "images": [],
             "today": false,
             "done": true,
-            "id": "emmw2zro2iyw"
+            "id": "emmw2zro2iyw",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -104,7 +112,8 @@
             "images": [],
             "today": false,
             "done": true,
-            "id": "emmw2zro2y63"
+            "id": "emmw2zro2y63",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -113,7 +122,8 @@
             "url": "",
             "images": [],
             "done": true,
-            "id": "emmw2zro2tjh"
+            "id": "emmw2zro2tjh",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -124,7 +134,8 @@
             "today": false,
             "id": "emmw2zro2tmy",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -135,7 +146,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmx5rb3lh70"
+            "id": "emmx5rb3lh70",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -149,7 +161,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2h23"
+            "id": "emmw2zro2h23",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -162,7 +175,8 @@
             "tags": [
               "定例"
             ],
-            "id": "emmx5rb3lu90"
+            "id": "emmx5rb3lu90",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -173,7 +187,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmxcrheobzo"
+            "id": "emmxcrheobzo",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -184,7 +199,8 @@
             "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
             "images": [],
             "done": false,
-            "id": "emmw2zro2s6e"
+            "id": "emmw2zro2s6e",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -195,7 +211,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmx5rb3lb67"
+            "id": "emmx5rb3lb67",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -204,7 +221,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2mh2"
+            "id": "emmw2zro2mh2",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -218,7 +236,16 @@
             "tags": [],
             "endWk": "2026-4-13",
             "spanColor": "#00695C",
-            "spanCollapsed": false
+            "spanCollapsed": false,
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "tetete",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emmxfebkrq4r"
           }
         ],
         "2026-4-6": [
@@ -229,7 +256,8 @@
             "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
             "images": [],
             "done": false,
-            "id": "emmw2zro2tge"
+            "id": "emmw2zro2tge",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -237,7 +265,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmx7gbbat4u"
+            "id": "emmx7gbbat4u",
+            "collapsed": false
           }
         ],
         "2026-3-2": [
@@ -247,7 +276,8 @@
             "note": "",
             "url": "https://workflowy.com/#/6a5361540b55",
             "images": [],
-            "id": "emmw2zro2zkx"
+            "id": "emmw2zro2zkx",
+            "collapsed": false
           }
         ]
       },
@@ -336,7 +366,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro28gp"
+            "id": "emmw2zro28gp",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -359,7 +390,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2zpo"
+            "id": "emmw2zro2zpo",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -368,7 +400,8 @@
             "url": "",
             "images": [],
             "done": true,
-            "id": "emmw2zro20dm"
+            "id": "emmw2zro20dm",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -377,7 +410,8 @@
             "url": "",
             "images": [],
             "id": "emmw2zro21cn",
-            "done": true
+            "done": true,
+            "collapsed": false
           },
           {
             "type": "log",
@@ -386,7 +420,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2h7j"
+            "id": "emmw2zro2h7j",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -395,7 +430,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2118"
+            "id": "emmw2zro2118",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -406,7 +442,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2zw8"
+            "id": "emmw2zro2zw8",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -415,7 +452,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2l9s"
+            "id": "emmw2zro2l9s",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -426,7 +464,8 @@
             "today": false,
             "id": "emmw2zro2w9x",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -435,7 +474,8 @@
             "url": "",
             "images": [],
             "id": "emmw2zro21cn",
-            "done": false
+            "done": false,
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -443,7 +483,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmx5rb3l29i"
+            "id": "emmx5rb3l29i",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -456,7 +497,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmx7gbbaitw"
+            "id": "emmx7gbbaitw",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -464,7 +506,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmx7gbbaehl"
+            "id": "emmx7gbbaehl",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -477,7 +520,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2yfv"
+            "id": "emmw2zro2yfv",
+            "collapsed": false
           }
         ]
       },
@@ -525,7 +569,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2ir0"
+            "id": "emmw2zro2ir0",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -535,7 +580,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmw2zro2u62"
+            "id": "emmw2zro2u62",
+            "collapsed": false
           }
         ],
         "2026-3-30": [],
@@ -550,7 +596,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2k6s"
+            "id": "emmw2zro2k6s",
+            "collapsed": false
           }
         ]
       },
@@ -571,7 +618,8 @@
             "url": "",
             "images": [],
             "done": true,
-            "id": "emmw2zro2qud"
+            "id": "emmw2zro2qud",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -581,7 +629,8 @@
             "images": [],
             "today": true,
             "done": true,
-            "id": "emmw2zro2mdd"
+            "id": "emmw2zro2mdd",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -591,7 +640,8 @@
             "images": [],
             "today": true,
             "done": true,
-            "id": "emmw2zro2us8"
+            "id": "emmw2zro2us8",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -600,7 +650,8 @@
             "url": "https://workflowy.com/#/b4a7c37f1f27",
             "images": [],
             "today": false,
-            "id": "emmw2zro263r"
+            "id": "emmw2zro263r",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -613,7 +664,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2vn0"
+            "id": "emmw2zro2vn0",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -630,7 +682,8 @@
             "today": false,
             "priority": "mid",
             "tags": [],
-            "id": "emmw2zro2rfq"
+            "id": "emmw2zro2rfq",
+            "collapsed": false
           }
         ]
       },
@@ -677,7 +730,8 @@
             "note": "機能調査\n要件定義と計画書作成までのフロー・工程を整理",
             "url": "",
             "images": [],
-            "id": "emmw2zro2zqf"
+            "id": "emmw2zro2zqf",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -687,7 +741,8 @@
             "images": [],
             "today": false,
             "done": true,
-            "id": "emmw2zro2wa1"
+            "id": "emmw2zro2wa1",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -697,7 +752,8 @@
             "note": "プロジェクト憲章・要件定義・計画書のテンプレートや条件を設定",
             "url": "",
             "images": [],
-            "id": "emmw2zro2xix"
+            "id": "emmw2zro2xix",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -707,7 +763,8 @@
             "note": "AIにヒアリングさせてみて、その結果をもって要件整理・計画書の順で作成させる\n実用的か、抜けがないか、どれくらいの修正が必要かをレビュー",
             "url": "",
             "images": [],
-            "id": "emmw2zro232f"
+            "id": "emmw2zro232f",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -717,7 +774,8 @@
             "note": "作業削減効果、品質、向いている業務と向いていない業務\n余裕があったらエージェント設計まで",
             "url": "",
             "images": [],
-            "id": "emmw2zro2tce"
+            "id": "emmw2zro2tce",
+            "collapsed": false
           }
         ]
       },
@@ -754,7 +812,8 @@
             "note": "中井さん、田中さん（商の工業化）",
             "url": "",
             "images": [],
-            "id": "emmw2zro2twl"
+            "id": "emmw2zro2twl",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -763,7 +822,8 @@
             "url": "",
             "images": [],
             "done": true,
-            "id": "emmw2zro2jaz"
+            "id": "emmw2zro2jaz",
+            "collapsed": false
           }
         ]
       },
@@ -811,7 +871,8 @@
             "note": "",
             "url": "https://teams.microsoft.com/l/chat/19:meeting_MDViODVmMjgtMDdlNC00YzAxLTgwYzgtNjk2MDEyN2NlZGQ4@thread.v2/conversations?context=%7B%22contextType%22%3A%22chat%22%7D",
             "images": [],
-            "id": "emmw2zro2rmi"
+            "id": "emmw2zro2rmi",
+            "collapsed": false
           }
         ]
       },
@@ -842,7 +903,8 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2on5",
-            "done": true
+            "done": true,
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -851,7 +913,8 @@
             "url": "",
             "images": [],
             "id": "emmw2zro2cym",
-            "done": true
+            "done": true,
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -868,7 +931,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmx5rb3lp8i"
+            "id": "emmx5rb3lp8i",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -876,7 +940,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmx5rb3lsyd"
+            "id": "emmx5rb3lsyd",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -884,7 +949,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmx5rb3lwge"
+            "id": "emmx5rb3lwge",
+            "collapsed": false
           }
         ]
       },
@@ -923,7 +989,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmw2zro2h2m"
+            "id": "emmw2zro2h2m",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -935,7 +1002,8 @@
             "priority": "mid",
             "tags": [],
             "done": true,
-            "id": "emmw2zro29yf"
+            "id": "emmw2zro29yf",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -949,7 +1017,8 @@
             "priority": "mid",
             "tags": [],
             "done": false,
-            "id": "emmw2zro24ue"
+            "id": "emmw2zro24ue",
+            "collapsed": false
           }
         ]
       },
@@ -970,7 +1039,8 @@
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro22lk"
+            "id": "emmw2zro22lk",
+            "collapsed": false
           }
         ]
       },
@@ -1076,7 +1146,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro27nb"
+            "id": "emmw2zro27nb",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1087,7 +1158,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmw2zro2mty"
+            "id": "emmw2zro2mty",
+            "collapsed": false
           }
         ]
       },
@@ -1099,7 +1171,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-19T12:08:56.026Z",
+  "savedAt": "2026-03-19T12:08:59.839Z",
   "dailyOutline": {
     "2026-3-18": [
       {
