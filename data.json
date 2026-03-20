@@ -43,22 +43,6 @@
           },
           {
             "type": "todo",
-            "text": "ソラカメ管理者パスワード",
-            "note": "テスト　あ",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmv5yjm63si"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2aqx",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "出張申請処理！",
             "note": "",
             "url": "",
@@ -200,6 +184,22 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro2zx3",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "ソラカメ管理者パスワード",
+            "note": "テスト　あ",
+            "url": "",
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmv5yjm63si"
+            },
+            "today": false,
+            "priority": "mid",
+            "tags": [],
+            "id": "emmw2zro2aqx",
             "collapsed": false
           }
         ],
@@ -1245,7 +1245,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-20T00:36:22.830Z",
+  "savedAt": "2026-03-20T00:36:25.863Z",
   "dailyOutline": {
     "2026-3-18": [
       {
