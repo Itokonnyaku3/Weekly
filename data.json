@@ -193,14 +193,6 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmxfm9brbre"
-          },
-          {
-            "type": "todo",
-            "text": "aa",
-            "note": "",
-            "url": "",
-            "images": [],
             "done": true,
             "id": "emmxfm9bri1w"
           },
@@ -1257,7 +1249,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:30:19.555Z",
+  "savedAt": "2026-03-20T00:31:38.924Z",
   "dailyOutline": {
     "2026-3-18": [
       {
