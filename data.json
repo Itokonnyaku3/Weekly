@@ -212,7 +212,7 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "done": true
+            "id": "emmywicaqghy"
           }
         ],
         "2026-3-30": [
@@ -247,6 +247,14 @@
             "today": false,
             "id": "emmw2zro2mh2",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emmywicaqqv9"
           }
         ],
         "2026-4-6": [
@@ -513,7 +521,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmy4wb1gj08"
+            "id": "emmy4wb1gj08",
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -1260,7 +1269,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T12:54:02.733Z",
+  "savedAt": "2026-03-20T12:55:52.162Z",
   "dailyOutline": {
     "2026-3-18": [
       {
