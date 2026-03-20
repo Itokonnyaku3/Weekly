@@ -533,7 +533,15 @@
             "priority": "",
             "tags": [],
             "id": "emmx7gbbaitw",
-            "collapsed": false
+            "collapsed": false,
+            "parentId": "emmy4wb1gj08"
+          },
+          {
+            "type": "todo",
+            "text": "大間々店状況確認",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-30": [
@@ -1197,7 +1205,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:01:39.626Z",
+  "savedAt": "2026-03-20T00:01:59.507Z",
   "dailyOutline": {
     "2026-3-18": [
       {
