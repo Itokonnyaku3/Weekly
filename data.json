@@ -352,7 +352,9 @@
           "note": "",
           "url": "",
           "category": "",
-          "weekDone": {}
+          "weekDone": {},
+          "priority": "mid",
+          "tags": []
         }
       ],
       "catCollapsed": {},
@@ -1232,7 +1234,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:31:41.654Z",
+  "savedAt": "2026-03-20T00:32:19.568Z",
   "dailyOutline": {
     "2026-3-18": [
       {
