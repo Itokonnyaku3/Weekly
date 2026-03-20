@@ -568,7 +568,8 @@
           "note": "Claude CoWorksで、HACCP監視のモニタ出来ないか？",
           "url": "",
           "images": [],
-          "id": "emmw2zro2gy0"
+          "id": "emmw2zro2gy0",
+          "done": true
         },
         {
           "type": "link",
@@ -1230,7 +1231,8 @@
             "text": "鹿喰さん・時田さんに集計方法確認",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emmy6a1t3reo"
           }
         ]
       },
@@ -1245,7 +1247,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-20T00:39:27.067Z",
+  "savedAt": "2026-03-20T00:44:19.941Z",
   "dailyOutline": {
     "2026-3-18": [
       {
