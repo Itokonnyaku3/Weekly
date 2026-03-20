@@ -1274,7 +1274,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T12:56:40.286Z",
+  "savedAt": "2026-03-20T12:56:51.475Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2040,18 +2040,18 @@
     "2026-3-20": [
       {
         "id": "mmv8a88tx21",
-        "text": "本日は休日。",
+        "text": "本日は休日。　",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "本日は休日。　"
       },
       {
         "id": "mmywl10ee2b",
         "text": "",
         "html": "",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
