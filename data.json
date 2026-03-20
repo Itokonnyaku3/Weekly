@@ -211,8 +211,7 @@
             "category": "テストカテゴリ",
             "today": false,
             "priority": "",
-            "tags": [],
-            "parentId": "emmy5whstteq"
+            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1246,7 +1245,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:33:01.251Z",
+  "savedAt": "2026-03-20T00:33:06.831Z",
   "dailyOutline": {
     "2026-3-18": [
       {
