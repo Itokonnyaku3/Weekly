@@ -172,7 +172,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmy5whstteq"
+            "id": "emmy5whstteq",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -212,7 +213,8 @@
             "today": false,
             "priority": "",
             "tags": [],
-            "id": "emmywicaqghy"
+            "id": "emmywicaqghy",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -254,7 +256,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmywicaqqv9"
+            "id": "emmywicaqqv9",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -522,7 +525,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -556,7 +559,8 @@
             "url": "",
             "images": [],
             "parentId": "emmy4wb1gj08",
-            "id": "emmy5whstca9"
+            "id": "emmy5whstca9",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -1254,7 +1258,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emmy6a1t3reo"
+            "id": "emmy6a1t3reo",
+            "collapsed": false
           }
         ]
       },
@@ -1269,7 +1274,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T12:55:52.162Z",
+  "savedAt": "2026-03-20T12:56:03.501Z",
   "dailyOutline": {
     "2026-3-18": [
       {
