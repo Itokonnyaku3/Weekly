@@ -181,23 +181,6 @@
           },
           {
             "type": "todo",
-            "text": "tetete",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmxfm9br7b7"
-          },
-          {
-            "type": "todo",
-            "text": "aa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "done": true,
-            "id": "emmxfm9bri1w"
-          },
-          {
-            "type": "todo",
             "text": "田口さん・久さん問題をリーダー会で相談",
             "note": "",
             "url": "",
@@ -1249,7 +1232,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:31:38.924Z",
+  "savedAt": "2026-03-20T00:31:41.654Z",
   "dailyOutline": {
     "2026-3-18": [
       {
