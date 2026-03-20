@@ -252,7 +252,11 @@
             "text": "あ",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "category": "テストカテゴリ",
+            "today": false,
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-4-6": [
@@ -1252,7 +1256,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:33:12.369Z",
+  "savedAt": "2026-03-20T00:33:20.408Z",
   "dailyOutline": {
     "2026-3-18": [
       {
