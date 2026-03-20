@@ -235,17 +235,6 @@
             "today": false,
             "id": "emmw2zro2mh2",
             "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "あ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "category": "テストカテゴリ",
-            "today": false,
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-4-6": [
@@ -1244,8 +1233,8 @@
       "recSectionOpen": false
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-03-20T00:34:43.077Z",
+  "wOff": -1,
+  "savedAt": "2026-03-20T00:35:00.470Z",
   "dailyOutline": {
     "2026-3-18": [
       {
