@@ -201,17 +201,6 @@
             "priority": "",
             "tags": [],
             "id": "emmy5whstteq"
-          },
-          {
-            "type": "todo",
-            "text": "あ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "category": "テストカテゴリ",
-            "today": false,
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1256,7 +1245,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:33:20.408Z",
+  "savedAt": "2026-03-20T00:34:43.077Z",
   "dailyOutline": {
     "2026-3-18": [
       {
