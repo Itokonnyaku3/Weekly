@@ -211,7 +211,8 @@
             "category": "テスト",
             "today": false,
             "priority": "",
-            "tags": []
+            "tags": [],
+            "done": true
           }
         ],
         "2026-3-30": [
@@ -1259,7 +1260,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T12:53:27.810Z",
+  "savedAt": "2026-03-20T12:54:02.733Z",
   "dailyOutline": {
     "2026-3-18": [
       {
