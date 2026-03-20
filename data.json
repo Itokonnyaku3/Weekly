@@ -501,6 +501,27 @@
             "collapsed": false
           },
           {
+            "type": "log",
+            "text": "個別店舗対応",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmy4wb1gj08"
+          },
+          {
+            "type": "todo",
+            "text": "岡芹さんとアラート頻度再調整",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emmx7gbbaehl",
+            "collapsed": false,
+            "parentId": "emmy4wb1gj08"
+          },
+          {
             "type": "todo",
             "text": "前橋小島田に1台送る",
             "note": "惣菜作業場冷凍③（長持） -18 -65",
@@ -512,25 +533,6 @@
             "priority": "",
             "tags": [],
             "id": "emmx7gbbaitw",
-            "collapsed": false
-          },
-          {
-            "type": "log",
-            "text": "個別店舗対応",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": []
-          },
-          {
-            "type": "todo",
-            "text": "岡芹さんとアラート頻度再調整",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmx7gbbaehl",
             "collapsed": false
           }
         ],
@@ -1195,7 +1197,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:01:36.228Z",
+  "savedAt": "2026-03-20T00:01:39.626Z",
   "dailyOutline": {
     "2026-3-18": [
       {
