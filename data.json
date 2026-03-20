@@ -1219,7 +1219,8 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro2mty",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           }
         ]
       },
@@ -1233,8 +1234,8 @@
       "recSectionOpen": false
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-03-20T00:35:00.470Z",
+  "wOff": -2,
+  "savedAt": "2026-03-20T00:35:27.821Z",
   "dailyOutline": {
     "2026-3-18": [
       {
