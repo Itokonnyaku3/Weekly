@@ -369,7 +369,17 @@
           "collapsed": false
         }
       ],
-      "recurringEntries": [],
+      "recurringEntries": [
+        {
+          "id": "emmy5x7z7gj2",
+          "text": "週次報告（Onenote）",
+          "type": "todo",
+          "note": "",
+          "url": "",
+          "category": "",
+          "weekDone": {}
+        }
+      ],
       "catCollapsed": {},
       "recSectionOpen": true
     },
@@ -1247,7 +1257,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:30:02.168Z",
+  "savedAt": "2026-03-20T00:30:19.555Z",
   "dailyOutline": {
     "2026-3-18": [
       {
