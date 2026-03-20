@@ -524,11 +524,14 @@
             "collapsed": false
           },
           {
-            "type": "todo",
+            "type": "log",
             "text": "個別店舗対応",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1192,7 +1195,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-20T00:01:24.056Z",
+  "savedAt": "2026-03-20T00:01:33.858Z",
   "dailyOutline": {
     "2026-3-18": [
       {
