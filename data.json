@@ -511,7 +511,8 @@
             "images": [],
             "id": "emmw2zro21cn",
             "done": false,
-            "collapsed": false
+            "collapsed": false,
+            "parentId": "emmw2zro2zpo"
           },
           {
             "type": "todo",
@@ -1281,7 +1282,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T22:49:02.342Z",
+  "savedAt": "2026-03-21T22:50:30.547Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2315,13 +2316,13 @@
       },
       {
         "id": "mn0hidmnr0n",
-        "text": " /",
-        "html": "&nbsp;/",
+        "text": " ",
+        "html": " ",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false
       }
     ],
