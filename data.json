@@ -593,7 +593,10 @@
           "note": "",
           "url": "https://workflowy.com/#/5c36760bd99b",
           "images": [],
-          "id": "emmw2zro29m1"
+          "id": "emmw2zro29m1",
+          "today": false,
+          "priority": "mid",
+          "tags": []
         },
         {
           "type": "todo",
@@ -1281,7 +1284,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T22:50:49.073Z",
+  "savedAt": "2026-03-21T22:51:04.363Z",
   "dailyOutline": {
     "2026-3-18": [
       {
