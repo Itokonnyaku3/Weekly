@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:57:58.851Z",
+  "savedAt": "2026-03-21T04:58:04.561Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2121,7 +2121,16 @@
       {
         "id": "mmzlcwmja3o",
         "text": "ミラーリング→＠でプロジェクトを選択する機能。",
-        "html": "ミラーリング→＠でプロジェクトを選択する機能。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuxba15gs",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
