@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:56:32.589Z",
+  "savedAt": "2026-03-21T04:56:35.501Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2158,7 +2158,7 @@
         "id": "mmzllgmllgl",
         "text": "インラインの改行がまだ反映されてない気がする。",
         "html": "インラインの改行がまだ反映されてない気がする。",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2166,8 +2166,8 @@
       {
         "id": "mmzle44a4kn",
         "text": "各ノードに対してプロジェクトとの紐づけ、そのプロジェクト関連ノートの検索。",
-        "html": "",
-        "indent": 2,
+        "html": "各ノードに対してプロジェクトとの紐づけ、そのプロジェクト関連ノートの検索。",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2175,8 +2175,8 @@
       {
         "id": "mmzlevwz7yr",
         "text": "また、それらの週次のアクションをまとめてサマリーとして表示するのもあり。",
-        "html": "",
-        "indent": 2,
+        "html": "また、それらの週次のアクションをまとめてサマリーとして表示するのもあり。",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2185,7 +2185,7 @@
         "id": "mmzlf9n7h9w",
         "text": "ノードは、プロジェクトの選択、カテゴリ（メモ、議事録、タスク？）なんかをタグかなんかで追加できるといいかも。",
         "html": "ノードは、プロジェクトの選択、カテゴリ（メモ、議事録、タスク？）なんかをタグかなんかで追加できるといいかも。",
-        "indent": 2,
+        "indent": 1,
         "bold": true,
         "color": "#3498db",
         "collapsed": false
@@ -2193,8 +2193,8 @@
       {
         "id": "mmzlgeapu2x",
         "text": "Weeklｙを折りたたんでいるときは、↑を押したときに開閉するとスマート",
-        "html": "",
-        "indent": 2,
+        "html": "Weeklｙを折りたたんでいるときは、↑を押したときに開閉するとスマート",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
