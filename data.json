@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:56:29.239Z",
+  "savedAt": "2026-03-21T04:56:32.589Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2125,13 +2125,13 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmzld6g517x",
         "text": "ライブ検索",
-        "html": "",
-        "indent": 2,
+        "html": "ライブ検索",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2139,8 +2139,8 @@
       {
         "id": "mmzlddgzulv",
         "text": "カード表示",
-        "html": "",
-        "indent": 2,
+        "html": "カード表示",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2148,8 +2148,8 @@
       {
         "id": "mmzldn0jrsw",
         "text": "あまり機能を増やしすぎて動作が遅くならないように注意。",
-        "html": "",
-        "indent": 2,
+        "html": "あまり機能を増やしすぎて動作が遅くならないように注意。",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
