@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:58:18.051Z",
+  "savedAt": "2026-03-21T04:58:24.687Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2129,8 +2129,17 @@
       },
       {
         "id": "mmzuxba15gs",
-        "text": "選択すると、ノートを書いた週に",
-        "html": "選択すると、ノートを書いた週に",
+        "text": "選択すると、ノートを書いた週にリンクが自動的に追加される",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuxu0fhty",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
