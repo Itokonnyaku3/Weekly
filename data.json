@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:37:44.467Z",
+  "savedAt": "2026-03-21T04:24:55.903Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1531,7 +1531,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "html": "０９００ 店舗インフラ改善会議"
       },
       {
@@ -2228,7 +2228,16 @@
       {
         "id": "mmzllbqgxdj",
         "text": "資料になりそうなメールは全部フォルダに入れておいて整理してもらう",
-        "html": "資料になりそうなメールは全部フォルダに入れておいて整理してもらう",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzlmmoedh0",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
