@@ -205,13 +205,6 @@
           },
           {
             "type": "todo",
-            "text": "a",
-            "note": "",
-            "url": "",
-            "images": []
-          },
-          {
-            "type": "todo",
             "text": "ソラカメ管理者パスワード",
             "note": "テスト　あ",
             "url": "",
@@ -234,6 +227,14 @@
             "images": [],
             "id": "emn0h75uv18q",
             "collapsed": false,
+            "parentId": "emmw2zro2aqx"
+          },
+          {
+            "type": "todo",
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
             "parentId": "emmw2zro2aqx"
           },
           {
@@ -1358,7 +1359,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:31:55.197Z",
+  "savedAt": "2026-03-21T23:31:58.703Z",
   "dailyOutline": {
     "2026-3-18": [
       {
