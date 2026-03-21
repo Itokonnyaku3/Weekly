@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:31:54.898Z",
+  "savedAt": "2026-03-21T00:32:01.939Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2164,8 +2164,17 @@
       },
       {
         "id": "mmzlevwz7yr",
-        "text": "また、それらの週次のアクションを",
-        "html": "また、それらの週次のアクションを",
+        "text": "また、それらの週次のアクションをまとめてサマリーとして表示するのもあり。",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzlf9n7h9w",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
