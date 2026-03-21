@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:30:10.532Z",
+  "savedAt": "2026-03-21T00:30:21.025Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2113,6 +2113,15 @@
         "text": "どういう形にすれば使いやすいか、考えてみるか…",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzlcwmja3o",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
