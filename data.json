@@ -484,12 +484,14 @@
           },
           {
             "type": "log",
-            "text": "その他メモ",
-            "note": "太田丸山店…説明会には参加したがよくわからなかったのかデジタル推進本部全体にメールで問合せ。",
+            "text": "アスベスト調査会社を小林さんに紹介してもらった",
+            "note": "加納さん経由？\n株式会社環境管理センター\n水落さん　Eightに登録、久保田さんにも連携した",
             "url": "",
             "images": [],
             "today": false,
-            "id": "emmw2zro2118",
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2ir0",
             "collapsed": false
           }
         ],
@@ -681,6 +683,16 @@
       "entries": {
         "2026-3-16": [
           {
+            "type": "log",
+            "text": "その他メモ",
+            "note": "太田丸山店…説明会には参加したがよくわからなかったのかデジタル推進本部全体にメールで問合せ。",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2118",
+            "collapsed": false
+          },
+          {
             "id": "emn0yfouyc8b",
             "type": "link",
             "text": "📝あああ",
@@ -695,18 +707,6 @@
               "nodeId": "mn0hi86atps"
             },
             "today": false
-          },
-          {
-            "type": "log",
-            "text": "アスベスト調査会社を小林さんに紹介してもらった",
-            "note": "加納さん経由？\n株式会社環境管理センター\n水落さん　Eightに登録、久保田さんにも連携した",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2ir0",
-            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -1368,7 +1368,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:34:21.716Z",
+  "savedAt": "2026-03-21T23:34:38.522Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2373,15 +2373,15 @@
     "2026-3-22": [
       {
         "id": "mn0hi86atps",
-        "text": "aああ #",
-        "html": "aああ #",
+        "text": "aああ ",
+        "html": "aああ ",
         "indent": 0,
         "bold": true,
         "color": "#e74c3c",
         "collapsed": false,
         "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "2:2026-3-16:1",
+        "linkedEntryRef": "emmw2zro2ir0",
         "linkedEntryText": "📝ノート参照: aa"
       },
       {
