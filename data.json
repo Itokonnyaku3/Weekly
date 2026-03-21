@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:30:02.866Z",
+  "savedAt": "2026-03-21T00:30:10.532Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2112,15 +2112,6 @@
         "id": "mmzlbw4ziyd",
         "text": "どういう形にすれば使いやすいか、考えてみるか…",
         "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mmzlcdwl3w5",
-        "text": "列1列2列3列1列2列3",
-        "html": "<table><tbody><tr><th>列1</th><th>列2</th><th>列3</th></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table><table><tbody><tr><th>列1</th><th>列2</th><th>列3</th></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table>",
         "indent": 1,
         "bold": false,
         "color": "",
