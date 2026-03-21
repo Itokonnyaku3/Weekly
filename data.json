@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:33:08.966Z",
+  "savedAt": "2026-03-21T00:33:11.513Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2111,9 +2111,9 @@
       {
         "id": "mmzlbw4ziyd",
         "text": "どういう形にすれば使いやすいか、考えてみるか…",
-        "html": "",
+        "html": "どういう形にすれば使いやすいか、考えてみるか…",
         "indent": 1,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
