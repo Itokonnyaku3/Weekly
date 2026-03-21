@@ -1280,7 +1280,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:34:23.002Z",
+  "savedAt": "2026-03-21T04:34:26.792Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2080,7 +2080,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "本日も休日"
       },
       {
@@ -2221,11 +2221,11 @@
       {
         "id": "mmzlkxgz15z",
         "text": "その他のClaudeの活用について",
-        "html": "",
+        "html": "その他のClaudeの活用について",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mmzllbqgxdj",
