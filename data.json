@@ -491,6 +491,21 @@
             "today": false,
             "id": "emmw2zro2118",
             "collapsed": false
+          },
+          {
+            "id": "emn0z0l49q0v",
+            "type": "link",
+            "text": "📝ノート参照: aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn0z0i5zuqa"
+            }
           }
         ],
         "2026-3-23": [
@@ -1352,7 +1367,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:40:16.697Z",
+  "savedAt": "2026-03-21T23:40:23.228Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2368,12 +2383,14 @@
       },
       {
         "id": "mn0z0i5zuqa",
-        "text": "aaa #",
-        "html": "aaa #",
+        "text": "aaa ",
+        "html": "aaa&nbsp;",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn0z0l49q0v",
+        "linkedEntryText": "📝ノート参照: aaa"
       }
     ],
     "2026-3-23": [
