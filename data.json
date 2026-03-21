@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:56:19.316Z",
+  "savedAt": "2026-03-21T04:56:22.195Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2094,8 +2094,8 @@
       {
         "id": "mmzlaxmmj9p",
         "text": "さすがにWorkflowyと同様、とはいかないが、自分好みにできることも考えると全然こっちでいい気がする。",
-        "html": "",
-        "indent": 1,
+        "html": "さすがにWorkflowyと同様、とはいかないが、自分好みにできることも考えると全然こっちでいい気がする。",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2103,8 +2103,8 @@
       {
         "id": "mmzlbp743bt",
         "text": "あとはミラーリング位か？",
-        "html": "",
-        "indent": 1,
+        "html": "あとはミラーリング位か？",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2113,7 +2113,7 @@
         "id": "mmzlbw4ziyd",
         "text": "どういう形にすれば使いやすいか、考えてみるか…",
         "html": "どういう形にすれば使いやすいか、考えてみるか…",
-        "indent": 1,
+        "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false
@@ -2122,7 +2122,7 @@
         "id": "mmzlcwmja3o",
         "text": "ミラーリング",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2131,7 +2131,7 @@
         "id": "mmzld6g517x",
         "text": "ライブ検索",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2140,7 +2140,7 @@
         "id": "mmzlddgzulv",
         "text": "カード表示",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2149,7 +2149,7 @@
         "id": "mmzldn0jrsw",
         "text": "あまり機能を増やしすぎて動作が遅くならないように注意。",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2158,7 +2158,7 @@
         "id": "mmzllgmllgl",
         "text": "インラインの改行がまだ反映されてない気がする。",
         "html": "インラインの改行がまだ反映されてない気がする。",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2167,7 +2167,7 @@
         "id": "mmzle44a4kn",
         "text": "各ノードに対してプロジェクトとの紐づけ、そのプロジェクト関連ノートの検索。",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2176,7 +2176,7 @@
         "id": "mmzlevwz7yr",
         "text": "また、それらの週次のアクションをまとめてサマリーとして表示するのもあり。",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2185,7 +2185,7 @@
         "id": "mmzlf9n7h9w",
         "text": "ノードは、プロジェクトの選択、カテゴリ（メモ、議事録、タスク？）なんかをタグかなんかで追加できるといいかも。",
         "html": "ノードは、プロジェクトの選択、カテゴリ（メモ、議事録、タスク？）なんかをタグかなんかで追加できるといいかも。",
-        "indent": 2,
+        "indent": 1,
         "bold": true,
         "color": "#3498db",
         "collapsed": false
@@ -2194,7 +2194,7 @@
         "id": "mmzlgeapu2x",
         "text": "Weeklｙを折りたたんでいるときは、↑を押したときに開閉するとスマート",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2203,7 +2203,7 @@
         "id": "mmzli5zd3t4",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2212,7 +2212,7 @@
         "id": "mmzlkxaphgz",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
