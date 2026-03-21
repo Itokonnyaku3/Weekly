@@ -481,6 +481,16 @@
             "today": false,
             "id": "emmw2zro2h7j",
             "collapsed": false
+          },
+          {
+            "type": "log",
+            "text": "その他メモ",
+            "note": "太田丸山店…説明会には参加したがよくわからなかったのかデジタル推進本部全体にメールで問合せ。",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2118",
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -680,16 +690,6 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro2ir0",
-            "collapsed": false
-          },
-          {
-            "type": "log",
-            "text": "その他メモ",
-            "note": "太田丸山店…説明会には参加したがよくわからなかったのかデジタル推進本部全体にメールで問合せ。",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2118",
             "collapsed": false
           },
           {
@@ -1368,7 +1368,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:34:43.462Z",
+  "savedAt": "2026-03-21T23:34:59.859Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2373,8 +2373,8 @@
     "2026-3-22": [
       {
         "id": "mn0hi86atps",
-        "text": "aああ ",
-        "html": "aああ ",
+        "text": "aああ ",
+        "html": "aああ&nbsp;",
         "indent": 0,
         "bold": true,
         "color": "#e74c3c",
