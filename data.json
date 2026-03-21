@@ -222,7 +222,8 @@
             "text": "a",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emmzu2fp64sm"
           }
         ],
         "2026-3-30": [
@@ -1279,7 +1280,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:25:09.647Z",
+  "savedAt": "2026-03-21T04:34:20.097Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2077,10 +2078,10 @@
         "id": "mmx7jy982l7",
         "text": "本日も休日",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "本日も休日"
       },
       {
         "id": "mmzlajkk1ge",
