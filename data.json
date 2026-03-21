@@ -695,7 +695,7 @@
           {
             "id": "emn0z0l49q0v",
             "type": "link",
-            "text": "📝ノート参照: aaa",
+            "text": "📝ノート参照: aaaaaaa",
             "note": "",
             "url": "",
             "images": [],
@@ -705,7 +705,8 @@
             "linkedNote": {
               "date": "2026-3-22",
               "nodeId": "mn0z0i5zuqa"
-            }
+            },
+            "today": false
           }
         ],
         "2026-3-23": [
@@ -1367,7 +1368,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:40:30.507Z",
+  "savedAt": "2026-03-21T23:40:41.629Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2384,13 +2385,22 @@
       {
         "id": "mn0z0i5zuqa",
         "text": "aaaaaa",
-        "html": "aaaaaa",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn0z0l49q0v",
         "linkedEntryText": "📝ノート参照: aaa"
+      },
+      {
+        "id": "mn0z0w71z07",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-23": [
