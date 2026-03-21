@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:58:32.986Z",
+  "savedAt": "2026-03-21T04:58:38.100Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2139,8 +2139,17 @@
       {
         "id": "mmzuxu0fhty",
         "text": "タスク追加",
-        "html": "タスク追加",
+        "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuy1x3g6t",
+        "text": "ノートに",
+        "html": "ノートに",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
