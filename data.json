@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:56:38.151Z",
+  "savedAt": "2026-03-21T04:56:55.347Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2129,8 +2129,8 @@
       },
       {
         "id": "mmzld6g517x",
-        "text": "ライブ検索",
-        "html": "ライブ検索",
+        "text": "ｌライブ検索",
+        "html": "ｌライブ検索",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -2221,7 +2221,7 @@
         "id": "mmzlmmoedh0",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
