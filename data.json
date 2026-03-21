@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:56:13.002Z",
+  "savedAt": "2026-03-21T04:56:19.316Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2085,8 +2085,8 @@
       {
         "id": "mmzlajkk1ge",
         "text": "デイリーノートは色々やっていたら結構いい感じになってきた。",
-        "html": "",
-        "indent": 1,
+        "html": "デイリーノートは色々やっていたら結構いい感じになってきた。",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2230,7 +2230,7 @@
         "id": "mmzllbqgxdj",
         "text": "資料になりそうなメールは全部フォルダに入れておいて整理してもらう",
         "html": "資料になりそうなメールは全部フォルダに入れておいて整理してもらう",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2239,7 +2239,7 @@
         "id": "mmzlmmoedh0",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
