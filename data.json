@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:57:37.128Z",
+  "savedAt": "2026-03-21T04:57:45.261Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2120,8 +2120,8 @@
       },
       {
         "id": "mmzlcwmja3o",
-        "text": "ミラーリング",
-        "html": "ミラーリング",
+        "text": "ミラーリング→",
+        "html": "ミラーリング→",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -2229,7 +2229,16 @@
       {
         "id": "mmzuwckgnkb",
         "text": "上下で選択した後、一度は左右キーで上下に移るがそのあとはまた無効になる",
-        "html": "上下で選択した後、一度は左右キーで上下に移るがそのあとはまた無効になる",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuwtgwvrj",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
