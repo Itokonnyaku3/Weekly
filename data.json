@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:58:38.100Z",
+  "savedAt": "2026-03-21T04:58:40.732Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2147,8 +2147,17 @@
       },
       {
         "id": "mmzuy1x3g6t",
-        "text": "ノートに",
-        "html": "ノートに",
+        "text": "ノートに[",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuy627qvn",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
