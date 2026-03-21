@@ -222,8 +222,7 @@
             "text": "a",
             "note": "",
             "url": "",
-            "images": [],
-            "id": "emmzu2fp64sm"
+            "images": []
           }
         ],
         "2026-3-30": [
@@ -1280,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:34:32.050Z",
+  "savedAt": "2026-03-21T04:56:06.972Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2078,15 +2077,15 @@
         "id": "mmx7jy982l7",
         "text": "本日も休日",
         "indent": 0,
-        "bold": true,
+        "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "本日も休日"
       },
       {
         "id": "mmzlajkk1ge",
         "text": "デイリーノートは色々やっていたら結構いい感じになってきた。",
-        "html": "デイリーノートは色々やっていたら結構いい感じになってきた。",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -2117,7 +2116,7 @@
         "indent": 1,
         "bold": true,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmzlcwmja3o",
@@ -2221,11 +2220,11 @@
       {
         "id": "mmzlkxgz15z",
         "text": "その他のClaudeの活用について",
-        "html": "その他のClaudeの活用について",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mmzllbqgxdj",
