@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:30:45.955Z",
+  "savedAt": "2026-03-21T00:31:08.122Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2146,6 +2146,15 @@
       },
       {
         "id": "mmzldn0jrsw",
+        "text": "あまり機能を増やしすぎて動作が遅くならないように注意。",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzle44a4kn",
         "text": "",
         "html": "",
         "indent": 2,
