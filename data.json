@@ -404,7 +404,7 @@
         }
       ],
       "catCollapsed": {
-        "テスト": true
+        "テスト": false
       },
       "recSectionOpen": true
     },
@@ -1350,7 +1350,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:30:36.673Z",
+  "savedAt": "2026-03-21T23:30:44.065Z",
   "dailyOutline": {
     "2026-3-18": [
       {
