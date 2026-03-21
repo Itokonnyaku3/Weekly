@@ -223,7 +223,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn0h75uv18q"
+            "id": "emn0h75uv18q",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -531,7 +532,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1280,7 +1281,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T15:30:50.541Z",
+  "savedAt": "2026-03-21T15:30:53.242Z",
   "dailyOutline": {
     "2026-3-18": [
       {
