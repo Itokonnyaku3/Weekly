@@ -1352,7 +1352,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:40:08.813Z",
+  "savedAt": "2026-03-21T23:40:12.900Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2355,28 +2355,6 @@
       }
     ],
     "2026-3-22": [
-      {
-        "id": "mn0hi86atps",
-        "text": "aああ ",
-        "html": "aああ ",
-        "indent": 0,
-        "bold": true,
-        "color": "#e74c3c",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "emmw2zro2ir0",
-        "linkedEntryText": "📝ノート参照: aa"
-      },
-      {
-        "id": "mn0yg78lc7t",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
       {
         "id": "mn0hidmnr0n",
         "text": "aaa ",
