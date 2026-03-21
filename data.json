@@ -532,7 +532,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -1281,7 +1281,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T15:31:02.252Z",
+  "savedAt": "2026-03-21T15:31:07.061Z",
   "dailyOutline": {
     "2026-3-18": [
       {
