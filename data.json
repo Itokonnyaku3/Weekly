@@ -1279,7 +1279,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T04:58:54.996Z",
+  "savedAt": "2026-03-21T04:58:57.355Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2147,8 +2147,17 @@
       },
       {
         "id": "mmzuy1x3g6t",
-        "text": "ノートに[] またはショートカットで",
-        "html": "ノートに[] またはショートカットで",
+        "text": "ノートに[] またはショートカットでタスク追加。",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzuyj7vx7b",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
