@@ -1299,7 +1299,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:16:27.487Z",
+  "savedAt": "2026-03-21T23:16:33.150Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2309,7 +2309,7 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "&nbsp;tesut <span class=\"e-tag-chip\" style=\"color:var(--tx-info);background:var(--bg-info);border-color:var(--bd-info);\">🏷️ その他細かいこと<br><br></span>",
+        "html": "&nbsp;tesut <span class=\"e-tag-chip\" style=\"color:var(--tx-info);background:var(--bg-info);border-color:var(--bd-info);\">🏷️ その<br>他細かいこと<br></span>",
         "linkedEntryRef": "9:2026-3-16:2",
         "linkedEntryText": "📝ノート参照: tesut"
       },
