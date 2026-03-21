@@ -691,22 +691,6 @@
             "tags": [],
             "id": "emmw2zro2ir0",
             "collapsed": false
-          },
-          {
-            "id": "emn0yfouyc8b",
-            "type": "link",
-            "text": "📝あああ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0hi86atps"
-            },
-            "today": false
           }
         ],
         "2026-3-23": [
@@ -1368,7 +1352,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:40:06.055Z",
+  "savedAt": "2026-03-21T23:40:08.813Z",
   "dailyOutline": {
     "2026-3-18": [
       {
