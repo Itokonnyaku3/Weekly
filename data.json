@@ -1278,7 +1278,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-21T00:36:42.881Z",
+  "savedAt": "2026-03-21T00:36:50.925Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2154,6 +2154,15 @@
         "collapsed": false
       },
       {
+        "id": "mmzllgmllgl",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mmzle44a4kn",
         "text": "各ノードに対してプロジェクトとの紐づけ、そのプロジェクト関連ノートの検索。",
         "html": "",
@@ -2209,9 +2218,18 @@
       },
       {
         "id": "mmzlkxgz15z",
-        "text": "その他のClaudeの活用について…あああ",
+        "text": "その他のClaudeの活用について",
         "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mmzllbqgxdj",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
