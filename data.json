@@ -234,7 +234,7 @@
             "priority": "mid",
             "tags": [],
             "id": "emmw2zro2aqx",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -268,6 +268,13 @@
             "images": [],
             "id": "emn0yqlocw1m",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "あ",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-30": [
@@ -433,7 +440,8 @@
       "catCollapsed": {
         "テスト": false
       },
-      "recSectionOpen": true
+      "recSectionOpen": true,
+      "isPrivate": false
     },
     {
       "name": "HACCP",
@@ -684,7 +692,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "FHラインESL導入",
@@ -755,7 +764,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "運用改善",
@@ -871,7 +881,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "上手い早い安い",
@@ -956,7 +967,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "商品業務推進部引継ぎ案件",
@@ -999,7 +1011,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "📔新店改装店",
@@ -1020,7 +1033,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "店舗DXサポート",
@@ -1054,7 +1068,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "ふかやバイオーダー",
@@ -1145,7 +1160,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "その他細かいこと",
@@ -1213,7 +1229,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "山下さん",
@@ -1295,7 +1312,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "根岸さん",
@@ -1324,7 +1342,8 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     },
     {
       "name": "複合機改善",
@@ -1376,11 +1395,12 @@
       "spanItems": [],
       "recurringEntries": [],
       "catCollapsed": {},
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T04:27:50.625Z",
+  "savedAt": "2026-03-22T04:33:03.372Z",
   "dailyOutline": {
     "2026-3-18": [
       {
