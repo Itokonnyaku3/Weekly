@@ -136,7 +136,8 @@
               "date": "2026-3-22",
               "nodeId": "mn11uc1j1m4"
             },
-            "today": false
+            "today": false,
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -250,7 +251,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn0yqlocw1m"
+            "id": "emn0yqlocw1m",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -626,7 +628,8 @@
             "linkedNote": {
               "date": "2026-3-22",
               "nodeId": "mn0hi6p2qxn"
-            }
+            },
+            "collapsed": false
           }
         ]
       },
@@ -698,7 +701,8 @@
               "date": "2026-3-22",
               "nodeId": "mn0z0w71z07"
             },
-            "today": false
+            "today": false,
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -1167,7 +1171,8 @@
             "linkedNote": {
               "date": "2026-3-22",
               "nodeId": "mmx7jydeqqw"
-            }
+            },
+            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -1360,7 +1365,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T01:55:17.210Z",
+  "savedAt": "2026-03-22T01:55:55.660Z",
   "dailyOutline": {
     "2026-3-18": [
       {
