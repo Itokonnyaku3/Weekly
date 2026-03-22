@@ -1,6 +1,17 @@
 {
   "projects": [
     {
+      "name": "Private",
+      "entries": {},
+      "links": [],
+      "projEntries": [],
+      "projEntriesOpen": false,
+      "collapsed": false,
+      "recurringEntries": [],
+      "recSectionOpen": false,
+      "isPrivate": true
+    },
+    {
       "name": "管理・全般",
       "entries": {
         "2026-3-9": [
@@ -1037,17 +1048,6 @@
       "isPrivate": false
     },
     {
-      "name": "Private",
-      "entries": {},
-      "links": [],
-      "projEntries": [],
-      "projEntriesOpen": false,
-      "collapsed": false,
-      "recurringEntries": [],
-      "recSectionOpen": false,
-      "isPrivate": true
-    },
-    {
       "name": "店舗DXサポート",
       "entries": {
         "2026-3-16": [],
@@ -1411,7 +1411,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T04:40:27.291Z",
+  "savedAt": "2026-03-22T04:40:42.851Z",
   "dailyOutline": {
     "2026-3-18": [
       {
