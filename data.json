@@ -1406,11 +1406,12 @@
       "projEntriesOpen": false,
       "collapsed": false,
       "recurringEntries": [],
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": true
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T04:39:39.832Z",
+  "savedAt": "2026-03-22T04:39:45.795Z",
   "dailyOutline": {
     "2026-3-18": [
       {
