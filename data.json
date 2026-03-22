@@ -1445,7 +1445,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T06:25:27.622Z",
+  "savedAt": "2026-03-22T06:25:37.917Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2466,7 +2466,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn1403unpck",
