@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:18:36.518Z",
+  "savedAt": "2026-03-22T12:18:40.097Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2577,12 +2577,13 @@
       },
       {
         "id": "mn1q3o8qj2z",
-        "text": "欲しいもの",
-        "html": "欲しいもの",
+        "text": "欲しいもの ",
+        "html": "欲しいもの ",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isPrivate": true
       }
     ],
     "2026-3-24": [
