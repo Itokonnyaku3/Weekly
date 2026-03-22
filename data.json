@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:16:05.916Z",
+  "savedAt": "2026-03-22T12:16:08.304Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2531,19 +2531,10 @@
         "collapsed": false
       },
       {
-        "id": "mmx7jyojy3w",
-        "text": "久保田さん育休後の体制…",
+        "id": "mn1q0bnb2ao",
+        "text": "要検討",
+        "html": "要検討",
         "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": false,
-        "html": "久保田さん育休後の体制…"
-      },
-      {
-        "id": "mmx7rujjvky",
-        "text": "根岸さん ",
-        "html": "根岸さん&nbsp;",
-        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2558,13 +2549,22 @@
         "collapsed": false
       },
       {
-        "id": "mn1q0bnb2ao",
-        "text": "要検討",
-        "html": "要検討",
-        "indent": 0,
+        "id": "mmx7rujjvky",
+        "text": "根岸さん ",
+        "html": "根岸さん&nbsp;",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mmx7jyojy3w",
+        "text": "久保田さん育休後の体制…",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false,
+        "html": "久保田さん育休後の体制…"
       }
     ],
     "2026-3-24": [
