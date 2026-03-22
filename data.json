@@ -233,7 +233,7 @@
           {
             "id": "emn1pw7bid29",
             "type": "link",
-            "text": "1799稟議",
+            "text": "1700 稟議",
             "note": "",
             "url": "",
             "images": [],
@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:15:06.026Z",
+  "savedAt": "2026-03-22T12:15:08.996Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2484,17 +2484,6 @@
         "linkedEntryText": "1300 ESL業務分科会　※前半は久保田さんに任せる /"
       },
       {
-        "id": "mn1prxh48m6",
-        "text": "1799稟議",
-        "html": "1799稟議",
-        "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn1pw7bid29",
-        "linkedEntryText": ""
-      },
-      {
         "id": "mn1pydeetyl",
         "text": "1700 稟議",
         "html": "1700 稟議",
@@ -2511,6 +2500,17 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn1prxh48m6",
+        "text": "1700 稟議",
+        "html": "1700 稟議",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn1pw7bid29",
+        "linkedEntryText": ""
       },
       {
         "id": "mmx7jyojy3w",
