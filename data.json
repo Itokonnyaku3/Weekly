@@ -487,6 +487,13 @@
           },
           {
             "type": "todo",
+            "text": "成電社から見積受領！",
+            "note": "",
+            "url": "",
+            "images": []
+          },
+          {
+            "type": "todo",
             "text": "新狭山見積→発注",
             "note": "□成電社\n■富士通\n■小泉成器",
             "url": "",
@@ -585,13 +592,6 @@
             "parentId": "emmy4wb1gj08",
             "id": "emmy5whstca9",
             "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "成電社から見積受領！",
-            "note": "",
-            "url": "",
-            "images": []
           }
         ],
         "2026-3-30": [
@@ -1381,7 +1381,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T11:05:40.868Z",
+  "savedAt": "2026-03-22T11:05:55.067Z",
   "dailyOutline": {
     "2026-3-18": [
       {
