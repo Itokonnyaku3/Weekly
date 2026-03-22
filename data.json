@@ -33,6 +33,37 @@
               "date": "2026-3-22",
               "nodeId": "mn1bh5pu0cf"
             }
+          },
+          {
+            "id": "emn1hhtqelog",
+            "type": "link",
+            "text": "プライあああベート",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn1bq88tji4"
+            }
+          },
+          {
+            "id": "emn1hhtqe1o5",
+            "type": "todo",
+            "done": false,
+            "text": "ああ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn1bq7u9olp"
+            }
           }
         ],
         "2026-3-23": [
@@ -1405,7 +1436,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:16:53.847Z",
+  "savedAt": "2026-03-22T08:24:53.709Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2476,13 +2507,33 @@
       {
         "id": "mn0z0w71z07",
         "text": "📝ノート参照esaataaa",
-        "html": "📝ノート参照esaataaa",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn11svai09o",
         "linkedEntryText": "📝ノート参照: 📝ノート参照esaataaa"
+      },
+      {
+        "id": "mn1hkdo18w6",
+        "text": "てすと3",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn1hkozljmx",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn124tswd8p",
@@ -2557,13 +2608,15 @@
       },
       {
         "id": "mn1bq88tji4",
-        "text": "プライベート ",
-        "html": "プライベート ",
+        "text": "プライあああベート ",
+        "html": "プライあああベート ",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isPrivate": true
+        "isPrivate": true,
+        "linkedEntryRef": "emn1hhtqelog",
+        "linkedEntryText": "プライあああベート"
       },
       {
         "id": "mn1bqem96v6",
@@ -2577,13 +2630,44 @@
       {
         "id": "mn1bq7u9olp",
         "text": "ああ　",
-        "html": "ああ　",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false,
         "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn1hhtqe1o5",
+        "linkedEntryText": "ああ"
+      },
+      {
+        "id": "mn1hhwg7j5y",
+        "text": "aaa ",
+        "html": "aaa ",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
         "checked": false
+      },
+      {
+        "id": "mn1hi4fkovl",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn1hhypu4id",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-23": [
