@@ -679,7 +679,7 @@
           {
             "id": "emn11svai09o",
             "type": "link",
-            "text": "📝ノート参照: tesaataa",
+            "text": "📝ノート参照: tesaataaaaaa",
             "note": "",
             "url": "",
             "images": [],
@@ -689,7 +689,8 @@
             "linkedNote": {
               "date": "2026-3-22",
               "nodeId": "mn0z0w71z07"
-            }
+            },
+            "today": false
           }
         ],
         "2026-3-23": [
@@ -1351,7 +1352,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T00:58:34.154Z",
+  "savedAt": "2026-03-22T00:58:43.703Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2367,14 +2368,14 @@
       },
       {
         "id": "mn0z0w71z07",
-        "text": "tesaataa",
-        "html": "tesaataa",
+        "text": "📝ノート参照: tesaataaaaaa",
+        "html": "📝ノート参照: tesaataaaaaa",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn11svai09o",
-        "linkedEntryText": "📝ノート参照: tesaataa"
+        "linkedEntryText": "📝ノート参照: tesaataaaaaa"
       }
     ],
     "2026-3-23": [
