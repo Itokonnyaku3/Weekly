@@ -1399,7 +1399,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:12:23.304Z",
+  "savedAt": "2026-03-22T12:12:27.207Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2424,9 +2424,9 @@
       {
         "id": "mn1prcy3ri8",
         "text": "1100 店舗インフラ部リーダー会",
-        "html": "",
+        "html": "1100 店舗インフラ部リーダー会",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -2490,7 +2490,7 @@
         "id": "mmx7jyojy3w",
         "text": "久保田さん育休後の体制…",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "html": "久保田さん育休後の体制…"
