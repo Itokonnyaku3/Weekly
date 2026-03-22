@@ -491,22 +491,6 @@
             "today": false,
             "id": "emmw2zro2118",
             "collapsed": false
-          },
-          {
-            "id": "emn0z0l49q0v",
-            "type": "link",
-            "text": "aaadasd📝ノート参照: aaaaaaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0z0i5zuqa"
-            },
-            "today": false
           }
         ],
         "2026-3-23": [
@@ -1368,7 +1352,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T00:58:00.002Z",
+  "savedAt": "2026-03-22T00:58:08.490Z",
   "dailyOutline": {
     "2026-3-18": [
       {
