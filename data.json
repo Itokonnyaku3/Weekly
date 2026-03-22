@@ -104,16 +104,6 @@
           },
           {
             "type": "todo",
-            "text": "All Hands出欠入力",
-            "note": "",
-            "url": "",
-            "images": [],
-            "done": true,
-            "id": "emmw2zro2tjh",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "山下さん展示会FBもらう",
             "note": "",
             "url": "",
@@ -121,6 +111,16 @@
             "today": false,
             "done": true,
             "id": "emmw2zro2y63",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "All Hands出欠入力",
+            "note": "",
+            "url": "",
+            "images": [],
+            "done": true,
+            "id": "emmw2zro2tjh",
             "collapsed": false
           },
           {
@@ -1384,7 +1384,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:05:38.250Z",
+  "savedAt": "2026-03-22T12:08:29.841Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2403,8 +2403,8 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "html": ""
+        "collapsed": true,
+        "html": "久保田さん育休後の体制…"
       },
       {
         "id": "mmx7rujjvky",
