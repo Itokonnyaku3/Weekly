@@ -627,6 +627,13 @@
             "tags": [],
             "id": "emmw2zro2yfv",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "説明会！",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-9": [
@@ -1392,7 +1399,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:10:32.537Z",
+  "savedAt": "2026-03-22T08:10:42.218Z",
   "dailyOutline": {
     "2026-3-18": [
       {
