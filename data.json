@@ -29,6 +29,21 @@
               "date": "2026-3-23",
               "nodeId": "mn1q3o8qj2z"
             }
+          },
+          {
+            "id": "emn1q8btwn4u",
+            "type": "link",
+            "text": "子ども会スケジュール(植竹幼稚園)",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn1q66924wn"
+            }
           }
         ]
       },
@@ -1429,7 +1444,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:22:04.857Z",
+  "savedAt": "2026-03-22T12:22:08.612Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2628,7 +2643,9 @@
         "bold": true,
         "color": "",
         "collapsed": true,
-        "isPrivate": true
+        "isPrivate": true,
+        "linkedEntryRef": "emn1q8btwn4u",
+        "linkedEntryText": "子ども会スケジュール(植竹幼稚園)"
       },
       {
         "id": "mn1q6geg2m7",
