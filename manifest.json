@@ -1,0 +1,16 @@
+{
+  "name": "週次プロジェクト管理",
+  "short_name": "WeeklyTracker",
+  "start_url": "project-weekly-tracker.html",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#2c3e50",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
