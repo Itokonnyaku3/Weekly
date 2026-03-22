@@ -185,7 +185,7 @@
             "url": "",
             "images": [],
             "today": false,
-            "priority": "",
+            "priority": "high",
             "tags": [],
             "id": "emmxcrheobzo",
             "collapsed": false
@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:16:24.002Z",
+  "savedAt": "2026-03-22T12:16:48.510Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2532,8 +2532,8 @@
       },
       {
         "id": "mn1q0bnb2ao",
-        "text": "要検",
-        "html": "要検",
+        "text": "要検討",
+        "html": "要検討",
         "indent": 0,
         "bold": false,
         "color": "",
