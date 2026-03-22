@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:15:08.996Z",
+  "savedAt": "2026-03-22T12:15:13.597Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2488,15 +2488,6 @@
         "text": "1700 稟議",
         "html": "1700 稟議",
         "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn1ps15z1ke",
-        "text": "",
-        "html": "<br>",
-        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
