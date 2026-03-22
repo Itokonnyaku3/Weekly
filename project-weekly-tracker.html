@@ -1828,19 +1828,75 @@
 
     #report-textarea {
       flex: 1;
-      width: 100%;
-      min-height: 320px;
-      font-size: 12px;
-      line-height: 1.7;
-      border: 1.5px solid var(--bd2);
+      height: 400px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 11px;
+      padding: 10px;
+      border: 1px solid var(--bd2);
       border-radius: 6px;
-      padding: 10px 12px;
+      resize: none;
       background: var(--bg2);
       color: var(--tx);
-      font-family: 'BIZ UDPGothic', 'BIZ UDP Gothic', 'Hiragino Sans', monospace;
-      resize: vertical;
     }
 
+    /* ── 設定モーダル ── */
+    #settings-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 500;
+      align-items: center;
+      justify-content: center
+    }
+    #settings-modal.open { display: flex; }
+    #settings-box {
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid var(--bd2);
+      padding: 24px;
+      width: 480px;
+      max-width: 95vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .settings-section {
+      border-bottom: 1px solid var(--bd);
+      padding-bottom: 12px;
+    }
+    .settings-section:last-child { border-bottom: none; }
+    .settings-section h4 {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--tx2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .settings-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .settings-row label { font-size: 11px; font-weight: 600; color: var(--tx2); }
+    .settings-row input[type="text"], .settings-row input[type="password"] {
+      padding: 6px 10px;
+      border: 1px solid var(--bd2);
+      border-radius: 4px;
+      background: var(--bg2);
+      color: var(--tx);
+      font-size: 12px;
+    }
+    .settings-grid-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    #app-ver-disp { font-size: 10px; color: var(--tx3); text-align: right; }
+    
     #report-textarea:focus {
       outline: none;
       border-color: var(--bd-focus)
@@ -2921,6 +2977,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
+    const APP_VERSION = 'v0.8.2';
     let S = { projects: [], wOff: 0 };
     let pCtx = null, lmCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4724,17 +4781,59 @@
     }
 
     /* ================================================================
-       GitHub 同期
-       - Personal Access Token + プライベートリポジトリで JSON を管理
-       - 起動時に取得（リモートが新しければ上書き）
-       - saveState のたびに非同期でプッシュ
-       - 手動で「↓ 取得」「↑ 送信」も可能
+       設定モーダル & GitHub 同期
     ================================================================ */
     const GH_TOKEN_SK = 'pwt_gh_token';
     const GH_REPO_SK = 'pwt_gh_repo';
     const GH_FILE_SK = 'pwt_gh_file';
     const GH_ENABLED_SK = 'pwt_gh_enabled';
     const GH_SHA_SK = 'pwt_gh_sha';
+
+    function openSettings() {
+      $('settings-modal').classList.add('open');
+      if ($('app-ver-disp')) $('app-ver-disp').textContent = 'Version ' + APP_VERSION;
+      
+      const g = ghGetSettings();
+      $('gh-repo-s').value = g.repo;
+      $('gh-file-s').value = g.file;
+      $('gh-enabled-s').checked = g.enabled;
+      
+      const tok = localStorage.getItem(GH_TOKEN_SK);
+      $('gh-token-s').value = tok ? '●'.repeat(20) : '';
+      $('gh-token-s').dataset.saved = tok ? '1' : '';
+      
+      const sha = localStorage.getItem(GH_SHA_SK);
+      if (sha) ghStatus('最終同期 SHA: ' + sha.slice(0, 7) + '…');
+    }
+
+    function closeSettings() {
+      $('settings-modal').classList.remove('open');
+    }
+
+    function saveSettingsAndClose() {
+      const gRepo = $('gh-repo-s').value.trim();
+      const gFile = $('gh-file-s').value.trim() || 'data.json';
+      const gEnabled = $('gh-enabled-s').checked;
+      
+      localStorage.setItem(GH_REPO_SK, gRepo);
+      localStorage.setItem(GH_FILE_SK, gFile);
+      localStorage.setItem(GH_ENABLED_SK, gEnabled ? '1' : '0');
+      
+      const tokEl = $('gh-token-s');
+      const mask = '●'.repeat(20);
+      if (tokEl.value !== mask) {
+        const v = tokEl.value.trim();
+        if (v) localStorage.setItem(GH_TOKEN_SK, v);
+        else if (tokEl.value === '') localStorage.removeItem(GH_TOKEN_SK);
+      }
+      
+      ghStatus(gEnabled ? '同期有効' : '同期無効');
+      const badge = $('gh-sync-badge');
+      if (badge) badge.style.display = gEnabled ? 'inline' : 'none';
+      
+      closeSettings();
+      showToast('⚙️ 設定を保存しました');
+    }
 
     let _ghSyncing = false;
 
