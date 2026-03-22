@@ -741,7 +741,7 @@
           {
             "id": "emn1pu3fxfgs",
             "type": "link",
-            "text": "1300 ESL業務分科会　※前半は久保田さんに任せる",
+            "text": "1300 ESL業務分科会　※前半は久保田さんに任せる 　/",
             "note": "",
             "url": "",
             "images": [],
@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:12:50.640Z",
+  "savedAt": "2026-03-22T12:12:53.946Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2474,14 +2474,14 @@
       },
       {
         "id": "mn1prwebh7z",
-        "text": " 1300 ESL業務分科会　※前半は久保田さんに任せる 　",
-        "html": "&nbsp;1300 ESL業務分科会　※前半は久保田さんに任せる 　",
+        "text": " 1300 ESL業務分科会　※前半は久保田さんに任せる 　/",
+        "html": "&nbsp;1300 ESL業務分科会　※前半は久保田さんに任せる 　/",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn1pu3fxfgs",
-        "linkedEntryText": "1300 ESL業務分科会　※前半は久保田さんに任せる"
+        "linkedEntryText": "1300 ESL業務分科会　※前半は久保田さんに任せる 　/"
       },
       {
         "id": "mn1prxh48m6",
@@ -2514,8 +2514,8 @@
       },
       {
         "id": "mmx7rujjvky",
-        "text": "根岸さん /",
-        "html": "根岸さん /",
+        "text": "根岸さん ",
+        "html": "根岸さん&nbsp;",
         "indent": 1,
         "bold": false,
         "color": "",
