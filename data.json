@@ -1384,7 +1384,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:08:33.543Z",
+  "savedAt": "2026-03-22T12:08:38.298Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2407,10 +2407,10 @@
         "html": "久保田さん育休後の体制…"
       },
       {
-        "id": "mmx7rujjvky",
-        "text": "根岸さん",
+        "id": "mn1pqux3z36",
+        "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2425,10 +2425,10 @@
         "collapsed": false
       },
       {
-        "id": "mn1pqux3z36",
-        "text": "",
+        "id": "mmx7rujjvky",
+        "text": "根岸さん",
         "html": "",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
