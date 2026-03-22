@@ -1445,7 +1445,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T13:49:26.114Z",
+  "savedAt": "2026-03-22T13:49:30.972Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2662,7 +2662,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isPrivate": true,
         "linkedEntryRef": "emn1q8btwn4u",
         "linkedEntryText": "子ども会スケジュール(植竹幼稚園)"
