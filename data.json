@@ -497,6 +497,15 @@
         ],
         "2026-3-23": [
           {
+            "type": "log",
+            "text": "🌡️説明会！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
+          },
+          {
             "type": "todo",
             "text": "27日ごろセンサー早出し納品日確認",
             "note": "",
@@ -606,15 +615,6 @@
             "parentId": "emmy4wb1gj08",
             "id": "emmy5whstca9",
             "collapsed": false
-          },
-          {
-            "type": "log",
-            "text": "🌡️説明会！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1403,7 +1403,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:11:10.501Z",
+  "savedAt": "2026-03-22T08:11:15.782Z",
   "dailyOutline": {
     "2026-3-18": [
       {
