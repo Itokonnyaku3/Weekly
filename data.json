@@ -2,7 +2,25 @@
   "projects": [
     {
       "name": "Private",
-      "entries": {},
+      "entries": {
+        "2026-3-16": [
+          {
+            "id": "emn1bgyaq3pr",
+            "type": "link",
+            "text": "テスト",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn12443nrnd"
+            }
+          }
+        ]
+      },
       "links": [],
       "projEntries": [],
       "projEntriesOpen": false,
@@ -1412,7 +1430,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T05:28:56.132Z",
+  "savedAt": "2026-03-22T05:29:01.170Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2517,8 +2535,19 @@
       },
       {
         "id": "mn12443nrnd",
-        "text": "テスト #",
-        "html": "テスト #",
+        "text": "テスト ",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn1bgyaq3pr",
+        "linkedEntryText": "テスト"
+      },
+      {
+        "id": "mn1bh1puafr",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
