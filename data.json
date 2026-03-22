@@ -1444,7 +1444,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:23:38.696Z",
+  "savedAt": "2026-03-22T12:24:03.516Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2638,7 +2638,16 @@
       {
         "id": "mn1q9xyoyum",
         "text": "今使っている机の天板を",
-        "html": "今使っている机の天板を",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn1qashom1u",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
