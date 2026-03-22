@@ -1436,7 +1436,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:25:35.742Z",
+  "savedAt": "2026-03-22T08:25:43.669Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2637,17 +2637,6 @@
         "checked": false,
         "linkedEntryRef": "emn1hhtqe1o5",
         "linkedEntryText": "ああ"
-      },
-      {
-        "id": "mn1hhwg7j5y",
-        "text": "aaa ",
-        "html": "aaa ",
-        "indent": 3,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false
       },
       {
         "id": "mn1hi4fkovl",
