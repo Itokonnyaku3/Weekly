@@ -231,15 +231,6 @@
           },
           {
             "type": "todo",
-            "text": "a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emmw2zro2aqx",
-            "id": "emn0yqloc1ri"
-          },
-          {
-            "type": "todo",
             "text": "テスト",
             "note": "",
             "url": "",
@@ -1368,7 +1359,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T01:08:50.478Z",
+  "savedAt": "2026-03-22T01:12:19.211Z",
   "dailyOutline": {
     "2026-3-18": [
       {
