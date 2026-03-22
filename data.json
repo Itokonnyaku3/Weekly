@@ -619,6 +619,15 @@
         ],
         "2026-3-30": [
           {
+            "type": "log",
+            "text": "🌡️説明会！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
+          },
+          {
             "type": "todo",
             "text": "オフラインの店舗の詳細を確認",
             "note": "",
@@ -629,15 +638,6 @@
             "tags": [],
             "id": "emmw2zro2yfv",
             "collapsed": false
-          },
-          {
-            "type": "log",
-            "text": "🌡️説明会！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-3-9": [
@@ -1403,7 +1403,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:11:15.782Z",
+  "savedAt": "2026-03-22T08:11:18.441Z",
   "dailyOutline": {
     "2026-3-18": [
       {
