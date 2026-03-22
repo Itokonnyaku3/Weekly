@@ -138,6 +138,21 @@
             },
             "today": false,
             "collapsed": false
+          },
+          {
+            "id": "emn13z0busie",
+            "type": "link",
+            "text": "ああああ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn1252ehq5c"
+            }
           }
         ],
         "2026-3-23": [
@@ -1365,7 +1380,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T01:58:44.544Z",
+  "savedAt": "2026-03-22T01:59:02.250Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2437,7 +2452,9 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false
+        "checked": false,
+        "linkedEntryRef": "emn13z0busie",
+        "linkedEntryText": "ああああ"
       },
       {
         "id": "mn124tswd8p",
