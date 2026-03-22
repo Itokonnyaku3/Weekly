@@ -3145,7 +3145,7 @@
                 const isDone = n.checked;
                 const txtCls = isDone ? 'etxt done' : 'etxt';
                 const privateMark = isNodePrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
-                let h = `<div class="eitem" tabindex="0" data-daily="1" data-date="${dateStr}" data-nid="${n.id}" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" onkeydown="if(event.key==='Enter'){event.preventDefault();openNotePanelToDate('${dateStr}','${n.id}')}" title="ノートを開く (${dateStr})">`;
+                let h = `<div class="eitem" tabindex="0" data-daily="1" data-date="${dateStr}" data-nid="${n.id}" data-pi="${pi}" data-wk="${wk}" data-ei="-2" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" onkeydown="eitemKeyDown(event, this)" title="ノートを開く (${dateStr})">`;
                 h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
                 h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
                 h += `</div>`;
@@ -3499,32 +3499,17 @@
     let _programmaticFocus = false;
 
     // ── apply focus to an eitem or qainp ─────────────────────────────
+    // ── apply focus to an eitem or qainp ─────────────────────────────
     function applyFocus(pi, wk, ei) {
-      // clear old highlight
       document.querySelectorAll('.eitem.kfocus').forEach(el => el.classList.remove('kfocus'));
-
       pi = +pi;
-
-      // try exact eitem
       let el = document.querySelector(`.eitem[data-pi="${pi}"][data-wk="${wk}"][data-ei="${ei}"]`);
-
       if (!el) {
-        // clamp within same cell
         const all = Array.from(document.querySelectorAll(`.eitem[data-pi="${pi}"][data-wk="${wk}"]`));
-        if (all.length) {
-          el = all[Math.min(+ei, all.length - 1)];
-        }
+        if (all.length) el = all[Math.min(+ei, all.length - 1)];
       }
-
-      if (el) {
-        focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
-        el.classList.add('kfocus');
-        _programmaticFocus = true;
-        el.focus({ preventScroll: false });
-        setTimeout(() => { _programmaticFocus = false; }, 50);
-        el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      } else {
-        // cell is empty → focus qainp
+      if (el) { applyFocusToElement(el); }
+      else {
         const td = document.querySelector(`td[data-pi="${pi}"][data-wk="${wk}"]`);
         const inp = td && td.querySelector('.qainp');
         if (inp) {
@@ -3533,14 +3518,27 @@
           inp.focus();
           setTimeout(() => { _programmaticFocus = false; }, 50);
           inp.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        } else {
-          focusKey = null;
-        }
+        } else { focusKey = null; }
       }
     }
 
+    function applyFocusToElement(el) {
+      if (!el) return;
+      document.querySelectorAll('.eitem.kfocus').forEach(e => e.classList.remove('kfocus'));
+      if (el.dataset.daily) {
+          focusKey = 'daily:' + el.dataset.date + ':' + el.dataset.nid;
+      } else {
+          focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
+      }
+      el.classList.add('kfocus');
+      _programmaticFocus = true;
+      el.focus();
+      setTimeout(() => { _programmaticFocus = false; }, 50);
+      el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+
     // ── core navigation: given current pi/wk/ei, move by direction ───
-    function navigate(ev, pi, wk, ei) {
+    function navigate(ev, pi, wk, ei, currentEl) {
       pi = +pi; ei = +ei;
       const isAltShift = ev.altKey && ev.shiftKey;
       const key = ev.key;
@@ -3581,16 +3579,22 @@
       if (!ev.altKey && !ev.shiftKey && (key === 'ArrowUp' || key === 'ArrowDown')) {
         ev.preventDefault();
         const dir = key === 'ArrowUp' ? -1 : 1;
-        const entries = (S.projects[pi].entries && S.projects[pi].entries[wk]) || [];
-        const nei = ei + dir;
-
-        if (nei >= 0 && nei < entries.length) {
-          // 同セル内のアイテムへ
-          applyFocus(pi, wk, nei);
-          return;
+        
+        // DOMベースでの移動（通常アイテムとデイリーアイテムを混在して扱う）
+        if (currentEl) {
+          const list = currentEl.closest('.elist');
+          if (list) {
+            const allItems = Array.from(list.querySelectorAll('.eitem'));
+            const curIdx = allItems.indexOf(currentEl);
+            const nextIdx = curIdx + dir;
+            if (nextIdx >= 0 && nextIdx < allItems.length) {
+              applyFocusToElement(allItems[nextIdx]);
+              return;
+            }
+          }
         }
 
-        if (dir === 1 && nei >= entries.length) {
+        if (dir === 1) {
           // アイテム末尾 → まずqainpへ（次PJへは qainp からさらに↓）
           const td = document.querySelector(`td[data-pi="${pi}"][data-wk="${wk}"]`);
           const inp = td && td.querySelector('.qainp');
@@ -3604,18 +3608,19 @@
           return;
         }
 
-        if (dir === -1 && nei < 0) {
+        if (dir === -1) {
           // アイテム先頭 → 前プロジェクトのqainpへ
           const npi = pi - 1;
           if (npi >= 0) {
             showHint('▲ 前プロジェクト');
-            const prevEntries = (S.projects[npi].entries && S.projects[npi].entries[wk]) || [];
-            if (prevEntries.length) {
-              // 前PJにアイテムがある → 末尾アイテムへ
-              applyFocus(npi, wk, prevEntries.length - 1);
-            } else {
-              // 前PJが空 → qainpへ
-              applyFocus(npi, wk, 0);
+            const targetTd = document.querySelector(`td[data-pi="${npi}"][data-wk="${wk}"]`);
+            if (targetTd) {
+              const prevItems = Array.from(targetTd.querySelectorAll('.eitem'));
+              if (prevItems.length) {
+                applyFocusToElement(prevItems[prevItems.length - 1]);
+              } else {
+                applyFocus(npi, wk, 0); // qainpへ
+              }
             }
           }
           return;
@@ -3678,6 +3683,21 @@
     }
 
     function eitemKeyDown(ev, el) {
+      if (el.dataset.daily) {
+        if (ev.key === 'Enter') {
+            ev.preventDefault();
+            openNotePanelToDate(el.dataset.date, el.dataset.nid);
+            return;
+        }
+        if (ev.key === ' ') {
+            ev.preventDefault();
+            tvCheckDaily(el.dataset.date, el.dataset.nid);
+            return;
+        }
+        navigate(ev, +el.dataset.pi, el.dataset.wk, -2, el);
+        return;
+      }
+
       const pi = +el.dataset.pi, wk = el.dataset.wk, ei = +el.dataset.ei;
       const e = S.projects[pi].entries[wk][ei];
 
@@ -3810,7 +3830,7 @@
         if (e && e.type === 'todo') { ev.preventDefault(); toggleTodo(pi, wk, ei); }
         return;
       }
-      navigate(ev, pi, wk, ei);
+      navigate(ev, pi, wk, ei, el);
     }
 
     // ── qainp handler ─────────────────────────────────────────────────
