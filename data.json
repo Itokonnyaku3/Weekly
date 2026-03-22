@@ -18,6 +18,21 @@
               "date": "2026-3-22",
               "nodeId": "mn12443nrnd"
             }
+          },
+          {
+            "id": "emn1bq0wfllq",
+            "type": "link",
+            "text": "てすと２",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn1bh5pu0cf"
+            }
           }
         ]
       },
@@ -1430,7 +1445,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T05:35:59.717Z",
+  "savedAt": "2026-03-22T05:36:09.009Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2556,16 +2571,27 @@
       },
       {
         "id": "mn1bh5pu0cf",
-        "text": "てすと２ #",
-        "html": "てすと２ #",
+        "text": "てすと２ ",
+        "html": "てすと２ ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isPrivate": false
+        "isPrivate": false,
+        "linkedEntryRef": "emn1bq0wfllq",
+        "linkedEntryText": "てすと２"
       },
       {
         "id": "mn1bpwure8u",
+        "text": "非プライベート",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn1bq7u9olp",
         "text": "",
         "html": "",
         "indent": 1,
