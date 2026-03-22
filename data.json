@@ -1374,7 +1374,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T11:01:15.267Z",
+  "savedAt": "2026-03-22T11:01:18.480Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2418,12 +2418,12 @@
     "2026-3-24": [
       {
         "id": "mn1gzgeiov8",
-        "text": "tesuto　",
+        "text": "te",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "tesuto　",
+        "html": "te",
         "isTodo": true,
         "checked": false
       },
