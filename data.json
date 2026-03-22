@@ -1384,7 +1384,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:08:38.298Z",
+  "savedAt": "2026-03-22T12:08:43.994Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2398,15 +2398,6 @@
     ],
     "2026-3-23": [
       {
-        "id": "mmx7jyojy3w",
-        "text": "久保田さん育休後の体制…",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": true,
-        "html": "久保田さん育休後の体制…"
-      },
-      {
         "id": "mn1pqux3z36",
         "text": "",
         "html": "",
@@ -2423,6 +2414,15 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mmx7jyojy3w",
+        "text": "久保田さん育休後の体制…",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": true,
+        "html": "久保田さん育休後の体制…"
       },
       {
         "id": "mmx7rujjvky",
