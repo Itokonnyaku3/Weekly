@@ -1445,7 +1445,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T05:36:27.162Z",
+  "savedAt": "2026-03-22T05:36:46.406Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2601,12 +2601,13 @@
       },
       {
         "id": "mn1bq88tji4",
-        "text": "プライベート /",
-        "html": "プライベート /",
+        "text": "プライベート ",
+        "html": "プライベート ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true,
+        "isPrivate": true
       },
       {
         "id": "mn1bqem96v6",
