@@ -166,21 +166,6 @@
             "id": "emmx5rb3lh70",
             "collapsed": false,
             "done": true
-          },
-          {
-            "id": "emn13z0busie",
-            "type": "link",
-            "text": "ああああ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn1252ehq5c"
-            }
           }
         ],
         "2026-3-23": [
@@ -273,20 +258,6 @@
             "id": "emn0h75uv18q",
             "collapsed": false,
             "parentId": "emmw2zro2aqx"
-          },
-          {
-            "type": "todo",
-            "text": "テスト",
-            "note": "",
-            "url": "",
-            "images": [],
-            "category": "テスト",
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmywicaqghy",
-            "collapsed": false,
-            "done": true
           },
           {
             "type": "todo",
@@ -1429,7 +1400,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T06:29:11.492Z",
+  "savedAt": "2026-03-22T06:29:31.265Z",
   "dailyOutline": {
     "2026-3-18": [
       {
