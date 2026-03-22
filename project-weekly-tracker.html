@@ -3116,9 +3116,24 @@
           const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
           if (S.dailyOutline && S.dailyOutline[dateStr]) {
             const nodes = S.dailyOutline[dateStr];
+
+            // プライベート継承を事前計算（olVisible と同じアルゴリズム）
+            const inheritedPrivate = new Set();
+            const privStack = [];
+            nodes.forEach((nd, ni) => {
+              while (privStack.length > 0 && privStack[privStack.length - 1] >= nd.indent) privStack.pop();
+              if (nd.isPrivate || privStack.length > 0) {
+                inheritedPrivate.add(ni);
+                if (nd.isPrivate) privStack.push(nd.indent);
+              }
+            });
+
             nodes.forEach((n, idx) => {
               if (n.isTodo) {
-                if (_viewMode === 'work' && n.isPrivate) return;
+                // プライベート継承を考慮したフィルタリング
+                const isNodePrivate = inheritedPrivate.has(idx);
+                if (_viewMode === 'work' && isNodePrivate) return;
+                if (_viewMode === 'private' && !isNodePrivate) return;
                 if (_hideDone && n.checked) return;
 
                 const pi = getProjectIndexForNote(nodes, idx);
@@ -3129,7 +3144,7 @@
 
                 const isDone = n.checked;
                 const txtCls = isDone ? 'etxt done' : 'etxt';
-                const privateMark = n.isPrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
+                const privateMark = isNodePrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
                 let h = `<div class="eitem" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" title="ノートを開く (${dateStr})">`;
                 h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
                 h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
@@ -5685,15 +5700,31 @@ ${draft}
       if (!S.projects) return -1;
       let cur = idx;
       while (cur >= 0) {
-        const txt = nodes[cur].text || "";
-        // 1. 各プロジェクト名との一致を確認（#HACCP 等）
+        const node = nodes[cur];
+
+        // 1. linkedEntryRef からプロジェクトを特定（最も確実）
+        if (node.linkedEntryRef) {
+          if (node.linkedEntryRef.includes(':')) {
+            const pi = parseInt(node.linkedEntryRef.split(':')[0]);
+            if (!isNaN(pi) && pi >= 0 && pi < S.projects.length) return pi;
+          } else {
+            const loc = findEntryById(node.linkedEntryRef);
+            if (loc && !isNaN(loc.pi)) return loc.pi;
+          }
+        }
+
+        // 2. #タグでプロジェクト名との一致を確認
+        const txt = node.text || '';
         for (let i = 0; i < S.projects.length; i++) {
-          const p = S.projects[i];
-          const reg = new RegExp("#" + p.name + "(\\s|$)", "i");
+          const pName = S.projects[i].name;
+          // 特殊文字をエスケープして正規表現を安全に構築
+          const escaped = pName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const reg = new RegExp('#' + escaped + '(\\s|$)', 'i');
           if (reg.test(txt)) return i;
         }
-        // 2. 親ノードへ移動（より浅いインデント）
-        const myIndent = nodes[cur].indent;
+
+        // 3. 親ノードへ移動（より浅いインデント）
+        const myIndent = node.indent;
         let foundParent = false;
         for (let j = cur - 1; j >= 0; j--) {
           if (nodes[j].indent < myIndent) {
@@ -5705,9 +5736,9 @@ ${draft}
         if (!foundParent) break;
       }
       // フォールバック: "管理・全般" という名称のプロジェクトを探す
-      const fallback = S.projects.findIndex(p => p.name === "管理・全般");
+      const fallback = S.projects.findIndex(p => p.name === '管理・全般');
       if (fallback !== -1) return fallback;
-      // どれにも当てはまらなければ最初のプロジェクト（管理・全般が最初にある想定）
+      // どれにも当てはまらなければ最初のプロジェクト
       return 0;
     }
 
