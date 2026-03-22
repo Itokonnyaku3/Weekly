@@ -1400,30 +1400,10 @@
       "catCollapsed": {},
       "recSectionOpen": false,
       "isPrivate": false
-    },
-    {
-      "name": "テスト",
-      "entries": {
-        "2026-3-16": [
-          {
-            "type": "todo",
-            "text": "あ",
-            "note": "",
-            "url": "",
-            "images": []
-          }
-        ]
-      },
-      "links": [],
-      "projEntries": [],
-      "projEntriesOpen": false,
-      "collapsed": false,
-      "recurringEntries": [],
-      "recSectionOpen": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:12:03.272Z",
+  "savedAt": "2026-03-22T08:12:12.752Z",
   "dailyOutline": {
     "2026-3-18": [
       {
