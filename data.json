@@ -500,7 +500,8 @@
             "text": "成電社から見積受領！",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "parentId": "emmw2zro2l9s"
           },
           {
             "type": "todo",
@@ -1381,7 +1382,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T11:05:59.755Z",
+  "savedAt": "2026-03-22T11:06:03.018Z",
   "dailyOutline": {
     "2026-3-18": [
       {
