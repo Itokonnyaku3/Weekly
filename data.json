@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:15:21.348Z",
+  "savedAt": "2026-03-22T12:15:23.432Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2457,9 +2457,18 @@
       {
         "id": "mn1pqux3z36",
         "text": "1100 次世代NW構築PJ　全体進捗会議",
-        "html": "1100 次世代NW構築PJ　全体進捗会議",
+        "html": "",
         "indent": 0,
         "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn1pzms6ieu",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
         "color": "",
         "collapsed": false
       },
