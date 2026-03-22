@@ -501,7 +501,9 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emmw2zro2l9s"
+            "parentId": "emmw2zro2l9s",
+            "priority": "high",
+            "tags": []
           },
           {
             "type": "todo",
@@ -1382,7 +1384,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T11:06:03.018Z",
+  "savedAt": "2026-03-22T11:06:13.592Z",
   "dailyOutline": {
     "2026-3-18": [
       {
