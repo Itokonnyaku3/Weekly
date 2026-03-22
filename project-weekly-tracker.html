@@ -3107,78 +3107,42 @@
       });
       $('gh').innerHTML = hr + '</tr>';
 
-      let rows = '';
-
-      // ======== デイリータスク抽出行 ======== 
-      let hasDailyContent = false;
-      const isDailyCompactRow = typeof _compactMode !== 'undefined' && _compactMode && !_compactExpanded.has('daily');
-      let dailyHtml = `<tr class="${isDailyCompactRow ? 'compact-row' : ''}" style="background:var(--bg2)">`;
-      let dailyTotalCells = '';
-      
+      // ======== デイリータスクの事前振り分け ========
+      const dailyMap = {}; // { projIndex: { weekKey: [htmlString] } }
       weeks.forEach(w => {
-        const k = wkey(w);
-        const isCur = k === cw;
-        let total = 0, undone = 0;
-        let elistHtml = '';
+        const wk = wkey(w);
         for (let i = 0; i < 7; i++) {
           const d = addDays(w, i);
           const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-          if (typeof S !== 'undefined' && S.dailyOutline && S.dailyOutline[dateStr]) {
-            S.dailyOutline[dateStr].forEach(n => {
+          if (S.dailyOutline && S.dailyOutline[dateStr]) {
+            const nodes = S.dailyOutline[dateStr];
+            nodes.forEach((n, idx) => {
               if (n.isTodo) {
-                if (typeof _viewMode !== 'undefined' && _viewMode === 'work' && n.isPrivate) return;
-                if (typeof _hideDone !== 'undefined' && _hideDone && n.checked) return;
-                total++;
-                if (!n.checked) undone++;
+                if (_viewMode === 'work' && n.isPrivate) return;
+                if (_hideDone && n.checked) return;
+
+                const pi = getProjectIndexForNote(nodes, idx);
+                if (pi === -1) return;
+
+                if (!dailyMap[pi]) dailyMap[pi] = {};
+                if (!dailyMap[pi][wk]) dailyMap[pi][wk] = [];
+
                 const isDone = n.checked;
                 const txtCls = isDone ? 'etxt done' : 'etxt';
                 const privateMark = n.isPrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
-                elistHtml += `<div class="eitem" style="border:1px dashed var(--bd);background:var(--bg)" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" title="ノートを開く (${dateStr})">`;
-                elistHtml += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
-                elistHtml += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
-                elistHtml += `</div>`;
+                let h = `<div class="eitem" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" title="ノートを開く (${dateStr})">`;
+                h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
+                h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
+                h += `</div>`;
+                dailyMap[pi][wk].push(h);
               }
             });
           }
         }
-        if (total > 0) hasDailyContent = true;
-
-        if (isDailyCompactRow) {
-          dailyTotalCells += `<td class="col-week${isCur ? ' cur-week' : ''}" onclick="compactToggleRow('daily')" style="vertical-align:middle;background:transparent"><div class="compact-badge">`;
-          if (total) {
-            dailyTotalCells += `<span style="color:var(--tx3)">${total}件</span>`;
-            if (undone) dailyTotalCells += `<span class="compact-todo-cnt">☐${undone}</span>`;
-          }
-          dailyTotalCells += `</div></td>`;
-        } else {
-          dailyTotalCells += `<td class="col-week${isCur ? ' cur-week' : ''}" style="background:transparent;vertical-align:top">`;
-          dailyTotalCells += `<div class="wcell${isCur ? ' cur' : ''}" style="min-height:auto;background:transparent;padding:5px 7px">`;
-          dailyTotalCells += `<div class="elist">${elistHtml}</div>`;
-          dailyTotalCells += `</div></td>`;
-        }
       });
+      // ===========================================
 
-      if (hasDailyContent) {
-        dailyHtml += `<td class="col-proj">`;
-        dailyHtml += `<div class="pcell" style="background:transparent;border-left:3px solid var(--accent)">`;
-        if (isDailyCompactRow) {
-          dailyHtml += `<div class="compact-pname" onclick="compactToggleRow('daily')" title="クリックで展開">`;
-          dailyHtml += `<span style="color:var(--tx3);font-size:10px;margin-right:4px">▶</span><span>📝 デイリー抽出</span>`;
-          dailyHtml += `</div></div></td>`;
-        } else {
-          dailyHtml += `<div class="pname" style="border-bottom:none;margin-bottom:0">`;
-          dailyHtml += `<span class="nm" style="font-size:14px;color:var(--tx);font-weight:600">📝 デイリー抽出</span>`;
-          if (typeof _compactMode !== 'undefined' && _compactMode) dailyHtml += `<span style="font-size:10px;cursor:pointer;color:var(--tx-info);padding:0 4px" onclick="compactToggleRow('daily')" title="折りたたむ">▲</span>`;
-          dailyHtml += `</div>`;
-          dailyHtml += `<div style="font-size:10px;color:var(--tx3);margin-top:2px">ノートのタスクを自動抽出しています</div>`;
-          dailyHtml += `</div></td>`;
-        }
-        dailyHtml += dailyTotalCells;
-        dailyHtml += `</tr>`;
-        rows += dailyHtml;
-      }
-      // ======================================== 
-
+      let rows = '';
       S.projects.forEach((proj, pi) => {
         // 表示モードによるフィルタリング
         if (_viewMode === 'work' && proj.isPrivate) return;  // お仕事モード→プライベート非表示
@@ -3297,6 +3261,10 @@
             entriesOrder.forEach(({ ei, isParent, isChild }) => {
               rows += renderE(entries[ei], pi, k, ei, { isParent, isChild, entries });
             });
+            // ── デイリーノートからの抽出タスク ──
+            if (dailyMap[pi] && dailyMap[pi][k]) {
+              rows += dailyMap[pi][k].join('');
+            }
             rows += `</div>`;
             rows += `<div class="qarow">`;
             rows += `<input class="qainp" type="text" tabindex="-1" placeholder="追加…(Enter)" data-pi="${pi}" data-wk="${k}" onkeydown="qainpKeyDown(event,this)">`;
@@ -5709,6 +5677,38 @@ ${draft}
       olPushHistory(_olCurrentDate);
       saveState();
       olRender('ol-container', _olCurrentDate);
+      render(); // グリッド側も即時反映
+    }
+
+    // ノードに有効なプロジェクトIndexを特定（親階層へ遡ってタグを探す）
+    function getProjectIndexForNote(nodes, idx) {
+      if (!S.projects) return -1;
+      let cur = idx;
+      while (cur >= 0) {
+        const txt = nodes[cur].text || "";
+        // 1. 各プロジェクト名との一致を確認（#HACCP 等）
+        for (let i = 0; i < S.projects.length; i++) {
+          const p = S.projects[i];
+          const reg = new RegExp("#" + p.name + "(\\s|$)", "i");
+          if (reg.test(txt)) return i;
+        }
+        // 2. 親ノードへ移動（より浅いインデント）
+        const myIndent = nodes[cur].indent;
+        let foundParent = false;
+        for (let j = cur - 1; j >= 0; j--) {
+          if (nodes[j].indent < myIndent) {
+            cur = j;
+            foundParent = true;
+            break;
+          }
+        }
+        if (!foundParent) break;
+      }
+      // フォールバック: "管理・全般" という名称のプロジェクトを探す
+      const fallback = S.projects.findIndex(p => p.name === "管理・全般");
+      if (fallback !== -1) return fallback;
+      // どれにも当てはまらなければ最初のプロジェクト（管理・全般が最初にある想定）
+      return 0;
     }
 
     // 折りたたみを考慮して可視ノードの配列を返す（元のインデックス _idx 付き）
@@ -6629,14 +6629,14 @@ ${draft}
             const pi = +parts[0], wk = parts[1], ei = +parts[2];
             if (S.projects[pi] && S.projects[pi].entries[wk] && S.projects[pi].entries[wk][ei]) {
               S.projects[pi].entries[wk][ei].done = n.checked;
-              render();
-              if (todoOpen) renderTodo();
             }
           }
         }
 
         saveState();
         olRender('ol-container', date);
+        render(); // 即時グリッド反映
+        if (todoOpen) renderTodo();
       }
     }
 
@@ -6776,8 +6776,28 @@ ${draft}
       hideOlSlashMenu();
       saveState();
       olRender('ol-container', _olSlashDate);
+      
+      // グリッド即時反映（フォーカス維持の仕組みは olInput と同様）
+      const focusedEl = document.activeElement;
+      let savedRange = null;
+      try {
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
+      } catch (e) { }
+      
+      render();
+      
+      if (focusedEl) {
+        focusedEl.focus();
+        if (savedRange) {
+          try {
+            const sel = window.getSelection();
+            sel.removeAllRanges(); sel.addRange(savedRange);
+          } catch (e) { }
+        }
+      }
 
-      // Restore focus to the end
+      // Restore focus to the end (if needed)
       setTimeout(() => {
         const nextEl = document.getElementById('olt-' + _olSlashNodeId);
         if (nextEl) {
