@@ -43,7 +43,8 @@
             "url": "",
             "images": [],
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emn1fukaji8v"
           }
         ]
       },
@@ -269,15 +270,6 @@
             "id": "emn0h75uv18q",
             "collapsed": false,
             "parentId": "emmw2zro2aqx"
-          },
-          {
-            "type": "todo",
-            "text": "test",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emn0yqlocw1m",
-            "collapsed": false
           },
           {
             "type": "todo",
@@ -1411,7 +1403,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T07:35:05.508Z",
+  "savedAt": "2026-03-22T07:47:52.959Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2538,7 +2530,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isPrivate": false,
         "linkedEntryRef": "emn1bq0wfllq",
         "linkedEntryText": "てすと２"
