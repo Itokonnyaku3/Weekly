@@ -165,7 +165,8 @@
               "定例"
             ],
             "id": "emmx5rb3lu90",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           },
           {
             "type": "todo",
@@ -1359,7 +1360,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T01:35:50.719Z",
+  "savedAt": "2026-03-22T01:55:17.210Z",
   "dailyOutline": {
     "2026-3-18": [
       {
