@@ -229,6 +229,21 @@
             "tags": [],
             "id": "emmw2zro2aqx",
             "collapsed": false
+          },
+          {
+            "id": "emn1pw7bid29",
+            "type": "link",
+            "text": "1700 稟議",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn1prxh48m6"
+            }
           }
         ],
         "2026-3-30": [
@@ -1399,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:12:40.711Z",
+  "savedAt": "2026-03-22T12:12:45.203Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2470,17 +2485,19 @@
       },
       {
         "id": "mn1prxh48m6",
-        "text": "1700 稟議 ",
-        "html": "1700 稟議&nbsp;",
+        "text": "1700 稟議 ",
+        "html": "1700 稟議 ",
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn1pw7bid29",
+        "linkedEntryText": "1700 稟議"
       },
       {
         "id": "mn1ps15z1ke",
-        "text": "",
-        "html": "",
+        "text": "/",
+        "html": "/",
         "indent": 0,
         "bold": false,
         "color": "",
