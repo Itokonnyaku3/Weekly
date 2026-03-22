@@ -3108,6 +3108,77 @@
       $('gh').innerHTML = hr + '</tr>';
 
       let rows = '';
+
+      // ======== デイリータスク抽出行 ======== 
+      let hasDailyContent = false;
+      const isDailyCompactRow = typeof _compactMode !== 'undefined' && _compactMode && !_compactExpanded.has('daily');
+      let dailyHtml = `<tr class="${isDailyCompactRow ? 'compact-row' : ''}" style="background:var(--bg2)">`;
+      let dailyTotalCells = '';
+      
+      weeks.forEach(w => {
+        const k = wkey(w);
+        const isCur = k === cw;
+        let total = 0, undone = 0;
+        let elistHtml = '';
+        for (let i = 0; i < 7; i++) {
+          const d = addDays(w, i);
+          const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+          if (typeof S !== 'undefined' && S.dailyOutline && S.dailyOutline[dateStr]) {
+            S.dailyOutline[dateStr].forEach(n => {
+              if (n.isTodo) {
+                if (typeof _viewMode !== 'undefined' && _viewMode === 'work' && n.isPrivate) return;
+                if (typeof _hideDone !== 'undefined' && _hideDone && n.checked) return;
+                total++;
+                if (!n.checked) undone++;
+                const isDone = n.checked;
+                const txtCls = isDone ? 'etxt done' : 'etxt';
+                const privateMark = n.isPrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
+                elistHtml += `<div class="eitem" style="border:1px dashed var(--bd);background:var(--bg)" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" title="ノートを開く (${dateStr})">`;
+                elistHtml += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
+                elistHtml += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
+                elistHtml += `</div>`;
+              }
+            });
+          }
+        }
+        if (total > 0) hasDailyContent = true;
+
+        if (isDailyCompactRow) {
+          dailyTotalCells += `<td class="col-week${isCur ? ' cur-week' : ''}" onclick="compactToggleRow('daily')" style="vertical-align:middle;background:transparent"><div class="compact-badge">`;
+          if (total) {
+            dailyTotalCells += `<span style="color:var(--tx3)">${total}件</span>`;
+            if (undone) dailyTotalCells += `<span class="compact-todo-cnt">☐${undone}</span>`;
+          }
+          dailyTotalCells += `</div></td>`;
+        } else {
+          dailyTotalCells += `<td class="col-week${isCur ? ' cur-week' : ''}" style="background:transparent;vertical-align:top">`;
+          dailyTotalCells += `<div class="wcell${isCur ? ' cur' : ''}" style="min-height:auto;background:transparent;padding:5px 7px">`;
+          dailyTotalCells += `<div class="elist">${elistHtml}</div>`;
+          dailyTotalCells += `</div></td>`;
+        }
+      });
+
+      if (hasDailyContent) {
+        dailyHtml += `<td class="col-proj">`;
+        dailyHtml += `<div class="pcell" style="background:transparent;border-left:3px solid var(--accent)">`;
+        if (isDailyCompactRow) {
+          dailyHtml += `<div class="compact-pname" onclick="compactToggleRow('daily')" title="クリックで展開">`;
+          dailyHtml += `<span style="color:var(--tx3);font-size:10px;margin-right:4px">▶</span><span>📝 デイリー抽出</span>`;
+          dailyHtml += `</div></div></td>`;
+        } else {
+          dailyHtml += `<div class="pname" style="border-bottom:none;margin-bottom:0">`;
+          dailyHtml += `<span class="nm" style="font-size:14px;color:var(--tx);font-weight:600">📝 デイリー抽出</span>`;
+          if (typeof _compactMode !== 'undefined' && _compactMode) dailyHtml += `<span style="font-size:10px;cursor:pointer;color:var(--tx-info);padding:0 4px" onclick="compactToggleRow('daily')" title="折りたたむ">▲</span>`;
+          dailyHtml += `</div>`;
+          dailyHtml += `<div style="font-size:10px;color:var(--tx3);margin-top:2px">ノートのタスクを自動抽出しています</div>`;
+          dailyHtml += `</div></td>`;
+        }
+        dailyHtml += dailyTotalCells;
+        dailyHtml += `</tr>`;
+        rows += dailyHtml;
+      }
+      // ======================================== 
+
       S.projects.forEach((proj, pi) => {
         // 表示モードによるフィルタリング
         if (_viewMode === 'work' && proj.isPrivate) return;  // お仕事モード→プライベート非表示
@@ -4468,6 +4539,34 @@
       if (isProjEntry) S.projects[pi].projEntries[ei].done = true;
       else S.projects[pi].entries[wk][ei].done = true;
       saveState(); renderTodo(); render();
+    }
+    function tvCheckDaily(dateStr, nodeId) {
+      if (!S.dailyOutline || !S.dailyOutline[dateStr]) return;
+      const nodes = S.dailyOutline[dateStr];
+      const n = nodes.find(x => x.id === nodeId);
+      if (n) {
+        n.checked = !n.checked;
+        saveState(); render();
+        if (todoOpen) renderTodo();
+        if (typeof _notePanelOpen !== 'undefined' && _notePanelOpen && typeof _olCurrentDate !== 'undefined' && _olCurrentDate === dateStr) {
+          olRender('ol-container', dateStr);
+        }
+      }
+    }
+    function openNotePanelToDate(dateStr, id) {
+      if (typeof _notePanelOpen === 'undefined' || !_notePanelOpen) toggleNotePanel(dateStr);
+      else {
+        _olCurrentDate = dateStr;
+        if (typeof updateOlNav === 'function') updateOlNav();
+        olRender('ol-container', dateStr);
+      }
+      if (id) {
+        setTimeout(() => {
+          _olFocusId = id;
+          const el = document.getElementById('olt-' + id);
+          if (el) el.focus();
+        }, 100);
+      }
     }
     function jumpTo(pi, wk, ei) {
       const weeks = getWeeks().map(w => wkey(w));
