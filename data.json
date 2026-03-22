@@ -234,7 +234,7 @@
             "priority": "mid",
             "tags": [],
             "id": "emmw2zro2aqx",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1380,7 +1380,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T04:27:47.475Z",
+  "savedAt": "2026-03-22T04:27:50.625Z",
   "dailyOutline": {
     "2026-3-18": [
       {
