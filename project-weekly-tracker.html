@@ -11,7 +11,10 @@
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <meta name="theme-color" content="#2c3e50">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -72,7 +75,7 @@
     }
 
     body {
-      font-family: 'BIZ UDPGothic', 'BIZ UDP Gothic', 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', sans-serif;
+      font-family: 'BIZ UDPGothic', sans-serif;
       font-size: 13px;
       color: var(--tx);
       background: var(--bg3);
@@ -423,13 +426,76 @@
       color: var(--tx-info)
     }
 
-    .proj-entries-body {
-      display: none;
-      margin-bottom: 4px
-    }
-
     .proj-entries-body.open {
       display: block
+    }
+
+    .ol-row.ol-private {
+      background: rgba(46, 204, 113, 0.05);
+    }
+
+    /* プロジェクト名の強調表示 */
+    tr.is-private .nm {
+      color: #1a5c30 !important; /* 濃い緑 */
+      font-size: 14.5px !important;
+      font-weight: 700 !important;
+    }
+    
+    tr:not(.is-private) .nm {
+      color: #0e4f96 !important; /* 濃い青 */
+      font-size: 14.5px !important;
+      font-weight: 700 !important;
+    }
+
+    /* アイコンの視認性向上 */
+    .icon-memo, .icon-private {
+      font-size: 16px !important;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    /* ── 設定系モーダル ── */
+    #settings-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    #settings-box {
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid var(--bd2);
+      padding: 24px;
+      width: 420px;
+      max-width: 95vw;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .2)
+    }
+
+    .settings-section {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0
+    }
+
+    .settings-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px
     }
 
     /* project links */
@@ -2438,7 +2504,7 @@
     button,
     select,
     .ol-text {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      font-family: 'BIZ UDPGothic', sans-serif;
     }
 
     .slash-icon {
@@ -2482,14 +2548,13 @@
 <body>
 
   <div id="toolbar">
-    <h1>📋 週次プロジェクト管理</h1>
+    <h1>📋 Tracker</h1>
     <button class="btn" id="mode-btn" onclick="toggleViewMode()" title="表示モード切替">💼 お仕事</button>
     <div style="width:1px;height:14px;background:var(--bd2);margin:0 4px"></div>
     <button class="btn" onclick="prevW()">◀</button>
     <span id="wlabel" style="font-size:12px;font-weight:600;min-width:110px;text-align:center"></span>
     <button class="btn" onclick="nextW()">▶</button>
     <button class="btn" onclick="goToday()">今週</button>
-    <button class="btn btn-warn" id="tv-btn" onclick="toggleTodoPanel()">☑ 未完ToDo</button>
     <button class="btn" id="hide-done-btn" onclick="toggleHideDone()" title="完了済みToDoを非表示/表示">完了非表示</button>
     <button class="btn" id="note-btn" onclick="toggleNotePanel()" title="ノートを右ペインで開く (Alt+Shift+N)">📝 ノート <span
         style="font-size:10px;opacity:.65;font-weight:400">Alt+Shift+N</span></button>
@@ -2497,17 +2562,13 @@
         style="font-size:10px;opacity:.65;font-weight:400">Alt+Shift+C</span></button>
     <button class="btn" id="ai-btn" onclick="toggleAiPanel()" title="AIアシスタント">🤖 AI</button>
     <button class="btn" onclick="openCmdPalette()" title="コマンドパレット (Ctrl+K)">⌨ Ctrl+K</button>
-    <button class="btn" onclick="collapseAllParents()" title="全親アイテムを折り畳み (Alt+Shift+[)">⊟ 全折り</button>
-    <button class="btn" onclick="expandAllParents()" title="全親アイテムを展開 (Alt+Shift+])">⊞ 全展開</button>
+    <button class="btn" id="fold-toggle-btn" onclick="toggleAllCollapse()" title="全アイテムを折り畳み/展開 (Alt+Shift+[ )">⊟ 全折り</button>
     <div class="spacer"></div>
-    <span id="gh-sync-badge" title="GitHub同期状態" style="font-size:11px;color:var(--tx3);cursor:pointer;display:none"
-      onclick="toggleAiPanel();setTimeout(()=>{ const el=$('gh-settings'); if(el&&el.style.display==='none') toggleGhSettings(); },100)"></span>
-    <span id="save-time" title="最終保存時刻"></span>
+    <span id="save-time" title="最終保存時刻" style="font-size:11px;color:var(--tx3);margin-right:8px"></span>
+    <button class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px">⚙️</button>
     <button class="btn btn-accent" onclick="openQA()" title="新規追加 (Alt+Shift+E)">＋ 新規追加</button>
     <button class="btn btn-accent" onclick="addProj()">＋プロジェクト</button>
-    <button class="btn" onclick="copyWeeklyReport()" title="今週のデータを週報テンプレートへ出力してクリップボードにコピー">📋 週報</button>
-    <button class="btn" onclick="manualExport()" title="現在のデータをJSONファイルとしてダウンロード（バックアップ）">💾 バックアップ</button>
-    <input id="imp" type="file" accept=".json" style="display:none" onchange="importData(event)">
+    <button class="btn" onclick="copyWeeklyReport()" title="コピー">📋 週報</button>
   </div>
 
   <div id="main">
@@ -2556,15 +2617,19 @@
         <input type="date" id="ol-date-picker" onchange="olGoDate(this.value)">
         <span class="ol-today-badge" onclick="olGoDate(todayDateStr())">今日</span>
       </div>
-      <div id="today-ol-hd">
-        <h3 style="font-size:13px;font-weight:600;flex:1;margin:0">📝 デイリーノート</h3>
-        <div class="ol-toolbar">
-          <button class="ol-tbtn" onclick="openOlSlashMenuFromBtn(this)" title="拡張機能 / スラッシュコマンド (Ctrl+/)">⚡拡張</button>
-          <button class="ol-tbtn" onclick="olInsertLink()" title="リンク挿入 (Ctrl+L)">🔗</button>
-          <button class="ol-tbtn" onclick="olInsertTable()" title="表を挿入">⊞</button>
-          <button class="ol-tbtn" onclick="olInsertImageFile()" title="画像を挿入">🖼</button>
-          <button class="ol-tbtn" id="ol-private-btn" onclick="olToggleNodePrivate()" title="現在のノード（と子孫）をプライベート設定。お仕事モードで非表示になります">🔓 非公開</button>
-          <span class="ol-hint">Ctrl+↑↓:折畳/展開 Alt+Shift+↑↓:移動 Tab:段下げ Ctrl+L:リンク</span>
+      <div id="today-ol-hd" style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h3 style="font-size:14px;font-weight:700;margin:0">📝 デイリーノート</h3>
+          <button class="btn" onclick="openOlSlashMenuFromBtn(this)" style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張メニュー</button>
+        </div>
+        <div class="ol-toolbar" style="display:flex;flex-wrap:wrap;gap:4px;border-top:none;padding-top:0">
+          <button class="ol-tbtn" onclick="olInsertLink()" title="リンク挿入 (Ctrl+L)">🔗 リンク</button>
+          <button class="ol-tbtn" onclick="olInsertTable()" title="表を挿入">⊞ 表</button>
+          <button class="ol-tbtn" onclick="olInsertImageFile()" title="画像を挿入">🖼 写真</button>
+          <button class="ol-tbtn" id="ol-private-btn" onclick="olToggleNodePrivate()" title="プライベート設定">🔓 非公開設定</button>
+        </div>
+        <div style="font-size:10px;color:var(--tx3);line-height:1.2;opacity:0.8">
+          Alt+Shift+↑↓:移動 / Tab:段下げ / Ctrl+L:リンク / Ctrl+/:拡張
         </div>
       </div>
       <div id="ol-container" onclick="olContainerClick(event)"></div>
@@ -2595,35 +2660,7 @@
             <span class="ai-tmpl-toggle" onclick="toggleTmpl()">▶ 週報テンプレートを編集</span>
             <textarea id="ai-tmpl"></textarea>
           </div>
-          <!-- GitHub同期設定 -->
-          <div id="gh-settings-wrap" style="margin-top:6px;border-top:1px solid var(--bd2);padding-top:6px">
-            <span class="ai-tmpl-toggle" onclick="toggleGhSettings()">▶ GitHub同期設定</span>
-            <div id="gh-settings" style="display:none;margin-top:6px">
-              <div class="ai-key-row">
-                <input class="ai-key-inp" id="gh-token" type="password" placeholder="Personal Access Token (ghp_...)">
-              </div>
-              <div class="ai-key-row">
-                <input class="ai-key-inp" id="gh-repo" type="text" placeholder="owner/repo（例: yamada/my-tracker）">
-              </div>
-              <div class="ai-key-row" style="gap:4px">
-                <input class="ai-key-inp" id="gh-file" type="text" placeholder="ファイルパス（例: data.json）" style="flex:1">
-                <button class="btn" onclick="saveGhSettings()"
-                  style="font-size:11px;padding:3px 8px;white-space:nowrap">保存</button>
-              </div>
-              <div class="ai-key-row" style="justify-content:space-between;margin-top:2px">
-                <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer">
-                  <input type="checkbox" id="gh-enabled" onchange="saveGhSettings()"> 自動同期を有効にする
-                </label>
-                <div style="display:flex;gap:4px">
-                  <button class="btn" onclick="ghSyncLoad(true)" style="font-size:11px;padding:3px 7px"
-                    title="GitHubから取得">↓ 取得</button>
-                  <button class="btn" onclick="ghSyncSave(true)" style="font-size:11px;padding:3px 7px"
-                    title="GitHubへ送信">↑ 送信</button>
-                </div>
-              </div>
-              <div id="gh-status" style="font-size:10px;color:var(--tx3);margin-top:4px;min-height:14px"></div>
-            </div>
-          </div>
+          <!-- GitHub同期設定は設定モーダルへ移動しました -->
         </div>
         <div id="ai-chat"></div>
         <div id="ai-input-area">
@@ -3097,6 +3134,12 @@
           mb.className = 'btn';
         }
       }
+
+      if ($('app-ver-disp')) $('app-ver-disp').textContent = 'Version ' + APP_VERSION;
+      if ($('gh-token-s')) $('gh-token-s').value = localStorage.getItem(GH_TOKEN_SK) || '';
+      if ($('gh-repo-s')) $('gh-repo-s').value = localStorage.getItem(GH_REPO_SK) || '';
+      if ($('gh-file-s')) $('gh-file-s').value = localStorage.getItem(GH_FILE_SK) || 'data.json';
+      if ($('gh-enabled-s')) $('gh-enabled-s').checked = localStorage.getItem(GH_ENABLED_SK) === '1';
 
       $('wlabel').textContent = fmt(weeks[0]) + '〜' + fmt(addDays(weeks[WEEKS - 1], 6));
 
