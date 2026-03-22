@@ -42,7 +42,8 @@
       "collapsed": false,
       "recurringEntries": [],
       "recSectionOpen": false,
-      "isPrivate": true
+      "isPrivate": true,
+      "catCollapsed": {}
     },
     {
       "name": "管理・全般",
@@ -165,23 +166,6 @@
             "id": "emmx5rb3lh70",
             "collapsed": false,
             "done": true
-          },
-          {
-            "id": "emn123zc3jyk",
-            "type": "link",
-            "text": "aaaaaaaatesuaaaaaaasdaaaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn124tswd8p"
-            },
-            "today": false,
-            "collapsed": false
           },
           {
             "id": "emn13z0busie",
@@ -1445,7 +1429,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T06:26:11.788Z",
+  "savedAt": "2026-03-22T06:29:11.492Z",
   "dailyOutline": {
     "2026-3-18": [
       {
