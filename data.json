@@ -606,6 +606,13 @@
             "parentId": "emmy4wb1gj08",
             "id": "emmy5whstca9",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "説明会！",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-3-30": [
@@ -1385,7 +1392,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:06:02.819Z",
+  "savedAt": "2026-03-22T08:10:32.537Z",
   "dailyOutline": {
     "2026-3-18": [
       {
