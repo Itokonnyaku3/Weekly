@@ -178,7 +178,7 @@
             "tags": [],
             "linkedNote": {
               "date": "2026-3-22",
-              "nodeId": "mn11uc1j1m4"
+              "nodeId": "mn124tswd8p"
             },
             "today": false,
             "collapsed": false
@@ -1445,7 +1445,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T06:25:59.518Z",
+  "savedAt": "2026-03-22T06:26:11.788Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2522,7 +2522,9 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "1:2026-3-16:9",
+        "linkedEntryText": "aaaaaaaatesuaaaaaaasdaaaa"
       },
       {
         "id": "mn12443nrnd",
