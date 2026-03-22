@@ -259,7 +259,7 @@
             "priority": "mid",
             "tags": [],
             "id": "emmw2zro2aqx",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -270,14 +270,6 @@
             "id": "emn0h75uv18q",
             "collapsed": false,
             "parentId": "emmw2zro2aqx"
-          },
-          {
-            "type": "todo",
-            "text": "あ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emn1bgj69m99"
           }
         ],
         "2026-3-30": [
@@ -1403,7 +1395,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T07:47:52.959Z",
+  "savedAt": "2026-03-22T07:48:03.422Z",
   "dailyOutline": {
     "2026-3-18": [
       {
