@@ -1,4 +1,4 @@
-const CACHE_NAME = 'weekly-tracker-v6';
+const CACHE_NAME = 'weekly-tracker-v7';
 const urlsToCache = [
   './project-weekly-tracker.html',
   './manifest.json',
