@@ -491,6 +491,22 @@
             "today": false,
             "id": "emmw2zro2118",
             "collapsed": false
+          },
+          {
+            "id": "emn0z0l49q0v",
+            "type": "link",
+            "text": "aaadasd📝ノート参照: aaaaaaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-22",
+              "nodeId": "mn0z0i5zuqa"
+            },
+            "today": false
           }
         ],
         "2026-3-23": [
@@ -680,22 +696,6 @@
       "name": "FHラインESL導入",
       "entries": {
         "2026-3-16": [
-          {
-            "id": "emn0z0l49q0v",
-            "type": "link",
-            "text": "aaadasd📝ノート参照: aaaaaaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0z0i5zuqa"
-            },
-            "today": false
-          },
           {
             "type": "log",
             "text": "アスベスト調査会社を小林さんに紹介してもらった",
@@ -1368,7 +1368,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-21T23:41:08.634Z",
+  "savedAt": "2026-03-22T00:58:00.002Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2381,17 +2381,6 @@
         "collapsed": false,
         "isTodo": true,
         "checked": false
-      },
-      {
-        "id": "mn0z0i5zuqa",
-        "text": "aaaaaa ",
-        "html": "aaaaaa&nbsp;",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn0z0l49q0v",
-        "linkedEntryText": "📝ノート参照: aaa"
       },
       {
         "id": "mn0z0w71z07",
