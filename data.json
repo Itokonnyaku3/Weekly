@@ -1436,7 +1436,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T08:25:04.807Z",
+  "savedAt": "2026-03-22T08:25:35.742Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2440,17 +2440,6 @@
     ],
     "2026-3-22": [
       {
-        "id": "mn0hidmnr0n",
-        "text": "aaa aaa　あああああaaa列1列2列3aaa",
-        "html": "aaa aaa　あああああaaa<table><tbody><tr><th>列1</th><th>列2</th><th>列3</th></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table>aaa",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false
-      },
-      {
         "id": "mn1gr30q6p5",
         "text": "aaa",
         "html": "aaa",
@@ -2517,7 +2506,7 @@
       },
       {
         "id": "mn1hkdo18w6",
-        "text": "てすと3",
+        "text": "てすと3a",
         "html": "",
         "indent": 1,
         "bold": false,
@@ -2525,6 +2514,15 @@
         "collapsed": false,
         "isTodo": true,
         "checked": false
+      },
+      {
+        "id": "mn1hrv30p5g",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn1hkozljmx",
@@ -2593,7 +2591,7 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isPrivate": false,
+        "isPrivate": true,
         "linkedEntryRef": "emn1bq0wfllq",
         "linkedEntryText": "てすと２"
       },
