@@ -98,22 +98,6 @@
             "collapsed": false
           },
           {
-            "id": "emn0ydnk51ob",
-            "type": "link",
-            "text": "📝 aaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0hi6p2qxn"
-            },
-            "today": false
-          },
-          {
             "type": "log",
             "text": "リーダー会",
             "note": "",
@@ -1352,7 +1336,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-22T00:58:08.490Z",
+  "savedAt": "2026-03-22T00:58:15.517Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2368,8 +2352,8 @@
       },
       {
         "id": "mn0z0w71z07",
-        "text": "",
-        "html": "",
+        "text": "test #",
+        "html": "test #",
         "indent": 0,
         "bold": false,
         "color": "",
