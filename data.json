@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:16:16.153Z",
+  "savedAt": "2026-03-22T12:16:19.502Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2545,22 +2545,22 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "久保田さん育休後の体制…"
       },
       {
-        "id": "mmx7rxgxntj",
-        "text": "山下さんの運用を外出し、問い合わせを山下さんに集約",
-        "html": "山下さんの運用を外出し、問い合わせを山下さんに集約",
+        "id": "mmx7rujjvky",
+        "text": "根岸さん ",
+        "html": "根岸さん&nbsp;",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mmx7rujjvky",
-        "text": "根岸さん ",
-        "html": "根岸さん&nbsp;",
+        "id": "mmx7rxgxntj",
+        "text": "山下さんの運用を外出し、問い合わせを山下さんに集約",
+        "html": "山下さんの運用を外出し、問い合わせを山下さんに集約",
         "indent": 1,
         "bold": false,
         "color": "",
