@@ -1414,7 +1414,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T12:15:52.119Z",
+  "savedAt": "2026-03-22T12:15:55.127Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2553,6 +2553,15 @@
         "text": "山下さんの運用を外出し、問い合わせを山下さんに集約",
         "html": "山下さんの運用を外出し、問い合わせを山下さんに集約",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn1q0bnb2ao",
+        "text": "",
+        "html": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
