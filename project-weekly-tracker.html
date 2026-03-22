@@ -3145,7 +3145,7 @@
                 const isDone = n.checked;
                 const txtCls = isDone ? 'etxt done' : 'etxt';
                 const privateMark = isNodePrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
-                let h = `<div class="eitem" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" title="ノートを開く (${dateStr})">`;
+                let h = `<div class="eitem" tabindex="0" data-daily="1" data-date="${dateStr}" data-nid="${n.id}" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" onkeydown="if(event.key==='Enter'){event.preventDefault();openNotePanelToDate('${dateStr}','${n.id}')}" title="ノートを開く (${dateStr})">`;
                 h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
                 h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
                 h += `</div>`;
@@ -6005,6 +6005,33 @@ ${draft}
               }
             }, 800);
           }
+        }
+
+        // デイリー抽出用: todoノードのテキスト変更もグリッドに即時反映
+        if (node.isTodo && !node.linkedEntryRef) {
+          clearTimeout(olInput._gridTimer);
+          olInput._gridTimer = setTimeout(() => {
+            const focusedEl = document.activeElement;
+            const focusedInNote = focusedEl && focusedEl.closest('#ol-container');
+            let savedRange = null;
+            if (focusedInNote) {
+              try {
+                const sel = window.getSelection();
+                if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
+              } catch (e) { }
+            }
+            render();
+            if (focusedInNote && focusedEl) {
+              focusedEl.focus();
+              if (savedRange) {
+                try {
+                  const sel = window.getSelection();
+                  sel.removeAllRanges();
+                  sel.addRange(savedRange);
+                } catch (e) { }
+              }
+            }
+          }, 800);
         }
 
         // リアルタイムで詳細パネルのノート階層表示を更新
