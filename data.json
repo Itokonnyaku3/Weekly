@@ -204,18 +204,6 @@
           },
           {
             "type": "todo",
-            "text": "30期案件整理",
-            "note": "色々散らばっている案件情報を一元管理する",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2zx3",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "ソラカメ管理者パスワード",
             "note": "テスト　あ",
             "url": "",
@@ -228,6 +216,18 @@
             "priority": "mid",
             "tags": [],
             "id": "emmw2zro2aqx",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "30期案件整理",
+            "note": "色々散らばっている案件情報を一元管理する",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2zx3",
             "collapsed": false
           }
         ],
@@ -1384,7 +1384,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-22T11:06:13.592Z",
+  "savedAt": "2026-03-22T11:09:20.093Z",
   "dailyOutline": {
     "2026-3-18": [
       {
