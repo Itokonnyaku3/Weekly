@@ -938,6 +938,21 @@
             "tags": [],
             "id": "emmw2zro2rfq",
             "collapsed": false
+          },
+          {
+            "id": "emn2tw6o2kyu",
+            "type": "link",
+            "text": "NECタスク追加",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2tsymz02v"
+            }
           }
         ]
       },
@@ -1591,7 +1606,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T06:51:28.827Z",
+  "savedAt": "2026-03-23T06:52:26.690Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2687,14 +2702,16 @@
       },
       {
         "id": "mn2tsymz02v",
-        "text": "NECタスク追加 ",
-        "html": "",
+        "text": "NECタスク追加　",
+        "html": "NECタスク追加　",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false
+        "checked": false,
+        "linkedEntryRef": "emn2tw6o2kyu",
+        "linkedEntryText": "NECタスク追加"
       },
       {
         "id": "mn2tu1f07l7",
