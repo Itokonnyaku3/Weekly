@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>週次プロジェクト管理</title>
-  
+
   <!-- PWA マニフェストとアイコン設定 -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -436,19 +436,22 @@
 
     /* プロジェクト名の強調表示 */
     tr.is-private .nm {
-      color: #1a5c30 !important; /* 濃い緑 */
+      color: #1a5c30 !important;
+      /* 濃い緑 */
       font-size: 14.5px !important;
       font-weight: 700 !important;
     }
-    
+
     tr:not(.is-private) .nm {
-      color: #0e4f96 !important; /* 濃い青 */
+      color: #0e4f96 !important;
+      /* 濃い青 */
       font-size: 14.5px !important;
       font-weight: 700 !important;
     }
 
     /* アイコンの視認性向上 */
-    .icon-memo, .icon-private {
+    .icon-memo,
+    .icon-private {
       font-size: 16px !important;
       display: inline-block;
       vertical-align: middle;
@@ -1840,7 +1843,10 @@
     }
 
     }
-    #settings-modal.open { display: flex; }
+
+    #settings-modal.open {
+      display: flex;
+    }
 
     /* ── マスコット ── */
     #mascot-container {
@@ -1848,22 +1854,28 @@
       bottom: 20px;
       right: 20px;
       z-index: 1000;
-      display: none; /* JSで制御 */
+      display: none;
+      /* JSで制御 */
       flex-direction: column;
       align-items: flex-end;
       pointer-events: none;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     }
+
     #mascot-img {
       width: 100px;
       height: auto;
       object-fit: contain;
       cursor: pointer;
       pointer-events: auto;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
       transition: transform 0.2s;
     }
-    #mascot-img:hover { transform: scale(1.08); }
+
+    #mascot-img:hover {
+      transform: scale(1.08);
+    }
+
     #mascot-bubble {
       position: relative;
       background: var(--bg);
@@ -1874,11 +1886,12 @@
       max-width: 220px;
       font-size: 13px;
       line-height: 1.4;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       display: none;
       pointer-events: auto;
       animation: bubbleIn 0.3s ease-out;
     }
+
     #mascot-bubble::after {
       content: '';
       position: absolute;
@@ -1888,9 +1901,17 @@
       border-right: 8px solid transparent;
       border-top: 8px solid var(--bd2);
     }
+
     @keyframes bubbleIn {
-      from { opacity: 0; transform: translateY(10px) scale(0.9); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     /* ── 検索画面 ── */
@@ -1905,7 +1926,11 @@
       padding-top: 80px;
       backdrop-filter: blur(2px);
     }
-    #search-modal.open { display: flex; }
+
+    #search-modal.open {
+      display: flex;
+    }
+
     #search-box {
       background: var(--bg);
       width: 600px;
@@ -1913,11 +1938,12 @@
       max-height: 80vh;
       border-radius: 12px;
       border: 1px solid var(--bd2);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
+
     #search-header {
       padding: 16px;
       background: var(--bg2);
@@ -1926,6 +1952,7 @@
       align-items: center;
       gap: 12px;
     }
+
     #search-input {
       flex: 1;
       height: 40px;
@@ -1937,15 +1964,28 @@
       font-size: 16px;
       outline: none;
     }
-    #search-input:focus { border-color: var(--accent); }
-    #search-results { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+    #search-input:focus {
+      border-color: var(--accent);
+    }
+
+    #search-results {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
     .search-res-item {
       padding: 12px 16px;
       cursor: pointer;
       border-bottom: 1px solid var(--bd-dim);
       transition: background 0.2s;
     }
-    .search-res-item:hover { background: var(--bg-hover); }
+
+    .search-res-item:hover {
+      background: var(--bg-hover);
+    }
+
     .search-res-type {
       font-size: 10px;
       text-transform: uppercase;
@@ -1955,280 +1995,337 @@
       border-radius: 3px;
       margin-right: 8px;
     }
-    .search-res-info { font-size: 11px; color: var(--tx3); margin-top: 4px; }
-    .search-res-text { font-size: 14px; font-weight: 500; color: var(--tx); line-height: 1.4; }
-    .search-res-match { background: rgba(255, 215, 0, 0.4); border-radius: 2px; }
 
-    #settings-modal {
-    #settings-box {
-      background: var(--bg);
-      border-radius: 12px;
-      border: 1px solid var(--bd2);
-      padding: 24px;
-      width: 480px;
-      max-width: 95vw;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .settings-section {
-      border-bottom: 1px solid var(--bd);
-      padding-bottom: 16px;
-    }
-    .settings-section h4 {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--tx2);
-      margin-bottom: 10px;
-      letter-spacing: 0.05em;
-    }
-    .settings-row {
-      margin-bottom: 10px;
-    }
-    .settings-row label {
-      display: block;
+    .search-res-info {
       font-size: 11px;
       color: var(--tx3);
-      margin-bottom: 4px;
-    }
-    .settings-row input[type="text"], 
-    .settings-row input[type="password"] {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--bd);
-      background: var(--bg);
-      color: var(--tx);
-      font-family: inherit;
-      font-size: 13px;
-    }
-    .settings-row input:focus {
-      border-color: var(--accent);
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(122, 180, 232, 0.2);
-    }
-    .settings-section {
-      border-bottom: 1px solid var(--bd);
-      padding-bottom: 12px;
-    }
-    .settings-section:last-child { border-bottom: none; }
-    .settings-section h4 {
-      font-size: 12px;
-      margin-bottom: 8px;
-      color: var(--tx2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .settings-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .settings-row label { font-size: 11px; font-weight: 600; color: var(--tx2); }
-    .settings-row input[type="text"], .settings-row input[type="password"] {
-      padding: 6px 10px;
-      border: 1px solid var(--bd2);
-      border-radius: 4px;
-      background: var(--bg2);
-      color: var(--tx);
-      font-size: 12px;
-    }
-    .settings-grid-actions {
-      display: flex;
-      gap: 8px;
       margin-top: 4px;
     }
-    #app-ver-disp { font-size: 10px; color: var(--tx3); text-align: right; }
-    
-    #report-textarea:focus {
-      outline: none;
-      border-color: var(--bd-focus)
-    }
 
-    .report-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end
-    }
-
-    /* ── アウトラインエディタ 日付ナビゲーション ── */
-    #ol-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-bottom: 1px solid var(--bd);
-      flex-shrink: 0;
-      background: var(--bg2);
-    }
-
-    #ol-date-disp {
-      font-size: 13px;
-      font-weight: 600;
-      flex: 1;
-      text-align: center
-    }
-
-    #ol-date-picker {
-      font-size: 11px;
-      padding: 3px 6px;
-      border: 1px solid var(--bd2);
-      border-radius: 5px;
-      background: var(--bg);
+    .search-res-text {
+      font-size: 14px;
+      font-weight: 500;
       color: var(--tx);
-      font-family: inherit;
-      cursor: pointer;
+      line-height: 1.4;
     }
 
-    #ol-date-picker:focus {
-      outline: none;
-      border-color: var(--bd-focus)
+    .search-res-match {
+      background: rgba(255, 215, 0, 0.4);
+      border-radius: 2px;
     }
 
-    .ol-nav-btn {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px solid var(--bd2);
-      background: var(--bg);
-      color: var(--tx);
-      font-family: inherit;
-    }
+    #settings-modal {
+      #settings-box {
+        background: var(--bg);
+        border-radius: 12px;
+        border: 1px solid var(--bd2);
+        padding: 24px;
+        width: 480px;
+        max-width: 95vw;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-    .ol-nav-btn:hover {
-      background: var(--bg3);
-      border-color: var(--bd-focus)
-    }
+      .settings-section {
+        border-bottom: 1px solid var(--bd);
+        padding-bottom: 16px;
+      }
 
-    .ol-today-badge {
-      font-size: 10px;
-      color: var(--tx-info);
-      background: var(--bg-info);
-      border: 1px solid var(--bd-info);
-      border-radius: 8px;
-      padding: 1px 7px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
+      .settings-section h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx2);
+        margin-bottom: 10px;
+        letter-spacing: 0.05em;
+      }
 
-    /* ── ノートリンクボタン ── */
-    .link-note-btn {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px solid var(--bd-info);
-      background: var(--bg-info);
-      color: var(--tx-info);
-      font-family: inherit;
-      margin-bottom: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
+      .settings-row {
+        margin-bottom: 10px;
+      }
 
-    .link-note-btn:hover {
-      filter: brightness(.95)
-    }
+      .settings-row label {
+        display: block;
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 4px;
+      }
 
-    .ol-linked-chip {
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 8px;
-      background: var(--bg-info);
-      color: var(--tx-info);
-      border: 1px solid var(--bd-info);
-      cursor: pointer;
-      margin-left: 4px;
-      flex-shrink: 0;
-    }
+      .settings-row input[type="text"],
+      .settings-row input[type="password"] {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--bd);
+        background: var(--bg);
+        color: var(--tx);
+        font-family: inherit;
+        font-size: 13px;
+      }
 
-    .ol-linked-chip:hover {
-      filter: brightness(.95)
-    }
+      .settings-row input:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(122, 180, 232, 0.2);
+      }
 
-    /* ── NOTE PANEL (右ペイン・アウトラインエディタ) ── */
-    #note-panel {
-      width: 0;
-      flex-shrink: 0;
-      overflow: hidden;
-      background: var(--bg);
-      border-left: 1px solid var(--bd2);
-      display: flex;
-      flex-direction: column;
-      transition: width .2s ease;
-    }
+      .settings-section {
+        border-bottom: 1px solid var(--bd);
+        padding-bottom: 12px;
+      }
 
-    #note-panel.open {
-      width: 380px
-    }
+      .settings-section:last-child {
+        border-bottom: none;
+      }
 
-    #note-ph {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--bd2);
-      flex-shrink: 0;
-    }
+      .settings-section h4 {
+        font-size: 12px;
+        margin-bottom: 8px;
+        color: var(--tx2);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
 
-    #note-ph h2 {
-      font-size: 13px;
-      font-weight: 600;
-      flex: 1;
-      margin: 0
-    }
+      .settings-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 10px;
+      }
 
-    #note-ol-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 10px;
-      font-size: 13px;
-      line-height: 1.6
-    }
+      .settings-row label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
 
-    /* ── FULLSCREEN FOCUS MODE (Overlay) ── */
-    body.fs-focus-mode #note-panel {
-      position: fixed;
-      inset: 0;
-      width: 100% !important;
-      height: 100% !important;
-      z-index: 1000;
-      border: none;
-      background: var(--bg);
-      padding: 10px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    body.fs-focus-mode #note-ph,
-    body.fs-focus-mode #ol-nav,
-    body.fs-focus-mode #today-ol-hd,
-    body.fs-focus-mode #ol-container {
-      width: 100%;
-      max-width: 1400px; /* さらに広げる */
-    }
-    body.fs-focus-mode #rz-note { display: none !important; }
-    body.fs-focus-mode #ol-container {
-      padding: 10px 10px; /* さらに削減 */
-    }
-    body.fs-focus-mode #note-ph {
-      background: transparent;
-      border-bottom: none;
-      padding: 5px 10px;
-    }
-    body.fs-focus-mode #note-ph h2 {
-      font-size: 16px;
-    }
-    /* 各種メニューを最前面に（集中モードの z-index:1000 より上に） */
-    #ol-slash-menu, #ol-proj-menu, #cmd-bg, #report-modal, #settings-modal, #img-full, #qa-bg {
-      z-index: 1100 !important;
-    }
+      .settings-row input[type="text"],
+      .settings-row input[type="password"] {
+        padding: 6px 10px;
+        border: 1px solid var(--bd2);
+        border-radius: 4px;
+        background: var(--bg2);
+        color: var(--tx);
+        font-size: 12px;
+      }
+
+      .settings-grid-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      #app-ver-disp {
+        font-size: 10px;
+        color: var(--tx3);
+        text-align: right;
+      }
+
+      #report-textarea:focus {
+        outline: none;
+        border-color: var(--bd-focus)
+      }
+
+      .report-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end
+      }
+
+      /* ── アウトラインエディタ 日付ナビゲーション ── */
+      #ol-nav {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-bottom: 1px solid var(--bd);
+        flex-shrink: 0;
+        background: var(--bg2);
+      }
+
+      #ol-date-disp {
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+        text-align: center
+      }
+
+      #ol-date-picker {
+        font-size: 11px;
+        padding: 3px 6px;
+        border: 1px solid var(--bd2);
+        border-radius: 5px;
+        background: var(--bg);
+        color: var(--tx);
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      #ol-date-picker:focus {
+        outline: none;
+        border-color: var(--bd-focus)
+      }
+
+      .ol-nav-btn {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid var(--bd2);
+        background: var(--bg);
+        color: var(--tx);
+        font-family: inherit;
+      }
+
+      .ol-nav-btn:hover {
+        background: var(--bg3);
+        border-color: var(--bd-focus)
+      }
+
+      .ol-today-badge {
+        font-size: 10px;
+        color: var(--tx-info);
+        background: var(--bg-info);
+        border: 1px solid var(--bd-info);
+        border-radius: 8px;
+        padding: 1px 7px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      /* ── ノートリンクボタン ── */
+      .link-note-btn {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid var(--bd-info);
+        background: var(--bg-info);
+        color: var(--tx-info);
+        font-family: inherit;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .link-note-btn:hover {
+        filter: brightness(.95)
+      }
+
+      .ol-linked-chip {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 8px;
+        background: var(--bg-info);
+        color: var(--tx-info);
+        border: 1px solid var(--bd-info);
+        cursor: pointer;
+        margin-left: 4px;
+        flex-shrink: 0;
+      }
+
+      .ol-linked-chip:hover {
+        filter: brightness(.95)
+      }
+
+      /* ── NOTE PANEL (右ペイン・アウトラインエディタ) ── */
+      #note-panel {
+        width: 0;
+        flex-shrink: 0;
+        overflow: hidden;
+        background: var(--bg);
+        border-left: 1px solid var(--bd2);
+        display: flex;
+        flex-direction: column;
+        transition: width .2s ease;
+      }
+
+      #note-panel.open {
+        width: 380px
+      }
+
+      #note-ph {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        background: var(--bg2);
+        border-bottom: 1px solid var(--bd2);
+        flex-shrink: 0;
+      }
+
+      #note-ph h2 {
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+        margin: 0
+      }
+
+      #note-ol-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 10px;
+        font-size: 13px;
+        line-height: 1.6
+      }
+
+      /* ── FULLSCREEN FOCUS MODE (Overlay) ── */
+      body.fs-focus-mode #note-panel {
+        position: fixed;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 1000;
+        border: none;
+        background: var(--bg);
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      body.fs-focus-mode #note-ph,
+      body.fs-focus-mode #ol-nav,
+      body.fs-focus-mode #today-ol-hd,
+      body.fs-focus-mode #ol-container {
+        width: 100%;
+        max-width: 1400px;
+        /* さらに広げる */
+      }
+
+      body.fs-focus-mode #rz-note {
+        display: none !important;
+      }
+
+      body.fs-focus-mode #ol-container {
+        padding: 10px 10px;
+        /* さらに削減 */
+      }
+
+      body.fs-focus-mode #note-ph {
+        background: transparent;
+        border-bottom: none;
+        padding: 5px 10px;
+      }
+
+      body.fs-focus-mode #note-ph h2 {
+        font-size: 16px;
+      }
+
+      /* 各種メニューを最前面に（集中モードの z-index:1000 より上に） */
+      #ol-slash-menu,
+      #ol-proj-menu,
+      #cmd-bg,
+      #report-modal,
+      #settings-modal,
+      #img-full,
+      #qa-bg {
+        z-index: 1100 !important;
+      }
+
       font-weight: 700;
       flex: 1;
       letter-spacing: .02em
@@ -2352,10 +2449,11 @@
     }
 
     /* プライベートノード (全表示モード時) */
-    .ol-private > .ol-text-area > .ol-text {
+    .ol-private>.ol-text-area>.ol-text {
       color: var(--tx-warn) !important;
       opacity: 0.8;
     }
+
     .ol-private::before {
       content: '🔒';
       font-size: 10px;
@@ -2775,9 +2873,11 @@
         style="font-size:10px;opacity:.65;font-weight:400">Alt+Shift+C</span></button>
     <button class="btn" id="ai-btn" onclick="toggleAiPanel()" title="AIアシスタント">🤖 AI</button>
     <button class="btn" onclick="openCmdPalette()" title="コマンドパレット (Ctrl+K)">⌨ Ctrl+K</button>
-    <button class="btn" id="fold-toggle-btn" onclick="toggleAllCollapse()" title="全アイテムを折り畳み/展開 (Alt+Shift+[ )">⊟ 全折り</button>
+    <button class="btn" id="fold-toggle-btn" onclick="toggleAllCollapse()" title="全アイテムを折り畳み/展開 (Alt+Shift+[ )">⊟
+      全折り</button>
     <div class="spacer"></div>
-    <span id="gh-sync-badge" style="font-size:11px;color:var(--tx3);margin-right:12px;display:none;cursor:pointer" onclick="openSettings()"></span>
+    <span id="gh-sync-badge" style="font-size:11px;color:var(--tx3);margin-right:12px;display:none;cursor:pointer"
+      onclick="openSettings()"></span>
     <span id="save-time" title="最終保存時刻" style="font-size:11px;color:var(--tx3);margin-right:8px"></span>
     <button class="btn" onclick="openSearch()" title="検索 (Ctrl+F)" style="font-size:16px;padding:2px 8px">🔍</button>
     <button class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px">⚙️</button>
@@ -2832,10 +2932,12 @@
         <input type="date" id="ol-date-picker" onchange="olGoDate(this.value)">
         <span class="ol-today-badge" onclick="olGoDate(todayDateStr())">今日</span>
       </div>
-      <div id="today-ol-hd" style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
+      <div id="today-ol-hd"
+        style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <h3 style="font-size:14px;font-weight:700;margin:0">📝 デイリーノート</h3>
-          <button class="btn" onclick="openOlSlashMenuFromBtn(this)" style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張メニュー</button>
+          <button class="btn" onclick="openOlSlashMenuFromBtn(this)"
+            style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張メニュー</button>
         </div>
         <div class="ol-toolbar" style="display:flex;flex-wrap:wrap;gap:4px;border-top:none;padding-top:0">
           <button class="ol-tbtn" onclick="olInsertLink()" title="リンク挿入 (Ctrl+L)">🔗 リンク</button>
@@ -3053,15 +3155,17 @@
         <div class="settings-row">
           <label>GitHub Personal Access Token (classic)</label>
           <input type="password" id="gh-token-s" placeholder="ghp_xxxxxxxxxxxx">
-          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。トークンはブラウザの localStorage にのみ保存されます。</p>
+          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。トークンはブラウザの localStorage にのみ保存されます。
+          </p>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
           <input type="checkbox" id="gh-enabled-s" style="cursor:pointer">
           <label for="gh-enabled-s" style="font-size:12px;cursor:pointer;font-weight:600">自動同期を有効にする</label>
         </div>
-        
+
         <div style="background:var(--bg2);padding:10px;border-radius:6px;margin-top:12px;border:1px solid var(--bd)">
-          <div id="gh-status" style="font-size:11px;color:var(--tx3);margin-bottom:8px;min-height:1.2em">同期ステータス: 未設定</div>
+          <div id="gh-status" style="font-size:11px;color:var(--tx3);margin-bottom:8px;min-height:1.2em">同期ステータス: 未設定
+          </div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-accent" onclick="ghSyncSave(true)" style="flex:1">↑ 手動送信 (Push)</button>
             <button class="btn" onclick="ghSyncLoad(true)" style="flex:1">↓ 手動取得 (Fetch)</button>
@@ -3084,7 +3188,8 @@
         <div style="background:var(--bg-warn);padding:10px;border-radius:6px;margin-top:8px;border:1px solid #d4a020">
           <p style="font-size:11px;color:var(--tx-warn);margin-bottom:8px"><strong>画像を GitHub フォルダへ移行</strong></p>
           <p style="font-size:10px;color:var(--tx-warn);margin-bottom:10px">
-            ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより <code>data.json</code> を大幅に軽量化できます。
+            ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより
+            <code>data.json</code> を大幅に軽量化できます。
           </p>
           <button class="btn btn-warn" onclick="olMigrateImages()" style="width:100%;padding:6px">🚀 画像の移行を実行する</button>
         </div>
@@ -3108,6 +3213,23 @@
     </div>
   </div>
 
+  <!-- デスクトップマスコット -->
+  <div id="mascot-container" style="display:none">
+    <div id="mascot-bubble"></div>
+    <img id="mascot-img" src="Characters/1-Idle.png" onclick="mascotClick()" onmouseover="mascotHover()">
+  </div>
+
+  <!-- 検索モーダル -->
+  <div id="search-modal" onclick="if(event.target===this)closeSearch()">
+    <div id="search-box">
+      <div id="search-header">
+        <span style="font-size:20px">🔍</span>
+        <input type="text" id="search-input" placeholder="プロジェクト、タスク、ノートを検索..." oninput="doSearch(this.value)">
+        <button class="btn" onclick="closeSearch()" style="padding:4px 12px">✕</button>
+      </div>
+      <div id="search-results"></div>
+    </div>
+  </div>
 
   <script>
 
@@ -3467,7 +3589,7 @@
           const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
           if (S.dailyOutline && S.dailyOutline[dateStr]) {
             const nodes = S.dailyOutline[dateStr];
-            
+
             // 状態に応じたキャッシュキー（表示設定を反映）
             const nodeHash = JSON.stringify(nodes) + _viewMode + _hideDone;
             if (!window._dailyHtmlCache[dateStr] || window._dailyHtmlCache[dateStr].hash !== nodeHash) {
@@ -3597,13 +3719,13 @@
         if (proj.recSectionOpen) {
           rows += `<div class="proj-entries-body open">`;
           if (!recEntries.length) { rows += `<div style="font-size:10px;color:var(--tx3);padding:3px 4px">まだありません。＋で追加</div>`; }
-            recEntries.forEach((re, rei) => {
-              rows += `<div class="rec-pitem">`;
-              rows += `<span style="font-size:9px;color:#7ab4e8">🔄</span>`;
-              rows += `<span class="rec-pitem-txt" ondblclick="openRecurringPanel(${pi},${rei})" title="ダブルクリックで編集">${esc(re.text || '(無題)')}</span>`;
-              rows += `<span class="edel" style="opacity:1" onclick="deleteRecurring(${pi},${rei})" title="削除">✕</span>`;
-              rows += `</div>`;
-            });
+          recEntries.forEach((re, rei) => {
+            rows += `<div class="rec-pitem">`;
+            rows += `<span style="font-size:9px;color:#7ab4e8">🔄</span>`;
+            rows += `<span class="rec-pitem-txt" ondblclick="openRecurringPanel(${pi},${rei})" title="ダブルクリックで編集">${esc(re.text || '(無題)')}</span>`;
+            rows += `<span class="edel" style="opacity:1" onclick="deleteRecurring(${pi},${rei})" title="削除">✕</span>`;
+            rows += `</div>`;
+          });
           rows += `</div>`;
         }
         rows += `</div>`;
@@ -3890,9 +4012,9 @@
       if (!el) return;
       document.querySelectorAll('.eitem.kfocus').forEach(e => e.classList.remove('kfocus'));
       if (el.dataset.daily) {
-          focusKey = 'daily:' + el.dataset.date + ':' + el.dataset.nid;
+        focusKey = 'daily:' + el.dataset.date + ':' + el.dataset.nid;
       } else {
-          focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
+        focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
       }
       el.classList.add('kfocus');
       _programmaticFocus = true;
@@ -3943,7 +4065,7 @@
       if (!ev.altKey && !ev.shiftKey && (key === 'ArrowUp' || key === 'ArrowDown')) {
         ev.preventDefault();
         const dir = key === 'ArrowUp' ? -1 : 1;
-        
+
         // DOMベースでの移動（通常アイテムとデイリーアイテムを混在して扱う）
         if (currentEl) {
           const list = currentEl.closest('.elist');
@@ -4049,14 +4171,14 @@
     function eitemKeyDown(ev, el) {
       if (el.dataset.daily) {
         if (ev.key === 'Enter') {
-            ev.preventDefault();
-            openNotePanelToDate(el.dataset.date, el.dataset.nid);
-            return;
+          ev.preventDefault();
+          openNotePanelToDate(el.dataset.date, el.dataset.nid);
+          return;
         }
         if (ev.key === ' ') {
-            ev.preventDefault();
-            tvCheckDaily(el.dataset.date, el.dataset.nid);
-            return;
+          ev.preventDefault();
+          tvCheckDaily(el.dataset.date, el.dataset.nid);
+          return;
         }
         navigate(ev, +el.dataset.pi, el.dataset.wk, -2, el);
         return;
@@ -4560,7 +4682,7 @@
       const pb = $('pb');
       pb.innerHTML = h;
       pb.classList.remove('panel-enter');
-      void pb.offsetWidth; 
+      void pb.offsetWidth;
       pb.classList.add('panel-enter');
       setupImageDropZone();
     }
@@ -5057,16 +5179,16 @@
     function openSettings() {
       $('settings-modal').classList.add('open');
       if ($('app-ver-disp')) $('app-ver-disp').textContent = 'Version ' + APP_VERSION;
-      
+
       const g = ghGetSettings();
       $('gh-repo-s').value = g.repo;
       $('gh-file-s').value = g.file;
       $('gh-enabled-s').checked = g.enabled;
-      
+
       const tok = localStorage.getItem(GH_TOKEN_SK);
       $('gh-token-s').value = tok ? '●'.repeat(20) : '';
       $('gh-token-s').dataset.saved = tok ? '1' : '';
-      
+
       const sha = localStorage.getItem(GH_SHA_SK);
       if (sha) ghStatus('最終同期 SHA: ' + sha.slice(0, 7) + '…');
     }
@@ -5079,11 +5201,11 @@
       const gRepo = $('gh-repo-s').value.trim();
       const gFile = $('gh-file-s').value.trim() || 'data.json';
       const gEnabled = $('gh-enabled-s').checked;
-      
+
       localStorage.setItem(GH_REPO_SK, gRepo);
       localStorage.setItem(GH_FILE_SK, gFile);
       localStorage.setItem(GH_ENABLED_SK, gEnabled ? '1' : '0');
-      
+
       const tokEl = $('gh-token-s');
       const mask = '●'.repeat(20);
       if (tokEl.value !== mask) {
@@ -5091,11 +5213,11 @@
         if (v) localStorage.setItem(GH_TOKEN_SK, v);
         else if (tokEl.value === '') localStorage.removeItem(GH_TOKEN_SK);
       }
-      
+
       ghStatus(gEnabled ? '同期有効' : '同期無効');
       const badge = $('gh-sync-badge');
       if (badge) badge.style.display = gEnabled ? 'inline' : 'none';
-      
+
       closeSettings();
       showToast('⚙️ 設定を保存しました');
     }
@@ -5218,12 +5340,12 @@
     async function ghUploadImage(file) {
       const { token, repo } = ghGetSettings();
       if (!token || !repo) throw new Error('GitHubの設定（トークン・リポジトリ）が必要です');
-      
+
       const ext = file.name.split('.').pop() || 'png';
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const random = Math.random().toString(36).substring(2, 7);
       const filename = `images/${timestamp}_${random}.${ext}`;
-      
+
       const reader = new FileReader();
       const base64Promise = new Promise((resolve, reject) => {
         reader.onload = e => resolve(e.target.result.split(',')[1]);
@@ -5250,20 +5372,20 @@
     async function olMigrateImages() {
       const g = ghGetSettings();
       if (!g.enabled || !g.token || !g.repo) { alert('GitHub 同期を有効にして設定（トークン・リポジトリ）を保存してから実行してください。'); return; }
-      
+
       let count = 0;
       const allDates = Object.keys(S.dailyOutline || {});
       const toProcess = [];
-      
+
       allDates.forEach(date => {
         S.dailyOutline[date].forEach(n => {
           if (n.html && n.html.includes('src="data:image/')) toProcess.push({ date, n });
         });
       });
-      
+
       if (toProcess.length === 0) { alert('移行が必要な base64 画像は見つかりませんでした。'); return; }
       if (!confirm(`${toProcess.length} 個のノードに埋め込まれた画像を GitHub へアップロードし、ノートを軽量化しますか？\n（処理には時間がかかる場合があります）`)) return;
-      
+
       showToast('⏳ 画像の移行を開始します...');
       for (const item of toProcess) {
         const div = document.createElement('div');
@@ -5287,7 +5409,7 @@
         // text も更新（画像タグが含まれる場合）
         item.n.text = div.textContent;
       }
-      
+
       saveState();
       render();
       if (_olCurrentDate) olRender('ol-container', _olCurrentDate);
@@ -6427,7 +6549,7 @@ ${draft}
 
       // 現在の構造（ノードID・インデント・状態）のハッシュを生成
       const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}`).join(',');
-      
+
       if (_olLastRenderKey === renderKey && container.innerHTML !== '') {
         // 構造が全く同じなら innerHTML を書き換えず、フォーカスと選択状態の更新のみ行う
         const rows = container.querySelectorAll('.ol-row');
@@ -7386,7 +7508,7 @@ ${draft}
       hideOlSlashMenu();
       saveState();
       olRender('ol-container', _olSlashDate);
-      
+
       // グリッド即時反映（フォーカス維持の仕組みは olInput と同様）
       const focusedEl = document.activeElement;
       let savedRange = null;
@@ -7394,9 +7516,9 @@ ${draft}
         const sel = window.getSelection();
         if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
       } catch (e) { }
-      
+
       render();
-      
+
       if (focusedEl) {
         focusedEl.focus();
         if (savedRange) {
@@ -7910,7 +8032,7 @@ ${draft}
     /* ── デスクトップマスコット機能 ── */
     let _mascotTimer = null;
     let _mascotEvasionCount = 0;
-    
+
     function initMascot() {
       const enabled = localStorage.getItem('pwt_mascot_enabled') === 'true';
       const chk = $('mascot-enabled-s');
@@ -7919,13 +8041,13 @@ ${draft}
         $('mascot-container').style.display = 'flex';
         setTimeout(() => mascotSpeak('起動したよ！今日も頑張ろう！', 4000), 1000);
       }
-      
+
       // マス回避ロジック（マウスポインタが近づくと四隅へ逃げる。画面外や他UIとの重なりを避ける）
       window.addEventListener('mousemove', e => {
         if (localStorage.getItem('pwt_mascot_enabled') !== 'true') return;
         const img = $('mascot-img');
         const rect = img.getBoundingClientRect();
-        const dist = Math.hypot(e.clientX - (rect.left + rect.width/2), e.clientY - (rect.top + rect.height/2));
+        const dist = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
         if (dist < 80) mascotMoveRandomly();
       });
 
@@ -7984,21 +8106,21 @@ ${draft}
       ];
       _mascotEvasionCount = (_mascotEvasionCount + 1) % corners.length;
       const c = corners[_mascotEvasionCount];
-      
+
       container.style.top = c.top;
       container.style.bottom = c.bottom;
       container.style.left = c.left;
       container.style.right = c.right;
-      
+
       mascotEmote('surprise');
       setTimeout(() => mascotEmote('idle'), 1000);
     }
 
     // 設定保存時にマスコットの有効/無効を反映
     const _origSaveSettings = saveSettingsAndClose;
-    saveSettingsAndClose = function() {
-      const enabled = $('mascot-enabled-s').checked;
-      toggleMascotVisible(enabled);
+    saveSettingsAndClose = function () {
+      const chk = $('mascot-enabled-s');
+      if (chk) toggleMascotVisible(chk.checked);
       _origSaveSettings();
     };
 
