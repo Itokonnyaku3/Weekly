@@ -89,6 +89,21 @@
               "date": "2026-3-23",
               "nodeId": "mn2uljtvg02"
             }
+          },
+          {
+            "id": "emn2v8to2sis",
+            "type": "link",
+            "text": "",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2f932lzzo"
+            }
           }
         ]
       },
@@ -1621,7 +1636,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T07:15:43.622Z",
+  "savedAt": "2026-03-23T07:30:22.806Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2838,7 +2853,7 @@
         "collapsed": false
       },
       {
-        "id": "mn2f932lzzo",
+        "id": "mn2v8xhhqq6",
         "text": "",
         "html": "",
         "indent": 0,
