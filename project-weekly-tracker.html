@@ -2091,7 +2091,7 @@
       z-index: 1000;
       border: none;
       background: var(--bg);
-      padding: 20px 0;
+      padding: 10px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -2101,19 +2101,23 @@
     body.fs-focus-mode #today-ol-hd,
     body.fs-focus-mode #ol-container {
       width: 100%;
-      max-width: 800px; /* フルスクリーン時は中央寄せ・幅制限で見やすく */
+      max-width: 1400px; /* さらに広げる */
     }
     body.fs-focus-mode #rz-note { display: none !important; }
     body.fs-focus-mode #ol-container {
-      padding: 20px 40px;
+      padding: 10px 10px; /* さらに削減 */
     }
     body.fs-focus-mode #note-ph {
       background: transparent;
       border-bottom: none;
-      padding: 10px 20px;
+      padding: 5px 10px;
     }
     body.fs-focus-mode #note-ph h2 {
-      font-size: 18px;
+      font-size: 16px;
+    }
+    /* 各種メニューを最前面に（集中モードの z-index:1000 より上に） */
+    #ol-slash-menu, #ol-proj-menu, #cmd-bg, #report-modal, #settings-modal, #img-full, #qa-bg {
+      z-index: 1100 !important;
     }
       font-weight: 700;
       flex: 1;
