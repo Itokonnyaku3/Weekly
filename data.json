@@ -255,21 +255,6 @@
           },
           {
             "type": "todo",
-            "text": "週次進捗確認",
-            "note": "・次週の予定\n・全体の確認",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [
-              "定例"
-            ],
-            "id": "emmx5rb3lu90",
-            "collapsed": false,
-            "done": true
-          },
-          {
-            "type": "todo",
             "text": "田口さん・久さん問題をリーダー会で相談",
             "note": "",
             "url": "",
@@ -336,6 +321,21 @@
               "date": "2026-3-23",
               "nodeId": "mn1prxh48m6"
             }
+          },
+          {
+            "type": "todo",
+            "text": "週次進捗確認（毎週金曜）",
+            "note": "・次週の予定\n・全体の確認",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [
+              "定例"
+            ],
+            "id": "emmx5rb3lu90",
+            "collapsed": false,
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -358,6 +358,13 @@
             "today": false,
             "id": "emmw2zro2mh2",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "週次進捗確認",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ],
         "2026-4-6": [
@@ -1651,7 +1658,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T07:46:23.046Z",
+  "savedAt": "2026-03-23T07:57:13.338Z",
   "dailyOutline": {
     "2026-3-18": [
       {
