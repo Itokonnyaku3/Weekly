@@ -1143,6 +1143,21 @@
             "priority": "",
             "tags": [],
             "id": "emn2gkvhlcht"
+          },
+          {
+            "id": "emn2tmz5ybax",
+            "type": "link",
+            "text": "25日新狭山店オープン！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2tlmcrwlc"
+            }
           }
         ]
       },
@@ -1260,6 +1275,21 @@
             "images": [],
             "id": "emmx5rb3lwge",
             "collapsed": false
+          },
+          {
+            "id": "emn2tmpdyjss",
+            "type": "link",
+            "text": "ふかや花園やること整理　・",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2tltf6q2v"
+            }
           }
         ]
       },
@@ -1561,7 +1591,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T06:42:19.200Z",
+  "savedAt": "2026-03-23T06:45:30.137Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2574,6 +2604,59 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn2tl9w1fvb",
+        "text": "明日の部会で告知",
+        "html": "明日の部会で告知",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2tks3ulzd",
+        "text": "田口さんに委託している内容を山下さんに確認 ",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn2tl6ljflx",
+        "text": "GW応援、25日まで",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2tlmcrwlc",
+        "text": "25日新狭山店オープン！　",
+        "html": "25日新狭山店オープン！　",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn2tmz5ybax",
+        "linkedEntryText": "25日新狭山店オープン！"
+      },
+      {
+        "id": "mn2tltf6q2v",
+        "text": "ふかや花園やること整理　",
+        "html": "ふかや花園やること整理　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn2tmpdyjss",
+        "linkedEntryText": "ふかや花園やること整理　・",
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn2telx4xid",
