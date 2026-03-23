@@ -2968,6 +2968,18 @@
         <p style="font-size:10px;color:var(--tx3);margin-top:8px">※ 読み込み（復元）を行うと、現在のデータは上書きされますのでご注意ください。</p>
       </div>
 
+      <div class="settings-section">
+        <h4>🛠️ メンテナンス</h4>
+        <div style="background:var(--bg-warn);padding:10px;border-radius:6px;margin-top:8px;border:1px solid #d4a020">
+          <p style="font-size:11px;color:var(--tx-warn);margin-bottom:8px"><strong>画像を GitHub フォルダへ移行</strong></p>
+          <p style="font-size:10px;color:var(--tx-warn);margin-bottom:10px">
+            ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより <code>data.json</code> を大幅に軽量化できます。
+          </p>
+          <button class="btn btn-warn" onclick="olMigrateImages()" style="width:100%;padding:6px">🚀 画像の移行を実行する</button>
+        </div>
+        <p style="font-size:10px;color:var(--tx3);margin-top:8px">※ 実行前に GitHub 同期設定が完了していることを確認してください。</p>
+      </div>
+
       <div class="settings-section" style="border-bottom:none;padding-bottom:0">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div id="app-ver-disp" style="font-size:11px;color:var(--tx3)">Version ---</div>
@@ -3311,7 +3323,8 @@
       });
       $('gh').innerHTML = hr + '</tr>';
 
-      // ======== デイリータスクの事前振り分け ========
+      // ======== デイリータスクの事前振り分け（キャッシュ対応） ========
+      if (!window._dailyHtmlCache) window._dailyHtmlCache = {};
       const dailyMap = {}; // { projIndex: { weekKey: [htmlString] } }
       weeks.forEach(w => {
         const wk = wkey(w);
@@ -3320,45 +3333,58 @@
           const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
           if (S.dailyOutline && S.dailyOutline[dateStr]) {
             const nodes = S.dailyOutline[dateStr];
+            
+            // 状態に応じたキャッシュキー（表示設定を反映）
+            const nodeHash = JSON.stringify(nodes) + _viewMode + _hideDone;
+            if (!window._dailyHtmlCache[dateStr] || window._dailyHtmlCache[dateStr].hash !== nodeHash) {
+              // キャッシュがないか、変更されている場合は再計算
+              const dayData = {}; // { pi: [html] }
+              // プライベート継承を計算
+              const inheritedPrivate = new Set();
+              const privStack = [];
+              nodes.forEach((nd, ni) => {
+                while (privStack.length > 0 && privStack[privStack.length - 1] >= nd.indent) privStack.pop();
+                if (nd.isPrivate || privStack.length > 0) {
+                  inheritedPrivate.add(ni);
+                  if (nd.isPrivate) privStack.push(nd.indent);
+                }
+              });
 
-            // プライベート継承を事前計算（olVisible と同じアルゴリズム）
-            const inheritedPrivate = new Set();
-            const privStack = [];
-            nodes.forEach((nd, ni) => {
-              while (privStack.length > 0 && privStack[privStack.length - 1] >= nd.indent) privStack.pop();
-              if (nd.isPrivate || privStack.length > 0) {
-                inheritedPrivate.add(ni);
-                if (nd.isPrivate) privStack.push(nd.indent);
-              }
-            });
+              nodes.forEach((n, idx) => {
+                if (n.isTodo) {
+                  const isNodePrivate = inheritedPrivate.has(idx);
+                  if (_viewMode === 'work' && isNodePrivate) return;
+                  if (_viewMode === 'private' && !isNodePrivate) return;
+                  if (_hideDone && n.checked) return;
 
-            nodes.forEach((n, idx) => {
-              if (n.isTodo) {
-                // プライベート継承を考慮したフィルタリング
-                const isNodePrivate = inheritedPrivate.has(idx);
-                if (_viewMode === 'work' && isNodePrivate) return;
-                if (_viewMode === 'private' && !isNodePrivate) return;
-                if (_hideDone && n.checked) return;
+                  const pi = getProjectIndexForNote(nodes, idx);
+                  if (pi === -1) return;
+                  if (!dayData[pi]) dayData[pi] = [];
 
-                const pi = getProjectIndexForNote(nodes, idx);
-                if (pi === -1) return;
+                  const isDone = n.checked;
+                  const txtCls = isDone ? 'etxt done' : 'etxt';
+                  const privateMark = isNodePrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
+                  let h = `<div class="eitem" tabindex="0" data-daily="1" data-date="${dateStr}" data-nid="${n.id}" data-pi="${pi}" data-wk="${wk}" data-ei="-2" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" onkeydown="eitemKeyDown(event, this)" title="ノートを開く (${dateStr})">`;
+                  h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
+                  h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
+                  h += `</div>`;
+                  dayData[pi].push(h);
+                }
+              });
+              window._dailyHtmlCache[dateStr] = { hash: nodeHash, data: dayData };
+            }
 
-                if (!dailyMap[pi]) dailyMap[pi] = {};
-                if (!dailyMap[pi][wk]) dailyMap[pi][wk] = [];
-
-                const isDone = n.checked;
-                const txtCls = isDone ? 'etxt done' : 'etxt';
-                const privateMark = isNodePrivate ? '<span style="font-size:10px;margin-right:2px">🔒</span>' : '';
-                let h = `<div class="eitem" tabindex="0" data-daily="1" data-date="${dateStr}" data-nid="${n.id}" data-pi="${pi}" data-wk="${wk}" data-ei="-2" style="border:1px dashed var(--bd);background:var(--bg2);margin-top:2px" onclick="event.stopPropagation();openNotePanelToDate('${dateStr}','${n.id}')" onkeydown="eitemKeyDown(event, this)" title="ノートを開く (${dateStr})">`;
-                h += `<input type="checkbox" class="cb" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); tvCheckDaily('${dateStr}', '${n.id}')">`;
-                h += `<span class="${txtCls}">${privateMark}${esc(n.text.replace(/#.*?$/, '').trim() || '(無題タスク)')}</span>`;
-                h += `</div>`;
-                dailyMap[pi][wk].push(h);
-              }
-            });
+            // キャッシュから dailyMap に振り分け
+            const cachedDay = window._dailyHtmlCache[dateStr].data;
+            for (const cpi in cachedDay) {
+              if (!dailyMap[cpi]) dailyMap[cpi] = {};
+              if (!dailyMap[cpi][wk]) dailyMap[cpi][wk] = [];
+              dailyMap[cpi][wk].push(...cachedDay[cpi]);
+            }
           }
         }
       });
+      // ===========================================
       // ===========================================
 
       let rows = '';
@@ -5054,6 +5080,86 @@
       localStorage.setItem(GH_SHA_SK, data.content.sha);
     }
 
+    /* GitHub API — 画像アップロード（images/フォルダへ） */
+    async function ghUploadImage(file) {
+      const { token, repo } = ghGetSettings();
+      if (!token || !repo) throw new Error('GitHubの設定（トークン・リポジトリ）が必要です');
+      
+      const ext = file.name.split('.').pop() || 'png';
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const random = Math.random().toString(36).substring(2, 7);
+      const filename = `images/${timestamp}_${random}.${ext}`;
+      
+      const reader = new FileReader();
+      const base64Promise = new Promise((resolve, reject) => {
+        reader.onload = e => resolve(e.target.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const content = await base64Promise;
+
+      const res = await fetch(
+        `https://api.github.com/repos/${repo}/contents/${filename}`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'upload image: ' + filename, content }),
+        }
+      );
+      if (!res.ok) { const e = await res.json().catch(() => ({ message: 'HTTP ' + res.status })); throw new Error(e.message); }
+      const data = await res.json();
+      // raw.githubusercontent.com のURLを生成（プライベートリポジトリでもトークンがあればアクセス可能だが、ここではプロパティから取得）
+      return data.content.download_url;
+    }
+
+    /* 既存の base64 画像をすべて GitHub へ移行してノートを軽量化する */
+    async function olMigrateImages() {
+      const g = ghGetSettings();
+      if (!g.enabled || !g.token || !g.repo) { alert('GitHub 同期を有効にして設定（トークン・リポジトリ）を保存してから実行してください。'); return; }
+      
+      let count = 0;
+      const allDates = Object.keys(S.dailyOutline || {});
+      const toProcess = [];
+      
+      allDates.forEach(date => {
+        S.dailyOutline[date].forEach(n => {
+          if (n.html && n.html.includes('src="data:image/')) toProcess.push({ date, n });
+        });
+      });
+      
+      if (toProcess.length === 0) { alert('移行が必要な base64 画像は見つかりませんでした。'); return; }
+      if (!confirm(`${toProcess.length} 個のノードに埋め込まれた画像を GitHub へアップロードし、ノートを軽量化しますか？\n（処理には時間がかかる場合があります）`)) return;
+      
+      showToast('⏳ 画像の移行を開始します...');
+      for (const item of toProcess) {
+        const div = document.createElement('div');
+        div.innerHTML = item.n.html;
+        const imgs = div.querySelectorAll('img[src^="data:image/"]');
+        for (const img of imgs) {
+          try {
+            const base64 = img.src;
+            const res = await fetch(base64);
+            const blob = await res.blob();
+            const file = new File([blob], "migrated_image.png", { type: blob.type });
+            const newUrl = await ghUploadImage(file);
+            img.src = newUrl;
+            count++;
+            showToast(`⏳ 移行中... (${count}件完了)`);
+          } catch (err) {
+            console.error('Image migration failed:', err);
+          }
+        }
+        item.n.html = div.innerHTML;
+        // text も更新（画像タグが含まれる場合）
+        item.n.text = div.textContent;
+      }
+      
+      saveState();
+      render();
+      if (_olCurrentDate) olRender('ol-container', _olCurrentDate);
+      alert(`${count} 個の画像を GitHub へ移行しました。data.json が大幅に軽量化されました。`);
+    }
+
     /* 起動時 or 手動「↓ 取得」 */
     async function ghSyncLoad(manual = false) {
       const g = ghGetSettings();
@@ -6088,6 +6194,8 @@ ${draft}
       return res;
     }
 
+    let _olLastRenderKey = '';
+
     // アウトラインを描画する
     function olRender(containerId, date) {
       const container = document.getElementById(containerId);
@@ -6132,8 +6240,8 @@ ${draft}
         }
       }
 
-      let html = '';
       // フォーカスモード用パンくずバー
+      let html = '';
       if (_olFocusMode && _olFocusMode.date === date) {
         const safeText = focusNodeText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         html += `<div class="ol-breadcrumb">`
@@ -6146,15 +6254,12 @@ ${draft}
       visible.forEach(n => {
         const isParent = olHasChildren(nodes, n._idx);
         const pl = (n.indent * 22) + 4;
-        // トグルボタン: <button> 要素で確実にクリックを受け取る
-        // onmousedown で preventDefault() してコンテンツエディタのフォーカス奪取を防ぐ
         const toggleHtml = isParent
           ? `<button class="ol-toggle${n.collapsed ? ' ol-clpsd' : ''}" `
           + `onmousedown="event.preventDefault()" `
           + `onclick="event.stopPropagation();olToggle('${date}','${n.id}')" `
           + `title="折りたたむ: Ctrl+↑ / 展開: Ctrl+↓">${n.collapsed ? '▶' : '▾'}</button>`
           : `<span class="ol-toggle-ph"></span>`;
-        // リンク参照チップ: クリックでアイテムを開く。Alt+Enter/Ctrl+Enter でも遷移
         const linkedRef = n.linkedEntryRef
           ? `<span class="ol-linked-ref e-tag-chip" onclick="event.stopPropagation();openLinkedEntry('${escA(n.linkedEntryRef)}')"></span>`
           : '';
@@ -6166,7 +6271,6 @@ ${draft}
           bulletHtml = `<input type="checkbox" class="ol-todo-cb" ${n.checked ? 'checked' : ''} onmousedown="event.preventDefault()" onclick="event.stopPropagation();olToggleTodo('${date}','${n.id}')">`;
           if (n.checked) tStyle += (tStyle ? ';' : '') + 'text-decoration:line-through;color:var(--tx3)';
         } else {
-          // 折り畳みかつ子ノードあり → ◎ ドットで子の存在を示す
           const bulletChar = (isParent && n.collapsed) ? '◎' : '•';
           bulletHtml = `<span class="ol-bullet">${bulletChar}</span>`;
         }
@@ -6185,40 +6289,50 @@ ${draft}
           + linkedRef
           + `</div></div>`;
       });
-      container.innerHTML = html;
-      // テキスト/HTML をノードにセット
-      visible.forEach(n => {
-        const el = document.getElementById('olt-' + n.id);
-        if (el) {
-          // node.html がある場合はリッチHTMLを使用（XSS注意: 自分で生成したHTMLのみ）
-          if (n.html && n.html.trim() && n.html !== n.text) {
-            el.innerHTML = n.html;
-          } else {
-            // プレーンテキスト表示: \n を <br> に変換して改行を保持
-            const txt = n.text || '';
-            const escaped = txt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const withBr = escaped.replace(/\n/g, '<br>');
-            if (/https?:\/\//.test(txt)) {
-              // URL自動リンク化（https?://で始まる文字列をa要素に変換）
-              el.innerHTML = withBr.replace(/(https?:\/\/[^\s<>"&]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+
+      // 現在の構造（ノードID・インデント・状態）のハッシュを生成
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}`).join(',');
+      
+      if (_olLastRenderKey === renderKey && container.innerHTML !== '') {
+        // 構造が全く同じなら innerHTML を書き換えず、フォーカスと選択状態の更新のみ行う
+        const rows = container.querySelectorAll('.ol-row');
+        rows.forEach(row => {
+          const id = row.dataset.id;
+          if (_olSelected.has(id)) row.classList.add('ol-selected');
+          else row.classList.remove('ol-selected');
+        });
+      } else {
+        _olLastRenderKey = renderKey;
+        container.innerHTML = html;
+        // テキスト/HTML をノードにセット
+        visible.forEach(n => {
+          const el = document.getElementById('olt-' + n.id);
+          if (el) {
+            if (n.html && n.html.trim() && n.html !== n.text) {
+              el.innerHTML = n.html;
             } else {
-              el.innerHTML = withBr;
+              const txt = n.text || '';
+              const escaped = txt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+              const withBr = escaped.replace(/\n/g, '<br>');
+              if (/https?:\/\//.test(txt)) {
+                el.innerHTML = withBr.replace(/(https?:\/\/[^\s<>"&]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+              } else {
+                el.innerHTML = withBr;
+              }
             }
           }
-        }
-        // リンク参照チップにエントリ名を安全にセット
-        // linkedEntryText がない場合は linkedEntryRef から動的に取得
-        if (n.linkedEntryRef) {
-          const row = document.querySelector(`.ol-row[data-id="${n.id}"]`);
-          const chip = row && row.querySelector('.ol-linked-ref');
-          if (chip) {
-            const projName = getLinkedProjName(n.linkedEntryRef);
-            const lbl = getLinkedEntryLabel(n.linkedEntryRef) || (n.linkedEntryText || '(不明)');
-            chip.textContent = '🏷️ ' + projName;
-            chip.title = 'リンク先: ' + lbl + '\nクリック または Ctrl+Enter / Alt+Enter で開く';
+          if (n.linkedEntryRef) {
+            const row = document.querySelector(`.ol-row[data-id="${n.id}"]`);
+            const chip = row && row.querySelector('.ol-linked-ref');
+            if (chip) {
+              const projName = getLinkedProjName(n.linkedEntryRef);
+              const lbl = getLinkedEntryLabel(n.linkedEntryRef) || (n.linkedEntryText || '(不明)');
+              chip.textContent = '🏷️ ' + projName;
+              chip.title = 'リンク先: ' + lbl + '\nクリック または Ctrl+Enter / Alt+Enter で開く';
+            }
           }
-        }
-      });
+        });
+      }
       // フォーカス復元
       let focusTarget = null;
       if (_olFocusId) {
@@ -7464,31 +7578,46 @@ ${draft}
       olRichSave();
     }
 
-    // ファイルから画像を挿入
-    function olInsertImageFile() {
+    // ファイルから画像を挿入 (GitHubアップロード対応)
+    async function olInsertImageFile() {
       const input = document.createElement('input');
       input.type = 'file'; input.accept = 'image/*';
-      input.onchange = e => {
+      input.onchange = async e => {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          const src = ev.target.result;
+
+        showToast('⏳ 画像を処理中...');
+        try {
+          const { enabled } = ghGetSettings();
+          let src;
+          if (enabled) {
+            showToast('⏳ GitHubへアップロード中...');
+            src = await ghUploadImage(file);
+          } else {
+            const reader = new FileReader();
+            src = await new Promise((resolve, reject) => {
+              reader.onload = ev => resolve(ev.target.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+          }
           const html = `<span class="ol-img-wrap" contenteditable="false" style="width:300px"><img src="${src}" alt="${file.name.replace(/"/g, '')}"></span><br>`;
           document.execCommand('insertHTML', false, html);
           olRichSave();
-        };
-        reader.readAsDataURL(file);
+          showToast('✓ 画像を挿入しました');
+        } catch (err) {
+          showToast('❌ 画像処理失敗: ' + err.message, true);
+        }
       };
       input.click();
     }
 
-    // ノートパネルの画像ペースト処理をセットアップ
+    // ノートパネルの画像ペースト処理をセットアップ (GitHubアップロード対応)
     function olSetupPasteHandler() {
       const container = $('ol-container');
       if (!container || container._pasteListenerSet) return;
       container._pasteListenerSet = true;
-      container.addEventListener('paste', ev => {
+      container.addEventListener('paste', async ev => {
         const items = ev.clipboardData && ev.clipboardData.items;
         if (!items) return;
         for (const item of items) {
@@ -7496,14 +7625,28 @@ ${draft}
             ev.preventDefault();
             const file = item.getAsFile();
             if (!file) break;
-            const reader = new FileReader();
-            reader.onload = e => {
-              const src = e.target.result;
+
+            showToast('⏳ 画像をアップロード中...');
+            try {
+              const { enabled } = ghGetSettings();
+              let src;
+              if (enabled) {
+                src = await ghUploadImage(file);
+              } else {
+                const reader = new FileReader();
+                src = await new Promise((resolve, reject) => {
+                  reader.onload = e => resolve(e.target.result);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(file);
+                });
+              }
               const html = `<span class="ol-img-wrap" contenteditable="false" style="width:300px"><img src="${src}" alt="ペースト画像"></span><br>`;
               document.execCommand('insertHTML', false, html);
               olRichSave();
-            };
-            reader.readAsDataURL(file);
+              showToast('✓ 画像を挿入しました');
+            } catch (err) {
+              showToast('❌ アップロード失敗: ' + err.message, true);
+            }
             break;
           }
         }
