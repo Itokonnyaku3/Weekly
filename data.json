@@ -29,7 +29,9 @@
               "date": "2026-3-23",
               "nodeId": "mn1q3o8qj2z"
             }
-          },
+          }
+        ],
+        "2026-3-30": [
           {
             "id": "emn1q8btwn4u",
             "type": "link",
@@ -1648,11 +1650,12 @@
       "collapsed": false,
       "recurringEntries": [],
       "recSectionOpen": false,
-      "isPrivate": false
+      "isPrivate": false,
+      "catCollapsed": {}
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T14:01:52.861Z",
+  "savedAt": "2026-03-23T21:43:45.917Z",
   "dailyOutline": {
     "2026-3-18": [
       {
