@@ -7940,26 +7940,80 @@ ${draft}
     }
 
     /* ── デスクトップマスコット機能 ── */
+    /* ── デスクトップマスコット機能 ── */
     let _mascotTimer = null;
-    let _mascotEvasionCount = 0;
 
     function initMascot() {
       const enabled = localStorage.getItem('pwt_mascot_enabled') === 'true';
       const chk = $('mascot-enabled-s');
       if (chk) chk.checked = enabled;
+      
+      const container = $('mascot-container');
       if (enabled) {
-        $('mascot-container').style.display = 'flex';
+        container.style.display = 'flex';
+        // 保存された位置を復元
+        const pos = localStorage.getItem('pwt_mascot_pos');
+        if (pos) {
+          const { left, top } = JSON.parse(pos);
+          container.style.left = left;
+          container.style.top = top;
+          container.style.bottom = 'auto';
+          container.style.right = 'auto';
+        }
         setTimeout(() => mascotSpeak('起動したよ！今日も頑張ろう！', 4000), 1000);
       }
 
-      // マス回避ロジック（マウスポインタが近づくと四隅へ逃げる。画面外や他UIとの重なりを避ける）
-      window.addEventListener('mousemove', e => {
-        if (localStorage.getItem('pwt_mascot_enabled') !== 'true') return;
-        const img = $('mascot-img');
-        const rect = img.getBoundingClientRect();
-        const dist = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
-        if (dist < 80) mascotMoveRandomly();
-      });
+      // ドラッグ移動ロジック
+      const img = $('mascot-img');
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      const onMouseDown = e => {
+        if (e.target !== img) return;
+        isDragging = true;
+        img.style.cursor = 'grabbing';
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        startX = clientX;
+        startY = clientY;
+        const rect = container.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        container.style.transition = 'none';
+        // e.preventDefault(); // クリックイベントを妨げないように注意
+      };
+
+      const onMouseMove = e => {
+        if (!isDragging) return;
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        container.style.left = (initialLeft + dx) + 'px';
+        container.style.top = (initialTop + dy) + 'px';
+        container.style.bottom = 'auto';
+        container.style.right = 'auto';
+      };
+
+      const onMouseUp = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        img.style.cursor = 'pointer';
+        container.style.transition = '';
+        // 位置を保存
+        localStorage.setItem('pwt_mascot_pos', JSON.stringify({
+          left: container.style.left,
+          top: container.style.top
+        }));
+      };
+
+      img.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      // タッチ対応
+      img.addEventListener('touchstart', onMouseDown, { passive: false });
+      window.addEventListener('touchmove', onMouseMove, { passive: false });
+      window.addEventListener('touchend', onMouseUp);
 
       // Ctrl+F で検索
       window.addEventListener('keydown', ev => {
@@ -7999,32 +8053,22 @@ ${draft}
 
     function mascotClick() {
       mascotEmote('happy');
-      const phrases = ["順調かな？", "休憩も取ってね！", "GitHubへの同期は任せて！", "何か手伝える？", "今日もいい調子だ！"];
+      const phrases = [
+        "順調かな？無理しすぎないでね！",
+        "休憩も大切だよ。お茶でも飲まない？",
+        "GitHubへの同期、私がしっかり見守ってるよ！",
+        "何か手伝えることがあったら教えてね。",
+        "今日も一日頑張ってるね。えらい！",
+        "集中力が切れてきたら、深呼吸してみて。",
+        "完了したToDoにチェックを入れる瞬間がいいよね！",
+        "一つ一つの積み重ねが大きな成果になるよ。",
+        "応援してるよ！フレー！フレー！"
+      ];
       mascotSpeak(phrases[Math.floor(Math.random() * phrases.length)]);
       setTimeout(() => mascotEmote('idle'), 3000);
     }
 
     function mascotHover() { }
-
-    function mascotMoveRandomly() {
-      const container = $('mascot-container');
-      const corners = [
-        { top: 'auto', bottom: '20px', left: 'auto', right: '20px' }, // Bottom Right
-        { top: 'auto', bottom: '20px', left: '20px', right: 'auto' }, // Bottom Left
-        { top: '80px', bottom: 'auto', left: 'auto', right: '20px' }, // Top Right
-        { top: '80px', bottom: 'auto', left: '20px', right: 'auto' }  // Top Left
-      ];
-      _mascotEvasionCount = (_mascotEvasionCount + 1) % corners.length;
-      const c = corners[_mascotEvasionCount];
-
-      container.style.top = c.top;
-      container.style.bottom = c.bottom;
-      container.style.left = c.left;
-      container.style.right = c.right;
-
-      mascotEmote('surprise');
-      setTimeout(() => mascotEmote('idle'), 1000);
-    }
 
     // 設定保存時にマスコットの有効/無効を反映
     const _origSaveSettings = saveSettingsAndClose;
