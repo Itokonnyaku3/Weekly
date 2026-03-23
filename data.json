@@ -74,6 +74,21 @@
               "date": "2026-3-23",
               "nodeId": "mn2ufprb7cs"
             }
+          },
+          {
+            "id": "emn2unznpa7f",
+            "type": "link",
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2uljtvg02"
+            }
           }
         ]
       },
@@ -1606,7 +1621,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T07:12:10.147Z",
+  "savedAt": "2026-03-23T07:14:09.131Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2816,37 +2831,6 @@
       {
         "id": "mn2g83gpwz7",
         "text": "鳩山店超低温オフライン…メール送信",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2ufprb7cs",
-        "text": "a   ",
-        "html": "a&nbsp; &nbsp;",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn2uksqv64o",
-        "linkedEntryText": "a"
-      },
-      {
-        "id": "mn2ul035mwp",
-        "text": "qweqwe ",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn2uliy2q7c",
-        "linkedEntryText": "qweqwe"
-      },
-      {
-        "id": "mn2uljtvg02",
-        "text": "",
         "html": "",
         "indent": 1,
         "bold": false,
