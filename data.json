@@ -1673,7 +1673,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-23T09:05:16.010Z",
+  "savedAt": "2026-03-23T09:06:48.721Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2863,6 +2863,33 @@
         "collapsed": false,
         "linkedEntryRef": "13:2026-3-23:1",
         "linkedEntryText": "複合機スキャン設定どうする"
+      },
+      {
+        "id": "mn2yncodxma",
+        "text": "ここでGeminiに相談",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2yoiuy0na",
+        "text": "https://gemini.google.com/share/81dc5dafaeea",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2yoz7d0le",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn2g81uboox",
