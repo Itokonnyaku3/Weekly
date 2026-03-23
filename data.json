@@ -1607,11 +1607,21 @@
           {
             "type": "todo",
             "text": "鹿喰さん・時田さんに集計方法確認",
-            "note": "",
+            "note": "毎月20日くらいに時田さんがマクロで集計されたデータを総務部に連携、キヤノンにも送っている。キヤノンはそれを基に請求書を総務に送付とのこと。",
             "url": "",
             "images": [],
             "id": "emmy6a1t3reo",
-            "collapsed": false
+            "collapsed": false,
+            "priority": "",
+            "tags": [],
+            "done": true
+          },
+          {
+            "type": "todo",
+            "text": "複合機スキャン設定どうする",
+            "note": "",
+            "url": "",
+            "images": []
           }
         ]
       },
@@ -1659,7 +1669,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-23T09:03:04.670Z",
+  "savedAt": "2026-03-23T09:04:50.804Z",
   "dailyOutline": {
     "2026-3-18": [
       {
