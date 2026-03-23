@@ -1532,7 +1532,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T02:17:23.912Z",
+  "savedAt": "2026-03-23T02:40:21.965Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2535,22 +2535,13 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn1pspszwgj",
         "text": "田口さん、久保田さん問題",
         "html": "田口さん、久保田さん問題",
         "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn1ptg4v0ar",
-        "text": "",
-        "html": "",
-        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
