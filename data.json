@@ -1532,7 +1532,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:05:52.514Z",
+  "savedAt": "2026-03-23T04:05:59.716Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2575,8 +2575,17 @@
       },
       {
         "id": "mn1pzkgtvza",
-        "text": "ｓ",
-        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-23T04-05-43-015Z_0zvxa.png\" alt=\"ペースト画像\"></span>ｓ",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-23T04-05-43-015Z_0zvxa.png\" alt=\"ペースト画像\"></span><br>",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2nxzpkgji",
+        "text": "来週までに信号機を",
+        "html": "来週までに信号機を",
         "indent": 1,
         "bold": false,
         "color": "",
