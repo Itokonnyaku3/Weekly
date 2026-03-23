@@ -698,6 +698,21 @@
             "id": "emmx7gbbaitw",
             "collapsed": false,
             "parentId": "emmy4wb1gj08"
+          },
+          {
+            "id": "emn2vtjuummy",
+            "type": "link",
+            "text": "鳩山店超低温オフライン…メール送信",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2g83gpwz7"
+            }
           }
         ],
         "2026-3-30": [
@@ -1636,7 +1651,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T07:30:22.806Z",
+  "savedAt": "2026-03-23T07:46:23.046Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2845,12 +2860,14 @@
       },
       {
         "id": "mn2g83gpwz7",
-        "text": "鳩山店超低温オフライン…メール送信",
-        "html": "",
+        "text": "鳩山店超低温オフライン…メール送信 ",
+        "html": "鳩山店超低温オフライン…メール送信 ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn2vtjuummy",
+        "linkedEntryText": "鳩山店超低温オフライン…メール送信"
       },
       {
         "id": "mn2v8xhhqq6",
