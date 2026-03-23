@@ -290,18 +290,6 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "久保田さん育休いつとるか確認",
-            "note": "計画、昇進プレゼント",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmx5rb3lb67",
-            "collapsed": false
-          },
-          {
             "type": "log",
             "text": "黒田さん30日在宅",
             "note": "",
@@ -330,6 +318,18 @@
             "url": "",
             "images": [],
             "id": "emmx7gbbat4u",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "久保田さん育休いつとるか確認",
+            "note": "計画、昇進プレゼント",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmx5rb3lb67",
             "collapsed": false
           }
         ],
@@ -682,6 +682,15 @@
             "tags": [],
             "id": "emmw2zro2yfv",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
+            "note": "",
+            "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-9": [
@@ -1549,7 +1558,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-23T05:21:05.464Z",
+  "savedAt": "2026-03-23T05:23:33.017Z",
   "dailyOutline": {
     "2026-3-18": [
       {
