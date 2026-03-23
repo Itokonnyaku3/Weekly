@@ -433,7 +433,9 @@
           "note": "あ",
           "url": "",
           "category": "",
-          "weekDone": {},
+          "weekDone": {
+            "2026-3-23": true
+          },
           "priority": "mid",
           "tags": []
         }
@@ -1546,7 +1548,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-23T04:43:05.598Z",
+  "savedAt": "2026-03-23T05:16:07.159Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2654,8 +2656,17 @@
       },
       {
         "id": "mn2orqv4kvw",
-        "text": "　",
-        "html": "　",
+        "text": "　山下さんが積極的に入っていく必要あり",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2qg0xvesh",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
