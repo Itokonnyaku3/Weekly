@@ -1532,7 +1532,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:05:59.716Z",
+  "savedAt": "2026-03-23T04:06:03.618Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2584,8 +2584,17 @@
       },
       {
         "id": "mn2nxzpkgji",
-        "text": "来週までに信号機を",
-        "html": "来週までに信号機を",
+        "text": "来週までに信号機を作成",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2ny7oic4u",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
