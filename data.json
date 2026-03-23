@@ -44,6 +44,36 @@
               "date": "2026-3-23",
               "nodeId": "mn1q66924wn"
             }
+          },
+          {
+            "id": "emn2ufp5ghka",
+            "type": "link",
+            "text": "あああ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2gcw2vjfv"
+            }
+          },
+          {
+            "id": "emn2uksqv64o",
+            "type": "link",
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2ufprb7cs"
+            }
           }
         ]
       },
@@ -938,21 +968,6 @@
             "tags": [],
             "id": "emmw2zro2rfq",
             "collapsed": false
-          },
-          {
-            "id": "emn2tw6o2kyu",
-            "type": "link",
-            "text": "NECタスク追加",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2tsymz02v"
-            }
           }
         ]
       },
@@ -1027,6 +1042,21 @@
             "images": [],
             "id": "emmw2zro2xix",
             "collapsed": false
+          },
+          {
+            "id": "emn2uliy2q7c",
+            "type": "link",
+            "text": "qweqwe",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2ul035mwp"
+            }
           }
         ],
         "2026-3-30": [
@@ -1158,21 +1188,6 @@
             "priority": "",
             "tags": [],
             "id": "emn2gkvhlcht"
-          },
-          {
-            "id": "emn2tmz5ybax",
-            "type": "link",
-            "text": "25日新狭山店オープン！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2tlmcrwlc"
-            }
           }
         ]
       },
@@ -1290,21 +1305,6 @@
             "images": [],
             "id": "emmx5rb3lwge",
             "collapsed": false
-          },
-          {
-            "id": "emn2tmpdyjss",
-            "type": "link",
-            "text": "ふかや花園やること整理　・",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2tltf6q2v"
-            }
           }
         ]
       },
@@ -1606,7 +1606,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T06:52:54.024Z",
+  "savedAt": "2026-03-23T07:12:10.147Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2621,103 +2621,10 @@
         "collapsed": false
       },
       {
-        "id": "mn2tl9w1fvb",
-        "text": "明日の部会で告知",
-        "html": "明日の部会で告知",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2tks3ulzd",
-        "text": "田口さんに委託している内容を山下さんに確認 ",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false
-      },
-      {
-        "id": "mn2tl6ljflx",
-        "text": "GW応援、25日まで",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2tlmcrwlc",
-        "text": "25日新狭山店オープン！　",
-        "html": "25日新狭山店オープン！　",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn2tmz5ybax",
-        "linkedEntryText": "25日新狭山店オープン！"
-      },
-      {
-        "id": "mn2tltf6q2v",
-        "text": "ふかや花園やること整理　",
-        "html": "ふかや花園やること整理　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": true,
-        "linkedEntryRef": "emn2tmpdyjss",
-        "linkedEntryText": "ふかや花園やること整理　・",
-        "isTodo": true,
-        "checked": false
-      },
-      {
         "id": "mn2telx4xid",
-        "text": "モニタ、レジ、台糖社を藤原さんに連携",
+        "text": "",
         "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2tnwmxnhg",
-        "text": "アイテム登録大丈夫？",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2tsuk94c1",
-        "text": "設置場所とか・・・",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2tsymz02v",
-        "text": "NECタスク追加　",
-        "html": "NECタスク追加　",
         "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn2tw6o2kyu",
-        "linkedEntryText": "NECタスク追加"
-      },
-      {
-        "id": "mn2tu1f07l7",
-        "text": "今村、茂野さん根岸さん、久保田さんとNECで現在の障害対応の状況をヒアリングして、効果を確認したうえで提案",
-        "html": "今村、茂野さん根岸さん、久保田さんとNECで現在の障害対応の状況をヒアリングして、効果を確認したうえで提案",
-        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -2916,7 +2823,29 @@
         "collapsed": false
       },
       {
-        "id": "mn2gcw2vjfv",
+        "id": "mn2ufprb7cs",
+        "text": "a   ",
+        "html": "a&nbsp; &nbsp;",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn2uksqv64o",
+        "linkedEntryText": "a"
+      },
+      {
+        "id": "mn2ul035mwp",
+        "text": "qweqwe ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn2uliy2q7c",
+        "linkedEntryText": "qweqwe"
+      },
+      {
+        "id": "mn2uljtvg02",
         "text": "",
         "html": "",
         "indent": 1,
