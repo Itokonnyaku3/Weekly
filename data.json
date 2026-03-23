@@ -1591,7 +1591,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T06:46:00.648Z",
+  "savedAt": "2026-03-23T06:50:50.897Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2669,8 +2669,37 @@
       },
       {
         "id": "mn2tnwmxnhg",
-        "text": "",
+        "text": "アイテム登録大丈夫？",
         "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2tsuk94c1",
+        "text": "設置場所とか・・・",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2tsymz02v",
+        "text": "NECタスク追加 ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn2tu1f07l7",
+        "text": "今村、茂野さん根岸さん、久保田さんとNECで現在の障害対応の状況をヒアリングして、効果を確認したうえで提案",
+        "html": "今村、茂野さん根岸さん、久保田さんとNECで現在の障害対応の状況をヒアリングして、効果を確認したうえで提案",
         "indent": 2,
         "bold": false,
         "color": "",
