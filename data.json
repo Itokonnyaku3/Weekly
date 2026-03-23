@@ -218,7 +218,8 @@
             "priority": "high",
             "tags": [],
             "id": "emmxcrheobzo",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           },
           {
             "type": "todo",
@@ -230,7 +231,8 @@
             "priority": "high",
             "tags": [],
             "id": "emmy5whstteq",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           },
           {
             "type": "todo",
@@ -1532,7 +1534,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:29:07.874Z",
+  "savedAt": "2026-03-23T04:40:34.901Z",
   "dailyOutline": {
     "2026-3-18": [
       {
