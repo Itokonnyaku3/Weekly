@@ -2082,32 +2082,39 @@
       line-height: 1.6
     }
 
-    /* ── TODAY FOCUS MODE（タスクリスト表示のみ・アウトラインは右ペインへ） ── */
-    #today-overlay {
-      display: none;
+    /* ── FULLSCREEN FOCUS MODE (Overlay) ── */
+    body.fs-focus-mode #note-panel {
       position: fixed;
       inset: 0;
-      z-index: 150;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1000;
+      border: none;
       background: var(--bg);
-      flex-direction: column;
-    }
-
-    #today-overlay.open {
-      display: flex
-    }
-
-    #today-hd {
+      padding: 20px 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      padding: 9px 14px;
-      background: var(--bg2);
-      border-bottom: 2px solid var(--bd2);
-      flex-shrink: 0;
     }
-
-    #today-date-lbl {
-      font-size: 15px;
+    body.fs-focus-mode #note-ph,
+    body.fs-focus-mode #ol-nav,
+    body.fs-focus-mode #today-ol-hd,
+    body.fs-focus-mode #ol-container {
+      width: 100%;
+      max-width: 800px; /* フルスクリーン時は中央寄せ・幅制限で見やすく */
+    }
+    body.fs-focus-mode #rz-note { display: none !important; }
+    body.fs-focus-mode #ol-container {
+      padding: 20px 40px;
+    }
+    body.fs-focus-mode #note-ph {
+      background: transparent;
+      border-bottom: none;
+      padding: 10px 20px;
+    }
+    body.fs-focus-mode #note-ph h2 {
+      font-size: 18px;
+    }
       font-weight: 700;
       flex: 1;
       letter-spacing: .02em
@@ -4150,6 +4157,7 @@
         { id: 'hideDone', icon: '☑', label: _hideDone ? '完了済みを表示' : '完了済みを非表示', key: '', fn: () => toggleHideDone() },
         { id: 'compact', icon: '⊟', label: _compactMode ? '圧縮モードOFF' : '圧縮モードON', key: 'Alt+Shift+C', fn: () => toggleCompactMode() },
         { id: 'note', icon: '📝', label: _notePanelOpen ? 'ノートを閉じる' : 'ノートを開く', key: 'Alt+Shift+N', fn: () => { _notePanelOpen ? toggleNotePanel() : focusNotePanel() } },
+        { id: 'fs-focus', icon: '🔲', label: _fsFocus ? 'フルスクリーン解除' : 'フルスクリーン集中モード', key: 'Alt+Shift+M', fn: () => { toggleFsFocus() } },
         { id: 'colAll', icon: '⊟', label: '全アイテムを折り畳む', key: 'Alt+Shift+[', fn: () => collapseAllParents() },
         { id: 'expAll', icon: '⊞', label: '全アイテムを展開', key: 'Alt+Shift+]', fn: () => expandAllParents() },
         { id: 'todo', icon: '☑', label: '未完ToDoパネル', key: '', fn: () => toggleTodoPanel() },
@@ -5480,6 +5488,18 @@ ${draft}
         }
         return;
       }
+      // Alt+Shift+M: フルスクリーンフォーカスモード（オーバーラップ表示）
+      if (ev.altKey && ev.shiftKey && (ev.key === 'M' || ev.key === 'm')) {
+        ev.preventDefault();
+        const np = $('note-panel');
+        if (_fsFocus && np && np.contains(document.activeElement)) {
+          toggleFsFocus();
+        } else {
+          if (!_fsFocus) toggleFsFocus();
+          else focusNotePanel();
+        }
+        return;
+      }
       // ノートペイン中: Alt+← / Alt+→ で日付ナビゲーション
       if (_notePanelOpen && ev.altKey && !ev.shiftKey) {
         if (ev.key === 'ArrowLeft') { ev.preventDefault(); olPrevDay(); return }
@@ -5656,12 +5676,32 @@ ${draft}
     }
 
 
-    function toggleNotePanel(date) {
-      // date引数があればその日付で開く
-      if (date && typeof date === 'string') {
-        if (!_olCurrentDate || _olCurrentDate !== date) {
-          _olCurrentDate = date;
+    let _fsFocus = false;
+    function toggleFsFocus() {
+      _fsFocus = !_fsFocus;
+      document.body.classList.toggle('fs-focus-mode', _fsFocus);
+      if (_fsFocus) {
+        if (!_notePanelOpen) {
+          _notePanelOpen = true; // 手動でフラグを立ててから toggleNotePanel の内部処理を模倣（再帰を避ける）
+          const np = $('note-panel'), btn = $('note-btn'), rzn = $('rz-note');
+          if (!_olCurrentDate) _olCurrentDate = todayDateStr();
+          np.classList.add('open');
+          btn && btn.classList.add('btn-active');
+          rzn && rzn.classList.add('visible');
+          updateOlNav();
+          olRender('ol-container', _olCurrentDate);
+          olSetupPasteHandler();
         }
+        focusNotePanel();
+      } else {
+        // フルスクリーン解除時、サイドパネルとして残すか閉じるかは Alt+Shift+N と同様のルールに準じる
+        // ここでは単にクラスを外すのみ
+      }
+    }
+
+    function toggleNotePanel(date) {
+      if (date && typeof date === 'string') {
+        if (!_olCurrentDate || _olCurrentDate !== date) { _olCurrentDate = date; }
       }
       _notePanelOpen = !_notePanelOpen;
       const np = $('note-panel'), btn = $('note-btn'), rzn = $('rz-note');
@@ -5670,7 +5710,6 @@ ${draft}
         np.classList.add('open');
         btn && btn.classList.add('btn-active');
         rzn && rzn.classList.add('visible');
-        // 保存済み幅を復元
         const saved = localStorage.getItem('pwt_np_w');
         if (saved) np.style.width = saved + 'px';
         updateOlNav();
@@ -5682,6 +5721,11 @@ ${draft}
         rzn && rzn.classList.remove('visible');
         _olLinkMode = null;
         np.style.width = '';
+        // フルスクリーンモード中なら解除
+        if (_fsFocus) {
+          _fsFocus = false;
+          document.body.classList.remove('fs-focus-mode');
+        }
       }
     }
 
