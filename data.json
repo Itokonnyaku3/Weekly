@@ -1532,7 +1532,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:21:11.188Z",
+  "savedAt": "2026-03-23T04:21:17.076Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2602,8 +2602,17 @@
       },
       {
         "id": "mn2ohhwho7g",
-        "text": "Sharepointとの連携は",
-        "html": "Sharepointとの連携は",
+        "text": "Sharepointとの連携は森田さんが動いている",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2ohsicfsh",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
