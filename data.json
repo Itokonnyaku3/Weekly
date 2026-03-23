@@ -364,7 +364,8 @@
             "text": "週次進捗確認",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emn2x84q2hxd"
           }
         ],
         "2026-4-6": [
@@ -1658,7 +1659,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T07:57:13.338Z",
+  "savedAt": "2026-03-23T08:26:16.629Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2666,15 +2667,6 @@
       {
         "id": "mn1pspszwgj",
         "text": "田口さん、久保田さん問題",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn2telx4xid",
-        "text": "",
         "html": "",
         "indent": 1,
         "bold": false,
