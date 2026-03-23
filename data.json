@@ -1532,7 +1532,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:06:03.618Z",
+  "savedAt": "2026-03-23T04:21:03.329Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2593,6 +2593,15 @@
       },
       {
         "id": "mn2ny7oic4u",
+        "text": "RAGは不要？",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn2ohhwho7g",
         "text": "",
         "html": "",
         "indent": 1,
