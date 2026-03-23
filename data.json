@@ -555,18 +555,6 @@
           },
           {
             "type": "todo",
-            "text": "SDでの閲覧植田さん、長田さん確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2w9x",
-            "priority": "",
-            "tags": [],
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "トラブルシュートガイドを確認",
             "note": "運用フォルダに移動させる",
             "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773809622340?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773809622340&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773809622340",
@@ -595,7 +583,8 @@
             "url": "",
             "images": [],
             "id": "emmx5rb3l29i",
-            "collapsed": false
+            "collapsed": false,
+            "done": true
           },
           {
             "type": "log",
@@ -666,6 +655,18 @@
             "priority": "",
             "tags": [],
             "id": "emmw2zro2yfv",
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "SDでの閲覧植田さん、長田さん確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2w9x",
+            "priority": "",
+            "tags": [],
             "collapsed": false
           }
         ],
@@ -1534,7 +1535,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T04:40:34.901Z",
+  "savedAt": "2026-03-23T04:40:55.603Z",
   "dailyOutline": {
     "2026-3-18": [
       {
