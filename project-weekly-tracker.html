@@ -3227,7 +3227,10 @@
         _loadStateError = '⚠️ 保存データの読み込みに失敗しました。\n\nエラー: ' + e.message + '\n\n初期状態で起動します。データが失われていない場合はブラウザの開発者ツールで localStorage を確認してください。';
       }
     }
-    function saveState() {
+    let _ghSyncTimer = null;
+    let _ghDirty = false; // GitHub 送信が必要な変更がある場合 true
+
+    function saveState(immediateSync = false) {
       S.savedAt = new Date().toISOString();
       try {
         localStorage.setItem(SK, JSON.stringify(S));
@@ -3237,11 +3240,23 @@
         } else {
           showToast('❌ 保存失敗: ' + e.message);
         }
-        return; // ストレージ保存失敗時はGitHub同期もスキップ
+        return;
       }
       updateSaveTimeDisplay();
-      // GitHub 同期: 有効な場合は非同期でプッシュ（失敗してもローカル保存には影響しない）
-      ghSyncSave(false);
+      _ghDirty = true; // 未送信フラグを立てる
+
+      const { enabled } = ghGetSettings();
+      if (!enabled) return;
+
+      clearTimeout(_ghSyncTimer);
+      if (immediateSync) {
+        ghSyncSave(false).catch(() => { });
+      } else {
+        // 入力停止から15秒後に自動送信（頻繁な通信を抑え競合を防ぐ）
+        _ghSyncTimer = setTimeout(() => {
+          if (_ghDirty) ghSyncSave(false).catch(() => { });
+        }, 15000);
+      }
     }
 
     /* ── auto save ── */
@@ -5212,6 +5227,7 @@
       try {
         if (!localStorage.getItem(GH_SHA_SK)) await ghFetchRaw().catch(() => { });
         await ghPushRaw();
+        _ghDirty = false; // 送信成功時にフラグを落とす
         ghStatus('✓ ' + new Date().toLocaleTimeString() + ' 同期しました');
       } catch (e) {
         // SHA不一致（別端末からの書き込みが先にあった場合）は再取得して再試行
@@ -7726,31 +7742,10 @@ ${draft}
 
     /* ── ブラウザを閉じるときの処理 ──
        GitHub同期が有効かつ未送信データがある場合: 送信確認ダイアログを表示
-       （beforeunload はカスタムメッセージ不可のため、ブラウザ標準ダイアログを利用）
     */
-    let _ghDirty = false; // 前回の GitHub 送信以降に変更があった場合 true
-
-    // saveState をラップして dirty フラグを立てる
-    const _origSaveState = saveState;
-    // ※ saveState 内で ghSyncSave を呼ぶため、送信成功時に _ghDirty = false にする
-    // ghSyncSave 成功後に呼ばれる ghStatus で管理するため、保存のたびに dirty = true
-    const _patchedSaveState = function () {
-      _origSaveState();
-      _ghDirty = true;
-    };
-    // ghSyncSave 成功時に dirty を解除（ghStatus を拡張）
-    const _origGhStatus = ghStatus;
-    ghStatus = function (msg, isErr = false) {
-      _origGhStatus(msg, isErr);
-      if (!isErr && (msg.includes('同期しました') || msg.includes('送信'))) _ghDirty = false;
-    };
-
     window.addEventListener('beforeunload', ev => {
-      saveState(); // localStorage に同期保存（確実）
-      const g = ghGetSettings();
-      if (g.enabled && _ghDirty) {
-        // GitHub同期が有効で未送信データがある → ベストエフォートで送信を試みつつ確認ダイアログ
-        ghSyncSave(false).catch(() => { });
+      if (_ghDirty && ghGetSettings().enabled) {
+        // 未送信データがある場合に警告（メッセージ内容はブラウザ規定）
         ev.preventDefault();
         ev.returnValue = 'GitHubへのデータ送信が完了していない可能性があります。このまま閉じますか？';
         return ev.returnValue;
