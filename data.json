@@ -718,7 +718,7 @@
           {
             "id": "emn3w3kqdfb9",
             "type": "todo",
-            "text": "成電社から見積受領！　・",
+            "text": "成電社から見積受領",
             "note": "",
             "url": "",
             "images": [],
@@ -1766,7 +1766,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T02:04:31.727Z",
+  "savedAt": "2026-03-24T02:06:12.478Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3243,37 +3243,6 @@
         "id": "mn3vlpq4cfm",
         "text": "今週が見くれることがある",
         "html": "今週が見くれることがある",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn3vmhrxw3m",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn3yvn9k6te",
-        "text": "成電社から見積受領！　・",
-        "html": "成電社から見積受領！　・",
-        "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "2:2026-3-23:15",
-        "linkedEntryText": "",
-        "isTodo": true,
-        "checked": false
-      },
-      {
-        "id": "mn3ywlb56pd",
-        "text": "",
-        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
