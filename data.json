@@ -561,16 +561,6 @@
           },
           {
             "type": "todo",
-            "text": "27日ごろセンサー早出し納品日確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2zw8",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "新狭山見積→発注",
             "note": "□成電社\n■富士通\n■小泉成器",
             "url": "",
@@ -783,6 +773,20 @@
             "priority": "",
             "tags": [],
             "id": "emn4cgny8k9i"
+          },
+          {
+            "type": "todo",
+            "text": "27日ごろセンサー早出し納品日確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2zw8",
+            "collapsed": false,
+            "start": "",
+            "due": "2026-03-27",
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1895,7 +1899,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-24T08:41:48.063Z",
+  "savedAt": "2026-03-24T08:44:16.159Z",
   "dailyOutline": {
     "2026-3-18": [
       {
