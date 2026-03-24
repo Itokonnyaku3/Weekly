@@ -29,6 +29,21 @@
               "date": "2026-3-23",
               "nodeId": "mn1q3o8qj2z"
             }
+          },
+          {
+            "id": "emn48kdcqtx7",
+            "type": "link",
+            "text": "1100 BE/BGS・IIJ定例　＃",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3v3wbsz78"
+            }
           }
         ],
         "2026-3-30": [
@@ -1838,7 +1853,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T06:29:16.479Z",
+  "savedAt": "2026-03-24T06:33:56.551Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3176,14 +3191,16 @@
     "2026-3-24": [
       {
         "id": "mn3v3wbsz78",
-        "text": "1100 BE/BGS・IIJ定例 ",
-        "html": "1100 BE/BGS・IIJ定例 ",
+        "text": "1100 BE/BGS・IIJ定例　",
+        "html": "1100 BE/BGS・IIJ定例　",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
         "isTodo": false,
-        "checked": false
+        "checked": false,
+        "linkedEntryRef": "emn48kdcqtx7",
+        "linkedEntryText": "1100 BE/BGS・IIJ定例　＃"
       },
       {
         "id": "mn3vp9z3eit",
@@ -3195,13 +3212,31 @@
         "collapsed": true
       },
       {
+        "id": "mn3vpepax5r",
+        "text": "CuT組織変更",
+        "html": "CuT組織変更",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mn40j3qc2so",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-24T02-46-00-853Z_49nxi.png\" alt=\"ペースト画像\"></span><br>",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mn40asnc78g",
         "text": "岐南店　",
         "html": "岐南店　",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn40baiego3",
         "linkedEntryText": "岐南店"
       },
@@ -3215,8 +3250,26 @@
         "collapsed": false
       },
       {
-        "id": "mn3vpepax5r",
-        "text": "CuT組織変更",
+        "id": "mn45hkt1akf",
+        "text": "関連する資料をぶっこんでClaudeに作ってもらうか",
+        "html": "",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3voop5gvi",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mn45kqkvcq6",
+        "text": "",
         "html": "",
         "indent": 1,
         "bold": false,
@@ -3224,19 +3277,37 @@
         "collapsed": false
       },
       {
-        "id": "mn40j3qc2so",
-        "text": "",
-        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-24T02-46-00-853Z_49nxi.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 2,
+        "id": "mn45kjdl7f4",
+        "text": "本部からの緊急売変が店舗に配信できない",
+        "html": "本部からの緊急売変が店舗に配信できない",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn40ixgogns",
-        "text": "1400　店舗インフラ部会",
-        "html": "1400　店舗インフラ部会",
-        "indent": 0,
+        "id": "mn45k6ek88f",
+        "text": "店舗の実績データが本部に上がらない",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45jpo65td",
+        "text": "23日の朝5時半～19時まで送受信がダウン",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45iq1d5or",
+        "text": "システム障害",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3253,55 +3324,19 @@
         "checked": false
       },
       {
-        "id": "mn45hkt1akf",
-        "text": "関連する資料をぶっこんでClaudeに作ってもらうか",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn45iq1d5or",
-        "text": "システム障害",
-        "html": "",
+        "id": "mn46it7m7ii",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-24T05-33-45-094Z_9kb7i.png\" alt=\"ペースト画像\"></span><br>",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn45jpo65td",
-        "text": "23日の朝5時半～19時まで送受信がダウン",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn45k6ek88f",
-        "text": "店舗の実績データが本部に上がらない",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn45kjdl7f4",
-        "text": "本部からの緊急売変が店舗に配信できない",
-        "html": "本部からの緊急売変が店舗に配信できない",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn45kqkvcq6",
-        "text": "",
-        "html": "",
-        "indent": 2,
+        "id": "mn40ixgogns",
+        "text": "1400　店舗インフラ部会",
+        "html": "1400　店舗インフラ部会",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3316,30 +3351,12 @@
         "collapsed": false
       },
       {
-        "id": "mn46it7m7ii",
-        "text": "",
-        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-24T05-33-45-094Z_9kb7i.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn3vpr4ix8v",
         "text": "1600　温度自動化について　",
         "html": "1600　温度自動化について　",
         "indent": 0,
         "bold": true,
         "color": "#e67e22",
-        "collapsed": false
-      },
-      {
-        "id": "mn3voop5gvi",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
         "collapsed": false
       },
       {
