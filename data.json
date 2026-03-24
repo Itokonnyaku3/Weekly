@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T05:06:48.464Z",
+  "savedAt": "2026-03-24T05:07:19.584Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3281,8 +3281,26 @@
       },
       {
         "id": "mn45k6ek88f",
-        "text": "店舗の実績データがほんぶにあｇ",
-        "html": "店舗の実績データがほんぶにあｇ",
+        "text": "店舗の実績データが本部に上がらない",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45kjdl7f4",
+        "text": "本部からの緊急売変が店舗に配信できない",
+        "html": "本部からの緊急売変が店舗に配信できない",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45kqkvcq6",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
