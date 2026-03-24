@@ -1680,7 +1680,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:13:46.986Z",
+  "savedAt": "2026-03-24T00:14:12.706Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3069,6 +3069,24 @@
         "collapsed": false,
         "linkedEntryRef": "11:2026-3-23:0",
         "linkedEntryText": "Windowsアップデート"
+      },
+      {
+        "id": "mn3v3p41w90",
+        "text": "山下さんに進捗確認。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3v3wbsz78",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-15": [
