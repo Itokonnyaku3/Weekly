@@ -640,7 +640,8 @@
             "tags": [],
             "id": "emmx7gbbaitw",
             "collapsed": false,
-            "parentId": "emmy4wb1gj08"
+            "parentId": "emmy4wb1gj08",
+            "done": true
           },
           {
             "id": "emn2vtjuummy",
@@ -1903,7 +1904,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-24T08:44:55.136Z",
+  "savedAt": "2026-03-24T08:45:16.076Z",
   "dailyOutline": {
     "2026-3-18": [
       {
