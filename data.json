@@ -1465,6 +1465,15 @@
             "id": "emmw2zro22lk",
             "collapsed": false
           }
+        ],
+        "2026-3-23": [
+          {
+            "type": "todo",
+            "text": "Windowsアップデート",
+            "note": "",
+            "url": "",
+            "images": []
+          }
         ]
       },
       "links": [],
@@ -1667,7 +1676,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:08:14.502Z",
+  "savedAt": "2026-03-24T00:12:50.435Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3048,8 +3057,8 @@
       },
       {
         "id": "mn1ncrojbjq",
-        "text": "",
-        "html": "",
+        "text": "Windows　Update",
+        "html": "Windows　Update",
         "indent": 0,
         "bold": false,
         "color": "",
