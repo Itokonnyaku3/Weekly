@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T05:05:40.291Z",
+  "savedAt": "2026-03-24T05:06:48.464Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3263,8 +3263,26 @@
       },
       {
         "id": "mn45iq1d5or",
-        "text": "",
+        "text": "システム障害",
         "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45jpo65td",
+        "text": "23日の朝5時半～19時まで送受信がダウン",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45k6ek88f",
+        "text": "店舗の実績データがほんぶにあｇ",
+        "html": "店舗の実績データがほんぶにあｇ",
         "indent": 2,
         "bold": false,
         "color": "",
