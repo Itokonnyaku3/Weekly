@@ -717,7 +717,7 @@
           },
           {
             "id": "emn3w3kqdfb9",
-            "type": "link",
+            "type": "todo",
             "text": "HACCPメール設定！！",
             "note": "",
             "url": "",
@@ -728,7 +728,10 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn3vl7lr1p0"
-            }
+            },
+            "start": "",
+            "due": "",
+            "done": true
           }
         ],
         "2026-3-30": [
@@ -1763,7 +1766,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T01:15:42.376Z",
+  "savedAt": "2026-03-24T01:59:09.601Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3256,8 +3259,8 @@
       },
       {
         "id": "mn3vl7lr1p0",
-        "text": "HACCPメール設定！！ ",
-        "html": "HACCPメール設定！！ ",
+        "text": "HACCPメール設定！！",
+        "html": "HACCPメール設定！！",
         "indent": 0,
         "bold": false,
         "color": "",
