@@ -1015,11 +1015,15 @@
             "collapsed": false
           },
           {
-            "type": "todo",
+            "type": "log",
             "text": "NEC資産管理",
-            "note": "",
+            "note": "NECのソリューションを確認し、運用改善に使えるか検討する。",
             "url": "",
-            "images": []
+            "images": [],
+            "start": "2026-03-24",
+            "due": "2026-04-24",
+            "priority": "",
+            "tags": []
           }
         ]
       },
@@ -1687,7 +1691,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:23:08.085Z",
+  "savedAt": "2026-03-24T00:23:48.286Z",
   "dailyOutline": {
     "2026-3-18": [
       {
