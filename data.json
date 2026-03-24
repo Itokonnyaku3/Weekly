@@ -1472,7 +1472,11 @@
             "text": "Windowsアップデート",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn1ncrojbjq"
+            }
           }
         ]
       },
@@ -1676,7 +1680,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:12:50.435Z",
+  "savedAt": "2026-03-24T00:13:46.986Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3058,11 +3062,13 @@
       {
         "id": "mn1ncrojbjq",
         "text": "Windows　Update",
-        "html": "Windows　Update",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "11:2026-3-23:0",
+        "linkedEntryText": "Windowsアップデート"
       }
     ],
     "2026-3-15": [
