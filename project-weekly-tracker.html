@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>週次プロジェクト管理</title>
-  
+
   <!-- PWA マニフェストとアイコン設定 -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -46,6 +46,8 @@
       --accent: #0e4f96;
       --panel-right: 380px;
       --panel-left: 220px;
+      --proj-col-w: 240px;
+      --week-col-w: 336px;
     }
 
     @media(prefers-color-scheme:dark) {
@@ -109,7 +111,7 @@
       padding: 4px 10px;
       border: 1px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       cursor: pointer;
       white-space: nowrap;
@@ -177,7 +179,7 @@
       padding: 9px 12px;
       border-bottom: 1px solid var(--bd);
       flex-shrink: 0;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
     }
 
     #todo-panel-head h2 {
@@ -226,7 +228,7 @@
     }
 
     .tv-item:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-color: var(--bd)
     }
 
@@ -256,7 +258,9 @@
     /* ── grid ── */
     table {
       border-collapse: collapse;
-      table-layout: fixed
+      table-layout: fixed;
+      width: auto; /* width:100% だと全体の幅に収めようとして squish されるため */
+      min-width: fit-content;
     }
 
     th,
@@ -277,8 +281,8 @@
     }
 
     .col-proj {
-      width: 240px;
-      min-width: 240px;
+      width: var(--proj-col-w);
+      min-width: var(--proj-col-w);
       position: sticky;
       left: 0;
       z-index: 10;
@@ -286,37 +290,56 @@
     }
 
     .col-week {
-      width: 336px;
-      min-width: 280px
-    }
-
-    /* 当週列は色で強調（幅は全週共通） */
-    .col-week.cur-week {
-      width: 336px;
-      min-width: 280px
+      /* 幅は thead th の style 属性で個別指定するため CSS では指定しない */
+      min-width: 80px;
     }
 
     thead th {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: var(--bg2);
+      background: var(--bg2) !important;
       font-weight: 600;
       font-size: 11px;
       padding: 6px 8px;
       border-bottom: 2px solid var(--bd2);
       color: var(--tx2);
       letter-spacing: .02em;
+      box-shadow: 0 1px 0 var(--bd2);
+      overflow: visible;
     }
 
     thead th.col-proj {
-      z-index: 30
+      position: sticky;
+      left: 0;
+      z-index: 50;
+      background: var(--bg2) !important;
     }
 
     thead th.cur-week {
       color: var(--tx-info);
-      background: var(--bg-cur)
+      background: var(--bg-cur) !important;
     }
+    /* リサイズハンドル */
+    .col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 100;
+      background: transparent;
+    }
+    .col-resizer:hover {
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .col-resizer:active {
+      background: var(--accent);
+      opacity: 1;
+    }
+    /* ハンドル配置用の position:relative は個別 th 定義内に含まれています */
 
     /* ── compact mode ── */
     .compact-badge {
@@ -354,7 +377,7 @@
     }
 
     .compact-pname:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-radius: 4px;
     }
 
@@ -372,7 +395,7 @@
     /* プロジェクト列に薄い背景色を付けて週列と区別 */
     .pcell {
       padding: 6px 8px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       height: 100%
     }
 
@@ -430,25 +453,55 @@
       display: block
     }
 
+    .e-due-badge {
+      font-size: 8px;
+      padding: 0 4px;
+      border-radius: 4px;
+      margin-right: 4px;
+      background: var(--bg2); z-index: 25;
+      color: var(--tx2);
+      border: 1px solid var(--bd2);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      height: 16px;
+      vertical-align: middle;
+    }
+    .e-due-over {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fca5a5;
+      font-weight: 700;
+    }
+    .e-due-today {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fcd34d;
+      font-weight: 700;
+    }
+
     .ol-row.ol-private {
       background: rgba(46, 204, 113, 0.05);
     }
 
     /* プロジェクト名の強調表示 */
     tr.is-private .nm {
-      color: #1a5c30 !important; /* 濃い緑 */
+      color: #1a5c30 !important;
+      /* 濃い緑 */
       font-size: 14.5px !important;
       font-weight: 700 !important;
     }
-    
+
     tr:not(.is-private) .nm {
-      color: #0e4f96 !important; /* 濃い青 */
+      color: #0e4f96 !important;
+      /* 濃い青 */
       font-size: 14.5px !important;
       font-weight: 700 !important;
     }
 
     /* アイコンの視認性向上 */
-    .icon-memo, .icon-private {
+    .icon-memo,
+    .icon-private {
       font-size: 16px !important;
       display: inline-block;
       vertical-align: middle;
@@ -573,7 +626,7 @@
     }
 
     .eitem:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-color: var(--bd)
     }
 
@@ -662,7 +715,7 @@
     }
 
     .e-toggle:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx)
     }
 
@@ -761,7 +814,7 @@
       display: flex;
       gap: 6px;
       padding: 7px 10px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-top: 1px solid var(--bd)
     }
 
@@ -839,7 +892,7 @@
       padding: 4px 8px;
       border: 1px solid var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
     }
@@ -875,7 +928,7 @@
     }
 
     .ai-msg.ai-msg-ai {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       border: 1px solid var(--bd);
       max-width: 100%;
@@ -918,7 +971,7 @@
       padding: 6px 8px;
       border: 1px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       resize: none;
@@ -998,7 +1051,7 @@
       margin-top: 4px;
       border: 1px solid var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       resize: vertical;
@@ -1013,7 +1066,7 @@
     }
 
     .rz-handle-ai {
-      width: 5px;
+      width: 10px; right: -5px;
       flex-shrink: 0;
       cursor: col-resize;
       background: transparent;
@@ -1043,7 +1096,7 @@
     }
 
     .rz-handle {
-      width: 5px;
+      width: 10px; right: -5px;
       flex-shrink: 0;
       cursor: col-resize;
       background: transparent;
@@ -1188,7 +1241,7 @@
       font-family: inherit;
       margin-bottom: 6px;
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-weight: 500;
       transition: background .1s;
@@ -1283,7 +1336,7 @@
       padding: 5px 10px;
       border: 1px dashed var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx2);
       cursor: pointer;
       display: inline-block;
@@ -1332,7 +1385,7 @@
       padding: 7px 9px;
       border: 1.5px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       margin-bottom: 8px
@@ -1362,7 +1415,7 @@
 
     .m-cancel {
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx)
     }
 
@@ -1642,7 +1695,7 @@
       cursor: pointer;
       font-family: inherit;
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx2);
       transition: all .12s;
       text-align: center;
@@ -1835,7 +1888,7 @@
       border: 1px solid var(--bd2);
       border-radius: 6px;
       resize: none;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
     }
 
@@ -1845,11 +1898,13 @@
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, .5);
-      z-index: 500;
+      z-index: 2000; /* 十分に高く設定 */
       align-items: center;
-      justify-content: center
+      justify-content: center;
+      backdrop-filter: blur(2px);
     }
     #settings-modal.open { display: flex; }
+
     #settings-box {
       background: var(--bg);
       border-radius: 12px;
@@ -1857,14 +1912,21 @@
       padding: 24px;
       width: 480px;
       max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
       box-shadow: 0 12px 40px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: relative;
     }
+
     .settings-section {
       border-bottom: 1px solid var(--bd);
       padding-bottom: 16px;
+    }
+    .settings-section:last-of-type {
+      border-bottom: none;
     }
     .settings-section h4 {
       font-size: 13px;
@@ -1872,15 +1934,21 @@
       color: var(--tx2);
       margin-bottom: 10px;
       letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .settings-row {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
     .settings-row label {
       display: block;
       font-size: 11px;
+      font-weight: 600;
       color: var(--tx3);
-      margin-bottom: 4px;
     }
     .settings-row input[type="text"], 
     .settings-row input[type="password"] {
@@ -1888,7 +1956,7 @@
       padding: 8px 10px;
       border-radius: 6px;
       border: 1px solid var(--bd);
-      background: var(--bg);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       font-size: 13px;
@@ -1898,231 +1966,360 @@
       outline: none;
       box-shadow: 0 0 0 2px rgba(122, 180, 232, 0.2);
     }
-    .settings-section {
-      border-bottom: 1px solid var(--bd);
-      padding-bottom: 12px;
-    }
-    .settings-section:last-child { border-bottom: none; }
-    .settings-section h4 {
-      font-size: 12px;
-      margin-bottom: 8px;
-      color: var(--tx2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .settings-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .settings-row label { font-size: 11px; font-weight: 600; color: var(--tx2); }
-    .settings-row input[type="text"], .settings-row input[type="password"] {
-      padding: 6px 10px;
-      border: 1px solid var(--bd2);
-      border-radius: 4px;
-      background: var(--bg2);
-      color: var(--tx);
-      font-size: 12px;
-    }
-    .settings-grid-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    #app-ver-disp { font-size: 10px; color: var(--tx3); text-align: right; }
-    
-    #report-textarea:focus {
-      outline: none;
-      border-color: var(--bd-focus)
-    }
-
-    .report-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end
-    }
-
-    /* ── アウトラインエディタ 日付ナビゲーション ── */
-    #ol-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-bottom: 1px solid var(--bd);
-      flex-shrink: 0;
-      background: var(--bg2);
-    }
-
-    #ol-date-disp {
-      font-size: 13px;
-      font-weight: 600;
-      flex: 1;
-      text-align: center
-    }
-
-    #ol-date-picker {
-      font-size: 11px;
-      padding: 3px 6px;
-      border: 1px solid var(--bd2);
-      border-radius: 5px;
-      background: var(--bg);
-      color: var(--tx);
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    #ol-date-picker:focus {
-      outline: none;
-      border-color: var(--bd-focus)
-    }
-
-    .ol-nav-btn {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px solid var(--bd2);
-      background: var(--bg);
-      color: var(--tx);
-      font-family: inherit;
-    }
-
-    .ol-nav-btn:hover {
-      background: var(--bg3);
-      border-color: var(--bd-focus)
-    }
-
-    .ol-today-badge {
+    #app-ver-disp {
       font-size: 10px;
-      color: var(--tx-info);
-      background: var(--bg-info);
-      border: 1px solid var(--bd-info);
-      border-radius: 8px;
-      padding: 1px 7px;
-      cursor: pointer;
-      white-space: nowrap;
+      color: var(--tx3);
     }
 
-    /* ── ノートリンクボタン ── */
-    .link-note-btn {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px solid var(--bd-info);
-      background: var(--bg-info);
-      color: var(--tx-info);
-      font-family: inherit;
-      margin-bottom: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .link-note-btn:hover {
-      filter: brightness(.95)
-    }
-
-    .ol-linked-chip {
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 8px;
-      background: var(--bg-info);
-      color: var(--tx-info);
-      border: 1px solid var(--bd-info);
-      cursor: pointer;
-      margin-left: 4px;
-      flex-shrink: 0;
-    }
-
-    .ol-linked-chip:hover {
-      filter: brightness(.95)
-    }
-
-    /* ── NOTE PANEL (右ペイン・アウトラインエディタ) ── */
-    #note-panel {
-      width: 0;
-      flex-shrink: 0;
-      overflow: hidden;
-      background: var(--bg);
-      border-left: 1px solid var(--bd2);
-      display: flex;
+    /* ── マスコット ── */
+    #mascot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: none;
       flex-direction: column;
-      transition: width .2s ease;
+      align-items: flex-end;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     }
-
-    #note-panel.open {
-      width: 380px
+    #mascot-img {
+      width: 100px;
+      height: auto;
+      object-fit: contain;
+      cursor: pointer;
+      pointer-events: auto;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+      transition: transform 0.2s;
     }
-
-    #note-ph {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
+    #mascot-img:hover { transform: scale(1.08); }
+    #mascot-bubble {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      right: 0;
+      background: var(--bg);
+      border: 1px solid var(--bd2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      max-width: 340px;
+      min-width: 200px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      pointer-events: auto;
+      animation: bubbleIn 0.3s ease-out;
+    }
+    #mascot-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 24px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid var(--bd2);
+    }
+    #mascot-chat-wrap {
+      background: var(--bg);
+      border: 1px solid var(--bd2);
+      border-radius: 10px;
+      padding: 10px;
+      width: 280px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      pointer-events: auto;
+      margin-bottom: 8px;
+    }
+    #mascot-chat-input {
+      width: 100%;
+      min-height: 72px;
+      border: 1px solid var(--bd2);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 13px;
+      font-family: inherit;
       background: var(--bg2);
-      border-bottom: 1px solid var(--bd2);
-      flex-shrink: 0;
+      color: var(--tx);
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+    #mascot-chat-input:focus { border-color: var(--accent); }
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    #note-ph h2 {
-      font-size: 13px;
-      font-weight: 600;
-      flex: 1;
-      margin: 0
-    }
-
-    #note-ol-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 10px;
-      font-size: 13px;
-      line-height: 1.6
-    }
-
-    /* ── FULLSCREEN FOCUS MODE (Overlay) ── */
-    body.fs-focus-mode #note-panel {
+    /* ── 検索画面 ── */
+    #search-modal {
+      display: none;
       position: fixed;
       inset: 0;
-      width: 100% !important;
-      height: 100% !important;
-      z-index: 1000;
-      border: none;
+      background: rgba(0, 0, 0, .4);
+      z-index: 600;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 80px;
+      backdrop-filter: blur(2px);
+    }
+    #search-modal.open { display: flex; }
+    #search-box {
       background: var(--bg);
-      padding: 10px 0;
+      width: 600px;
+      max-width: 95vw;
+      max-height: 80vh;
+      border-radius: 12px;
+      border: 1px solid var(--bd2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+    }
+    #search-header {
+      padding: 16px;
+      background: var(--bg2); z-index: 25;
+      border-bottom: 1px solid var(--bd);
+      display: flex;
       align-items: center;
+      gap: 12px;
     }
-    body.fs-focus-mode #note-ph,
-    body.fs-focus-mode #ol-nav,
-    body.fs-focus-mode #today-ol-hd,
-    body.fs-focus-mode #ol-container {
-      width: 100%;
-      max-width: 1400px; /* さらに広げる */
-    }
-    body.fs-focus-mode #rz-note { display: none !important; }
-    body.fs-focus-mode #ol-container {
-      padding: 10px 10px; /* さらに削減 */
-    }
-    body.fs-focus-mode #note-ph {
-      background: transparent;
-      border-bottom: none;
-      padding: 5px 10px;
-    }
-    body.fs-focus-mode #note-ph h2 {
-      font-size: 16px;
-    }
-    /* 各種メニューを最前面に（集中モードの z-index:1000 より上に） */
-    #ol-slash-menu, #ol-proj-menu, #cmd-bg, #report-modal, #settings-modal, #img-full, #qa-bg {
-      z-index: 1100 !important;
-    }
-      font-weight: 700;
+    #search-input {
       flex: 1;
-      letter-spacing: .02em
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--bd2);
+      background: var(--bg);
+      color: var(--tx);
+      padding: 0 16px;
+      font-size: 16px;
+      outline: none;
     }
+    #search-input:focus { border-color: var(--accent); }
+    #search-results { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .search-res-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--bd-dim);
+      transition: background 0.2s;
+    }
+    .search-res-item:hover { background: var(--bg-hover); }
+    .search-res-type {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--accent);
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-right: 8px;
+    }
+    .search-res-info { font-size: 11px; color: var(--tx3); margin-top: 4px; }
+    .search-res-text { font-size: 14px; font-weight: 500; color: var(--tx); line-height: 1.4; }
+    .search-res-match { background: rgba(255, 215, 0, 0.4); border-radius: 2px; }
+
+      #report-textarea:focus {
+        outline: none;
+        border-color: var(--bd-focus)
+      }
+
+      .report-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end
+      }
+
+      /* ── アウトラインエディタ 日付ナビゲーション ── */
+      #ol-nav {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-bottom: 1px solid var(--bd);
+        flex-shrink: 0;
+        background: var(--bg2); z-index: 25;
+      }
+
+      #ol-date-disp {
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+        text-align: center
+      }
+
+      #ol-date-picker {
+        font-size: 11px;
+        padding: 3px 6px;
+        border: 1px solid var(--bd2);
+        border-radius: 5px;
+        background: var(--bg);
+        color: var(--tx);
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      #ol-date-picker:focus {
+        outline: none;
+        border-color: var(--bd-focus)
+      }
+
+      .ol-nav-btn {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid var(--bd2);
+        background: var(--bg);
+        color: var(--tx);
+        font-family: inherit;
+      }
+
+      .ol-nav-btn:hover {
+        background: var(--bg3);
+        border-color: var(--bd-focus)
+      }
+
+      .ol-today-badge {
+        font-size: 10px;
+        color: var(--tx-info);
+        background: var(--bg-info);
+        border: 1px solid var(--bd-info);
+        border-radius: 8px;
+        padding: 1px 7px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      /* ── ノートリンクボタン ── */
+      .link-note-btn {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid var(--bd-info);
+        background: var(--bg-info);
+        color: var(--tx-info);
+        font-family: inherit;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .link-note-btn:hover {
+        filter: brightness(.95)
+      }
+
+      .ol-linked-chip {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 8px;
+        background: var(--bg-info);
+        color: var(--tx-info);
+        border: 1px solid var(--bd-info);
+        cursor: pointer;
+        margin-left: 4px;
+        flex-shrink: 0;
+      }
+
+      .ol-linked-chip:hover {
+        filter: brightness(.95)
+      }
+
+      /* ── NOTE PANEL (右ペイン・アウトラインエディタ) ── */
+      #note-panel {
+        width: 0;
+        flex-shrink: 0;
+        overflow: hidden;
+        background: var(--bg);
+        border-left: 1px solid var(--bd2);
+        display: flex;
+        flex-direction: column;
+        transition: width .2s ease;
+      }
+
+      #note-panel.open {
+        width: 380px
+      }
+
+      #note-ph {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        background: var(--bg2); z-index: 25;
+        border-bottom: 1px solid var(--bd2);
+        flex-shrink: 0;
+      }
+
+      #note-ph h2 {
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+        margin: 0
+      }
+
+      #note-ol-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 10px;
+        font-size: 13px;
+        line-height: 1.6
+      }
+
+      /* ── FULLSCREEN FOCUS MODE (Overlay) ── */
+      body.fs-focus-mode #note-panel {
+        position: fixed;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 999;
+        border: none;
+        background: var(--bg);
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      body.fs-focus-mode #note-ph,
+      body.fs-focus-mode #ol-nav,
+      body.fs-focus-mode #today-ol-hd,
+      body.fs-focus-mode #ol-container {
+        width: 100%;
+        max-width: 1400px;
+        /* さらに広げる */
+      }
+
+      body.fs-focus-mode #rz-note {
+        display: none !important;
+      }
+
+      body.fs-focus-mode #ol-container {
+        padding: 10px 10px;
+        /* さらに削減 */
+      }
+
+      body.fs-focus-mode #note-ph {
+        background: transparent;
+        border-bottom: none;
+        padding: 5px 10px;
+      }
+
+      body.fs-focus-mode #note-ph h2 {
+        font-size: 16px;
+      }
+
+      /* 各種メニューを最前面に（集中モードの z-index:1000 より上に） */
+      #ol-slash-menu,
+      #ol-proj-menu,
+      #cmd-bg,
+      #report-modal,
+      #settings-modal,
+      #img-full,
+      #qa-bg {
+        z-index: 1100 !important;
+      }
 
     #today-body {
       flex: 1;
@@ -2153,7 +2350,7 @@
       border-radius: 6px;
       margin-bottom: 4px;
       border: 1px solid var(--bd);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       font-size: 12px;
       line-height: 1.5;
       cursor: pointer;
@@ -2205,7 +2402,7 @@
       align-items: center;
       gap: 8px;
       padding: 9px 14px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-bottom: 1px solid var(--bd);
       flex-shrink: 0;
     }
@@ -2242,10 +2439,11 @@
     }
 
     /* プライベートノード (全表示モード時) */
-    .ol-private > .ol-text-area > .ol-text {
+    .ol-private>.ol-text-area>.ol-text {
       color: var(--tx-warn) !important;
       opacity: 0.8;
     }
+
     .ol-private::before {
       content: '🔒';
       font-size: 10px;
@@ -2292,7 +2490,7 @@
       gap: 6px;
       padding: 5px 8px;
       margin-bottom: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border: 1px solid var(--bd);
       border-radius: 6px;
       font-size: 11px;
@@ -2482,7 +2680,7 @@
     }
 
     .ol-text th {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       font-weight: 600;
       text-align: left
     }
@@ -2553,7 +2751,7 @@
     #ol-slash-menu {
       display: none;
       position: absolute;
-      z-index: 400;
+      z-index: 5000;
       background: var(--bg);
       border: 1px solid var(--bd2);
       border-radius: 8px;
@@ -2665,11 +2863,14 @@
         style="font-size:10px;opacity:.65;font-weight:400">Alt+Shift+C</span></button>
     <button class="btn" id="ai-btn" onclick="toggleAiPanel()" title="AIアシスタント">🤖 AI</button>
     <button class="btn" onclick="openCmdPalette()" title="コマンドパレット (Ctrl+K)">⌨ Ctrl+K</button>
-    <button class="btn" id="fold-toggle-btn" onclick="toggleAllCollapse()" title="全アイテムを折り畳み/展開 (Alt+Shift+[ )">⊟ 全折り</button>
+    <button class="btn" id="fold-toggle-btn" onclick="toggleAllCollapse()" title="全アイテムを折り畳み/展開 (Alt+Shift+[ )">⊟
+      全折り</button>
     <div class="spacer"></div>
-    <span id="gh-sync-badge" style="font-size:11px;color:var(--tx3);margin-right:12px;display:none;cursor:pointer" onclick="openSettings()"></span>
+    <span id="gh-sync-badge" style="font-size:11px;color:var(--tx3);margin-right:12px;display:none;cursor:pointer"
+      onclick="openSettings()"></span>
     <span id="save-time" title="最終保存時刻" style="font-size:11px;color:var(--tx3);margin-right:8px"></span>
-    <button class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px">⚙️</button>
+    <button class="btn" onclick="openSearch()" title="検索 (Ctrl+F)" style="font-size:16px;padding:2px 8px">🔍</button>
+    <button id="settings-btn" class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px;display:inline-flex;align-items:center;justify-content:center">⚙</button>
     <button class="btn btn-accent" onclick="openQA()" title="新規追加 (Alt+Shift+E)">＋ 新規追加</button>
     <button class="btn btn-accent" onclick="addProj()">＋プロジェクト</button>
     <button class="btn" onclick="copyWeeklyReport()" title="コピー">📋 週報</button>
@@ -2688,7 +2889,7 @@
 
     <!-- grid -->
     <div id="grid-wrap">
-      <table id="grid">
+      <table id="grid"><colgroup id="gc"></colgroup>
         <thead id="gh"></thead>
         <tbody id="gb"></tbody>
       </table>
@@ -2721,10 +2922,12 @@
         <input type="date" id="ol-date-picker" onchange="olGoDate(this.value)">
         <span class="ol-today-badge" onclick="olGoDate(todayDateStr())">今日</span>
       </div>
-      <div id="today-ol-hd" style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
+      <div id="today-ol-hd"
+        style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <h3 style="font-size:14px;font-weight:700;margin:0">📝 デイリーノート</h3>
-          <button class="btn" onclick="openOlSlashMenuFromBtn(this)" style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張メニュー</button>
+          <button class="btn" onclick="openOlSlashMenuFromBtn(this)"
+            style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張メニュー</button>
         </div>
         <div class="ol-toolbar" style="display:flex;flex-wrap:wrap;gap:4px;border-top:none;padding-top:0">
           <button class="ol-tbtn" onclick="olInsertLink()" title="リンク挿入 (Ctrl+L)">🔗 リンク</button>
@@ -2942,15 +3145,17 @@
         <div class="settings-row">
           <label>GitHub Personal Access Token (classic)</label>
           <input type="password" id="gh-token-s" placeholder="ghp_xxxxxxxxxxxx">
-          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。トークンはブラウザの localStorage にのみ保存されます。</p>
+          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。トークンはブラウザの localStorage にのみ保存されます。
+          </p>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
           <input type="checkbox" id="gh-enabled-s" style="cursor:pointer">
           <label for="gh-enabled-s" style="font-size:12px;cursor:pointer;font-weight:600">自動同期を有効にする</label>
         </div>
-        
+
         <div style="background:var(--bg2);padding:10px;border-radius:6px;margin-top:12px;border:1px solid var(--bd)">
-          <div id="gh-status" style="font-size:11px;color:var(--tx3);margin-bottom:8px;min-height:1.2em">同期ステータス: 未設定</div>
+          <div id="gh-status" style="font-size:11px;color:var(--tx3);margin-bottom:8px;min-height:1.2em">同期ステータス: 未設定
+          </div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-accent" onclick="ghSyncSave(true)" style="flex:1">↑ 手動送信 (Push)</button>
             <button class="btn" onclick="ghSyncLoad(true)" style="flex:1">↓ 手動取得 (Fetch)</button>
@@ -2973,11 +3178,20 @@
         <div style="background:var(--bg-warn);padding:10px;border-radius:6px;margin-top:8px;border:1px solid #d4a020">
           <p style="font-size:11px;color:var(--tx-warn);margin-bottom:8px"><strong>画像を GitHub フォルダへ移行</strong></p>
           <p style="font-size:10px;color:var(--tx-warn);margin-bottom:10px">
-            ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより <code>data.json</code> を大幅に軽量化できます。
+            ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより
+            <code>data.json</code> を大幅に軽量化できます。
           </p>
           <button class="btn btn-warn" onclick="olMigrateImages()" style="width:100%;padding:6px">🚀 画像の移行を実行する</button>
         </div>
         <p style="font-size:10px;color:var(--tx3);margin-top:8px">※ 実行前に GitHub 同期設定が完了していることを確認してください。</p>
+      </div>
+
+      <div class="settings-section">
+        <h4>🤖 表示設定</h4>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" id="mascot-enabled-s" style="cursor:pointer">
+          <label for="mascot-enabled-s" style="font-size:12px;cursor:pointer;font-weight:600">デスクトップキャラクターを表示する</label>
+        </div>
       </div>
 
       <div class="settings-section" style="border-bottom:none;padding-bottom:0">
@@ -2989,6 +3203,30 @@
     </div>
   </div>
 
+  <!-- デスクトップマスコット -->
+  <div id="mascot-container" style="display:none" onmousedown="handleMascotMousedown(event)">
+    <div id="mascot-bubble"></div>
+    <div id="mascot-chat-wrap" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+      <textarea id="mascot-chat-input" placeholder="質問を入力… (Ctrl+Enter で送信)" onkeydown="handleMascotChatKey(event)" onclick="event.stopPropagation()"></textarea>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-accent" onclick="submitMascotChat()" style="flex:1;font-size:10px;padding:4px">送信</button>
+        <button class="btn" onclick="toggleMascotChat(false)" style="font-size:10px;padding:4px">閉じる</button>
+      </div>
+    </div>
+    <img id="mascot-img" src="Characters/1-Idle.png">
+  </div>
+
+  <!-- 検索モーダル -->
+  <div id="search-modal" onclick="if(event.target===this)closeSearch()">
+    <div id="search-box">
+      <div id="search-header">
+        <span style="font-size:20px">🔍</span>
+        <input type="text" id="search-input" placeholder="プロジェクト、タスク、ノートを検索..." oninput="doSearch(this.value)">
+        <button class="btn" onclick="closeSearch()" style="padding:4px 12px">✕</button>
+      </div>
+      <div id="search-results"></div>
+    </div>
+  </div>
 
   <script>
 
@@ -3209,7 +3447,7 @@
       if (!ch.length) return '';
       return `<span class="e-parent-count">(${ch.filter(e => e.done).length}/${ch.length})</span>`;
     }
-    function newEntry(type = 'log') { return { type, text: '', note: '', url: '', images: [] } }
+    function newEntry(type = 'log') { return { type, text: '', note: '', url: '', images: [], start: '', due: '', status: 'todo' } }
     function fkey(pi, wk, ei) { return pi + ':' + wk + ':' + ei }
     let _loadStateError = '';
     function loadState() {
@@ -3331,12 +3569,18 @@
 
       $('wlabel').textContent = fmt(weeks[0]) + '〜' + fmt(addDays(weeks[WEEKS - 1], 6));
 
-      let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト</th>`;
+      // リサイズハンドルの追加
+      let ghtml = '<col id="gc-proj" class="col-proj">';
+      let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト<div class="col-resizer" onmousedown="startColResize(event, 'proj')"></div></th>`;
       weeks.forEach(w => {
         const k = wkey(w);
-        hr += `<th class="col-week${k === cw ? ' cur-week' : ''}">W ${fmt(w)}〜${fmt(addDays(w, 6))}</th>`;
+        ghtml += `<col id="gc-wk-${k}" class="col-week">`;
+        hr += `<th id="thk-${k}" class="col-week${k === cw ? ' cur-week' : ''}">W ${fmt(w)}〜${fmt(addDays(w, 6))}<div class="col-resizer" onmousedown="startColResize(event, 'week', '${k}')"></div></th>`;
       });
+      $('gc').innerHTML = ghtml;
       $('gh').innerHTML = hr + '</tr>';
+      // 保存済みの幅をインライン style に反映
+      if (typeof applyWeekColWidths === 'function') applyWeekColWidths();
 
       // ======== デイリータスクの事前振り分け（キャッシュ対応） ========
       if (!window._dailyHtmlCache) window._dailyHtmlCache = {};
@@ -3348,7 +3592,7 @@
           const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
           if (S.dailyOutline && S.dailyOutline[dateStr]) {
             const nodes = S.dailyOutline[dateStr];
-            
+
             // 状態に応じたキャッシュキー（表示設定を反映）
             const nodeHash = JSON.stringify(nodes) + _viewMode + _hideDone;
             if (!window._dailyHtmlCache[dateStr] || window._dailyHtmlCache[dateStr].hash !== nodeHash) {
@@ -3478,13 +3722,13 @@
         if (proj.recSectionOpen) {
           rows += `<div class="proj-entries-body open">`;
           if (!recEntries.length) { rows += `<div style="font-size:10px;color:var(--tx3);padding:3px 4px">まだありません。＋で追加</div>`; }
-            recEntries.forEach((re, rei) => {
-              rows += `<div class="rec-pitem">`;
-              rows += `<span style="font-size:9px;color:#7ab4e8">🔄</span>`;
-              rows += `<span class="rec-pitem-txt" ondblclick="openRecurringPanel(${pi},${rei})" title="ダブルクリックで編集">${esc(re.text || '(無題)')}</span>`;
-              rows += `<span class="edel" style="opacity:1" onclick="deleteRecurring(${pi},${rei})" title="削除">✕</span>`;
-              rows += `</div>`;
-            });
+          recEntries.forEach((re, rei) => {
+            rows += `<div class="rec-pitem">`;
+            rows += `<span style="font-size:9px;color:#7ab4e8">🔄</span>`;
+            rows += `<span class="rec-pitem-txt" ondblclick="openRecurringPanel(${pi},${rei})" title="ダブルクリックで編集">${esc(re.text || '(無題)')}</span>`;
+            rows += `<span class="edel" style="opacity:1" onclick="deleteRecurring(${pi},${rei})" title="削除">✕</span>`;
+            rows += `</div>`;
+          });
           rows += `</div>`;
         }
         rows += `</div>`;
@@ -3547,7 +3791,7 @@
 
       // ノートエディタがフォーカス中の場合はグリッド側にフォーカスを移さない
       const ae = document.activeElement;
-      const noteHasFocus = ae && (ae.closest('#ol-container') || ae.closest('#note-panel'));
+      const noteHasFocus = ae && (ae.closest('#ol-container') || ae.closest('#note-panel') || ae.closest('#ol-slash-menu') || ae.closest('#ol-proj-menu'));
       if (focusKey && !noteHasFocus) requestAnimationFrame(() => requestAnimationFrame(() => applyFocusKey(focusKey)));
       if (todoOpen) renderTodo();
     }
@@ -3644,24 +3888,27 @@
       if (isParent) {
         o += `<span class="e-toggle" onclick="event.stopPropagation();toggleEntryCollapse(${pi},'${k}',${ei})" title="折り畳み/展開 (Ctrl+↑↓)">${e.collapsed ? '▶' : '▼'}</span>`;
       }
-      if (e.type === 'todo') {
-        o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleTodo(${pi},'${k}',${ei})">`;
-        o += `<span class="etxt${e.done ? ' done' : ''}">`;
-        o += esc(e.text);
-        o += pCount;
-        if (badges) o += `<span class="e-badge">${badges}</span>`;
-        if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
-        o += `</span>`;
+    if (e.type === 'todo') {
+      o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleTodo(${pi},'${k}',${ei})">`;
+      o += `<span class="etxt${e.done ? ' done' : ''}">`;
+      o += getDueBadge(e);
+      o += esc(e.text);
+      o += pCount;
+      if (badges) o += `<span class="e-badge">${badges}</span>`;
+      if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
+      o += `</span>`;
       } else if (e.type === 'link') {
         const isWF = (e.url || '').includes('workflowy.com');
         const tgt = isWF ? 'workflowy-pane' : '_blank';
         o += `<span class="tag tag-lnk">🔗</span>`;
+        o += getDueBadge(e);
         const displayText = hasLinkedNote ? '📝 ' + esc(e.text) : esc(e.text);
         o += `<span class="etxt"><a href="${escA(e.url || '#')}" target="${tgt}">${displayText}</a>${pCount}${badges ? '<span class="e-badge">' + badges + '</span>' : ''}`;
         if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
         o += `</span>`;
       } else {
         o += `<span class="tag tag-log">📝</span>`;
+        o += getDueBadge(e);
         o += `<span class="etxt">${esc(e.text)}${pCount}${badges ? `<span class="e-badge">${badges}</span>` : ''}${hasLinkedNote ? '<span class="e-badge" title="ノートにリンクあり">📝</span>' : ''}</span>`;
       }
       // タグ表示（テキスト右のインライン表示）
@@ -3713,6 +3960,7 @@
       if (e.type === 'todo') {
         o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleProjTodo(${pi},${ei})">`;
         o += `<span class="etxt${e.done ? ' done' : ''}">`;
+        o += getDueBadge(e);
         o += esc(e.text);
         if (badges) o += `<span class="e-badge">${badges}</span>`;
         o += `</span>`;
@@ -3771,9 +4019,9 @@
       if (!el) return;
       document.querySelectorAll('.eitem.kfocus').forEach(e => e.classList.remove('kfocus'));
       if (el.dataset.daily) {
-          focusKey = 'daily:' + el.dataset.date + ':' + el.dataset.nid;
+        focusKey = 'daily:' + el.dataset.date + ':' + el.dataset.nid;
       } else {
-          focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
+        focusKey = fkey(el.dataset.pi, el.dataset.wk, el.dataset.ei);
       }
       el.classList.add('kfocus');
       _programmaticFocus = true;
@@ -3824,7 +4072,7 @@
       if (!ev.altKey && !ev.shiftKey && (key === 'ArrowUp' || key === 'ArrowDown')) {
         ev.preventDefault();
         const dir = key === 'ArrowUp' ? -1 : 1;
-        
+
         // DOMベースでの移動（通常アイテムとデイリーアイテムを混在して扱う）
         if (currentEl) {
           const list = currentEl.closest('.elist');
@@ -3930,14 +4178,14 @@
     function eitemKeyDown(ev, el) {
       if (el.dataset.daily) {
         if (ev.key === 'Enter') {
-            ev.preventDefault();
-            openNotePanelToDate(el.dataset.date, el.dataset.nid);
-            return;
+          ev.preventDefault();
+          openNotePanelToDate(el.dataset.date, el.dataset.nid);
+          return;
         }
         if (ev.key === ' ') {
-            ev.preventDefault();
-            tvCheckDaily(el.dataset.date, el.dataset.nid);
-            return;
+          ev.preventDefault();
+          tvCheckDaily(el.dataset.date, el.dataset.nid);
+          return;
         }
         navigate(ev, +el.dataset.pi, el.dataset.wk, -2, el);
         return;
@@ -4318,10 +4566,21 @@
       h += `<input class="fi" id="pf-url" type="url" value="${esc(e.url || '')}" placeholder="https://" oninput="markDirty()">`;
       h += `</div>`;
 
-      h += `<label class="fl">備考・詳細メモ</label>`;
       h += `<div class="note-drop-wrap" id="note-drop-wrap">`;
       h += `<textarea class="fi" id="pf-note" placeholder="詳細メモ… ここに画像をドロップ・Ctrl+Vで貼り付け可" oninput="markDirty()" onkeydown="pfNoteKey(event)">${esc(e.note || '')}</textarea>`;
       h += `<div class="drop-hint">🖼 画像をドロップ</div>`;
+      h += `</div>`;
+
+      // ── 開始日・期限日 ──
+      h += `<div style="display:flex;gap:10px;margin-bottom:10px">`;
+      h += `  <div style="flex:1">`;
+      h += `    <label class="fl">開始日</label>`;
+      h += `    <input class="fi" id="pf-start" type="date" value="${e.start || ''}" oninput="markDirty()">`;
+      h += `  </div>`;
+      h += `  <div style="flex:1">`;
+      h += `    <label class="fl">期限日</label>`;
+      h += `    <input class="fi" id="pf-due" type="date" value="${e.due || ''}" oninput="markDirty()">`;
+      h += `  </div>`;
       h += `</div>`;
       // ── ノートリンクボタン（備考欄の直下に配置） ──
       if (!isNew && !isProj && !isRec) {
@@ -4441,7 +4700,7 @@
       const pb = $('pb');
       pb.innerHTML = h;
       pb.classList.remove('panel-enter');
-      void pb.offsetWidth; 
+      void pb.offsetWidth;
       pb.classList.add('panel-enter');
       setupImageDropZone();
     }
@@ -4559,6 +4818,11 @@
           S.projects[pi].entries[wk].push(ne);
         } else {
           Object.assign(S.projects[pi].entries[wk][ei], { type, text, note, url });
+          const start = ($('pf-start') ? $('pf-start').value || '' : '').trim();
+          const due = ($('pf-due') ? $('pf-due').value || '' : '').trim();
+          if (start !== undefined) S.projects[pi].entries[wk][ei].start = start;
+          if (due !== undefined) S.projects[pi].entries[wk][ei].due = due;
+
           if (priority !== undefined) S.projects[pi].entries[wk][ei].priority = priority;
           if (tagChips !== undefined) S.projects[pi].entries[wk][ei].tags = tagChips;
           if (newParentId !== undefined) {
@@ -4938,16 +5202,16 @@
     function openSettings() {
       $('settings-modal').classList.add('open');
       if ($('app-ver-disp')) $('app-ver-disp').textContent = 'Version ' + APP_VERSION;
-      
+
       const g = ghGetSettings();
       $('gh-repo-s').value = g.repo;
       $('gh-file-s').value = g.file;
       $('gh-enabled-s').checked = g.enabled;
-      
+
       const tok = localStorage.getItem(GH_TOKEN_SK);
       $('gh-token-s').value = tok ? '●'.repeat(20) : '';
       $('gh-token-s').dataset.saved = tok ? '1' : '';
-      
+
       const sha = localStorage.getItem(GH_SHA_SK);
       if (sha) ghStatus('最終同期 SHA: ' + sha.slice(0, 7) + '…');
     }
@@ -4960,11 +5224,11 @@
       const gRepo = $('gh-repo-s').value.trim();
       const gFile = $('gh-file-s').value.trim() || 'data.json';
       const gEnabled = $('gh-enabled-s').checked;
-      
+
       localStorage.setItem(GH_REPO_SK, gRepo);
       localStorage.setItem(GH_FILE_SK, gFile);
       localStorage.setItem(GH_ENABLED_SK, gEnabled ? '1' : '0');
-      
+
       const tokEl = $('gh-token-s');
       const mask = '●'.repeat(20);
       if (tokEl.value !== mask) {
@@ -4972,11 +5236,11 @@
         if (v) localStorage.setItem(GH_TOKEN_SK, v);
         else if (tokEl.value === '') localStorage.removeItem(GH_TOKEN_SK);
       }
-      
+
       ghStatus(gEnabled ? '同期有効' : '同期無効');
       const badge = $('gh-sync-badge');
       if (badge) badge.style.display = gEnabled ? 'inline' : 'none';
-      
+
       closeSettings();
       showToast('⚙️ 設定を保存しました');
     }
@@ -5099,12 +5363,12 @@
     async function ghUploadImage(file) {
       const { token, repo } = ghGetSettings();
       if (!token || !repo) throw new Error('GitHubの設定（トークン・リポジトリ）が必要です');
-      
+
       const ext = file.name.split('.').pop() || 'png';
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const random = Math.random().toString(36).substring(2, 7);
       const filename = `images/${timestamp}_${random}.${ext}`;
-      
+
       const reader = new FileReader();
       const base64Promise = new Promise((resolve, reject) => {
         reader.onload = e => resolve(e.target.result.split(',')[1]);
@@ -5131,20 +5395,20 @@
     async function olMigrateImages() {
       const g = ghGetSettings();
       if (!g.enabled || !g.token || !g.repo) { alert('GitHub 同期を有効にして設定（トークン・リポジトリ）を保存してから実行してください。'); return; }
-      
+
       let count = 0;
       const allDates = Object.keys(S.dailyOutline || {});
       const toProcess = [];
-      
+
       allDates.forEach(date => {
         S.dailyOutline[date].forEach(n => {
           if (n.html && n.html.includes('src="data:image/')) toProcess.push({ date, n });
         });
       });
-      
+
       if (toProcess.length === 0) { alert('移行が必要な base64 画像は見つかりませんでした。'); return; }
       if (!confirm(`${toProcess.length} 個のノードに埋め込まれた画像を GitHub へアップロードし、ノートを軽量化しますか？\n（処理には時間がかかる場合があります）`)) return;
-      
+
       showToast('⏳ 画像の移行を開始します...');
       for (const item of toProcess) {
         const div = document.createElement('div');
@@ -5168,7 +5432,7 @@
         // text も更新（画像タグが含まれる場合）
         item.n.text = div.textContent;
       }
-      
+
       saveState();
       render();
       if (_olCurrentDate) olRender('ol-container', _olCurrentDate);
@@ -5579,6 +5843,8 @@ ${draft}
     $('lm-bg').addEventListener('click', e => { if (e.target === $('lm-bg')) closeLM() });
     $('qa-bg').addEventListener('click', e => { if (e.target === $('qa-bg')) closeQA() });
     document.addEventListener('keydown', ev => {
+      // 入力要素内でのタイピング中はショートカットを無効化（マスコットなどの入力を優先）
+      if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.isContentEditable) return;
       // Ctrl+K: コマンドパレット（ノートエディタ内は除く — リンク挿入はCtrl+Lを使用）
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'k') {
         ev.preventDefault();
@@ -6280,7 +6546,7 @@ ${draft}
           ? `<span class="ol-linked-ref e-tag-chip" onclick="event.stopPropagation();openLinkedEntry('${escA(n.linkedEntryRef)}')"></span>`
           : '';
         const selCls = _olSelected.has(n.id) ? ' ol-selected' : '';
-        let tStyle = [n.bold ? 'font-weight:600' : '', n.color ? `color:${n.color}` : ''].filter(Boolean).join(';');
+        let tStyle = [n.bold ? 'font-weight:700' : '', n.color ? `color:${n.color}` : ''].filter(Boolean).join(';');
 
         let bulletHtml = '';
         if (n.isTodo) {
@@ -6307,8 +6573,8 @@ ${draft}
       });
 
       // 現在の構造（ノードID・インデント・状態）のハッシュを生成
-      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}`).join(',');
-      
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}`).join(',');
+
       if (_olLastRenderKey === renderKey && container.innerHTML !== '') {
         // 構造が全く同じなら innerHTML を書き換えず、フォーカスと選択状態の更新のみ行う
         const rows = container.querySelectorAll('.ol-row');
@@ -7189,7 +7455,7 @@ ${draft}
     function hideOlSlashMenu() {
       const menu = $('ol-slash-menu');
       if (menu) menu.classList.remove('open');
-      _olSlashNodeId = null;
+      // _olSlashNodeId = null; // ここでクリアせず、呼び出し元で制御する
     }
 
     // Close menu when clicking outside
@@ -7266,8 +7532,9 @@ ${draft}
 
       hideOlSlashMenu();
       saveState();
+      // まずノート側を再描画
       olRender('ol-container', _olSlashDate);
-      
+
       // グリッド即時反映（フォーカス維持の仕組みは olInput と同様）
       const focusedEl = document.activeElement;
       let savedRange = null;
@@ -7275,9 +7542,9 @@ ${draft}
         const sel = window.getSelection();
         if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
       } catch (e) { }
-      
+
       render();
-      
+
       if (focusedEl) {
         focusedEl.focus();
         if (savedRange) {
@@ -7708,10 +7975,401 @@ ${draft}
       } catch (err) { }
     }
 
+    /* ── 検索機能 ── */
+    function openSearch() {
+      $('search-modal').classList.add('open');
+      const input = $('search-input');
+      input.value = '';
+      input.focus();
+      $('search-results').innerHTML = '';
+      mascotEmote('thinking');
+    }
+    function closeSearch() {
+      $('search-modal').classList.remove('open');
+      mascotEmote('idle');
+    }
+    function doSearch(q) {
+      if (!q || q.length < 2) {
+        $('search-results').innerHTML = '';
+        return;
+      }
+      const results = [];
+      const lowQ = q.toLowerCase();
+
+      // プロジェクト名とエントリ（タスク・ログ・備考）
+      S.projects.forEach((p, pi) => {
+        if (p.name.toLowerCase().includes(lowQ)) {
+          results.push({ type: 'PROJECT', text: p.name, info: 'プロジェクト名', pi });
+        }
+        for (const wk in p.entries) {
+          p.entries[wk].forEach((e, ei) => {
+            if (e.text && e.text.toLowerCase().includes(lowQ)) {
+              results.push({ type: 'ENTRY', text: e.text, info: p.name + ' (' + wk + ')', pi, wk, ei });
+            }
+            if (e.note && e.note.toLowerCase().includes(lowQ)) {
+              results.push({ type: 'NOTE', text: e.note, info: p.name + ' (' + wk + ')', pi, wk, ei });
+            }
+          });
+        }
+      });
+
+      // 全デイリーノート（localStorage 内の pwt_daily_ キーを全走査）
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('pwt_daily_')) {
+          const date = key.replace('pwt_daily_', '');
+          try {
+            const nodes = JSON.parse(localStorage.getItem(key));
+            nodes.forEach(n => {
+              if (n.text && n.text.toLowerCase().includes(lowQ)) {
+                results.push({ type: 'DAILY', text: n.text, info: 'ノート: ' + date, date, id: n.id });
+              }
+            });
+          } catch (e) { }
+        }
+      });
+
+      renderSearchResults(results, q);
+    }
+    function renderSearchResults(results, q) {
+      const container = $('search-results');
+      if (results.length === 0) {
+        container.innerHTML = '<div id="search-no-results">一致する結果が見つかりませんでした</div>';
+        return;
+      }
+      container.innerHTML = results.slice(0, 50).map(res => {
+        const highlighted = res.text.replace(new RegExp('(' + q.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ')', 'gi'), '<span class="search-res-match">$1</span>');
+        let onclick = '';
+        if (res.type === 'DAILY') {
+          onclick = `olGoDate('${res.date}'); setTimeout(()=>olFocus('${res.id}'), 100); closeSearch();`;
+        } else if (res.pi !== undefined) {
+          const wkArg = res.wk ? `'${res.wk}'` : 'null';
+          onclick = `jumpTo(${res.pi}, ${wkArg}, ${res.ei ?? -1}); closeSearch();`;
+        }
+        return `
+          <div class="search-res-item" onclick="${onclick}">
+            <span class="search-res-type">${res.type}</span>
+            <span class="search-res-info">${res.info}</span>
+            <div class="search-res-text">${highlighted}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ── デスクトップマスコット機能 ── */
+    /* ── デスクトップマスコット機能 ── */
+    
+    function initMascot() {
+      const enabled = localStorage.getItem('pwt_mascot_enabled') === 'true';
+      const chk = $('mascot-enabled-s');
+      if (chk) chk.checked = enabled;
+      
+      const container = $('mascot-container');
+      if (enabled) {
+        container.style.display = 'flex';
+        // 復元
+        const x = localStorage.getItem('pwt_mascot_x');
+        const y = localStorage.getItem('pwt_mascot_y');
+        if (x && y) {
+          container.style.left = x;
+          container.style.top = y;
+          container.style.bottom = 'auto';
+          container.style.right = 'auto';
+        }
+        setTimeout(() => mascotSpeak('起動したよ！今日も頑張ろう！', 4000), 1000);
+      }
+      
+      // Ctrl+F で検索
+      window.addEventListener('keydown', ev => {
+        if ((ev.ctrlKey || ev.metaKey) && ev.key === 'f') {
+          ev.preventDefault(); openSearch();
+        }
+      });
+    }
+
+    function toggleMascotVisible(enabled) {
+      localStorage.setItem('pwt_mascot_enabled', enabled ? 'true' : 'false');
+      $('mascot-container').style.display = enabled ? 'flex' : 'none';
+      if (enabled) mascotSpeak('呼んだ？いつでも助けるよ！', 3000);
+    }
+
+    
+    
+    
+// Duplicates removed (already at top)
+
+    
+    
+
+        let _mascotDragging=false; let _mascotMoved=false; let _mascotOffset={x:0,y:0}; let _mascotTimer=null; let _mascotIsSpeaking=false; 
+    function mascotEmote(type) {
+      const img = $('mascot-img');
+      const paths = {
+        idle: 'Characters/1-Idle.png',
+        happy: 'Characters/1-Happy.png',
+        surprise: 'Characters/1-Surprise.png',
+        thinking: 'Characters/1-Thinking.png'
+      };
+      if (paths[type]) img.src = paths[type];
+    }
+
+    function mascotSpeak(text, duration = 5000) {
+      _mascotIsSpeaking = true;
+      const b = $("mascot-bubble");
+      if (!b) return;
+      b.textContent = text;
+      b.style.display = "block";
+      clearTimeout(_mascotTimer);
+      if (duration > 0) {
+        _mascotTimer = setTimeout(() => {
+          b.style.display = "none";
+          _mascotIsSpeaking = false;
+        }, duration);
+      }
+    }
+    function mascotHover() { }
+
+    function getDueBadge(e) {
+      if (!e || !e.due || e.done) return '';
+      const today = todayDateStr();
+      let cls = 'e-due-badge';
+      if (e.due < today) cls += ' e-due-over';
+      else if (e.due === today) cls += ' e-due-today';
+      const m = e.due.match(/(\d\d)-(\d\d)$/);
+      const disp = m ? `${m[1]}/${m[2]}` : e.due;
+      return `<span class="${cls}">${disp}</span>`;
+    }
+
+    function doRollover() {
+      const today = new Date();
+      const currentWk = wkey(today);
+      let movedCount = 0;
+
+      S.projects.forEach((p, pi) => {
+        if (!p.entries) return;
+        const weekKeys = Object.keys(p.entries).sort();
+        weekKeys.forEach(wk => {
+          if (wk < currentWk) {
+            const arr = p.entries[wk];
+            for (let i = 0; i < arr.length; i++) {
+              const e = arr[i];
+              if (e.type === 'todo' && !e.done) {
+                const item = arr.splice(i, 1)[0];
+                i--;
+                if (!p.entries[currentWk]) p.entries[currentWk] = [];
+                p.entries[currentWk].push(item);
+                movedCount++;
+              }
+            }
+          }
+        });
+      });
+      if (movedCount > 0) {
+        showToast(`🚚 ${movedCount} 件の未完了タスクを今週に繰り越しました`);
+        saveState(true);
+      }
+    }
+
+    let _projColWidth = parseInt(localStorage.getItem('pwt_proj_col_w')) || 240;
+    let _weekColWidth = parseInt(localStorage.getItem('pwt_week_col_w')) || 336;
+    let _weekColWidthMap = {};
+    try {
+      const savedMap = localStorage.getItem('pwt_week_col_w_map');
+      if (savedMap) _weekColWidthMap = JSON.parse(savedMap);
+    } catch (e) { }
+
+    function applyWeekColWidths() {
+      let total = _projColWidth;
+      
+      // proj
+      const colP = $('gc-proj');
+      if (colP) colP.style.width = _projColWidth + 'px';
+      
+      // weeks
+      document.querySelectorAll('col[id^="gc-wk-"]').forEach(col => {
+        const k = col.id.replace('gc-wk-', '');
+        const w = (_weekColWidthMap[k] || _weekColWidth);
+        col.style.width = w + 'px';
+        total += w;
+      });
+      
+      const grid = $('grid');
+      if (grid) grid.style.width = total + 'px';
+    }
+
+    function initColumnWidths() {
+      document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
+      applyWeekColWidths();
+    }
+
+        function startColResize(e, type, colKey) {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startW = (type === "proj") ? _projColWidth : (_weekColWidthMap[colKey] || _weekColWidth);
+
+      const onMouseMove = ev => {
+        const delta = ev.clientX - startX;
+        const newW = Math.max(type === "proj" ? 80 : 100, startW + delta);
+        if (type === "proj") {
+          _projColWidth = newW;
+          document.documentElement.style.setProperty("--proj-col-w", _projColWidth + "px");
+          const cp = $('gc-proj'); if (cp) cp.style.width = _projColWidth + "px";
+        } else {
+          _weekColWidthMap[colKey] = newW;
+          const cwk = $('gc-wk-' + colKey); if (cwk) cwk.style.width = newW + "px";
+        }
+        // 表全体の幅も更新（他の列が縮まないようにするため）
+        applyWeekColWidths();
+      };
+      const onMouseUp = () => {
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("mouseup", onMouseUp);
+        localStorage.setItem("pwt_proj_col_w", _projColWidth);
+        localStorage.setItem("pwt_week_col_w_map", JSON.stringify(_weekColWidthMap));
+      };
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseUp);
+    }
+    // 設定保存時にマスコットの有効/無効を反映
+    const _origSaveSettings = saveSettingsAndClose;
+    saveSettingsAndClose = function () {
+      const chk = $('mascot-enabled-s');
+      if (chk) toggleMascotVisible(chk.checked);
+      _origSaveSettings();
+    };
+
+
+    
+    // --- Mascot Refined Interaction ---
+    
+
+    function handleMascotMousedown(e) {
+      // chat欄の内側のクリック/フォーカスはドラッグさせない
+      if (e.target.closest('#mascot-chat-wrap')) { e.stopPropagation(); return; }
+      _mascotDragging = true;
+      _mascotMoved = false;
+      const rect = $('mascot-container').getBoundingClientRect();
+      _mascotOffset.x = e.clientX - rect.left;
+      _mascotOffset.y = e.clientY - rect.top;
+      document.addEventListener('mousemove', handleMascotMousemove);
+      document.addEventListener('mouseup', handleMascotMouseup);
+    }
+
+    function handleMascotMousemove(e) {
+      if (!_mascotDragging) return;
+      if (Math.abs(e.movementX) > 2 || Math.abs(e.movementY) > 2) _mascotMoved = true;
+      const c = $('mascot-container');
+      c.style.left = (e.clientX - _mascotOffset.x) + 'px';
+      c.style.top = (e.clientY - _mascotOffset.y) + 'px';
+      c.style.bottom = 'auto'; c.style.right = 'auto';
+    }
+
+    function handleMascotMouseup() {
+      if (_mascotDragging && !_mascotMoved) {
+        onMascotClick();
+      }
+      if (_mascotDragging) {
+        const c = $('mascot-container');
+        localStorage.setItem('pwt_mascot_x', c.style.left);
+        localStorage.setItem('pwt_mascot_y', c.style.top);
+      }
+      _mascotDragging = false;
+      document.removeEventListener('mousemove', handleMascotMousemove);
+      document.removeEventListener('mouseup', handleMascotMouseup);
+    }
+
+    function onMascotClick() {
+      const wrap = $('mascot-chat-wrap');
+      // チャットフォームが開いている場合は何もしない
+      if (wrap.style.display !== 'none' && wrap.style.display !== '') return;
+      
+      if (!_mascotIsSpeaking) {
+        // 初回クリック: まず自動コメントを喋らせる
+        askGemini("今のタスク状況や進捗を見て、コロが思う今のあなたの状態を一言ポジティブに伝えて（短く語尾はコロらしくてね）");
+      } else {
+        // 2回目クリック(喋っている間): チャットフォームを表示
+        toggleMascotChat(true);
+      }
+    }
+
+    function toggleMascotChat(show) {
+      const wrap = $('mascot-chat-wrap');
+      wrap.style.display = show ? 'flex' : 'none';
+      wrap.style.flexDirection = 'column';
+      if (show) {
+        setTimeout(() => { const inp = $('mascot-chat-input'); if(inp){inp.focus();} }, 50);
+      }
+    }
+
+    function handleMascotChatKey(e) {
+      e.stopPropagation();
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        submitMascotChat();
+      }
+    }
+
+    function submitMascotChat() {
+      const input = $('mascot-chat-input');
+      const q = input.value.trim();
+      if (!q) return;
+      askGemini(q);
+      input.value = '';
+      toggleMascotChat(false);
+    }
+
+    async function askGemini(question) {
+      // AIアシスタントのキー (pwt_ai_key) をそのまま利用
+      const apiKey = localStorage.getItem('pwt_ai_key');
+      if (!apiKey) {
+        mascotSpeak("Gemini APIキーが見つからないよ。AIアシスタントパネルでAPIキーを設定して「保存」してね！");
+        return;
+      }
+
+      _mascotIsSpeaking = true;
+      mascotEmote('thinking');
+      mascotSpeak("ふむふむ...");
+
+      const todayStr = new Date().toLocaleDateString('ja-JP');
+      let context = "あなたはタスク管理アシスタントのマスコット「コロ」です。ボクはコロといいます。語尾は「〜だよ」「〜だね」などフレンドリーに。\n";
+      context += "本日: " + todayStr + "\n";
+      context += "あなたの未完了タスク:\n";
+      
+      const todoList = [];
+      S.projects.forEach(p => {
+        for(let k in p.entries) {
+          p.entries[k].forEach(e => {
+             if(e.type==='todo' && !e.done) {
+               todoList.push(`${p.name}: ${e.text} (期限: ${e.due || 'なし'})`);
+             }
+          });
+        }
+      });
+      context += todoList.slice(0, 15).join("\n") + "\n";
+      
+      try {
+        const model = getAiModel();
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: context + "\n質問: " + question }] }]
+          })
+        });
+        const data = await resp.json();
+        const msg = data.candidates[0].content.parts[0].text;
+        mascotSpeak(msg, 9000);
+        mascotEmote('idle');
+      } catch (e) {
+        console.error(e);
+        mascotSpeak("あうっ、APIでエラーがでちゃった...");
+        mascotEmote('idle');
+      }
+    }
+// Obsolete Gemini-key settings logic removed
+
     loadState();
     ensureEntryIds();
     if (!S.projects || !S.projects.length) initSample();
-    // migrate old data
     S.projects.forEach(p => {
       if (!p.projEntries) p.projEntries = [];
       if (p.projEntriesOpen === undefined) p.projEntriesOpen = false;
@@ -7719,10 +8377,11 @@ ${draft}
       if (p.recSectionOpen === undefined) p.recSectionOpen = false;
     });
     render();
+    doRollover();
+    initColumnWidths();
+    initMascot();
     updateSaveTimeDisplay();
-    // 起動時にデータ読み込みエラーがあれば通知
     if (_loadStateError) { setTimeout(() => alert(_loadStateError), 400); }
-    // GitHub 同期: 有効な場合は起動時にリモートと比較し新しければ自動取得
     ghSyncLoad(false);
 
     /* ── 別タブ検知 ──
