@@ -6738,7 +6738,8 @@ ${draft}
       }
 
       // スラッシュコマンド（/, ・, ／）および プロジェクトコマンド（#, ＃）検知
-      const text = el.textContent;
+      // IME確定前でも検知できるように textContent を正規化した上で判定
+      const text = el.textContent.replace(/[\u200B-\u200D\uFEFF]/g, ''); // ゼロ幅文字を除去
       const match = text.match(/(^|\s)([\/・／#＃])$/);
       if (match && olGetCaretOffset(el) === text.length) {
         const trig = match[2];
