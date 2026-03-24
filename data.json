@@ -283,7 +283,8 @@
             "linkedNote": {
               "date": "2026-3-23",
               "nodeId": "mn1prxh48m6"
-            }
+            },
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1895,7 +1896,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-24T08:31:26.812Z",
+  "savedAt": "2026-03-24T08:31:52.832Z",
   "dailyOutline": {
     "2026-3-18": [
       {
