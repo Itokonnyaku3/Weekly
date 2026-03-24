@@ -46,6 +46,8 @@
       --accent: #0e4f96;
       --panel-right: 380px;
       --panel-left: 220px;
+      --proj-col-w: 240px;
+      --week-col-w: 336px;
     }
 
     @media(prefers-color-scheme:dark) {
@@ -109,7 +111,7 @@
       padding: 4px 10px;
       border: 1px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       cursor: pointer;
       white-space: nowrap;
@@ -177,7 +179,7 @@
       padding: 9px 12px;
       border-bottom: 1px solid var(--bd);
       flex-shrink: 0;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
     }
 
     #todo-panel-head h2 {
@@ -226,7 +228,7 @@
     }
 
     .tv-item:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-color: var(--bd)
     }
 
@@ -256,7 +258,9 @@
     /* ── grid ── */
     table {
       border-collapse: collapse;
-      table-layout: fixed
+      table-layout: fixed;
+      width: auto; /* width:100% だと全体の幅に収めようとして squish されるため */
+      min-width: fit-content;
     }
 
     th,
@@ -277,8 +281,8 @@
     }
 
     .col-proj {
-      width: 240px;
-      min-width: 240px;
+      width: var(--proj-col-w);
+      min-width: var(--proj-col-w);
       position: sticky;
       left: 0;
       z-index: 10;
@@ -286,37 +290,56 @@
     }
 
     .col-week {
-      width: 336px;
-      min-width: 280px
-    }
-
-    /* 当週列は色で強調（幅は全週共通） */
-    .col-week.cur-week {
-      width: 336px;
-      min-width: 280px
+      /* 幅は thead th の style 属性で個別指定するため CSS では指定しない */
+      min-width: 80px;
     }
 
     thead th {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: var(--bg2);
+      background: var(--bg2) !important;
       font-weight: 600;
       font-size: 11px;
       padding: 6px 8px;
       border-bottom: 2px solid var(--bd2);
       color: var(--tx2);
       letter-spacing: .02em;
+      box-shadow: 0 1px 0 var(--bd2);
+      overflow: visible;
     }
 
     thead th.col-proj {
-      z-index: 30
+      position: sticky;
+      left: 0;
+      z-index: 50;
+      background: var(--bg2) !important;
     }
 
     thead th.cur-week {
       color: var(--tx-info);
-      background: var(--bg-cur)
+      background: var(--bg-cur) !important;
     }
+    /* リサイズハンドル */
+    .col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 100;
+      background: transparent;
+    }
+    .col-resizer:hover {
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .col-resizer:active {
+      background: var(--accent);
+      opacity: 1;
+    }
+    /* ハンドル配置用の position:relative は個別 th 定義内に含まれています */
 
     /* ── compact mode ── */
     .compact-badge {
@@ -354,7 +377,7 @@
     }
 
     .compact-pname:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-radius: 4px;
     }
 
@@ -372,7 +395,7 @@
     /* プロジェクト列に薄い背景色を付けて週列と区別 */
     .pcell {
       padding: 6px 8px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       height: 100%
     }
 
@@ -428,6 +451,33 @@
 
     .proj-entries-body.open {
       display: block
+    }
+
+    .e-due-badge {
+      font-size: 8px;
+      padding: 0 4px;
+      border-radius: 4px;
+      margin-right: 4px;
+      background: var(--bg2); z-index: 25;
+      color: var(--tx2);
+      border: 1px solid var(--bd2);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      height: 16px;
+      vertical-align: middle;
+    }
+    .e-due-over {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fca5a5;
+      font-weight: 700;
+    }
+    .e-due-today {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fcd34d;
+      font-weight: 700;
     }
 
     .ol-row.ol-private {
@@ -576,7 +626,7 @@
     }
 
     .eitem:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-color: var(--bd)
     }
 
@@ -665,7 +715,7 @@
     }
 
     .e-toggle:hover {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx)
     }
 
@@ -764,7 +814,7 @@
       display: flex;
       gap: 6px;
       padding: 7px 10px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-top: 1px solid var(--bd)
     }
 
@@ -842,7 +892,7 @@
       padding: 4px 8px;
       border: 1px solid var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
     }
@@ -878,7 +928,7 @@
     }
 
     .ai-msg.ai-msg-ai {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       border: 1px solid var(--bd);
       max-width: 100%;
@@ -921,7 +971,7 @@
       padding: 6px 8px;
       border: 1px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       resize: none;
@@ -1001,7 +1051,7 @@
       margin-top: 4px;
       border: 1px solid var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       resize: vertical;
@@ -1016,7 +1066,7 @@
     }
 
     .rz-handle-ai {
-      width: 5px;
+      width: 10px; right: -5px;
       flex-shrink: 0;
       cursor: col-resize;
       background: transparent;
@@ -1046,7 +1096,7 @@
     }
 
     .rz-handle {
-      width: 5px;
+      width: 10px; right: -5px;
       flex-shrink: 0;
       cursor: col-resize;
       background: transparent;
@@ -1191,7 +1241,7 @@
       font-family: inherit;
       margin-bottom: 6px;
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-weight: 500;
       transition: background .1s;
@@ -1286,7 +1336,7 @@
       padding: 5px 10px;
       border: 1px dashed var(--bd2);
       border-radius: 5px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx2);
       cursor: pointer;
       display: inline-block;
@@ -1335,7 +1385,7 @@
       padding: 7px 9px;
       border: 1.5px solid var(--bd2);
       border-radius: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       margin-bottom: 8px
@@ -1365,7 +1415,7 @@
 
     .m-cancel {
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx)
     }
 
@@ -1645,7 +1695,7 @@
       cursor: pointer;
       font-family: inherit;
       border: 1px solid var(--bd2);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx2);
       transition: all .12s;
       text-align: center;
@@ -1838,7 +1888,7 @@
       border: 1px solid var(--bd2);
       border-radius: 6px;
       resize: none;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
     }
 
@@ -1906,7 +1956,7 @@
       padding: 8px 10px;
       border-radius: 6px;
       border: 1px solid var(--bd);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
       font-size: 13px;
@@ -1926,11 +1976,10 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      z-index: 1000;
+      z-index: 10001;
       display: none;
       flex-direction: column;
       align-items: flex-end;
-      pointer-events: none;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     }
     #mascot-img {
@@ -1944,13 +1993,17 @@
     }
     #mascot-img:hover { transform: scale(1.08); }
     #mascot-bubble {
-      position: relative;
+      position: absolute;
+      bottom: calc(100% + 12px);
+      right: 0;
       background: var(--bg);
       border: 1px solid var(--bd2);
       border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      max-width: 220px;
+      padding: 12px 16px;
+      max-width: 340px;
+      min-width: 200px;
+      white-space: pre-wrap;
+      word-break: break-word;
       font-size: 13px;
       line-height: 1.4;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -1967,6 +2020,32 @@
       border-right: 8px solid transparent;
       border-top: 8px solid var(--bd2);
     }
+    #mascot-chat-wrap {
+      background: var(--bg);
+      border: 1px solid var(--bd2);
+      border-radius: 10px;
+      padding: 10px;
+      width: 280px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      pointer-events: auto;
+      margin-bottom: 8px;
+    }
+    #mascot-chat-input {
+      width: 100%;
+      min-height: 72px;
+      border: 1px solid var(--bd2);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--bg2);
+      color: var(--tx);
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+    #mascot-chat-input:focus { border-color: var(--accent); }
     @keyframes bubbleIn {
       from { opacity: 0; transform: translateY(10px) scale(0.9); }
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1999,7 +2078,7 @@
     }
     #search-header {
       padding: 16px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-bottom: 1px solid var(--bd);
       display: flex;
       align-items: center;
@@ -2057,7 +2136,7 @@
         padding: 7px 14px;
         border-bottom: 1px solid var(--bd);
         flex-shrink: 0;
-        background: var(--bg2);
+        background: var(--bg2); z-index: 25;
       }
 
       #ol-date-disp {
@@ -2167,7 +2246,7 @@
         align-items: center;
         gap: 8px;
         padding: 9px 14px;
-        background: var(--bg2);
+        background: var(--bg2); z-index: 25;
         border-bottom: 1px solid var(--bd2);
         flex-shrink: 0;
       }
@@ -2193,7 +2272,7 @@
         inset: 0;
         width: 100% !important;
         height: 100% !important;
-        z-index: 1000;
+        z-index: 10001;
         border: none;
         background: var(--bg);
         padding: 10px 0;
@@ -2270,7 +2349,7 @@
       border-radius: 6px;
       margin-bottom: 4px;
       border: 1px solid var(--bd);
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       font-size: 12px;
       line-height: 1.5;
       cursor: pointer;
@@ -2322,7 +2401,7 @@
       align-items: center;
       gap: 8px;
       padding: 9px 14px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border-bottom: 1px solid var(--bd);
       flex-shrink: 0;
     }
@@ -2410,7 +2489,7 @@
       gap: 6px;
       padding: 5px 8px;
       margin-bottom: 6px;
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       border: 1px solid var(--bd);
       border-radius: 6px;
       font-size: 11px;
@@ -2600,7 +2679,7 @@
     }
 
     .ol-text th {
-      background: var(--bg2);
+      background: var(--bg2); z-index: 25;
       font-weight: 600;
       text-align: left
     }
@@ -2790,7 +2869,7 @@
       onclick="openSettings()"></span>
     <span id="save-time" title="最終保存時刻" style="font-size:11px;color:var(--tx3);margin-right:8px"></span>
     <button class="btn" onclick="openSearch()" title="検索 (Ctrl+F)" style="font-size:16px;padding:2px 8px">🔍</button>
-    <button class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px">⚙️</button>
+    <button id="settings-btn" class="btn" onclick="openSettings()" title="設定" style="font-size:16px;padding:2px 8px;display:inline-flex;align-items:center;justify-content:center">⚙</button>
     <button class="btn btn-accent" onclick="openQA()" title="新規追加 (Alt+Shift+E)">＋ 新規追加</button>
     <button class="btn btn-accent" onclick="addProj()">＋プロジェクト</button>
     <button class="btn" onclick="copyWeeklyReport()" title="コピー">📋 週報</button>
@@ -2809,7 +2888,7 @@
 
     <!-- grid -->
     <div id="grid-wrap">
-      <table id="grid">
+      <table id="grid"><colgroup id="gc"></colgroup>
         <thead id="gh"></thead>
         <tbody id="gb"></tbody>
       </table>
@@ -3124,9 +3203,16 @@
   </div>
 
   <!-- デスクトップマスコット -->
-  <div id="mascot-container" style="display:none">
+  <div id="mascot-container" style="display:none" onmousedown="handleMascotMousedown(event)">
     <div id="mascot-bubble"></div>
-    <img id="mascot-img" src="Characters/1-Idle.png" onclick="mascotClick()" onmouseover="mascotHover()">
+    <div id="mascot-chat-wrap" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+      <textarea id="mascot-chat-input" placeholder="質問を入力… (Ctrl+Enter で送信)" onkeydown="handleMascotChatKey(event)" onclick="event.stopPropagation()"></textarea>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-accent" onclick="submitMascotChat()" style="flex:1;font-size:10px;padding:4px">送信</button>
+        <button class="btn" onclick="toggleMascotChat(false)" style="font-size:10px;padding:4px">閉じる</button>
+      </div>
+    </div>
+    <img id="mascot-img" src="Characters/1-Idle.png">
   </div>
 
   <!-- 検索モーダル -->
@@ -3360,7 +3446,7 @@
       if (!ch.length) return '';
       return `<span class="e-parent-count">(${ch.filter(e => e.done).length}/${ch.length})</span>`;
     }
-    function newEntry(type = 'log') { return { type, text: '', note: '', url: '', images: [] } }
+    function newEntry(type = 'log') { return { type, text: '', note: '', url: '', images: [], start: '', due: '', status: 'todo' } }
     function fkey(pi, wk, ei) { return pi + ':' + wk + ':' + ei }
     let _loadStateError = '';
     function loadState() {
@@ -3482,12 +3568,18 @@
 
       $('wlabel').textContent = fmt(weeks[0]) + '〜' + fmt(addDays(weeks[WEEKS - 1], 6));
 
-      let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト</th>`;
+      // リサイズハンドルの追加
+      let ghtml = '<col id="gc-proj" class="col-proj">';
+      let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト<div class="col-resizer" onmousedown="startColResize(event, 'proj')"></div></th>`;
       weeks.forEach(w => {
         const k = wkey(w);
-        hr += `<th class="col-week${k === cw ? ' cur-week' : ''}">W ${fmt(w)}〜${fmt(addDays(w, 6))}</th>`;
+        ghtml += `<col id="gc-wk-${k}" class="col-week">`;
+        hr += `<th id="thk-${k}" class="col-week${k === cw ? ' cur-week' : ''}">W ${fmt(w)}〜${fmt(addDays(w, 6))}<div class="col-resizer" onmousedown="startColResize(event, 'week', '${k}')"></div></th>`;
       });
+      $('gc').innerHTML = ghtml;
       $('gh').innerHTML = hr + '</tr>';
+      // 保存済みの幅をインライン style に反映
+      if (typeof applyWeekColWidths === 'function') applyWeekColWidths();
 
       // ======== デイリータスクの事前振り分け（キャッシュ対応） ========
       if (!window._dailyHtmlCache) window._dailyHtmlCache = {};
@@ -3795,24 +3887,27 @@
       if (isParent) {
         o += `<span class="e-toggle" onclick="event.stopPropagation();toggleEntryCollapse(${pi},'${k}',${ei})" title="折り畳み/展開 (Ctrl+↑↓)">${e.collapsed ? '▶' : '▼'}</span>`;
       }
-      if (e.type === 'todo') {
-        o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleTodo(${pi},'${k}',${ei})">`;
-        o += `<span class="etxt${e.done ? ' done' : ''}">`;
-        o += esc(e.text);
-        o += pCount;
-        if (badges) o += `<span class="e-badge">${badges}</span>`;
-        if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
-        o += `</span>`;
+    if (e.type === 'todo') {
+      o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleTodo(${pi},'${k}',${ei})">`;
+      o += `<span class="etxt${e.done ? ' done' : ''}">`;
+      o += getDueBadge(e);
+      o += esc(e.text);
+      o += pCount;
+      if (badges) o += `<span class="e-badge">${badges}</span>`;
+      if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
+      o += `</span>`;
       } else if (e.type === 'link') {
         const isWF = (e.url || '').includes('workflowy.com');
         const tgt = isWF ? 'workflowy-pane' : '_blank';
         o += `<span class="tag tag-lnk">🔗</span>`;
+        o += getDueBadge(e);
         const displayText = hasLinkedNote ? '📝 ' + esc(e.text) : esc(e.text);
         o += `<span class="etxt"><a href="${escA(e.url || '#')}" target="${tgt}">${displayText}</a>${pCount}${badges ? '<span class="e-badge">' + badges + '</span>' : ''}`;
         if (hasLinkedNote) o += `<span class="e-badge" title="ノートにリンクあり">📝</span>`;
         o += `</span>`;
       } else {
         o += `<span class="tag tag-log">📝</span>`;
+        o += getDueBadge(e);
         o += `<span class="etxt">${esc(e.text)}${pCount}${badges ? `<span class="e-badge">${badges}</span>` : ''}${hasLinkedNote ? '<span class="e-badge" title="ノートにリンクあり">📝</span>' : ''}</span>`;
       }
       // タグ表示（テキスト右のインライン表示）
@@ -3864,6 +3959,7 @@
       if (e.type === 'todo') {
         o += `<input type="checkbox" class="cb"${e.done ? ' checked' : ''} onclick="event.stopPropagation();toggleProjTodo(${pi},${ei})">`;
         o += `<span class="etxt${e.done ? ' done' : ''}">`;
+        o += getDueBadge(e);
         o += esc(e.text);
         if (badges) o += `<span class="e-badge">${badges}</span>`;
         o += `</span>`;
@@ -4469,10 +4565,21 @@
       h += `<input class="fi" id="pf-url" type="url" value="${esc(e.url || '')}" placeholder="https://" oninput="markDirty()">`;
       h += `</div>`;
 
-      h += `<label class="fl">備考・詳細メモ</label>`;
       h += `<div class="note-drop-wrap" id="note-drop-wrap">`;
       h += `<textarea class="fi" id="pf-note" placeholder="詳細メモ… ここに画像をドロップ・Ctrl+Vで貼り付け可" oninput="markDirty()" onkeydown="pfNoteKey(event)">${esc(e.note || '')}</textarea>`;
       h += `<div class="drop-hint">🖼 画像をドロップ</div>`;
+      h += `</div>`;
+
+      // ── 開始日・期限日 ──
+      h += `<div style="display:flex;gap:10px;margin-bottom:10px">`;
+      h += `  <div style="flex:1">`;
+      h += `    <label class="fl">開始日</label>`;
+      h += `    <input class="fi" id="pf-start" type="date" value="${e.start || ''}" oninput="markDirty()">`;
+      h += `  </div>`;
+      h += `  <div style="flex:1">`;
+      h += `    <label class="fl">期限日</label>`;
+      h += `    <input class="fi" id="pf-due" type="date" value="${e.due || ''}" oninput="markDirty()">`;
+      h += `  </div>`;
       h += `</div>`;
       // ── ノートリンクボタン（備考欄の直下に配置） ──
       if (!isNew && !isProj && !isRec) {
@@ -4710,6 +4817,11 @@
           S.projects[pi].entries[wk].push(ne);
         } else {
           Object.assign(S.projects[pi].entries[wk][ei], { type, text, note, url });
+          const start = ($('pf-start') ? $('pf-start').value || '' : '').trim();
+          const due = ($('pf-due') ? $('pf-due').value || '' : '').trim();
+          if (start !== undefined) S.projects[pi].entries[wk][ei].start = start;
+          if (due !== undefined) S.projects[pi].entries[wk][ei].due = due;
+
           if (priority !== undefined) S.projects[pi].entries[wk][ei].priority = priority;
           if (tagChips !== undefined) S.projects[pi].entries[wk][ei].tags = tagChips;
           if (newParentId !== undefined) {
@@ -5730,6 +5842,8 @@ ${draft}
     $('lm-bg').addEventListener('click', e => { if (e.target === $('lm-bg')) closeLM() });
     $('qa-bg').addEventListener('click', e => { if (e.target === $('qa-bg')) closeQA() });
     document.addEventListener('keydown', ev => {
+      // 入力要素内でのタイピング中はショートカットを無効化（マスコットなどの入力を優先）
+      if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.isContentEditable) return;
       // Ctrl+K: コマンドパレット（ノートエディタ内は除く — リンク挿入はCtrl+Lを使用）
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'k') {
         ev.preventDefault();
@@ -6458,7 +6572,7 @@ ${draft}
       });
 
       // 現在の構造（ノードID・インデント・状態）のハッシュを生成
-      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}`).join(',');
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.linkedEntryRef}`).join(',');
 
       if (_olLastRenderKey === renderKey && container.innerHTML !== '') {
         // 構造が全く同じなら innerHTML を書き換えず、フォーカスと選択状態の更新のみ行う
@@ -7941,8 +8055,7 @@ ${draft}
 
     /* ── デスクトップマスコット機能 ── */
     /* ── デスクトップマスコット機能 ── */
-    let _mascotTimer = null;
-
+    
     function initMascot() {
       const enabled = localStorage.getItem('pwt_mascot_enabled') === 'true';
       const chk = $('mascot-enabled-s');
@@ -7951,70 +8064,18 @@ ${draft}
       const container = $('mascot-container');
       if (enabled) {
         container.style.display = 'flex';
-        // 保存された位置を復元
-        const pos = localStorage.getItem('pwt_mascot_pos');
-        if (pos) {
-          const { left, top } = JSON.parse(pos);
-          container.style.left = left;
-          container.style.top = top;
+        // 復元
+        const x = localStorage.getItem('pwt_mascot_x');
+        const y = localStorage.getItem('pwt_mascot_y');
+        if (x && y) {
+          container.style.left = x;
+          container.style.top = y;
           container.style.bottom = 'auto';
           container.style.right = 'auto';
         }
         setTimeout(() => mascotSpeak('起動したよ！今日も頑張ろう！', 4000), 1000);
       }
-
-      // ドラッグ移動ロジック
-      const img = $('mascot-img');
-      let isDragging = false;
-      let startX, startY, initialLeft, initialTop;
-
-      const onMouseDown = e => {
-        if (e.target !== img) return;
-        isDragging = true;
-        img.style.cursor = 'grabbing';
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-        startX = clientX;
-        startY = clientY;
-        const rect = container.getBoundingClientRect();
-        initialLeft = rect.left;
-        initialTop = rect.top;
-        container.style.transition = 'none';
-        // e.preventDefault(); // クリックイベントを妨げないように注意
-      };
-
-      const onMouseMove = e => {
-        if (!isDragging) return;
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-        container.style.left = (initialLeft + dx) + 'px';
-        container.style.top = (initialTop + dy) + 'px';
-        container.style.bottom = 'auto';
-        container.style.right = 'auto';
-      };
-
-      const onMouseUp = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        img.style.cursor = 'pointer';
-        container.style.transition = '';
-        // 位置を保存
-        localStorage.setItem('pwt_mascot_pos', JSON.stringify({
-          left: container.style.left,
-          top: container.style.top
-        }));
-      };
-
-      img.addEventListener('mousedown', onMouseDown);
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-      // タッチ対応
-      img.addEventListener('touchstart', onMouseDown, { passive: false });
-      window.addEventListener('touchmove', onMouseMove, { passive: false });
-      window.addEventListener('touchend', onMouseUp);
-
+      
       // Ctrl+F で検索
       window.addEventListener('keydown', ev => {
         if ((ev.ctrlKey || ev.metaKey) && ev.key === 'f') {
@@ -8029,6 +8090,15 @@ ${draft}
       if (enabled) mascotSpeak('呼んだ？いつでも助けるよ！', 3000);
     }
 
+    
+    
+    
+// Duplicates removed (already at top)
+
+    
+    
+
+        let _mascotDragging=false; let _mascotMoved=false; let _mascotOffset={x:0,y:0}; let _mascotTimer=null; let _mascotIsSpeaking=false; 
     function mascotEmote(type) {
       const img = $('mascot-img');
       const paths = {
@@ -8041,35 +8111,122 @@ ${draft}
     }
 
     function mascotSpeak(text, duration = 5000) {
-      const b = $('mascot-bubble');
+      _mascotIsSpeaking = true;
+      const b = $("mascot-bubble");
       if (!b) return;
       b.textContent = text;
-      b.style.display = 'block';
+      b.style.display = "block";
       clearTimeout(_mascotTimer);
       if (duration > 0) {
-        _mascotTimer = setTimeout(() => { b.style.display = 'none'; }, duration);
+        _mascotTimer = setTimeout(() => {
+          b.style.display = "none";
+          _mascotIsSpeaking = false;
+        }, duration);
+      }
+    }
+    function mascotHover() { }
+
+    function getDueBadge(e) {
+      if (!e || !e.due || e.done) return '';
+      const today = todayDateStr();
+      let cls = 'e-due-badge';
+      if (e.due < today) cls += ' e-due-over';
+      else if (e.due === today) cls += ' e-due-today';
+      const m = e.due.match(/(\d\d)-(\d\d)$/);
+      const disp = m ? `${m[1]}/${m[2]}` : e.due;
+      return `<span class="${cls}">${disp}</span>`;
+    }
+
+    function doRollover() {
+      const today = new Date();
+      const currentWk = wkey(today);
+      let movedCount = 0;
+
+      S.projects.forEach((p, pi) => {
+        if (!p.entries) return;
+        const weekKeys = Object.keys(p.entries).sort();
+        weekKeys.forEach(wk => {
+          if (wk < currentWk) {
+            const arr = p.entries[wk];
+            for (let i = 0; i < arr.length; i++) {
+              const e = arr[i];
+              if (e.type === 'todo' && !e.done) {
+                const item = arr.splice(i, 1)[0];
+                i--;
+                if (!p.entries[currentWk]) p.entries[currentWk] = [];
+                p.entries[currentWk].push(item);
+                movedCount++;
+              }
+            }
+          }
+        });
+      });
+      if (movedCount > 0) {
+        showToast(`🚚 ${movedCount} 件の未完了タスクを今週に繰り越しました`);
+        saveState(true);
       }
     }
 
-    function mascotClick() {
-      mascotEmote('happy');
-      const phrases = [
-        "順調かな？無理しすぎないでね！",
-        "休憩も大切だよ。お茶でも飲まない？",
-        "GitHubへの同期、私がしっかり見守ってるよ！",
-        "何か手伝えることがあったら教えてね。",
-        "今日も一日頑張ってるね。えらい！",
-        "集中力が切れてきたら、深呼吸してみて。",
-        "完了したToDoにチェックを入れる瞬間がいいよね！",
-        "一つ一つの積み重ねが大きな成果になるよ。",
-        "応援してるよ！フレー！フレー！"
-      ];
-      mascotSpeak(phrases[Math.floor(Math.random() * phrases.length)]);
-      setTimeout(() => mascotEmote('idle'), 3000);
+    let _projColWidth = parseInt(localStorage.getItem('pwt_proj_col_w')) || 240;
+    let _weekColWidth = parseInt(localStorage.getItem('pwt_week_col_w')) || 336;
+    let _weekColWidthMap = {};
+    try {
+      const savedMap = localStorage.getItem('pwt_week_col_w_map');
+      if (savedMap) _weekColWidthMap = JSON.parse(savedMap);
+    } catch (e) { }
+
+    function applyWeekColWidths() {
+      let total = _projColWidth;
+      
+      // proj
+      const colP = $('gc-proj');
+      if (colP) colP.style.width = _projColWidth + 'px';
+      
+      // weeks
+      document.querySelectorAll('col[id^="gc-wk-"]').forEach(col => {
+        const k = col.id.replace('gc-wk-', '');
+        const w = (_weekColWidthMap[k] || _weekColWidth);
+        col.style.width = w + 'px';
+        total += w;
+      });
+      
+      const grid = $('grid');
+      if (grid) grid.style.width = total + 'px';
     }
 
-    function mascotHover() { }
+    function initColumnWidths() {
+      document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
+      applyWeekColWidths();
+    }
 
+        function startColResize(e, type, colKey) {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startW = (type === "proj") ? _projColWidth : (_weekColWidthMap[colKey] || _weekColWidth);
+
+      const onMouseMove = ev => {
+        const delta = ev.clientX - startX;
+        const newW = Math.max(type === "proj" ? 80 : 100, startW + delta);
+        if (type === "proj") {
+          _projColWidth = newW;
+          document.documentElement.style.setProperty("--proj-col-w", _projColWidth + "px");
+          const cp = $('gc-proj'); if (cp) cp.style.width = _projColWidth + "px";
+        } else {
+          _weekColWidthMap[colKey] = newW;
+          const cwk = $('gc-wk-' + colKey); if (cwk) cwk.style.width = newW + "px";
+        }
+        // 表全体の幅も更新（他の列が縮まないようにするため）
+        applyWeekColWidths();
+      };
+      const onMouseUp = () => {
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("mouseup", onMouseUp);
+        localStorage.setItem("pwt_proj_col_w", _projColWidth);
+        localStorage.setItem("pwt_week_col_w_map", JSON.stringify(_weekColWidthMap));
+      };
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseUp);
+    }
     // 設定保存時にマスコットの有効/無効を反映
     const _origSaveSettings = saveSettingsAndClose;
     saveSettingsAndClose = function () {
@@ -8077,6 +8234,136 @@ ${draft}
       if (chk) toggleMascotVisible(chk.checked);
       _origSaveSettings();
     };
+
+
+    
+    // --- Mascot Refined Interaction ---
+    
+
+    function handleMascotMousedown(e) {
+      // chat欄の内側のクリック/フォーカスはドラッグさせない
+      if (e.target.closest('#mascot-chat-wrap')) { e.stopPropagation(); return; }
+      _mascotDragging = true;
+      _mascotMoved = false;
+      const rect = $('mascot-container').getBoundingClientRect();
+      _mascotOffset.x = e.clientX - rect.left;
+      _mascotOffset.y = e.clientY - rect.top;
+      document.addEventListener('mousemove', handleMascotMousemove);
+      document.addEventListener('mouseup', handleMascotMouseup);
+    }
+
+    function handleMascotMousemove(e) {
+      if (!_mascotDragging) return;
+      if (Math.abs(e.movementX) > 2 || Math.abs(e.movementY) > 2) _mascotMoved = true;
+      const c = $('mascot-container');
+      c.style.left = (e.clientX - _mascotOffset.x) + 'px';
+      c.style.top = (e.clientY - _mascotOffset.y) + 'px';
+      c.style.bottom = 'auto'; c.style.right = 'auto';
+    }
+
+    function handleMascotMouseup() {
+      if (_mascotDragging && !_mascotMoved) {
+        onMascotClick();
+      }
+      if (_mascotDragging) {
+        const c = $('mascot-container');
+        localStorage.setItem('pwt_mascot_x', c.style.left);
+        localStorage.setItem('pwt_mascot_y', c.style.top);
+      }
+      _mascotDragging = false;
+      document.removeEventListener('mousemove', handleMascotMousemove);
+      document.removeEventListener('mouseup', handleMascotMouseup);
+    }
+
+    function onMascotClick() {
+      const wrap = $('mascot-chat-wrap');
+      // チャットフォームが開いている場合は何もしない
+      if (wrap.style.display !== 'none' && wrap.style.display !== '') return;
+      
+      if (!_mascotIsSpeaking) {
+        // 初回クリック: まず自動コメントを喋らせる
+        askGemini("今のタスク状況や進捗を見て、コロが思う今のあなたの状態を一言ポジティブに伝えて（短く語尾はコロらしくてね）");
+      } else {
+        // 2回目クリック(喋っている間): チャットフォームを表示
+        toggleMascotChat(true);
+      }
+    }
+
+    function toggleMascotChat(show) {
+      const wrap = $('mascot-chat-wrap');
+      wrap.style.display = show ? 'flex' : 'none';
+      wrap.style.flexDirection = 'column';
+      if (show) {
+        setTimeout(() => { const inp = $('mascot-chat-input'); if(inp){inp.focus();} }, 50);
+      }
+    }
+
+    function handleMascotChatKey(e) {
+      e.stopPropagation();
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        submitMascotChat();
+      }
+    }
+
+    function submitMascotChat() {
+      const input = $('mascot-chat-input');
+      const q = input.value.trim();
+      if (!q) return;
+      askGemini(q);
+      input.value = '';
+      toggleMascotChat(false);
+    }
+
+    async function askGemini(question) {
+      // AIアシスタントのキー (pwt_ai_key) をそのまま利用
+      const apiKey = localStorage.getItem('pwt_ai_key');
+      if (!apiKey) {
+        mascotSpeak("Gemini APIキーが見つからないよ。AIアシスタントパネルでAPIキーを設定して「保存」してね！");
+        return;
+      }
+
+      _mascotIsSpeaking = true;
+      mascotEmote('thinking');
+      mascotSpeak("ふむふむ...");
+
+      const todayStr = new Date().toLocaleDateString('ja-JP');
+      let context = "あなたはタスク管理アシスタントのマスコット「コロ」です。ボクはコロといいます。語尾は「〜だよ」「〜だね」などフレンドリーに。\n";
+      context += "本日: " + todayStr + "\n";
+      context += "あなたの未完了タスク:\n";
+      
+      const todoList = [];
+      S.projects.forEach(p => {
+        for(let k in p.entries) {
+          p.entries[k].forEach(e => {
+             if(e.type==='todo' && !e.done) {
+               todoList.push(`${p.name}: ${e.text} (期限: ${e.due || 'なし'})`);
+             }
+          });
+        }
+      });
+      context += todoList.slice(0, 15).join("\n") + "\n";
+      
+      try {
+        const model = getAiModel();
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: context + "\n質問: " + question }] }]
+          })
+        });
+        const data = await resp.json();
+        const msg = data.candidates[0].content.parts[0].text;
+        mascotSpeak(msg, 9000);
+        mascotEmote('idle');
+      } catch (e) {
+        console.error(e);
+        mascotSpeak("あうっ、APIでエラーがでちゃった...");
+        mascotEmote('idle');
+      }
+    }
+// Obsolete Gemini-key settings logic removed
 
     loadState();
     ensureEntryIds();
@@ -8088,6 +8375,8 @@ ${draft}
       if (p.recSectionOpen === undefined) p.recSectionOpen = false;
     });
     render();
+    doRollover();
+    initColumnWidths();
     initMascot();
     updateSaveTimeDisplay();
     if (_loadStateError) { setTimeout(() => alert(_loadStateError), 400); }
