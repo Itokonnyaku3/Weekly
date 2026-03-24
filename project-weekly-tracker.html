@@ -2835,6 +2835,25 @@
       filter: brightness(0.95);
     }
 
+    .ol-linked-ref {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 4px !important;
+      font-size: 11px !important;
+      color: var(--tx-info) !important;
+      opacity: 0.75;
+      transition: all 0.2s;
+      vertical-align: baseline !important;
+    }
+
+    .ol-linked-ref:hover {
+      opacity: 1;
+      text-decoration: underline;
+      background: none !important;
+      filter: none !important;
+    }
+
     .ol-bullet {
       font-size: 16px;
       margin-right: 4px;
@@ -3327,7 +3346,21 @@
        - 注意: localStorage は 5MB 制限があるため、大量画像は JSON ファイル
          運用を推奨
     
-       ================================================================ */
+
+       【Gemini専用：開発ガイドライン】
+       - Single Source of Truthの遵守: UIの変更は必ず S オブジェクト（ステート）を更新してから render() を呼ぶフローを徹底すること。DOMを直接書き換えてデータと乖離させないこと。
+       - 既存機能の全量スキャン: コードを修正する前に、修正対象の変数が Maps 関数や render 関数内でどう使われているか必ず全スキャンし、依存関係を壊さないこと。
+       - 共通定数の保護: SK (localStorageキー) や fkey の形式（pi:wk:ei）を勝手に変更しないこと。
+       - 差分ではなく関数単位の提示: 修正案は「〜行目を書き換える」ではなく、修正後の「関数全体」を提示すること。
+       - 更新履歴の自動更新: 修正完了後、コード内の「仕様・実装メモ」コメントを必ず最新状態に更新すること。
+
+       【デイリーノート機能・フォーカス管理 (最新仕様)】
+       - 右端: ノートパネル (#note-panel) ⇒ olRender() でアウトライン形式のノートを管理
+       - スタイル反映: ノート内の装飾（太字・色）はステート変更時に即時再描画 (olRender の最適化廃止により実現)
+       - フォーカス保護: render() 実行時のフォーカス解決において、ノート各メニュー操作中や _programmaticFocus フラグ有効時はグリッド側へのフォーカス奪還を阻止
+       - ナビゲーション: 完了要素（display:none）をスキップするようにキー移動ロジックを強化。デイリータスク(daily:DATE:ID)のフォーカス復元にも対応済。
+
+              ================================================================ */
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
@@ -3995,12 +4028,25 @@
     // ── apply focus to an eitem or qainp ─────────────────────────────
     function applyFocus(pi, wk, ei) {
       document.querySelectorAll('.eitem.kfocus').forEach(el => el.classList.remove('kfocus'));
-      pi = +pi;
-      let el = document.querySelector(`.eitem[data-pi="${pi}"][data-wk="${wk}"][data-ei="${ei}"]`);
-      if (!el) {
-        const all = Array.from(document.querySelectorAll(`.eitem[data-pi="${pi}"][data-wk="${wk}"]`));
-        if (all.length) el = all[Math.min(+ei, all.length - 1)];
+      
+      let el = null;
+      if (typeof pi === 'string' && pi === 'daily') {
+        // デイリーアイテムの場合 (ei = nid)
+        el = document.querySelector(`.eitem[data-daily="1"][data-date="${wk}"][data-nid="${ei}"]`);
+      } else {
+        // 通常アイテムの場合
+        pi = +pi;
+        el = document.querySelector(`.eitem[data-pi="${pi}"][data-wk="${wk}"][data-ei="${ei}"]`);
+        // 見つかったアイテムが非表示（display:none）の場合は、el をクリアして代替を探す
+        if (el && !(el.offsetWidth > 0 || el.offsetHeight > 0)) el = null;
+        
+        if (!el) {
+          const all = Array.from(document.querySelectorAll(`.eitem[data-pi="${pi}"][data-wk="${wk}"]`))
+                           .filter(x => x.offsetWidth > 0 || x.offsetHeight > 0);
+          if (all.length) el = all[Math.min(+ei, all.length - 1)];
+        }
       }
+
       if (el) { applyFocusToElement(el); }
       else {
         const td = document.querySelector(`td[data-pi="${pi}"][data-wk="${wk}"]`);
@@ -4077,7 +4123,8 @@
         if (currentEl) {
           const list = currentEl.closest('.elist');
           if (list) {
-            const allItems = Array.from(list.querySelectorAll('.eitem'));
+            // 表示されている（display:none でない）アイテムのみを対象にする
+            const allItems = Array.from(list.querySelectorAll('.eitem')).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0);
             const curIdx = allItems.indexOf(currentEl);
             const nextIdx = curIdx + dir;
             if (nextIdx >= 0 && nextIdx < allItems.length) {
@@ -4108,7 +4155,7 @@
             showHint('▲ 前プロジェクト');
             const targetTd = document.querySelector(`td[data-pi="${npi}"][data-wk="${wk}"]`);
             if (targetTd) {
-              const prevItems = Array.from(targetTd.querySelectorAll('.eitem'));
+              const prevItems = Array.from(targetTd.querySelectorAll('.eitem')).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0);
               if (prevItems.length) {
                 applyFocusToElement(prevItems[prevItems.length - 1]);
               } else {
@@ -4401,15 +4448,21 @@
 
     function applyFocusKey(key) {
       if (!key) return;
-      const [pi, wk, ei] = key.split(':');
-      applyFocus(+pi, wk, +ei);
+      const parts = key.split(':');
+      if (parts[0] === 'daily') {
+        applyFocus('daily', parts[1], parts[2]); // daily:DATE:NID
+      } else {
+        applyFocus(+parts[0], parts[1], +parts[2]); // pi:wk:ei
+      }
     }
 
 
     /* Called after ＋ button or panel close — keep focus in grid */
     function refocusGrid() {
       if (focusKey) {
-        const [pi, wk, ei] = focusKey.split(":"); applyFocus(+pi, wk, +ei);
+        const parts = focusKey.split(":"); 
+        if (parts[0] === 'daily') applyFocus('daily', parts[1], parts[2]);
+        else applyFocus(+parts[0], parts[1], +parts[2]);
       } else {
         // focus first available eitem
         const el = document.querySelector('.eitem');
@@ -5843,9 +5896,10 @@ ${draft}
     $('lm-bg').addEventListener('click', e => { if (e.target === $('lm-bg')) closeLM() });
     $('qa-bg').addEventListener('click', e => { if (e.target === $('qa-bg')) closeQA() });
     document.addEventListener('keydown', ev => {
-      // 入力要素内でのタイピング中はショートカットを無効化（マスコットなどの入力を優先）
-      if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.isContentEditable) return;
-      // Ctrl+K: コマンドパレット（ノートエディタ内は除く — リンク挿入はCtrl+Lを使用）
+      // マスコットの入力欄にフォーカスがある場合は、マスコット側のハンドラに任せてグローバルは無視する
+      if (ev.target.id === 'mascot-chat-input') return;
+
+      // Ctrl+K: コマンドパレット
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'k') {
         ev.preventDefault();
         if ($('cmd-bg').classList.contains('open')) { closeCmdPalette(); }
@@ -6575,16 +6629,7 @@ ${draft}
       // 現在の構造（ノードID・インデント・状態）のハッシュを生成
       const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}`).join(',');
 
-      if (_olLastRenderKey === renderKey && container.innerHTML !== '') {
-        // 構造が全く同じなら innerHTML を書き換えず、フォーカスと選択状態の更新のみ行う
-        const rows = container.querySelectorAll('.ol-row');
-        rows.forEach(row => {
-          const id = row.dataset.id;
-          if (_olSelected.has(id)) row.classList.add('ol-selected');
-          else row.classList.remove('ol-selected');
-        });
-      } else {
-        _olLastRenderKey = renderKey;
+      _olLastRenderKey = renderKey;
         container.innerHTML = html;
         // テキスト/HTML をノードにセット
         visible.forEach(n => {
@@ -6609,12 +6654,11 @@ ${draft}
             if (chip) {
               const projName = getLinkedProjName(n.linkedEntryRef);
               const lbl = getLinkedEntryLabel(n.linkedEntryRef) || (n.linkedEntryText || '(不明)');
-              chip.textContent = '🏷️ ' + projName;
+              chip.textContent = '📂 ' + projName;
               chip.title = 'リンク先: ' + lbl + '\nクリック または Ctrl+Enter / Alt+Enter で開く';
             }
           }
         });
-      }
       // フォーカス復元
       let focusTarget = null;
       if (_olFocusId) {
@@ -8306,6 +8350,9 @@ ${draft}
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         submitMascotChat();
+      }
+      if (e.key === 'Escape') {
+        toggleMascotChat(false);
       }
     }
 
