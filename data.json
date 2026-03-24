@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T05:33:47.517Z",
+  "savedAt": "2026-03-24T06:05:16.305Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3176,10 +3176,10 @@
     "2026-3-24": [
       {
         "id": "mn3v3wbsz78",
-        "text": "1100 BE/BGS・IIJ定例",
-        "html": "1100 BE/BGS・IIJ定例",
+        "text": "1100 BE/BGS・IIJ定例 ",
+        "html": "1100 BE/BGS・IIJ定例 ",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "isTodo": false,
@@ -3387,12 +3387,15 @@
       },
       {
         "id": "mn44y91e3oy",
-        "text": "→台数と作業量が分かる",
-        "html": "→台数と作業量が分かる",
+        "text": "→台数と作業量が分かる ",
+        "html": "→台数と作業量が分かる ",
         "indent": 1,
         "bold": false,
-        "color": "",
-        "collapsed": false
+        "color": "#e67e22",
+        "collapsed": false,
+        "isTodo": false,
+        "isPrivate": false,
+        "checked": false
       },
       {
         "id": "mn44ycozlgn",
