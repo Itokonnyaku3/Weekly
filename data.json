@@ -1378,6 +1378,21 @@
             "images": [],
             "id": "emmx5rb3lwge",
             "collapsed": false
+          },
+          {
+            "id": "emn3vjyhhego",
+            "type": "link",
+            "text": "",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3vjncpz4l"
+            }
           }
         ]
       },
@@ -1675,7 +1690,25 @@
     },
     {
       "name": "Tracker改善",
-      "entries": {},
+      "entries": {
+        "2026-3-23": [
+          {
+            "type": "log",
+            "text": "Tracker不具合",
+            "note": "",
+            "url": "",
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3vks74f81"
+            },
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
+          }
+        ]
+      },
       "links": [],
       "projEntries": [
         {
@@ -1707,8 +1740,8 @@
       "catCollapsed": {}
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-03-24T00:25:25.428Z",
+  "wOff": 0,
+  "savedAt": "2026-03-24T00:29:00.370Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3112,6 +3145,53 @@
         "text": "",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3vks74f81",
+        "text": "Tracker不具合",
+        "html": "Tracker不具合",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "14:2026-3-23:0",
+        "linkedEntryText": ""
+      },
+      {
+        "id": "mn3vld79e1p",
+        "text": "定例にフォーカスが当たると矢印キーが動かなくなる",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3vlpq4cfm",
+        "text": "今週が見くれることがある",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3vmhrxw3m",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn3vl7lr1p0",
+        "text": "",
+        "html": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
