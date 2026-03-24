@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T04:54:52.115Z",
+  "savedAt": "2026-03-24T05:04:25.959Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3192,7 +3192,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn40asnc78g",
@@ -3235,8 +3235,17 @@
       {
         "id": "mn40ixgogns",
         "text": "1400　店舗インフラ部会",
-        "html": "",
+        "html": "1400　店舗インフラ部会",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45h4j6c1b",
+        "text": "機器リスト、ふぉーまｔｔ",
+        "html": "機器リスト、ふぉーまｔｔ",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
