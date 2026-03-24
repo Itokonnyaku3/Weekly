@@ -902,6 +902,15 @@
           "priority": "",
           "tags": [],
           "id": "emn4502mimae"
+        },
+        {
+          "type": "log",
+          "text": "マスタースケジュール情報",
+          "note": "費用　157000\n期間　2025/3　2026/5",
+          "url": "",
+          "images": [],
+          "priority": "",
+          "tags": []
         }
       ],
       "projEntriesOpen": true,
@@ -1863,7 +1872,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T08:08:39.744Z",
+  "savedAt": "2026-03-24T08:10:39.782Z",
   "dailyOutline": {
     "2026-3-18": [
       {
