@@ -780,7 +780,8 @@
             "start": "",
             "due": "2026-03-25",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emn4cgny8k9i"
           }
         ],
         "2026-3-30": [
@@ -927,7 +928,8 @@
           "url": "",
           "images": [],
           "priority": "",
-          "tags": []
+          "tags": [],
+          "id": "emn4cgny8bqe"
         }
       ],
       "projEntriesOpen": true,
@@ -1887,11 +1889,12 @@
       "projEntriesOpen": false,
       "collapsed": false,
       "recurringEntries": [],
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     }
   ],
-  "wOff": -2,
-  "savedAt": "2026-03-24T08:19:42.356Z",
+  "wOff": 0,
+  "savedAt": "2026-03-24T08:20:19.713Z",
   "dailyOutline": {
     "2026-3-18": [
       {
