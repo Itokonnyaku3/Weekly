@@ -692,7 +692,11 @@
             "start": "2026-03-24",
             "due": "2026-03-24",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3uuxwskbh"
+            }
           },
           {
             "type": "todo",
@@ -1659,7 +1663,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:07:14.594Z",
+  "savedAt": "2026-03-24T00:07:42.042Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3009,12 +3013,14 @@
       },
       {
         "id": "mn3uuxwskbh",
-        "text": "すけじゅーる",
-        "html": "すけじゅーる",
+        "text": "スケジュールアップデートして植田さんに確認！",
+        "html": "スケジュールアップデートして植田さんに確認！",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "2:2026-3-23:13",
+        "linkedEntryText": "スケジュール確認して植田さんに報告"
       },
       {
         "id": "mn1ncqsbkd1",
