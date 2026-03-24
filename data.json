@@ -1323,6 +1323,21 @@
               "date": "2026-3-24",
               "nodeId": "mn40asnc78g"
             }
+          },
+          {
+            "id": "emn44v1y82ue",
+            "type": "link",
+            "text": "壬生店電話番号",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn44dwxdr9z"
+            }
           }
         ]
       },
@@ -1820,7 +1835,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T04:34:16.599Z",
+  "savedAt": "2026-03-24T04:47:15.873Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3384,9 +3399,20 @@
       },
       {
         "id": "mn44dwxdr9z",
-        "text": "",
-        "html": "",
+        "text": "壬生店電話番号　",
+        "html": "壬生店電話番号　",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn44v1y82ue",
+        "linkedEntryText": "壬生店電話番号"
+      },
+      {
+        "id": "mn44uszpr1t",
+        "text": "０２８２－２８－６３００　代表\n\n　　　　　２８－６３０１　業務用\n\n　　　　　２８－６３１０　FAX",
+        "html": "<p class=\"MsoNormal\"><span style=\"font-size:11.0pt;color:black\">０２８２－２８－６３００　代表<span lang=\"EN-US\"><o:p></o:p></span></span></p>\n\n<p class=\"MsoNormal\"><span style=\"font-size:11.0pt;color:black\">　　　　　２８－６３０１　業務用<span lang=\"EN-US\"><o:p></o:p></span></span></p>\n\n<p class=\"MsoNormal\"><span style=\"font-size:11.0pt;color:black\">　　　　　２８－６３１０　<span lang=\"EN-US\">FAX<o:p></o:p></span></span></p>",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
