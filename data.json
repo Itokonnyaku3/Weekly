@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T06:05:16.305Z",
+  "savedAt": "2026-03-24T06:29:16.479Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3337,7 +3337,7 @@
         "id": "mn3voop5gvi",
         "text": "",
         "html": "",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3372,7 +3372,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "2:2026-3-23:14",
         "linkedEntryText": "不足分どうするか検討"
       },
@@ -3387,11 +3387,11 @@
       },
       {
         "id": "mn44y91e3oy",
-        "text": "→台数と作業量が分かる ",
-        "html": "→台数と作業量が分かる ",
+        "text": "→台数と作業量が分かる　",
+        "html": "",
         "indent": 1,
         "bold": false,
-        "color": "#e67e22",
+        "color": "",
         "collapsed": false,
         "isTodo": false,
         "isPrivate": false,
@@ -3436,11 +3436,11 @@
       {
         "id": "mn1ncrojbjq",
         "text": "Windows　Update",
-        "html": "",
+        "html": "Windows　Update",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "11:2026-3-23:0",
         "linkedEntryText": "Windowsアップデート"
       },
@@ -3460,7 +3460,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "14:2026-3-23:0",
         "linkedEntryText": ""
       },
@@ -3489,7 +3489,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn412011hj5",
         "linkedEntryText": "複合機スキャン設定"
       },
@@ -3509,7 +3509,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn44e9oc5zl",
         "linkedEntryText": "障害時等富士通対応費用を運用フォルダに格納"
       },
@@ -3529,7 +3529,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn44v1y82ue",
         "linkedEntryText": "壬生店電話番号"
       },
