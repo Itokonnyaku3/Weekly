@@ -198,6 +198,24 @@
         ],
         "2026-3-23": [
           {
+            "type": "log",
+            "text": "30期案件整理",
+            "note": "色々散らばっている案件情報を一元管理する",
+            "url": "",
+            "images": [],
+            "today": false,
+            "priority": "",
+            "tags": [],
+            "id": "emmw2zro2zx3",
+            "collapsed": false,
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn49lz5mvug"
+            },
+            "start": "2026-03-23",
+            "due": "2027-02-28"
+          },
+          {
             "type": "todo",
             "text": "勤怠",
             "note": "",
@@ -235,22 +253,6 @@
             "id": "emmy5whstteq",
             "collapsed": false,
             "done": true
-          },
-          {
-            "type": "todo",
-            "text": "30期案件整理",
-            "note": "色々散らばっている案件情報を一元管理する",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2zx3",
-            "collapsed": false,
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn49lz5mvug"
-            }
           },
           {
             "type": "todo",
@@ -1878,7 +1880,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T08:16:17.314Z",
+  "savedAt": "2026-03-24T08:16:43.032Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3586,8 +3588,8 @@
       },
       {
         "id": "mn49lz5mvug",
-        "text": "30期マスタースケジュール",
-        "html": "",
+        "text": "30期案件整理",
+        "html": "30期案件整理",
         "indent": 0,
         "bold": false,
         "color": "",
