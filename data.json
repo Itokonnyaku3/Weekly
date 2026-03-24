@@ -701,7 +701,7 @@
           },
           {
             "type": "todo",
-            "text": "不足分どうするか検 討",
+            "text": "不足分どうするか検討",
             "note": "台数、成電社に依頼、送ってもらう、行く日を決める、富士通との確認調整",
             "url": "",
             "images": [],
@@ -1835,7 +1835,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T04:47:15.873Z",
+  "savedAt": "2026-03-24T04:50:29.855Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3290,17 +3290,53 @@
       },
       {
         "id": "mn1ncqsbkd1",
-        "text": "不足分どうするか検 討",
-        "html": "不足分どうするか検 討",
+        "text": "不足分どうするか検討",
+        "html": "不足分どうするか検討",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "2:2026-3-23:14",
-        "linkedEntryText": "不足分どうするか検 討"
+        "linkedEntryText": "不足分どうするか検討"
       },
       {
         "id": "mn3uw7ywhae",
+        "text": "まずリストを見てみる。不足分が乗っているはず。",
+        "html": "まずリストを見てみる。不足分が乗っているはず。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44y91e3oy",
+        "text": "→台数と作業量が分かる",
+        "html": "→台数と作業量が分かる",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44ycozlgn",
+        "text": "成電社に送付を依頼する",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44z2ul6xs",
+        "text": "システムに登録する",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44z7aukrm",
         "text": "",
         "html": "",
         "indent": 1,
