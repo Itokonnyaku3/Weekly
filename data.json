@@ -1838,7 +1838,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T05:05:13.938Z",
+  "savedAt": "2026-03-24T05:05:40.291Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3254,8 +3254,17 @@
       },
       {
         "id": "mn45hkt1akf",
-        "text": "関連する資料をぶっこ",
-        "html": "関連する資料をぶっこ",
+        "text": "関連する資料をぶっこんでClaudeに作ってもらうか",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn45iq1d5or",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
