@@ -1050,7 +1050,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn3vgzrbylq"
+            "parentId": "emn3vgzrbylq",
+            "id": "emn3wo53dnfv"
           },
           {
             "type": "todo",
@@ -1058,7 +1059,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn3vgzrbylq"
+            "parentId": "emn3vgzrbylq",
+            "id": "emn3wo53d1m2"
           }
         ]
       },
@@ -1537,7 +1539,8 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn1ncrojbjq"
-            }
+            },
+            "id": "emn3wo53d74l"
           }
         ]
       },
@@ -1723,7 +1726,8 @@
             "start": "",
             "due": "",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emn3wo53dz0n"
           }
         ]
       },
@@ -1759,7 +1763,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-24T00:57:21.872Z",
+  "savedAt": "2026-03-24T01:02:08.711Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3235,7 +3239,7 @@
       {
         "id": "mn3vlpq4cfm",
         "text": "今週が見くれることがある",
-        "html": "",
+        "html": "今週が見くれることがある",
         "indent": 1,
         "bold": false,
         "color": "",
