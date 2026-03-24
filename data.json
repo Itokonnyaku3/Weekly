@@ -1835,7 +1835,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T04:50:29.855Z",
+  "savedAt": "2026-03-24T04:51:03.664Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3337,6 +3337,15 @@
       },
       {
         "id": "mn44z7aukrm",
+        "text": "富士通と設置時のサポートを依頼する",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44zxps6h0",
         "text": "",
         "html": "",
         "indent": 1,
