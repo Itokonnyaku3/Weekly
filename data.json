@@ -255,22 +255,6 @@
             "done": true
           },
           {
-            "type": "todo",
-            "text": "ソラカメ管理者パスワード",
-            "note": "テスト　あ",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmv5yjm63si"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2aqx",
-            "collapsed": false
-          },
-          {
             "id": "emn1pw7bid29",
             "type": "link",
             "text": "1700 稟議 (新店等、根岸さんと山下さん)",
@@ -332,6 +316,24 @@
             "url": "",
             "images": [],
             "id": "emn2x84q2hxd"
+          },
+          {
+            "type": "todo",
+            "text": "ソラカメ管理者パスワード",
+            "note": "テスト　あ",
+            "url": "",
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmv5yjm63si"
+            },
+            "today": false,
+            "priority": "mid",
+            "tags": [],
+            "id": "emmw2zro2aqx",
+            "collapsed": false,
+            "start": "",
+            "due": "2026-03-30"
           }
         ],
         "2026-4-6": [
@@ -1904,18 +1906,19 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-24T08:47:19.936Z",
+  "savedAt": "2026-03-24T08:48:17.336Z",
   "dailyOutline": {
     "2026-3-18": [
       {
         "id": "mmv5yjm63si",
-        "text": "テスト　あああああああ",
+        "text": "ソラカメ管理者パスワード",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": true,
-        "linkedEntryRef": "0:2026-3-16:3",
-        "html": "テスト　ああ<br>あああああ"
+        "linkedEntryRef": "emmw2zro2aqx",
+        "html": "ソラカメ管理者パスワード",
+        "linkedEntryText": "ソラカメ管理者パスワード"
       },
       {
         "id": "mmvqs9awegx",
