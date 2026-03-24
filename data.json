@@ -732,6 +732,21 @@
             "start": "",
             "due": "",
             "done": true
+          },
+          {
+            "id": "emn44e9oc5zl",
+            "type": "link",
+            "text": "障害時等富士通対応費用を運用フォルダに格納",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn44drrbn0n"
+            }
           }
         ],
         "2026-3-30": [
@@ -1805,7 +1820,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T04:32:43.409Z",
+  "savedAt": "2026-03-24T04:34:16.599Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3341,8 +3356,37 @@
       {
         "id": "mn4119d62id",
         "text": "IDPW方式はセキュリティ的にダメそう。Aoathでできるか鹿喰さんに確認中",
-        "html": "IDPW方式はセキュリティ的にダメそう。Aoathでできるか鹿喰さんに確認中",
+        "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44drrbn0n",
+        "text": "障害時等富士通対応費用を運用フォルダに格納　",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn44e9oc5zl",
+        "linkedEntryText": "障害時等富士通対応費用を運用フォルダに格納"
+      },
+      {
+        "id": "mn44ebmqeg0",
+        "text": "【富士通】  IoT Operations Cockpit 現地SE対応費用_20260318",
+        "html": "【富士通】&nbsp; IoT Operations Cockpit 現地SE対応費用_20260318",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn44dwxdr9z",
+        "text": "",
+        "html": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
