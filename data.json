@@ -676,7 +676,11 @@
             "due": "2026-03-24",
             "priority": "",
             "tags": [],
-            "id": "emn36v81292j"
+            "id": "emn36v81292j",
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn1ndc2bfjx"
+            }
           },
           {
             "type": "todo",
@@ -1655,7 +1659,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-23T21:43:45.917Z",
+  "savedAt": "2026-03-24T00:07:14.594Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2992,23 +2996,25 @@
     ],
     "2026-3-24": [
       {
-        "id": "mn1h2nepanj",
-        "text": "あああ",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn1ndc2bfjx",
-        "text": "",
+        "text": "成電社請求処理",
         "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isPrivate": false
+        "isPrivate": false,
+        "linkedEntryRef": "2:2026-3-23:12",
+        "linkedEntryText": "成電社請求処理"
+      },
+      {
+        "id": "mn3uuxwskbh",
+        "text": "すけじゅーる",
+        "html": "すけじゅーる",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn1ncqsbkd1",
