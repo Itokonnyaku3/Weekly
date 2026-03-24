@@ -700,7 +700,7 @@
           },
           {
             "type": "todo",
-            "text": "不足3店舗の設置計画",
+            "text": "不足分どうするか検討",
             "note": "台数、成電社に依頼、送ってもらう、行く日を決める、富士通との確認調整",
             "url": "",
             "images": [],
@@ -708,7 +708,11 @@
             "due": "2026-03-26",
             "priority": "",
             "tags": [],
-            "id": "emn36v812bfz"
+            "id": "emn36v812bfz",
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn1ncqsbkd1"
+            }
           }
         ],
         "2026-3-30": [
@@ -1663,7 +1667,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T00:07:42.042Z",
+  "savedAt": "2026-03-24T00:08:14.502Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3024,9 +3028,20 @@
       },
       {
         "id": "mn1ncqsbkd1",
-        "text": "",
+        "text": "不足分どうするか検討",
         "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "2:2026-3-23:14",
+        "linkedEntryText": "不足分どうするか検討"
+      },
+      {
+        "id": "mn3uw7ywhae",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
