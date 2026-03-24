@@ -1714,6 +1714,21 @@
               "nodeId": "mn1q3o2p63z"
             },
             "id": "emn358xe4pvf"
+          },
+          {
+            "id": "emn412011hj5",
+            "type": "link",
+            "text": "複合機スキャン設定",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3vmhrxw3m"
+            }
           }
         ]
       },
@@ -1781,7 +1796,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-24T02:46:03.822Z",
+  "savedAt": "2026-03-24T03:00:41.509Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3129,7 +3144,7 @@
       {
         "id": "mn3vp9z3eit",
         "text": "1130　デジタル本部会",
-        "html": "",
+        "html": "1130　デジタル本部会",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -3168,15 +3183,6 @@
         "id": "mn40j3qc2so",
         "text": "",
         "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-24T02-46-00-853Z_49nxi.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn40j6suhut",
-        "text": "",
-        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -3312,8 +3318,19 @@
       },
       {
         "id": "mn3vmhrxw3m",
-        "text": "",
-        "html": "",
+        "text": "複合機スキャン設定　",
+        "html": "複合機スキャン設定　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn412011hj5",
+        "linkedEntryText": "複合機スキャン設定"
+      },
+      {
+        "id": "mn4119d62id",
+        "text": "IDPW方式はセキュリティ的にダメそう。Aoathでできるか鹿喰さんに確認中",
+        "html": "IDPW方式はセキュリティ的にダメそう。Aoathでできるか鹿喰さんに確認中",
         "indent": 1,
         "bold": false,
         "color": "",
