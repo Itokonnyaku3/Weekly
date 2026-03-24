@@ -1895,7 +1895,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-24T08:35:03.785Z",
+  "savedAt": "2026-03-24T08:38:37.285Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3301,13 +3301,13 @@
         "collapsed": false
       },
       {
-        "id": "mn3voop5gvi",
-        "text": "",
-        "html": "",
+        "id": "mn45iq1d5or",
+        "text": "システム障害",
+        "html": "システム障害",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn45kjdl7f4",
@@ -3331,15 +3331,6 @@
         "id": "mn45jpo65td",
         "text": "23日の朝5時半～19時まで送受信がダウン",
         "html": "23日の朝5時半～19時まで送受信がダウン",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn45iq1d5or",
-        "text": "システム障害",
-        "html": "システム障害",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -3579,7 +3570,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn44v1y82ue",
         "linkedEntryText": "壬生店電話番号"
       },
@@ -3599,7 +3590,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "1:2026-3-23:3",
         "linkedEntryText": "30期案件整理"
       },
