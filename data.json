@@ -1911,7 +1911,17 @@
       "name": "AI ビーコン用アンテナ撤去",
       "entries": {},
       "links": [],
-      "projEntries": [],
+      "projEntries": [
+        {
+          "type": "log",
+          "text": "サマリ",
+          "note": "根岸さんに依頼。\nまずは岩崎さんと会話していただき、スケジュール、計画を立てる\n\n株式会社アドインテ\nAIICO事業本部　広告事業Div.\n岩﨑　真友香　\nMayuka Iwasaki\n\nE-mail iwasaki@adinte.co.jp\nURL https://adinte.co.jp/ 　\n携帯 080-5646-8947\n\n東京オフィス 　\n〒160-0023東京都新宿区西新宿8-1-2PMO西新宿12F\nTel 03-6427-8847　Fax 03-6427-8947",
+          "url": "",
+          "images": [],
+          "priority": "",
+          "tags": []
+        }
+      ],
       "projEntriesOpen": false,
       "collapsed": false,
       "recurringEntries": [],
@@ -1919,7 +1929,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T01:22:19.946Z",
+  "savedAt": "2026-03-25T01:23:49.955Z",
   "dailyOutline": {
     "2026-3-18": [
       {
