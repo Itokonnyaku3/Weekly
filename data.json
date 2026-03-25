@@ -1895,7 +1895,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T00:37:16.700Z",
+  "savedAt": "2026-03-25T00:37:54.228Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3660,7 +3660,8 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-25T00-37-53-114Z_f348v.png?token=ACNCRFHCA2ECCFDCHQQLNVLJYMXJ4\" alt=\"ペースト画像\"></span><br>"
       }
     ]
   }
