@@ -686,12 +686,13 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn1ndc2bfjx"
-            }
+            },
+            "done": true
           },
           {
             "type": "todo",
             "text": "新狭山見積→発注",
-            "note": "□成電社\n■富士通\n■小泉成器",
+            "note": "■成電社\n■富士通\n■小泉成器",
             "url": "",
             "images": [],
             "today": false,
@@ -701,7 +702,7 @@
             "due": "2026-03-25",
             "priority": "",
             "tags": [],
-            "done": false
+            "done": true
           },
           {
             "type": "todo",
@@ -2031,7 +2032,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T06:03:33.090Z",
+  "savedAt": "2026-03-25T06:04:07.448Z",
   "dailyOutline": {
     "2026-3-18": [
       {
