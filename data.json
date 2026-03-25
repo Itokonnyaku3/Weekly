@@ -1939,7 +1939,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T01:31:59.997Z",
+  "savedAt": "2026-03-25T01:34:43.123Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3741,7 +3741,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn5bid15v1l",
@@ -3750,7 +3750,7 @@
         "indent": 2,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn5d28f4kzd",
@@ -3809,6 +3809,15 @@
       {
         "id": "mn5bji3mix1",
         "text": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5df5nv3y4",
+        "text": "",
         "html": "",
         "indent": 1,
         "bold": false,
