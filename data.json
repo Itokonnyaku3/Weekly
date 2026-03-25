@@ -710,7 +710,8 @@
             "start": "",
             "due": "2026-03-25",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "done": false
           },
           {
             "type": "todo",
@@ -721,7 +722,8 @@
             "parentId": "emmw2zro2l9s",
             "priority": "high",
             "tags": [],
-            "id": "emn1qfxtvazd"
+            "id": "emn1qfxtvazd",
+            "done": true
           },
           {
             "type": "todo",
@@ -1946,7 +1948,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T04:24:10.724Z",
+  "savedAt": "2026-03-25T04:24:48.241Z",
   "dailyOutline": {
     "2026-3-18": [
       {
