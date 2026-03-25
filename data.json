@@ -728,7 +728,8 @@
             "start": "",
             "due": "2026-03-25",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "id": "emn5cymf24rd"
           },
           {
             "type": "todo",
@@ -1905,10 +1906,20 @@
       "recurringEntries": [],
       "recSectionOpen": false,
       "isPrivate": false
+    },
+    {
+      "name": "AI ビーコン用アンテナ撤去",
+      "entries": {},
+      "links": [],
+      "projEntries": [],
+      "projEntriesOpen": false,
+      "collapsed": false,
+      "recurringEntries": [],
+      "recSectionOpen": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T00:59:03.291Z",
+  "savedAt": "2026-03-25T01:22:19.946Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3669,12 +3680,12 @@
     "2026-3-25": [
       {
         "id": "mn5acjavcmo",
-        "text": "今日の予定k",
+        "text": "今日の予定",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "今日の予定k"
+        "html": "今日の予定"
       },
       {
         "id": "mn5bgq55ed8",
