@@ -807,6 +807,21 @@
             "collapsed": false,
             "parentId": "emmy4wb1gj08",
             "done": true
+          },
+          {
+            "id": "emn5sv7y3fyz",
+            "type": "link",
+            "text": "行田店岸田店長から5度以上の乖離",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-25",
+              "nodeId": "mn5sv0xs6sn"
+            }
           }
         ],
         "2026-3-30": [
@@ -2066,7 +2081,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T08:46:29.822Z",
+  "savedAt": "2026-03-25T08:47:42.018Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4050,6 +4065,26 @@
         "text": "早ければ一か月くらいでできるかも　By山下さん",
         "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5sv0xs6sn",
+        "text": "行田店岸田店長から5度以上の乖離",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn5sv7y3fyz",
+        "linkedEntryText": "行田店岸田店長から5度以上の乖離"
+      },
+      {
+        "id": "mn5svm3up8f",
+        "text": "平台で5台位ある。写真を送っていただいて、岡芹さんと相談",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
