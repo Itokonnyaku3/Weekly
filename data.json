@@ -878,7 +878,33 @@
             "text": "新狭山HACCP発注",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emn5jjkvhknn",
+            "collapsed": true
+          },
+          {
+            "type": "todo",
+            "text": "富士通→cloudｓｉｇｎ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5jjkvhknn"
+          },
+          {
+            "type": "todo",
+            "text": "成電社（見積もらってから）",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5jjkvhknn"
+          },
+          {
+            "type": "todo",
+            "text": "小泉成器",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5jjkvhknn"
           }
         ],
         "2026-3-9": [
@@ -1954,8 +1980,8 @@
       "isPrivate": false
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-03-25T04:25:10.123Z",
+  "wOff": -1,
+  "savedAt": "2026-03-25T04:26:07.333Z",
   "dailyOutline": {
     "2026-3-18": [
       {
