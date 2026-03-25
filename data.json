@@ -1680,7 +1680,7 @@
         ],
         "2026-3-23": [
           {
-            "type": "todo",
+            "type": "link",
             "text": "Windowsライセンス問題",
             "note": "イシダESL確認\n原さんから来ているリストに追記\n\nhttps://beisiag.sharepoint.com/:p:/r/sites/be_team_001151/Shared%20Documents/General/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/CoE/CAG/%E8%B3%87%E7%94%A3%E7%AE%A1%E7%90%86/MS%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E7%9B%A3%E6%9F%BB/BE%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E7%94%A8_MS%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E7%9B%A3%E6%9F%BB%E5%AF%BE%E5%BF%9C_%E5%90%84%E7%A4%BE%E3%81%B8%E3%81%AE%E4%BE%9D%E9%A0%BC%E4%BA%8B%E9%A0%85%E8%AA%AC%E6%98%8E.pptx?d=wf95eee1ee0af49d5b9f419aa2287b499&csf=1&web=1&e=0fEGNY",
             "url": "https://beisiag.sharepoint.com/:p:/r/sites/be_team_001151/Shared%20Documents/General/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/CoE/CAG/%E8%B3%87%E7%94%A3%E7%AE%A1%E7%90%86/MS%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E7%9B%A3%E6%9F%BB/BE%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E7%94%A8_MS%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E7%9B%A3%E6%9F%BB%E5%AF%BE%E5%BF%9C_%E5%90%84%E7%A4%BE%E3%81%B8%E3%81%AE%E4%BE%9D%E9%A0%BC%E4%BA%8B%E9%A0%85%E8%AA%AC%E6%98%8E.pptx?d=wf95eee1ee0af49d5b9f419aa2287b499&csf=1&web=1&e=0fEGNY",
@@ -1690,7 +1690,9 @@
             "tags": [],
             "done": false,
             "id": "emmw2zro24ue",
-            "collapsed": false
+            "collapsed": false,
+            "start": "",
+            "due": ""
           },
           {
             "id": "emn5mclkp3qu",
@@ -2029,7 +2031,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T05:46:23.658Z",
+  "savedAt": "2026-03-25T05:46:45.177Z",
   "dailyOutline": {
     "2026-3-18": [
       {
