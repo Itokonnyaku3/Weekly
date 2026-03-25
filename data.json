@@ -1942,7 +1942,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T01:53:39.239Z",
+  "savedAt": "2026-03-25T01:56:25.049Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3721,9 +3721,18 @@
       },
       {
         "id": "mn5e2rqfrx3",
-        "text": "3月23日",
-        "html": "3月23日",
+        "text": "3月23日アスベスト検体収集完了、特に問題なし。",
+        "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5e6tpy08p",
+        "text": "1000　NCR",
+        "html": "1000　NCR",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3732,7 +3741,7 @@
         "id": "mn5bgq55ed8",
         "text": "HACCP",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3741,7 +3750,7 @@
         "id": "mn5bhsxnskn",
         "text": "昨日参加した店舗のメアド設定HACCP　OK",
         "html": "昨日参加した店舗のメアド設定HACCP　OK",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3750,7 +3759,7 @@
         "id": "mn5bhe18v9e",
         "text": "新狭山見積確認",
         "html": "新狭山見積確認",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3759,7 +3768,7 @@
         "id": "mn5bhplmsa0",
         "text": "バイオーダー",
         "html": "バイオーダー",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3768,7 +3777,7 @@
         "id": "mn5bid15v1l",
         "text": "NCR見積確認（10時からの定例で）　→今週中。",
         "html": "NCR見積確認（10時からの定例で）　→今週中。",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3777,7 +3786,7 @@
         "id": "mn5d28f4kzd",
         "text": "発注は機器のみ、他は他のレジと一緒。",
         "html": "",
-        "indent": 4,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3786,7 +3795,7 @@
         "id": "mn5d2l2m5ze",
         "text": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
         "html": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
-        "indent": 4,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3795,7 +3804,7 @@
         "id": "mn5bilqrt1t",
         "text": "Windowsライセンス問題状況整理",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3804,7 +3813,7 @@
         "id": "mn5bs85hslh",
         "text": "",
         "html": "",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3813,7 +3822,7 @@
         "id": "mn5biycqdhn",
         "text": "複合機スキャン設定→BGSに聞いてみる",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3822,7 +3831,7 @@
         "id": "mn5bjc87k4r",
         "text": "Tracker不具合改善",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3831,7 +3840,7 @@
         "id": "mn5bji3mix1",
         "text": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3840,7 +3849,7 @@
         "id": "mn5df5nv3y4",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
