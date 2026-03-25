@@ -1916,7 +1916,8 @@
             "text": "根岸さんに岩崎さんと打ち合わせしてもらう",
             "note": "",
             "url": "",
-            "images": []
+            "images": [],
+            "id": "emn5e23ayqa6"
           }
         ]
       },
@@ -1929,17 +1930,19 @@
           "url": "",
           "images": [],
           "priority": "",
-          "tags": []
+          "tags": [],
+          "id": "emn5e23ayl67"
         }
       ],
       "projEntriesOpen": false,
       "collapsed": false,
       "recurringEntries": [],
-      "recSectionOpen": false
+      "recSectionOpen": false,
+      "isPrivate": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T01:39:24.816Z",
+  "savedAt": "2026-03-25T01:53:02.406Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3702,16 +3705,34 @@
         "id": "mn5acjavcmo",
         "text": "今日の予定",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
-        "html": "今日の予定"
+        "html": ""
+      },
+      {
+        "id": "mn5e2i7mahk",
+        "text": "0900　FHESL定例",
+        "html": "0900　FHESL定例",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5e2rqfrx3",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn5bgq55ed8",
         "text": "HACCP",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3720,7 +3741,7 @@
         "id": "mn5bhsxnskn",
         "text": "昨日参加した店舗のメアド設定HACCP　OK",
         "html": "昨日参加した店舗のメアド設定HACCP　OK",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3729,7 +3750,7 @@
         "id": "mn5bhe18v9e",
         "text": "新狭山見積確認",
         "html": "新狭山見積確認",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3738,7 +3759,7 @@
         "id": "mn5bhplmsa0",
         "text": "バイオーダー",
         "html": "バイオーダー",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3747,7 +3768,7 @@
         "id": "mn5bid15v1l",
         "text": "NCR見積確認（10時からの定例で）　→今週中。",
         "html": "NCR見積確認（10時からの定例で）　→今週中。",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3756,7 +3777,7 @@
         "id": "mn5d28f4kzd",
         "text": "発注は機器のみ、他は他のレジと一緒。",
         "html": "",
-        "indent": 3,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3765,7 +3786,7 @@
         "id": "mn5d2l2m5ze",
         "text": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
         "html": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
-        "indent": 3,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3774,7 +3795,7 @@
         "id": "mn5bilqrt1t",
         "text": "Windowsライセンス問題状況整理",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3783,7 +3804,7 @@
         "id": "mn5bs85hslh",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3792,7 +3813,7 @@
         "id": "mn5biycqdhn",
         "text": "複合機スキャン設定→BGSに聞いてみる",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3801,7 +3822,7 @@
         "id": "mn5bjc87k4r",
         "text": "Tracker不具合改善",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3810,7 +3831,7 @@
         "id": "mn5bji3mix1",
         "text": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3819,7 +3840,7 @@
         "id": "mn5df5nv3y4",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
