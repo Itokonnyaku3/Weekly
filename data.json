@@ -1691,6 +1691,21 @@
             "done": false,
             "id": "emmw2zro24ue",
             "collapsed": false
+          },
+          {
+            "id": "emn5mclkp3qu",
+            "type": "link",
+            "text": "Windowsライセンス問題",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-25",
+              "nodeId": "mn5mbgmu9vv"
+            }
           }
         ]
       },
@@ -2014,7 +2029,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T05:44:05.095Z",
+  "savedAt": "2026-03-25T05:46:23.658Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3363,8 +3378,8 @@
     "2026-3-24": [
       {
         "id": "mn3v3wbsz78",
-        "text": "1100 BE/BGS・IIJ定例　",
-        "html": "1100 BE/BGS・IIJ定例　",
+        "text": "1100 BE/BGS・IIJ定例　　",
+        "html": "1100 BE/BGS・IIJ定例　　",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -3475,7 +3490,7 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false
+        "checked": true
       },
       {
         "id": "mn46it7m7ii",
@@ -3982,9 +3997,49 @@
       },
       {
         "id": "mn5mbgmu9vv",
-        "text": "#",
-        "html": "#",
+        "text": "Windowsライセンス問題　",
+        "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn5mclkp3qu",
+        "linkedEntryText": "Windowsライセンス問題"
+      },
+      {
+        "id": "mn5mcmo8o0r",
+        "text": "イシダ…エビデンスがあるか再度確認",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5md66snx4",
+        "text": "GOT…",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5mefil2y8",
+        "text": "購入時のNECに、見積等にライセンスの記載があるか確認　",
+        "html": "購入時のNECに、見積等にライセンスの記載があるか確認　",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn5mdsmemel",
+        "text": "OTC…早急に使用を取りやめで担当部署と話を進める",
+        "html": "OTC…早急に使用を取りやめで担当部署と話を進める",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
