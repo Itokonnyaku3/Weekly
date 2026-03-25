@@ -933,21 +933,25 @@
           },
           {
             "type": "todo",
-            "text": "大間々店1台送付",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emn5khg5dcwl",
-            "id": "emn5lcx4r630"
-          },
-          {
-            "type": "todo",
             "text": "深谷国済寺1台送付済み状況確認",
             "note": "",
             "url": "",
             "images": [],
             "parentId": "emn5khg5dcwl",
             "id": "emn5lcx4rm60"
+          },
+          {
+            "type": "todo",
+            "text": "大間々店1台送付",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4r630",
+            "start": "2026-03-24",
+            "due": "2026-03-24",
+            "priority": "",
+            "tags": []
           },
           {
             "id": "emn5sdxpgou1",
@@ -2055,7 +2059,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T08:33:40.725Z",
+  "savedAt": "2026-03-25T08:41:09.442Z",
   "dailyOutline": {
     "2026-3-18": [
       {
