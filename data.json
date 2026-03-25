@@ -893,12 +893,31 @@
           },
           {
             "type": "todo",
+            "text": "大間々店状況確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emmy4wb1gj08",
+            "id": "emmy5whstca9",
+            "collapsed": false,
+            "done": true
+          },
+          {
+            "type": "todo",
             "text": "小泉成器",
             "note": "",
             "url": "",
             "images": [],
             "parentId": "emn5jjkvhknn",
             "id": "emn5lcx4rmuq"
+          },
+          {
+            "type": "todo",
+            "text": "成電社請求書確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emn5qzvdokvt"
           },
           {
             "type": "log",
@@ -931,22 +950,14 @@
             "id": "emn5lcx4rm60"
           },
           {
+            "id": "emn5sdxpgou1",
             "type": "todo",
-            "text": "大間々店状況確認",
+            "text": "テスト",
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emmy4wb1gj08",
-            "id": "emmy5whstca9",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
-            "text": "成電社請求書確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emn5qzvdokvt"
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-9": [
@@ -2044,7 +2055,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T08:28:20.276Z",
+  "savedAt": "2026-03-25T08:33:40.725Z",
   "dailyOutline": {
     "2026-3-18": [
       {
