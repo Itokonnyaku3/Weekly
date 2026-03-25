@@ -1895,7 +1895,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T00:42:30.620Z",
+  "savedAt": "2026-03-25T00:48:47.672Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3674,8 +3674,8 @@
       },
       {
         "id": "mn5bhsxnskn",
-        "text": "昨日参加した店舗のメアド設定HACCP",
-        "html": "昨日参加した店舗のメアド設定HACCP",
+        "text": "昨日参加した店舗のメアド設定HACCP　OK",
+        "html": "昨日参加した店舗のメアド設定HACCP　OK",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -3713,6 +3713,15 @@
         "text": "Windowsライセンス問題状況整理",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bs85hslh",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
