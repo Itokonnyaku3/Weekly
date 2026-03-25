@@ -1909,7 +1909,17 @@
     },
     {
       "name": "AI ビーコン用アンテナ撤去",
-      "entries": {},
+      "entries": {
+        "2026-3-30": [
+          {
+            "type": "todo",
+            "text": "根岸さんに岩崎さんと打ち合わせしてもらう",
+            "note": "",
+            "url": "",
+            "images": []
+          }
+        ]
+      },
       "links": [],
       "projEntries": [
         {
@@ -1929,7 +1939,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T01:23:49.955Z",
+  "savedAt": "2026-03-25T01:25:19.338Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3727,17 +3737,35 @@
       {
         "id": "mn5bhplmsa0",
         "text": "バイオーダー",
-        "html": "",
+        "html": "バイオーダー",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mn5bid15v1l",
+        "text": "NCR見積確認（10時からの定例で）　→今週中。",
+        "html": "NCR見積確認（10時からの定例で）　→今週中。",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mn5d28f4kzd",
+        "text": "発注は機器のみ、他は他のレジと一緒。",
+        "html": "",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn5bid15v1l",
-        "text": "NCR見積確認（10時からの定例で）",
-        "html": "",
-        "indent": 2,
+        "id": "mn5d2l2m5ze",
+        "text": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
+        "html": "ただし、見積はバイオーダー分だけ切り分ける（安田さん提出用）",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
