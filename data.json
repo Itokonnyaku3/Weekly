@@ -617,7 +617,8 @@
             "images": [],
             "id": "emmx7gbbaehl",
             "collapsed": false,
-            "parentId": "emmy4wb1gj08"
+            "parentId": "emmy4wb1gj08",
+            "done": false
           },
           {
             "type": "todo",
@@ -1907,7 +1908,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T00:49:51.615Z",
+  "savedAt": "2026-03-25T00:53:34.532Z",
   "dailyOutline": {
     "2026-3-18": [
       {
