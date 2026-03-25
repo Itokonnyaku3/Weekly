@@ -888,7 +888,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn5jjkvhknn"
+            "parentId": "emn5jjkvhknn",
+            "id": "emn5lcx4ri72"
           },
           {
             "type": "todo",
@@ -896,7 +897,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn5jjkvhknn"
+            "parentId": "emn5jjkvhknn",
+            "id": "emn5lcx4rojg"
           },
           {
             "type": "todo",
@@ -904,7 +906,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn5jjkvhknn"
+            "parentId": "emn5jjkvhknn",
+            "id": "emn5lcx4rmuq"
           },
           {
             "type": "log",
@@ -924,7 +927,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn5khg5dcwl"
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4r630"
           },
           {
             "type": "todo",
@@ -932,7 +936,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "parentId": "emn5khg5dcwl"
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4rm60"
           }
         ],
         "2026-3-9": [
@@ -2009,7 +2014,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-25T04:55:39.828Z",
+  "savedAt": "2026-03-25T05:17:23.638Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3969,7 +3974,7 @@
       {
         "id": "mn5dbsf6e3u",
         "text": "",
-        "html": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-25T05-17-21-429Z_yvwfh.png\" alt=\"ペースト画像\"></span><br>",
         "indent": 1,
         "bold": false,
         "color": "",
