@@ -939,6 +939,14 @@
             "parentId": "emmy4wb1gj08",
             "id": "emmy5whstca9",
             "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "成電社請求書確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emn5qzvdokvt"
           }
         ],
         "2026-3-9": [
@@ -2032,7 +2040,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T06:04:07.448Z",
+  "savedAt": "2026-03-25T07:56:51.374Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3909,28 +3917,19 @@
         "collapsed": false
       },
       {
-        "id": "mn5fdkj6yru",
-        "text": "HACCP",
-        "html": "HACCP",
+        "id": "mn5r2kvdctq",
+        "text": "１５３０　説明会",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn5bilqrt1t",
-        "text": "Windowsライセンス問題状況整理",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn5bs85hslh",
+        "id": "mn5r2po6nom",
         "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3938,8 +3937,8 @@
       {
         "id": "mn5biycqdhn",
         "text": "複合機スキャン設定→BGSに聞いてみる",
-        "html": "",
-        "indent": 1,
+        "html": "複合機スキャン設定→BGSに聞いてみる",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3947,8 +3946,8 @@
       {
         "id": "mn5bjc87k4r",
         "text": "Tracker不具合改善",
-        "html": "",
-        "indent": 1,
+        "html": "Tracker不具合改善",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3956,17 +3955,8 @@
       {
         "id": "mn5bji3mix1",
         "text": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn5df5nv3y4",
-        "text": "",
-        "html": "",
-        "indent": 1,
+        "html": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3978,24 +3968,6 @@
         "indent": 0,
         "bold": true,
         "color": "#2ecc71",
-        "collapsed": false
-      },
-      {
-        "id": "mn5mso1tz2e",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn5dbsf6e3u",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
         "collapsed": false
       },
       {
@@ -4041,8 +4013,17 @@
       {
         "id": "mn5mdsmemel",
         "text": "OTC…早急に使用を取りやめで担当部署と話を進める",
-        "html": "OTC…早急に使用を取りやめで担当部署と話を進める",
+        "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5r1ij3dkw",
+        "text": "早ければ一か月くらいでできるかも　By山下さん",
+        "html": "早ければ一か月くらいでできるかも　By山下さん",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
