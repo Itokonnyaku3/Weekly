@@ -1895,7 +1895,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T00:40:41.996Z",
+  "savedAt": "2026-03-25T00:42:30.620Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3692,6 +3692,60 @@
       },
       {
         "id": "mn5bhplmsa0",
+        "text": "バイオーダー",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bid15v1l",
+        "text": "NCR見積確認（10時からの定例で）",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bilqrt1t",
+        "text": "Windowsライセンス問題状況整理",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5biycqdhn",
+        "text": "複合機スキャン設定→BGSに聞いてみる",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bjc87k4r",
+        "text": "Tracker不具合改善",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bji3mix1",
+        "text": "30期マスタースケジュール、週次報告、効率の良い運用の検討",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn5bk59osvu",
         "text": "",
         "html": "",
         "indent": 1,
