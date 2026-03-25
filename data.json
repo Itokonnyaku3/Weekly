@@ -290,6 +290,24 @@
         ],
         "2026-3-30": [
           {
+            "type": "todo",
+            "text": "ソラカメ管理者パスワード",
+            "note": "30日の久保田さんとと商品業務推進部との打ち合わせで確認",
+            "url": "",
+            "images": [],
+            "linkedNote": {
+              "date": "2026-3-18",
+              "nodeId": "mmv5yjm63si"
+            },
+            "today": false,
+            "priority": "mid",
+            "tags": [],
+            "id": "emmw2zro2aqx",
+            "collapsed": false,
+            "start": "",
+            "due": "2026-03-30"
+          },
+          {
             "type": "link",
             "text": "★週次進捗OneNote",
             "note": "",
@@ -316,24 +334,6 @@
             "url": "",
             "images": [],
             "id": "emn2x84q2hxd"
-          },
-          {
-            "type": "todo",
-            "text": "ソラカメ管理者パスワード",
-            "note": "30日の久保田さんとと商品業務推進部との打ち合わせで確認",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmv5yjm63si"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2aqx",
-            "collapsed": false,
-            "start": "",
-            "due": "2026-03-30"
           }
         ],
         "2026-4-6": [
@@ -577,16 +577,6 @@
           },
           {
             "type": "todo",
-            "text": "OTの高温対応どうするか考える",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmw2zro21cn",
-            "done": false,
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "おおたモール久保田さんか根岸さんに",
             "note": "根岸さんが1時から、米山がMtg終わり次第駆けつけ",
             "url": "",
@@ -596,23 +586,6 @@
             "done": true,
             "priority": "",
             "tags": []
-          },
-          {
-            "id": "emn2vtjuummy",
-            "type": "log",
-            "text": "鳩山店超低温オフライン…メール送信",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2g83gpwz7"
-            },
-            "start": "",
-            "due": ""
           },
           {
             "type": "todo",
@@ -689,6 +662,22 @@
           },
           {
             "type": "todo",
+            "text": "不足分どうするか検討",
+            "note": "台数、成電社に依頼、送ってもらう、行く日を決める、富士通との確認調整",
+            "url": "",
+            "images": [],
+            "start": "2026-03-23",
+            "due": "2026-03-26",
+            "priority": "",
+            "tags": [],
+            "id": "emn36v812bfz",
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn1ncqsbkd1"
+            }
+          },
+          {
+            "type": "todo",
             "text": "27日ごろセンサー早出し納品日確認",
             "note": "",
             "url": "",
@@ -715,23 +704,6 @@
             "done": true
           },
           {
-            "id": "emn44e9oc5zl",
-            "type": "log",
-            "text": "障害時等富士通対応費用を運用フォルダに格納",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn44drrbn0n"
-            },
-            "start": "",
-            "due": ""
-          },
-          {
             "id": "emn3w3kqdfb9",
             "type": "todo",
             "text": "成電社から見積受領",
@@ -751,19 +723,13 @@
           },
           {
             "type": "todo",
-            "text": "不足分どうするか検討",
-            "note": "台数、成電社に依頼、送ってもらう、行く日を決める、富士通との確認調整",
+            "text": "OTの高温対応どうするか考える",
+            "note": "",
             "url": "",
             "images": [],
-            "start": "2026-03-23",
-            "due": "2026-03-26",
-            "priority": "",
-            "tags": [],
-            "id": "emn36v812bfz",
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn1ncqsbkd1"
-            }
+            "id": "emmw2zro21cn",
+            "done": false,
+            "collapsed": false
           },
           {
             "type": "log",
@@ -822,6 +788,40 @@
               "date": "2026-3-25",
               "nodeId": "mn5sv0xs6sn"
             }
+          },
+          {
+            "id": "emn44e9oc5zl",
+            "type": "log",
+            "text": "障害時等富士通対応費用を運用フォルダに格納",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn44drrbn0n"
+            },
+            "start": "",
+            "due": ""
+          },
+          {
+            "id": "emn2vtjuummy",
+            "type": "log",
+            "text": "鳩山店超低温オフライン…メール送信",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2g83gpwz7"
+            },
+            "start": "",
+            "due": ""
           }
         ],
         "2026-3-30": [
@@ -834,6 +834,57 @@
             "priority": "",
             "tags": [],
             "id": "emn1hfsbsuj6"
+          },
+          {
+            "type": "log",
+            "text": "3.31おおたモールで検証",
+            "note": "成電社から預かった不良品を根岸さんにもっていってもらう",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "id": "emn2qu5t7afh",
+            "start": "2026-03-31",
+            "due": "2026-03-31"
+          },
+          {
+            "type": "log",
+            "text": "個店対応",
+            "note": "",
+            "url": "",
+            "images": [],
+            "start": "2026-03-25",
+            "due": "2026-04-30",
+            "priority": "",
+            "tags": [],
+            "id": "emn5khg5dcwl",
+            "collapsed": true
+          },
+          {
+            "type": "todo",
+            "text": "大間々店1台送付",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4r630",
+            "start": "2026-03-24",
+            "due": "2026-03-24",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "type": "todo",
+            "text": "深谷国済寺1台送付済み状況確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4rm60",
+            "start": "2026-03-24",
+            "due": "2026-03-24",
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -868,18 +919,6 @@
             "priority": "",
             "tags": [],
             "id": "emn2qu5t7538"
-          },
-          {
-            "type": "log",
-            "text": "3.31おおたモールで検証",
-            "note": "成電社から預かった不良品を根岸さんにもっていってもらう",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [],
-            "id": "emn2qu5t7afh",
-            "start": "2026-03-31",
-            "due": "2026-03-31"
           },
           {
             "type": "todo",
@@ -935,45 +974,6 @@
             "url": "",
             "images": [],
             "id": "emn5qzvdokvt"
-          },
-          {
-            "type": "log",
-            "text": "個店対応",
-            "note": "",
-            "url": "",
-            "images": [],
-            "start": "2026-03-25",
-            "due": "2026-04-30",
-            "priority": "",
-            "tags": [],
-            "id": "emn5khg5dcwl",
-            "collapsed": true
-          },
-          {
-            "type": "todo",
-            "text": "大間々店1台送付",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emn5khg5dcwl",
-            "id": "emn5lcx4r630",
-            "start": "2026-03-24",
-            "due": "2026-03-24",
-            "priority": "",
-            "tags": []
-          },
-          {
-            "type": "todo",
-            "text": "深谷国済寺1台送付済み状況確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emn5khg5dcwl",
-            "id": "emn5lcx4rm60",
-            "start": "2026-03-24",
-            "due": "2026-03-24",
-            "priority": "",
-            "tags": []
           },
           {
             "id": "emn5sdxpgou1",
@@ -2081,7 +2081,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-25T08:47:42.018Z",
+  "savedAt": "2026-03-25T08:48:44.856Z",
   "dailyOutline": {
     "2026-3-18": [
       {
