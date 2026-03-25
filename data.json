@@ -1895,7 +1895,7 @@
     }
   ],
   "wOff": -2,
-  "savedAt": "2026-03-25T00:08:37.317Z",
+  "savedAt": "2026-03-25T00:36:43.625Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3262,7 +3262,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn3vpepax5r",
@@ -3271,7 +3271,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn40j3qc2so",
@@ -3289,7 +3289,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "linkedEntryRef": "emn40baiego3",
         "linkedEntryText": "岐南店"
       },
