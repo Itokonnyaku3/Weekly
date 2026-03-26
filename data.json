@@ -1296,22 +1296,6 @@
               "date": "2026-3-26",
               "nodeId": "mn5db1s93ub"
             }
-          },
-          {
-            "id": "emn6qwml393s",
-            "type": "todo",
-            "done": false,
-            "text": "インフラポータルの改善　黒田さんと米山で整理",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6qlp3lk61"
-            }
           }
         ]
       },
@@ -2112,7 +2096,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:39:53.175Z",
+  "savedAt": "2026-03-26T00:40:41.523Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4145,7 +4129,7 @@
       {
         "id": "mn6qlp3lk61",
         "text": "インフラポータルの改善　黒田さんと米山で整理　",
-        "html": "",
+        "html": "インフラポータルの改善　黒田さんと米山で整理　",
         "indent": 1,
         "bold": false,
         "color": "",
