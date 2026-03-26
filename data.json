@@ -1771,7 +1771,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T11:28:57.560Z",
+  "savedAt": "2026-03-26T11:30:30.109Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3288,10 +3288,10 @@
       },
       {
         "id": "mn1ncqsbkd1",
-        "text": "不足分どうするか検討",
-        "html": "不足分どうするか検討",
+        "text": "不足分どうするか検討 ",
+        "html": "不足分どうするか検討 ",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": true,
         "linkedEntryRef": "2:2026-3-23:14",
