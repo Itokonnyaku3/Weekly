@@ -1723,7 +1723,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T08:55:42.140Z",
+  "savedAt": "2026-03-26T08:57:07.826Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3985,8 +3985,8 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "2:2026-3-30:15",
-        "linkedEntryText": "HACCP不足店舗"
+        "linkedEntryRef": "1:2026-3-23:6",
+        "linkedEntryText": "test"
       },
       {
         "id": "mn76bas3sxw",
