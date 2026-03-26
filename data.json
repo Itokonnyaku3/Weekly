@@ -242,21 +242,11 @@
             "due": ""
           },
           {
-            "done": false
+            "done": false,
+            "id": "emn7bub5ci8b"
           }
         ],
         "2026-3-30": [
-          {
-            "done": false,
-            "type": "todo",
-            "text": "dasa",
-            "note": "",
-            "url": "",
-            "start": "",
-            "due": "",
-            "priority": "",
-            "tags": []
-          },
           {
             "type": "todo",
             "text": "週次進捗確認",
@@ -284,6 +274,18 @@
             "done": false,
             "id": "emmw2zro2s6e",
             "collapsed": false
+          },
+          {
+            "done": false,
+            "type": "todo",
+            "text": "dasa",
+            "note": "",
+            "url": "",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": [],
+            "id": "emn7bub5cw3p"
           }
         ],
         "2026-4-6": [
@@ -1070,6 +1072,21 @@
               "date": "2026-3-26",
               "nodeId": "mn6qlp3lk61"
             }
+          },
+          {
+            "id": "emn7bv5orkrz",
+            "type": "link",
+            "text": "0900　品質改善会議",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn5db1s93ub"
+            }
           }
         ]
       },
@@ -1739,7 +1756,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T09:00:17.455Z",
+  "savedAt": "2026-03-26T10:26:36.556Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3752,7 +3769,7 @@
         "color": "#e67e22",
         "collapsed": true,
         "html": "0900　品質改善会議　",
-        "linkedEntryRef": "emn6qwml39tp",
+        "linkedEntryRef": "emn7bv5orkrz",
         "linkedEntryText": "0900　品質改善会議"
       },
       {
