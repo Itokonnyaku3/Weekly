@@ -804,6 +804,16 @@
             "images": [],
             "priority": "",
             "tags": []
+          },
+          {
+            "id": "emn75gkrq1f5",
+            "type": "todo",
+            "text": "HACCP不足店舗対応",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-9": []
@@ -1719,7 +1729,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T07:26:36.360Z",
+  "savedAt": "2026-03-26T07:27:18.566Z",
   "dailyOutline": {
     "2026-3-18": [
       {
