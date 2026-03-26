@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T02:11:25.343Z",
+  "savedAt": "2026-03-26T02:23:23.914Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3942,8 +3942,65 @@
       },
       {
         "id": "mn6twyvs6l2",
-        "text": "",
-        "html": "<br>",
+        "text": "ビジネスの現場では新しい言葉、概念を使いたがる　",
+        "html": "ビジネスの現場では新しい言葉、概念を使いたがる　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn6ujdrnn61",
+        "linkedEntryText": "ビジネスの現場では新しい言葉、概念を使いたがる",
+        "isPrivate": true
+      },
+      {
+        "id": "mn6uiujze6i",
+        "text": "アマゾンのS3とか",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6uk2gahnt",
+        "text": "エビデンス",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6uk6p5nrd",
+        "text": "XXの帽子をかぶって",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6ukcp7ozj",
+        "text": "鉛筆舐めなめ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6ukkn8gye",
+        "text": "外来の文字は、概念も含んだ文字なのでのまま使った方が認識の齟齬が起きにくい",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6ulleyp9x",
+        "text": "別に意識が高いわけではなく・・",
+        "html": "別に意識が高いわけではなく・・",
         "indent": 1,
         "bold": false,
         "color": "",
