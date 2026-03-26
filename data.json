@@ -725,7 +725,7 @@
           {
             "type": "todo",
             "text": "深谷国済寺1台送付済み状況確認",
-            "note": "",
+            "note": "[03.27] 確認催促した",
             "url": "",
             "images": [],
             "parentId": "emn5khg5dcwl",
@@ -773,10 +773,27 @@
             "type": "todo",
             "text": "新狭山HACCP発注",
             "note": "",
-            "url": "",
+            "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/HACCP?csf=1&web=1&e=f3nJNz",
             "images": [],
             "id": "emn5jjkvhknn",
-            "collapsed": true
+            "collapsed": true,
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "id": "emn84t1ep3t9",
+            "type": "link",
+            "text": "見積書",
+            "note": "",
+            "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/HACCP?csf=1&web=1&e=f3nJNz",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn5jjkvhknn",
+            "start": "",
+            "due": ""
           },
           {
             "type": "todo",
@@ -789,12 +806,16 @@
           },
           {
             "type": "todo",
-            "text": "成電社（見積もらってから）",
+            "text": "成電社",
             "note": "",
             "url": "",
             "images": [],
             "parentId": "emn5jjkvhknn",
-            "id": "emn5lcx4rojg"
+            "id": "emn5lcx4rojg",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -1783,7 +1804,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T23:25:42.792Z",
+  "savedAt": "2026-03-26T23:57:16.831Z",
   "dailyOutline": {
     "2026-3-18": [
       {
