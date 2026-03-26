@@ -2105,7 +2105,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T01:27:46.073Z",
+  "savedAt": "2026-03-26T01:30:27.991Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4110,9 +4110,9 @@
         "id": "mn5db1s93ub",
         "text": "0900　品質改善会議　",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "0900　品質改善会議　",
         "linkedEntryRef": "emn6qwml39tp",
         "linkedEntryText": "0900　品質改善会議"
@@ -4120,11 +4120,11 @@
       {
         "id": "mn6qkwswyot",
         "text": "POSのジョブフロー　井谷さん",
-        "html": "",
+        "html": "POSのジョブフロー　井谷さん",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn6qlfzq4wh",
@@ -4151,11 +4151,11 @@
       {
         "id": "mn6qmhwurjy",
         "text": "休日体制",
-        "html": "",
+        "html": "休日体制",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn6qmubcead",
@@ -4167,40 +4167,11 @@
         "collapsed": false
       },
       {
-        "id": "mn6qn22q7eu",
-        "text": "小泉成器　担当者変更",
-        "html": "小泉成器　担当者変更",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": true
-      },
-      {
-        "id": "mn6qw20jxxw",
-        "text": "安東　純介\n\nE‐mail:j-andou@alphaxkoizumi.co.jp\n\n携帯電話080-8333-9244",
-        "html": "<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">安東　純介</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\"><o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">E</span><span lang=\"EN-US\" style=\"font-family:&quot;Cambria Math&quot;,serif;\nmso-bidi-font-family:&quot;Cambria Math&quot;;color:black\">‐</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;color:black\">mail:j-andou@alphaxkoizumi.co.jp<o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">携帯電話</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">080-8333-9244</span></p>",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn6qw87cln3",
-        "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認　",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false
-      },
-      {
         "id": "mn6sipfdslm",
-        "text": "IT稟議共有",
-        "html": "",
+        "text": "１０００　IT稟議共有",
+        "html": "１０００　IT稟議共有",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -4209,7 +4180,7 @@
         "text": "HACCP注文",
         "html": "HACCP注文",
         "indent": 1,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "7:2026-3-23:1",
@@ -4234,9 +4205,18 @@
         "collapsed": false
       },
       {
+        "id": "mn6sp9p3anm",
+        "text": "質問事項　いついれるの？今の課題は？",
+        "html": "質問事項　いついれるの？今の課題は？",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mn6sjnhc4in",
         "text": "その他",
-        "html": "",
+        "html": "その他",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4244,12 +4224,12 @@
       },
       {
         "id": "mn6sk0sp20q",
-        "text": "見切作業改善…",
-        "html": "",
+        "text": "見切作業改善…　亀山さんコメント",
+        "html": "見切作業改善…　亀山さんコメント",
         "indent": 2,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn6sk912r53",
@@ -4292,6 +4272,44 @@
         "text": "",
         "html": "",
         "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6snbor6f7",
+        "text": "",
+        "html": "<br>",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6qw87cln3",
+        "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認　",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn6qn22q7eu",
+        "text": "小泉成器　担当者変更",
+        "html": "小泉成器　担当者変更",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mn6qw20jxxw",
+        "text": "安東　純介\n\nE‐mail:j-andou@alphaxkoizumi.co.jp\n\n携帯電話080-8333-9244",
+        "html": "<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">安東　純介</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\"><o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">E</span><span lang=\"EN-US\" style=\"font-family:&quot;Cambria Math&quot;,serif;\nmso-bidi-font-family:&quot;Cambria Math&quot;;color:black\">‐</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;color:black\">mail:j-andou@alphaxkoizumi.co.jp<o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">携帯電話</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">080-8333-9244</span></p>",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
