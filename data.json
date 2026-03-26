@@ -731,7 +731,7 @@
             "parentId": "emn5khg5dcwl",
             "id": "emn5lcx4rm60",
             "start": "2026-03-24",
-            "due": "2026-03-24",
+            "due": "2026-03-30",
             "priority": "",
             "tags": []
           },
@@ -1804,7 +1804,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T23:57:16.831Z",
+  "savedAt": "2026-03-26T23:58:04.416Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4277,6 +4277,16 @@
         "text": "",
         "html": "<br>",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-27": [
+      {
+        "id": "mn84u7la0uq",
+        "text": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
