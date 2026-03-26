@@ -240,18 +240,30 @@
             },
             "start": "",
             "due": ""
+          },
+          {
+            "done": false
           }
         ],
         "2026-3-30": [
           {
-            "type": "link",
-            "text": "★週次進捗OneNote",
-            "note": "",
-            "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
-            "images": [],
             "done": false,
-            "id": "emmw2zro2s6e",
-            "collapsed": false
+            "type": "todo",
+            "text": "dasa",
+            "note": "",
+            "url": "",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "type": "todo",
+            "text": "週次進捗確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emn2x84q2hxd"
           },
           {
             "type": "log",
@@ -264,12 +276,14 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "週次進捗確認",
+            "type": "link",
+            "text": "★週次進捗OneNote",
             "note": "",
-            "url": "",
+            "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
             "images": [],
-            "id": "emn2x84q2hxd"
+            "done": false,
+            "id": "emmw2zro2s6e",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -1725,7 +1739,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T08:58:43.302Z",
+  "savedAt": "2026-03-26T09:00:17.455Z",
   "dailyOutline": {
     "2026-3-18": [
       {
