@@ -2081,7 +2081,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:30:46.952Z",
+  "savedAt": "2026-03-26T00:32:26.690Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4093,9 +4093,56 @@
       },
       {
         "id": "mn6qkwswyot",
-        "text": "",
+        "text": "POSのジョブフロー　井谷さん",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6qlfzq4wh",
+        "text": "→インフラポータルにセクションを追加。以後こちらに関連資料を掲載",
+        "html": "→インフラポータルにセクションを追加。以後こちらに関連資料を掲載",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6qlp3lk61",
+        "text": "インフラポータルの改善　黒田さんと米山で整理　",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn6qmhwurjy",
+        "text": "休日体制",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6qmubcead",
+        "text": "休みとして待機、オンコール？",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6qn22q7eu",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
