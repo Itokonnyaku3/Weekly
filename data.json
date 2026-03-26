@@ -628,7 +628,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -765,7 +765,7 @@
             "url": "",
             "images": [],
             "id": "emn5jjkvhknn",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -1048,7 +1048,8 @@
             "due": "2026-04-24",
             "priority": "",
             "tags": [],
-            "id": "emn3vgzrbylq"
+            "id": "emn3vgzrbylq",
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -1771,7 +1772,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T21:58:09.977Z",
+  "savedAt": "2026-03-26T22:24:17.574Z",
   "dailyOutline": {
     "2026-3-18": [
       {
