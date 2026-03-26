@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T01:48:17.037Z",
+  "savedAt": "2026-03-26T01:55:28.516Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3918,6 +3918,15 @@
         "text": "安東　純介\n\nE‐mail:j-andou@alphaxkoizumi.co.jp\n\n携帯電話080-8333-9244",
         "html": "<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">安東　純介</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\"><o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">E</span><span lang=\"EN-US\" style=\"font-family:&quot;Cambria Math&quot;,serif;\nmso-bidi-font-family:&quot;Cambria Math&quot;;color:black\">‐</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;color:black\">mail:j-andou@alphaxkoizumi.co.jp<o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">携帯電話</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">080-8333-9244</span></p>",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6tlir7e8s",
+        "text": "吉田店電波",
+        "html": "吉田店電波",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
