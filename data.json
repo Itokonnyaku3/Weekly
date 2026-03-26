@@ -1719,7 +1719,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T07:28:46.711Z",
+  "savedAt": "2026-03-26T07:31:12.325Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3974,8 +3974,53 @@
       },
       {
         "id": "mn75ig72viy",
-        "text": "",
-        "html": "",
+        "text": "3.26　リストを見て対象を特定　",
+        "html": "3.26　リストを見て対象を特定　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn75jimggwh",
+        "text": "3.27-3.31 不足分を成電社に依頼、いつ来るか確認",
+        "html": "3.27-3.31 不足分を成電社に依頼、いつ来るか確認",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn75jw41azx",
+        "text": "3.31 - 4.3 店舗実施日及び担当者を調整",
+        "html": "3.31 - 4.3 店舗実施日及び担当者を調整",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn75k0zavvd",
+        "text": "4.1 富士通にサポート可能か確認",
+        "html": "4.1 富士通にサポート可能か確認",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn75ka5mlfv",
+        "text": "設置",
+        "html": "設置",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn75jp1elyu",
+        "text": "フォロー設置",
+        "html": "フォロー設置",
         "indent": 1,
         "bold": false,
         "color": "",
