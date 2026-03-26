@@ -1719,7 +1719,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T07:42:54.578Z",
+  "savedAt": "2026-03-26T07:44:14.424Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3914,7 +3914,7 @@
         "indent": 0,
         "bold": true,
         "color": "#e67e22",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn6qn22q7eu",
@@ -3964,11 +3964,11 @@
       {
         "id": "mn75h93aiwi",
         "text": "HACCP不足店舗の対応",
-        "html": "",
+        "html": "HACCP不足店舗の対応",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "2:2026-3-30:15",
         "linkedEntryText": "HACCP不足店舗対応"
       },
@@ -4033,7 +4033,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn6umrfvl2f",
         "linkedEntryText": "ビジネスの現場では新しい言葉、概念を使いたがる",
         "isPrivate": true
