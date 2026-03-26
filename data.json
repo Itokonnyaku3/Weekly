@@ -2099,7 +2099,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:53:10.349Z",
+  "savedAt": "2026-03-26T00:53:46.201Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4179,13 +4179,15 @@
         "collapsed": false
       },
       {
-        "id": "mn6rdf17628",
+        "id": "mn6qw87cln3",
         "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認　",
-        "html": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認　",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn6qysrwuze",
