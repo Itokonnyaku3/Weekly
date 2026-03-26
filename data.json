@@ -1464,6 +1464,16 @@
               "date": "2026-3-25",
               "nodeId": "mn5mefil2y8"
             }
+          },
+          {
+            "id": "emn6vdtsnwv9",
+            "type": "todo",
+            "text": "熨斗紙印刷できない問題",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ]
       },
@@ -1707,7 +1717,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T02:38:24.558Z",
+  "savedAt": "2026-03-26T02:45:14.135Z",
   "dailyOutline": {
     "2026-3-18": [
       {
