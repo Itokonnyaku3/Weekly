@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T01:56:20.228Z",
+  "savedAt": "2026-03-26T01:58:27.533Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3717,7 +3717,7 @@
         "text": "0900　品質改善会議　",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#e67e22",
         "collapsed": true,
         "html": "0900　品質改善会議　",
         "linkedEntryRef": "emn6qwml39tp",
@@ -3774,11 +3774,11 @@
       },
       {
         "id": "mn6sipfdslm",
-        "text": "１０００　IT稟議共有",
-        "html": "１０００　IT稟議共有",
+        "text": "１０００　IT稟議共有　",
+        "html": "１０００　IT稟議共有　",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#e67e22",
         "collapsed": false
       },
       {
@@ -3788,7 +3788,7 @@
         "indent": 1,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "7:2026-3-23:1",
         "linkedEntryText": "HACCP注文"
       },
@@ -3820,19 +3820,10 @@
         "collapsed": false
       },
       {
-        "id": "mn6sjnhc4in",
-        "text": "その他",
-        "html": "その他",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn6sk0sp20q",
         "text": "見切作業改善…　亀山さんコメント",
         "html": "見切作業改善…　亀山さんコメント",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -3841,7 +3832,7 @@
         "id": "mn6sk912r53",
         "text": "金型作成9万円は投資ではない",
         "html": "",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3850,7 +3841,7 @@
         "id": "mn6ske4sanf",
         "text": "見切・シーリングテープの現新比較はわかりにくい。それが入っているのであれば3000万を超えるから経営会議では？",
         "html": "",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3859,7 +3850,7 @@
         "id": "mn6slrl6k80",
         "text": "現行はそもそも記載不要では",
         "html": "現行はそもそも記載不要では",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3868,7 +3859,7 @@
         "id": "mn6sl9gaojg",
         "text": "全体的にわかりにくい",
         "html": "全体的にわかりにくい",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3877,7 +3868,7 @@
         "id": "mn6skx5eemt",
         "text": "",
         "html": "",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3905,10 +3896,19 @@
         "linkedEntryText": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認"
       },
       {
+        "id": "mn6tomlkjgf",
+        "text": "メモ　",
+        "html": "メモ　",
+        "indent": 0,
+        "bold": true,
+        "color": "#e67e22",
+        "collapsed": false
+      },
+      {
         "id": "mn6qn22q7eu",
         "text": "小泉成器　担当者変更",
         "html": "小泉成器　担当者変更",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -3917,7 +3917,7 @@
         "id": "mn6qw20jxxw",
         "text": "安東　純介\n\nE‐mail:j-andou@alphaxkoizumi.co.jp\n\n携帯電話080-8333-9244",
         "html": "<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">安東　純介</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\"><o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">E</span><span lang=\"EN-US\" style=\"font-family:&quot;Cambria Math&quot;,serif;\nmso-bidi-font-family:&quot;Cambria Math&quot;;color:black\">‐</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;color:black\">mail:j-andou@alphaxkoizumi.co.jp<o:p></o:p></span></p>\n\n<p class=\"MsoNormal\"><span style=\"mso-ascii-font-family:Aptos;mso-hansi-font-family:\nAptos;color:black\">携帯電話</span><span lang=\"EN-US\" style=\"font-family:&quot;Aptos&quot;,sans-serif;\ncolor:black\">080-8333-9244</span></p>",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3925,17 +3925,17 @@
       {
         "id": "mn6tlir7e8s",
         "text": "吉田店電波改善依頼",
-        "html": "",
-        "indent": 0,
+        "html": "吉田店電波改善依頼",
+        "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn6tmdn02d6",
         "text": "→建設部遠藤さんから転送、根岸さんと久保田さんに転送",
         "html": "→建設部遠藤さんから転送、根岸さんと久保田さんに転送",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
