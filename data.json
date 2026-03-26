@@ -655,7 +655,7 @@
             "id": "emmx7gbbaehl",
             "collapsed": false,
             "parentId": "emmy4wb1gj08",
-            "done": false,
+            "done": true,
             "start": "",
             "due": "2026-03-30",
             "priority": "",
@@ -820,6 +820,21 @@
             "note": "",
             "url": "",
             "images": [],
+            "priority": "",
+            "tags": []
+          },
+          {
+            "type": "todo",
+            "text": "岡芹さんとアラート頻度再調整",
+            "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
+            "url": "",
+            "images": [],
+            "id": "emmx7gbbaehl",
+            "collapsed": false,
+            "parentId": "emmy4wb1gj08",
+            "done": false,
+            "start": "",
+            "due": "2026-03-30",
             "priority": "",
             "tags": []
           }
@@ -1752,7 +1767,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T10:57:50.377Z",
+  "savedAt": "2026-03-26T10:58:18.612Z",
   "dailyOutline": {
     "2026-3-18": [
       {
