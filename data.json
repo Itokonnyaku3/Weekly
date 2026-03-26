@@ -2081,7 +2081,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:30:16.197Z",
+  "savedAt": "2026-03-26T00:30:46.952Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4084,8 +4084,18 @@
     "2026-3-26": [
       {
         "id": "mn5db1s93ub",
-        "text": "",
+        "text": "0900　品質改善会議",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mn6qkwswyot",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
