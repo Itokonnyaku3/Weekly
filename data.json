@@ -807,13 +807,15 @@
           },
           {
             "id": "emn75gkrq1f5",
-            "type": "todo",
+            "type": "log",
             "text": "HACCP不足店舗対応",
             "note": "",
             "url": "",
             "images": [],
-            "priority": "",
-            "tags": []
+            "priority": "high",
+            "tags": [],
+            "start": "2026-03-26",
+            "due": "2026-04-10"
           }
         ],
         "2026-3-9": []
@@ -1729,7 +1731,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T07:27:18.566Z",
+  "savedAt": "2026-03-26T07:27:56.990Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3972,10 +3974,10 @@
         "collapsed": false
       },
       {
-        "id": "mn6yn3v22ky",
-        "text": "",
-        "html": "",
-        "indent": 1,
+        "id": "mn75h93aiwi",
+        "text": "HACCP不足手のp対応",
+        "html": "HACCP不足手のp対応",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
