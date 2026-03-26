@@ -20,7 +20,7 @@
       },
       "links": [],
       "projEntries": [],
-      "projEntriesOpen": false,
+      "projEntriesOpen": true,
       "collapsed": false,
       "recurringEntries": [],
       "recSectionOpen": false,
@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T02:23:43.216Z",
+  "savedAt": "2026-03-26T02:24:19.388Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3947,8 +3947,8 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
-        "linkedEntryRef": "emn6ujdrnn61",
+        "collapsed": false,
+        "linkedEntryRef": "emn6umrfvl2f",
         "linkedEntryText": "ビジネスの現場では新しい言葉、概念を使いたがる",
         "isPrivate": true
       },
