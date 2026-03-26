@@ -454,7 +454,11 @@
             "images": [],
             "done": true,
             "id": "emmw2zro20dm",
-            "collapsed": false
+            "collapsed": false,
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -1719,7 +1723,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T07:52:42.925Z",
+  "savedAt": "2026-03-26T08:46:09.590Z",
   "dailyOutline": {
     "2026-3-18": [
       {
