@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T01:55:28.516Z",
+  "savedAt": "2026-03-26T01:56:20.228Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3924,9 +3924,18 @@
       },
       {
         "id": "mn6tlir7e8s",
-        "text": "吉田店電波",
-        "html": "吉田店電波",
+        "text": "吉田店電波改善依頼",
+        "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6tmdn02d6",
+        "text": "→建設部遠藤さんから転送、根岸さんと久保田さんに転送",
+        "html": "→建設部遠藤さんから転送、根岸さんと久保田さんに転送",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
