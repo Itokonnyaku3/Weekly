@@ -1707,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T02:24:19.388Z",
+  "savedAt": "2026-03-26T02:28:43.514Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3998,9 +3998,27 @@
         "collapsed": false
       },
       {
+        "id": "mn6urvbg96e",
+        "text": "日本語を自由に操れる一部の人を除くと、共通するキーワードを使った方が意思疎通が簡単",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mn6ulleyp9x",
-        "text": "別に意識が高いわけではなく・・",
-        "html": "別に意識が高いわけではなく・・",
+        "text": "なので、結局別に意識が高いわけではなく・・",
+        "html": "なので、結局別に意識が高いわけではなく・・",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn6uscrnmq0",
+        "text": "",
+        "html": "<br>",
         "indent": 1,
         "bold": false,
         "color": "",
