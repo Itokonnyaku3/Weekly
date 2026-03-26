@@ -707,7 +707,7 @@
             "priority": "",
             "tags": [],
             "id": "emn5khg5dcwl",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1783,7 +1783,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T23:16:16.660Z",
+  "savedAt": "2026-03-26T23:25:42.792Z",
   "dailyOutline": {
     "2026-3-18": [
       {
