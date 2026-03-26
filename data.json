@@ -1719,7 +1719,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T07:51:57.303Z",
+  "savedAt": "2026-03-26T07:52:42.925Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4040,8 +4040,17 @@
       {
         "id": "mn76borvyic",
         "text": "みなみ",
-        "html": "みなみ",
+        "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn76d7auc35",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-26T07-52-41-546Z_kfodi.png\" alt=\"ペースト画像\"></span><br>",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
