@@ -1493,7 +1493,13 @@
             "parentId": "emn2f6yeur0y",
             "priority": "mid",
             "tags": [],
-            "id": "emn2gkvhlyni"
+            "id": "emn2gkvhlyni",
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6qysrwuze"
+            },
+            "start": "",
+            "due": ""
           },
           {
             "type": "log",
@@ -2099,7 +2105,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:53:46.201Z",
+  "savedAt": "2026-03-26T00:54:56.656Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4191,9 +4197,20 @@
       },
       {
         "id": "mn6qysrwuze",
-        "text": "",
-        "html": "",
+        "text": "HACCP注文",
+        "html": "HACCP注文",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "7:2026-3-23:1",
+        "linkedEntryText": "HACCP注文"
+      },
+      {
+        "id": "mn6rfn03gaq",
+        "text": "案件No131_20260326_新狭山店（新店発注稟議）_206万 (HACCP追加).xlsx",
+        "html": "<a href=\"https://beisiag.sharepoint.com/:x:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/%E6%A1%88%E4%BB%B6No131_20260326_%E6%96%B0%E7%8B%AD%E5%B1%B1%E5%BA%97%EF%BC%88%E6%96%B0%E5%BA%97%E7%99%BA%E6%B3%A8%E7%A8%9F%E8%AD%B0%EF%BC%89_206%E4%B8%87%20(HACCP%E8%BF%BD%E5%8A%A0).xlsx?d=w5dec447233544e5f9842ead1bc3ef072&amp;csf=1&amp;web=1&amp;e=1JqIbk\">案件No131_20260326_新狭山店（新店発注稟議）_206万 (HACCP追加).xlsx</a>",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
