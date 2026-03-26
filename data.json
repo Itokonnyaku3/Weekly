@@ -237,7 +237,19 @@
             "linkedNote": {
               "date": "2026-3-26",
               "nodeId": "mn6qw87cln3"
-            }
+            },
+            "start": "",
+            "due": ""
+          },
+          {
+            "id": "emn78p8zp92a",
+            "type": "todo",
+            "text": "tesut",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-30": [
@@ -1723,7 +1735,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T08:57:07.826Z",
+  "savedAt": "2026-03-26T08:58:02.053Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3901,8 +3913,8 @@
       },
       {
         "id": "mn6qw87cln3",
-        "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認　",
-        "html": "",
+        "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
+        "html": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
         "indent": 0,
         "bold": false,
         "color": "",
