@@ -14,40 +14,9 @@
             "priority": "",
             "tags": [],
             "id": "emn1fukaji8v"
-          },
-          {
-            "id": "emn1q88xk69i",
-            "type": "log",
-            "text": "欲しいもの",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1q3o8qj2z"
-            }
           }
         ],
-        "2026-3-30": [
-          {
-            "id": "emn1q8btwn4u",
-            "type": "link",
-            "text": "子ども会スケジュール(植竹幼稚園)",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1q66924wn"
-            }
-          }
-        ]
+        "2026-3-30": []
       },
       "links": [],
       "projEntries": [],
@@ -226,24 +195,6 @@
             "due": "2026-03-27"
           },
           {
-            "type": "log",
-            "text": "30期案件整理",
-            "note": "色々散らばっている案件情報を一元管理する",
-            "url": "",
-            "images": [],
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmw2zro2zx3",
-            "collapsed": false,
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn49lz5mvug"
-            },
-            "start": "2026-03-23",
-            "due": "2027-02-28"
-          },
-          {
             "type": "todo",
             "text": "小口経費精算、印刷して提出",
             "note": "",
@@ -257,25 +208,10 @@
             "done": true
           },
           {
-            "id": "emn1pw7bid29",
-            "type": "link",
-            "text": "1700 稟議 (新店等、根岸さんと山下さん)",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1prxh48m6"
-            },
-            "collapsed": false
-          },
-          {
-            "id": "emn48kdcqtx7",
-            "type": "link",
-            "text": "1100 BE/BGS・IIJ定例",
+            "id": "emn6tcl57ww2",
+            "type": "todo",
+            "done": true,
+            "text": "機器リスト、フォーマットだけでも作っておく？",
             "note": "",
             "url": "",
             "images": [],
@@ -284,29 +220,27 @@
             "tags": [],
             "linkedNote": {
               "date": "2026-3-24",
-              "nodeId": "mn3v3wbsz78"
+              "nodeId": "mn45h4j6c1b"
+            }
+          },
+          {
+            "id": "emn6tcl59mk0",
+            "type": "todo",
+            "done": false,
+            "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6qw87cln3"
             }
           }
         ],
         "2026-3-30": [
-          {
-            "type": "todo",
-            "text": "ソラカメ管理者パスワード",
-            "note": "30日の久保田さんとと商品業務推進部との打ち合わせで確認",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmv5yjm63si"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2aqx",
-            "collapsed": false,
-            "start": "",
-            "due": "2026-03-30"
-          },
           {
             "type": "link",
             "text": "★週次進捗OneNote",
@@ -592,40 +526,6 @@
           },
           {
             "type": "todo",
-            "text": "スケジュール確認して植田さんに報告",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emn35uawf2lx",
-            "start": "2026-03-24",
-            "due": "2026-03-24",
-            "priority": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3uuxwskbh"
-            },
-            "done": true
-          },
-          {
-            "type": "todo",
-            "text": "成電社請求処理→3.24受領予定",
-            "note": "",
-            "url": "",
-            "images": [],
-            "start": "",
-            "due": "2026-03-25",
-            "priority": "",
-            "tags": [],
-            "id": "emn36v81292j",
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn1ndc2bfjx"
-            },
-            "done": true
-          },
-          {
-            "type": "todo",
             "text": "新狭山見積→発注",
             "note": "■成電社\n■富士通\n■小泉成器",
             "url": "",
@@ -665,22 +565,6 @@
           },
           {
             "type": "todo",
-            "text": "不足分どうするか検討",
-            "note": "台数、成電社に依頼、送ってもらう、行く日を決める、富士通との確認調整",
-            "url": "",
-            "images": [],
-            "start": "2026-03-23",
-            "due": "2026-03-26",
-            "priority": "",
-            "tags": [],
-            "id": "emn36v812bfz",
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn1ncqsbkd1"
-            }
-          },
-          {
-            "type": "todo",
             "text": "27日ごろセンサー早出し納品日確認",
             "note": "",
             "url": "",
@@ -704,24 +588,6 @@
             "priority": "",
             "tags": [],
             "id": "emn4cgny8k9i",
-            "done": true
-          },
-          {
-            "id": "emn3w3kqdfb9",
-            "type": "todo",
-            "text": "成電社から見積受領",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3yvn9k6te"
-            },
-            "start": "",
-            "due": "",
             "done": true
           },
           {
@@ -776,55 +642,6 @@
             "due": "2026-03-30",
             "priority": "",
             "tags": []
-          },
-          {
-            "id": "emn5sv7y3fyz",
-            "type": "link",
-            "text": "行田店岸田店長から5度以上の乖離",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-25",
-              "nodeId": "mn5sv0xs6sn"
-            }
-          },
-          {
-            "id": "emn44e9oc5zl",
-            "type": "log",
-            "text": "障害時等富士通対応費用を運用フォルダに格納",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn44drrbn0n"
-            },
-            "start": "",
-            "due": ""
-          },
-          {
-            "id": "emn2vtjuummy",
-            "type": "log",
-            "text": "鳩山店超低温オフライン…メール送信",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2g83gpwz7"
-            },
-            "start": "",
-            "due": ""
           }
         ],
         "2026-3-30": [
@@ -989,24 +806,7 @@
             "tags": []
           }
         ],
-        "2026-3-9": [
-          {
-            "id": "emn0yf0lqphb",
-            "type": "link",
-            "text": "📝ノート参照: aaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0hi6p2qxn"
-            },
-            "collapsed": false
-          }
-        ]
+        "2026-3-9": []
       },
       "links": [],
       "projEntries": [
@@ -1102,23 +902,6 @@
             "tags": [],
             "id": "emmw2zro2ir0",
             "collapsed": false
-          },
-          {
-            "id": "emn11svai09o",
-            "type": "link",
-            "text": "📝ノート参照: 📝ノート参照esaataaa",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mn0z0w71z07"
-            },
-            "today": false,
-            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -1131,21 +914,6 @@
             "id": "emmw2zro2u62",
             "collapsed": false,
             "done": true
-          },
-          {
-            "id": "emn1pu3fxfgs",
-            "type": "link",
-            "text": "1300 ESL業務分科会　※前半は久保田さんに任せる /",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1prwebh7z"
-            }
           }
         ],
         "2026-3-30": [],
@@ -1238,24 +1006,6 @@
         ],
         "2026-3-23": [
           {
-            "type": "todo",
-            "text": "品質改善の課題を整理",
-            "note": "",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-18",
-              "nodeId": "mmvsy9c35zh"
-            },
-            "today": false,
-            "priority": "mid",
-            "tags": [],
-            "id": "emmw2zro2rfq",
-            "collapsed": false,
-            "start": "",
-            "due": "2026-03-25"
-          },
-          {
             "type": "log",
             "text": "NEC資産管理",
             "note": "NECのソリューションを確認し、運用改善に使えるか検討する。",
@@ -1286,9 +1036,10 @@
             "id": "emn3wo53d1m2"
           },
           {
-            "id": "emn6qwml39tp",
-            "type": "link",
-            "text": "0900　品質改善会議",
+            "id": "emn6tcl59mxw",
+            "type": "todo",
+            "done": false,
+            "text": "インフラポータルの改善　黒田さんと米山で整理",
             "note": "",
             "url": "",
             "images": [],
@@ -1297,7 +1048,7 @@
             "tags": [],
             "linkedNote": {
               "date": "2026-3-26",
-              "nodeId": "mn5db1s93ub"
+              "nodeId": "mn6qlp3lk61"
             }
           }
         ]
@@ -1485,23 +1236,6 @@
             "collapsed": false
           },
           {
-            "type": "todo",
-            "text": "HACCP注文",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emn2f6yeur0y",
-            "priority": "mid",
-            "tags": [],
-            "id": "emn2gkvhlyni",
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6qysrwuze"
-            },
-            "start": "",
-            "due": ""
-          },
-          {
             "type": "log",
             "text": "東村山",
             "note": "",
@@ -1510,36 +1244,6 @@
             "priority": "",
             "tags": [],
             "id": "emn2gkvhlcht"
-          },
-          {
-            "id": "emn40baiego3",
-            "type": "link",
-            "text": "岐南店",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn40asnc78g"
-            }
-          },
-          {
-            "id": "emn44v1y82ue",
-            "type": "link",
-            "text": "壬生店電話番号",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn44dwxdr9z"
-            }
           }
         ]
       },
@@ -1627,22 +1331,6 @@
         "2026-3-23": [
           {
             "type": "todo",
-            "text": "まとめ",
-            "note": "",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-19",
-              "nodeId": "mmwqt2jdmq2"
-            },
-            "today": false,
-            "priority": "",
-            "tags": [],
-            "id": "emmx5rb3lp8i",
-            "collapsed": false
-          },
-          {
-            "type": "todo",
             "text": "NCR見積受領",
             "note": "",
             "url": "",
@@ -1658,21 +1346,6 @@
             "images": [],
             "id": "emmx5rb3lwge",
             "collapsed": false
-          },
-          {
-            "id": "emn3vjyhhego",
-            "type": "link",
-            "text": "",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3vjncpz4l"
-            }
           }
         ]
       },
@@ -1730,22 +1403,6 @@
             "done": true,
             "id": "emmw2zro29yf",
             "collapsed": false
-          },
-          {
-            "id": "emn0y16wat4r",
-            "type": "link",
-            "text": "📝ノート参照: tesut",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-22",
-              "nodeId": "mmx7jydeqqw"
-            },
-            "collapsed": false
           }
         ],
         "2026-3-23": [
@@ -1763,21 +1420,6 @@
             "collapsed": false,
             "start": "",
             "due": ""
-          },
-          {
-            "id": "emn5mclkp3qu",
-            "type": "link",
-            "text": "Windowsライセンス問題",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-25",
-              "nodeId": "mn5mbgmu9vv"
-            }
           }
         ]
       },
@@ -1808,16 +1450,20 @@
         ],
         "2026-3-23": [
           {
+            "id": "emn6tcl57fz5",
             "type": "todo",
-            "text": "Windowsアップデート",
+            "done": false,
+            "text": "購入時のNECに、見積等にライセンスの記載があるか確認",
             "note": "",
             "url": "",
             "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
             "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn1ncrojbjq"
-            },
-            "id": "emn3wo53d74l"
+              "date": "2026-3-25",
+              "nodeId": "mn5mefil2y8"
+            }
           }
         ]
       },
@@ -1967,33 +1613,6 @@
             "priority": "",
             "tags": [],
             "done": true
-          },
-          {
-            "type": "todo",
-            "text": "複合機スキャン設定どうする",
-            "note": "",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1q3o2p63z"
-            },
-            "id": "emn358xe4pvf"
-          },
-          {
-            "id": "emn412011hj5",
-            "type": "link",
-            "text": "複合機スキャン設定",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3vmhrxw3m"
-            }
           }
         ]
       },
@@ -2010,24 +1629,7 @@
     {
       "name": "Tracker改善",
       "entries": {
-        "2026-3-23": [
-          {
-            "type": "log",
-            "text": "Tracker不具合",
-            "note": "",
-            "url": "",
-            "images": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3vks74f81"
-            },
-            "start": "",
-            "due": "",
-            "priority": "",
-            "tags": [],
-            "id": "emn3wo53dz0n"
-          }
-        ]
+        "2026-3-23": []
       },
       "links": [],
       "projEntries": [
@@ -2105,7 +1707,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T01:30:27.991Z",
+  "savedAt": "2026-03-26T01:48:17.037Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3557,7 +3159,9 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": true
+        "checked": true,
+        "linkedEntryRef": "emn6tcl57ww2",
+        "linkedEntryText": "機器リスト、フォーマットだけでも作っておく？"
       },
       {
         "id": "mn46it7m7ii",
@@ -4064,7 +3668,9 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false
+        "checked": false,
+        "linkedEntryRef": "emn6tcl57fz5",
+        "linkedEntryText": "購入時のNECに、見積等にライセンスの記載があるか確認"
       },
       {
         "id": "mn5mdsmemel",
@@ -4145,7 +3751,7 @@
         "collapsed": false,
         "isTodo": true,
         "checked": false,
-        "linkedEntryRef": "emn6qwml393s",
+        "linkedEntryRef": "emn6tcl59mxw",
         "linkedEntryText": "インフラポータルの改善　黒田さんと米山で整理"
       },
       {
@@ -4294,7 +3900,9 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false
+        "checked": false,
+        "linkedEntryRef": "emn6tcl59mk0",
+        "linkedEntryText": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認"
       },
       {
         "id": "mn6qn22q7eu",
