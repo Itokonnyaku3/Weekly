@@ -748,21 +748,6 @@
           },
           {
             "type": "todo",
-            "text": "岡芹さんとアラート頻度再調整",
-            "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている",
-            "url": "",
-            "images": [],
-            "id": "emmx7gbbaehl",
-            "collapsed": false,
-            "parentId": "emmy4wb1gj08",
-            "done": false,
-            "start": "",
-            "due": "",
-            "priority": "",
-            "tags": []
-          },
-          {
-            "type": "todo",
             "text": "前橋小島田に1台送る→根岸さん",
             "note": "惣菜作業場冷凍③（長持） -18 -65\n\n根岸さんが対応してくれている",
             "url": "",
@@ -776,6 +761,21 @@
             "collapsed": false,
             "parentId": "emmy4wb1gj08",
             "done": true
+          },
+          {
+            "type": "todo",
+            "text": "岡芹さんとアラート頻度再調整",
+            "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
+            "url": "",
+            "images": [],
+            "id": "emmx7gbbaehl",
+            "collapsed": false,
+            "parentId": "emmy4wb1gj08",
+            "done": false,
+            "start": "",
+            "due": "2026-03-30",
+            "priority": "",
+            "tags": []
           },
           {
             "id": "emn5sv7y3fyz",
@@ -2105,7 +2105,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-26T00:56:23.350Z",
+  "savedAt": "2026-03-26T00:56:49.199Z",
   "dailyOutline": {
     "2026-3-18": [
       {
