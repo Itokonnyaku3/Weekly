@@ -1281,7 +1281,9 @@
             "priority": "",
             "tags": [],
             "id": "emn2f6yeur0y",
-            "collapsed": false
+            "collapsed": false,
+            "start": "",
+            "due": "2026-06-26"
           },
           {
             "type": "log",
@@ -1291,7 +1293,9 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn2gkvhlcht"
+            "id": "emn2gkvhlcht",
+            "start": "",
+            "due": "2026-06-26"
           }
         ]
       },
@@ -1767,7 +1771,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-26T10:58:18.612Z",
+  "savedAt": "2026-03-26T11:28:57.560Z",
   "dailyOutline": {
     "2026-3-18": [
       {
