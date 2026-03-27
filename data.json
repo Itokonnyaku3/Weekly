@@ -1500,6 +1500,23 @@
             "images": [],
             "id": "emmx5rb3lwge",
             "collapsed": false
+          },
+          {
+            "id": "emn8bqg25bew",
+            "type": "log",
+            "text": "ふかやバイオーダー",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn88rptz4le"
+            },
+            "done": false,
+            "start": "",
+            "due": ""
           }
         ]
       },
@@ -1885,7 +1902,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T03:09:54.982Z",
+  "savedAt": "2026-03-27T03:11:07.421Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4409,7 +4426,11 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8bqg25bew",
+        "linkedEntryText": "ふかやバイオーダー",
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn8blsyuyg5",
