@@ -238,7 +238,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T22:45:50.658Z",
+  "savedAt": "2026-03-27T22:56:20.180Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3872,7 +3872,7 @@
       },
       {
         "id": "emmx7gbbaehl",
-        "text": "岡芹さんとアラート頻度再調整",
+        "text": "岡芹さんとアラート頻度再調整 q",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -3883,7 +3883,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
-        "due": "2026-03-30"
+        "due": "2026-03-30",
+        "html": "岡芹さんとアラート頻度再調整 q"
       },
       {
         "id": "emmw2zro232f",
@@ -4561,21 +4562,21 @@
       },
       {
         "id": "mn9hocz6xx2",
-        "text": "waasd ",
-        "html": "waasd&nbsp;",
+        "text": "waasd a aaaaaaa aaa",
+        "html": "waasd a aaaaaaa aaa",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "projTag": "管理・全般",
-        "type": "log",
-        "isTodo": false,
+        "type": "todo",
+        "isTodo": true,
         "checked": false
       },
       {
         "id": "mn9hon6gxyr",
-        "text": "",
-        "html": "",
+        "text": "a",
+        "html": "a",
         "indent": 0,
         "bold": false,
         "color": "",
