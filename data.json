@@ -13,7 +13,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn1fukaji8v"
+            "id": "emn1fukaji8v",
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -25,7 +26,8 @@
             "url": "",
             "images": [],
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           }
         ]
       },
@@ -232,7 +234,8 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn45h4j6c1b"
-            }
+            },
+            "collapsed": false
           }
         ],
         "2026-3-30": [
@@ -242,7 +245,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn2x84q2hxd"
+            "id": "emn2x84q2hxd",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -274,7 +278,8 @@
             "due": "2026-03-26",
             "priority": "",
             "tags": [],
-            "id": "emn7bub5cw3p"
+            "id": "emn7bub5cw3p",
+            "collapsed": false
           },
           {
             "id": "emn6tcl59mk0",
@@ -292,7 +297,8 @@
               "nodeId": "mn6qw87cln3"
             },
             "start": "2026-03-30",
-            "due": "2026-04-03"
+            "due": "2026-04-03",
+            "collapsed": false
           },
           {
             "id": "emn88c807cfl",
@@ -304,7 +310,8 @@
             "priority": "mid",
             "tags": [],
             "start": "",
-            "due": ""
+            "due": "",
+            "collapsed": false
           },
           {
             "id": "emn8aur07mo4",
@@ -315,7 +322,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "parentId": "emn88c807cfl"
+            "parentId": "emn88c807cfl",
+            "collapsed": false
           }
         ],
         "2026-4-6": [
@@ -550,7 +558,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn1hfsbsfnd"
+            "id": "emn1hfsbsfnd",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -586,7 +595,7 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2l9s",
-            "collapsed": true,
+            "collapsed": false,
             "start": "",
             "due": "2026-03-25",
             "priority": "",
@@ -603,7 +612,8 @@
             "priority": "high",
             "tags": [],
             "id": "emn1qfxtvazd",
-            "done": true
+            "done": true,
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -616,7 +626,8 @@
             "priority": "",
             "tags": [],
             "id": "emn4cgny8k9i",
-            "done": true
+            "done": true,
+            "collapsed": false
           },
           {
             "type": "log",
@@ -628,7 +639,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -681,7 +692,8 @@
             "due": "2026-03-27",
             "priority": "",
             "tags": [],
-            "id": "emn5cymf24rd"
+            "id": "emn5cymf24rd",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -707,7 +719,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn1hfsbsuj6"
+            "id": "emn1hfsbsuj6",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -719,7 +732,8 @@
             "tags": [],
             "id": "emn2qu5t7afh",
             "start": "2026-03-31",
-            "due": "2026-03-31"
+            "due": "2026-03-31",
+            "collapsed": false
           },
           {
             "type": "log",
@@ -732,7 +746,7 @@
             "priority": "",
             "tags": [],
             "id": "emn5khg5dcwl",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -745,7 +759,8 @@
             "start": "2026-03-24",
             "due": "2026-03-30",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -758,7 +773,8 @@
             "start": "2026-03-24",
             "due": "2026-03-30",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -794,7 +810,8 @@
             "tags": [],
             "id": "emn2qu5t7538",
             "start": "2026-04-01",
-            "due": "2026-04-03"
+            "due": "2026-04-03",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -803,7 +820,7 @@
             "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/HACCP?csf=1&web=1&e=f3nJNz",
             "images": [],
             "id": "emn5jjkvhknn",
-            "collapsed": true,
+            "collapsed": false,
             "start": "",
             "due": "",
             "priority": "",
@@ -820,7 +837,8 @@
             "tags": [],
             "parentId": "emn5jjkvhknn",
             "start": "",
-            "due": ""
+            "due": "",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -829,7 +847,8 @@
             "url": "",
             "images": [],
             "parentId": "emn5jjkvhknn",
-            "id": "emn5lcx4ri72"
+            "id": "emn5lcx4ri72",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -842,7 +861,8 @@
             "start": "",
             "due": "",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -862,7 +882,8 @@
             "url": "",
             "images": [],
             "parentId": "emn5jjkvhknn",
-            "id": "emn5lcx4rmuq"
+            "id": "emn5lcx4rmuq",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -874,7 +895,8 @@
             "start": "",
             "due": "",
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "id": "emn5sdxpgou1",
@@ -884,7 +906,8 @@
             "url": "",
             "images": [],
             "priority": "",
-            "tags": []
+            "tags": [],
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -915,7 +938,7 @@
               "nodeId": "mn75h93aiwi"
             },
             "done": false,
-            "collapsed": true
+            "collapsed": false
           },
           {
             "id": "emn85d9trbtl",
@@ -926,7 +949,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "parentId": "emn85bh6cxc7"
+            "parentId": "emn85bh6cxc7",
+            "collapsed": false
           },
           {
             "id": "emn85dhauexe",
@@ -937,7 +961,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "parentId": "emn85bh6cxc7"
+            "parentId": "emn85bh6cxc7",
+            "collapsed": false
           }
         ],
         "2026-3-9": []
@@ -1150,7 +1175,7 @@
             "priority": "",
             "tags": [],
             "id": "emn3vgzrbylq",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1159,7 +1184,8 @@
             "url": "",
             "images": [],
             "parentId": "emn3vgzrbylq",
-            "id": "emn3wo53dnfv"
+            "id": "emn3wo53dnfv",
+            "collapsed": false
           },
           {
             "type": "todo",
@@ -1168,7 +1194,8 @@
             "url": "",
             "images": [],
             "parentId": "emn3vgzrbylq",
-            "id": "emn3wo53d1m2"
+            "id": "emn3wo53d1m2",
+            "collapsed": false
           },
           {
             "id": "emn6tcl59mxw",
@@ -1184,7 +1211,8 @@
             "linkedNote": {
               "date": "2026-3-26",
               "nodeId": "mn6qlp3lk61"
-            }
+            },
+            "collapsed": false
           },
           {
             "id": "emn7bv5orkrz",
@@ -1199,7 +1227,8 @@
             "linkedNote": {
               "date": "2026-3-26",
               "nodeId": "mn5db1s93ub"
-            }
+            },
+            "collapsed": false
           }
         ]
       },
@@ -1397,7 +1426,8 @@
             "tags": [],
             "id": "emn2gkvhlcht",
             "start": "",
-            "due": "2026-06-26"
+            "due": "2026-06-26",
+            "collapsed": false
           }
         ]
       },
@@ -1516,7 +1546,8 @@
             },
             "done": false,
             "start": "2026-03-27",
-            "due": "2026-06-13"
+            "due": "2026-06-13",
+            "collapsed": false
           }
         ]
       },
@@ -1634,7 +1665,8 @@
             "linkedNote": {
               "date": "2026-3-25",
               "nodeId": "mn5mefil2y8"
-            }
+            },
+            "collapsed": false
           },
           {
             "id": "emn6vdtsnwv9",
@@ -1647,7 +1679,7 @@
             "tags": [],
             "start": "2026-03-26",
             "due": "2026-04-10",
-            "collapsed": true
+            "collapsed": false
           },
           {
             "id": "emn854q5pkn8",
@@ -1658,7 +1690,8 @@
             "images": [],
             "priority": "",
             "tags": [],
-            "parentId": "emn6vdtsnwv9"
+            "parentId": "emn6vdtsnwv9",
+            "collapsed": false
           }
         ]
       },
@@ -1877,7 +1910,8 @@
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn5e23ayqa6"
+            "id": "emn5e23ayqa6",
+            "collapsed": false
           }
         ]
       },
@@ -1902,7 +1936,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T04:15:32.005Z",
+  "savedAt": "2026-03-27T04:18:26.781Z",
   "dailyOutline": {
     "2026-3-18": [
       {
