@@ -238,7 +238,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T22:35:43.330Z",
+  "savedAt": "2026-03-27T22:36:54.836Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4553,7 +4553,7 @@
       {
         "id": "mn9hbdhrlt1",
         "text": "testa ",
-        "html": "testa ",
+        "html": "testa <div><br></div>",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4586,6 +4586,23 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn9hdlgeu61",
+        "text": "test2 ",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "todo",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "test2 "
       }
     ]
   },
