@@ -267,6 +267,21 @@
               "nodeId": "mn8itn2st4s"
             },
             "done": false
+          },
+          {
+            "id": "emn8j8aeytqj",
+            "type": "todo",
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8j8aeyi13"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -1979,7 +1994,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:40:14.985Z",
+  "savedAt": "2026-03-27T06:40:32.708Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4733,6 +4748,14 @@
         "linkedEntryRef": "emn8j5ze2afl",
         "html": "test2 #管理・全般 ",
         "linkedEntryText": "test2"
+      },
+      {
+        "id": "mn8j8aeyi13",
+        "text": "aaa #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8j8aeytqj"
       }
     ],
     "2026-3-28": [
