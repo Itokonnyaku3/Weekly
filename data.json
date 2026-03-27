@@ -1885,7 +1885,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T02:46:05.482Z",
+  "savedAt": "2026-03-27T03:07:06.467Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4404,9 +4404,18 @@
       },
       {
         "id": "mn88rptz4le",
-        "text": "",
+        "text": "ふかやバイオーダー",
         "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8blsyuyg5",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
