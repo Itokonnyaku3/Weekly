@@ -322,7 +322,7 @@
           {
             "id": "emn8lvjgsz1t",
             "type": "todo",
-            "text": "test6 /",
+            "text": "test6",
             "note": "",
             "url": "",
             "images": [],
@@ -332,6 +332,21 @@
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8lv6r3koo"
+            },
+            "done": false
+          },
+          {
+            "id": "emn8lzj0u3uw",
+            "type": "todo",
+            "text": "test7",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lzj0u3k4"
             },
             "done": false
           }
@@ -2030,7 +2045,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:56:08.746Z",
+  "savedAt": "2026-03-27T07:58:19.545Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4793,18 +4808,36 @@
       {
         "id": "mn8lv6r3koo",
         "text": "test6 ",
-        "html": "test6 ",
+        "html": "test6 <div><br></div>",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn8lvjgsz1t",
-        "linkedEntryText": "test6 /",
+        "linkedEntryText": "test6",
         "isTodo": false,
         "checked": false
       },
       {
         "id": "mn8lvfkxqya",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8lzj0u3k4",
+        "text": "test7 ",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "linkedEntryRef": "emn8lzj0u3uw",
+        "html": "test7&nbsp;"
+      },
+      {
+        "id": "mn8m05j2vwl",
         "text": "",
         "html": "",
         "indent": 0,
