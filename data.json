@@ -238,79 +238,9 @@
             "collapsed": false
           },
           {
-            "id": "emn8l571ogko",
-            "type": "todo",
-            "done": false,
-            "text": "test2",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8l3hw8pj9"
-            }
-          },
-          {
-            "id": "emn8lagkx4l7",
-            "type": "memo",
-            "text": "a  a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [
-              "管理・全般"
-            ],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8lagkx6fq"
-            },
-            "done": false
-          },
-          {
-            "id": "emn8lcgm2jan",
-            "type": "log",
-            "text": "test3 a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8laxktu58"
-            },
-            "done": false,
-            "start": "",
-            "due": ""
-          },
-          {
-            "id": "emn8ld5btgvd",
-            "type": "log",
-            "text": "a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [
-              "管理・全般"
-            ],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8ld5bttf0"
-            },
-            "done": false,
-            "start": "",
-            "due": ""
-          },
-          {
             "id": "emn8ldctqun9",
             "type": "todo",
-            "text": "a",
+            "text": "a a",
             "note": "",
             "url": "",
             "images": [],
@@ -807,6 +737,22 @@
             "tags": [],
             "start": "",
             "due": "2026-03-27"
+          },
+          {
+            "id": "emn8lemgh5nz",
+            "type": "todo",
+            "done": false,
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lav7nopt"
+            }
           }
         ],
         "2026-3-30": [
@@ -2019,7 +1965,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:40:29.021Z",
+  "savedAt": "2026-03-27T07:42:21.393Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4703,35 +4649,6 @@
         "collapsed": false
       },
       {
-        "id": "mn8ksnue0k0",
-        "text": "test1 ",
-        "html": "test1 ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn8l348i8p3",
-        "linkedEntryText": "test1"
-      },
-      {
-        "id": "mn8l357o5fm",
-        "text": "",
-        "html": "<div><br></div><div><br></div>",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8l3hw8pj9",
-        "text": "test2",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8l571ogko",
-        "html": "test2"
-      },
-      {
         "id": "mn8lb1clah5",
         "text": "",
         "html": "",
@@ -4741,79 +4658,43 @@
         "collapsed": false
       },
       {
-        "id": "mn8lagkx6fq",
-        "text": "a  a",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "emn8lagkx4l7",
-        "html": "a&nbsp; a"
-      },
-      {
-        "id": "mn8laxktu58",
-        "text": "test3 a",
-        "html": "",
+        "id": "mn8lav7nopt",
+        "text": "a ",
+        "html": "a ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "emn8lcgm2jan",
-        "linkedEntryText": "test3 a",
-        "isTodo": false,
-        "checked": false
-      },
-      {
-        "id": "mn8ld1xzz5a",
-        "text": "",
-        "html": "<div><br></div><div><br></div><div><br></div>",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8lcqi5ij8",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8lav7nopt",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8lao1zwv4",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ld5bttf0",
-        "text": "a",
-        "indent": 0,
-        "isTodo": false,
+        "isTodo": true,
         "checked": false,
-        "linkedEntryRef": "emn8ld5btgvd",
-        "html": "a"
+        "linkedEntryRef": "emn8lemgh5nz"
       },
       {
         "id": "mn8ldctqpbj",
-        "text": "a #管理・全般",
+        "text": "a a",
         "indent": 0,
         "isTodo": true,
         "checked": false,
-        "linkedEntryRef": "emn8ldctqun9"
+        "linkedEntryRef": "emn8ldctqun9",
+        "html": "a a"
+      },
+      {
+        "id": "mn8lfptadmg",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8lfmwvap3",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-28": [
