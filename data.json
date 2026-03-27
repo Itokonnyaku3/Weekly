@@ -287,7 +287,7 @@
             }
           },
           {
-            "id": "emn8jkgq73oe",
+            "id": "emn8jl5niq8u",
             "type": "memo",
             "done": false,
             "text": "test2",
@@ -301,6 +301,21 @@
               "date": "2026-3-27",
               "nodeId": "mn8j5jytip4"
             }
+          },
+          {
+            "id": "emn8jlbbhj40",
+            "type": "todo",
+            "text": "テスト３",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8jlbbhl77"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -1997,7 +2012,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:50:00.751Z",
+  "savedAt": "2026-03-27T06:50:51.625Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4480,12 +4495,12 @@
     "2026-3-27": [
       {
         "id": "mn84u7la0uq",
-        "text": "朝娘の水泳短期教室　０９００－１０１５",
+        "text": "朝娘の水泳短期教室　０９００－１０１５　　　",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "朝娘の水泳短期教室　０９００－１０１５"
+        "html": "朝娘の水泳短期教室　０９００－１０１５<div>　　　</div>"
       },
       {
         "id": "mn88qws26l6",
@@ -4748,7 +4763,7 @@
         "indent": 0,
         "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "emn8jkgq73oe",
+        "linkedEntryRef": "emn8jl5niq8u",
         "html": "test2 #管理・全般 ",
         "linkedEntryText": "test2"
       },
@@ -4760,6 +4775,14 @@
         "checked": false,
         "linkedEntryRef": "emn8j8aeytqj",
         "html": "1aaa"
+      },
+      {
+        "id": "mn8jlbbhl77",
+        "text": "テスト３ #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8jlbbhj40"
       }
     ],
     "2026-3-28": [
