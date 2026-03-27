@@ -375,9 +375,10 @@
             }
           },
           {
-            "id": "emn8nhyhprrl",
-            "type": "link",
-            "text": "あ",
+            "id": "emn8njw0g2gl",
+            "type": "todo",
+            "done": false,
+            "text": "あa",
             "note": "",
             "url": "",
             "images": [],
@@ -2315,7 +2316,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:40:02.269Z",
+  "savedAt": "2026-03-27T08:41:32.368Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4971,14 +4972,52 @@
       },
       {
         "id": "mn8nhsuyngm",
-        "text": "あ　",
-        "html": "あ　",
+        "text": "あa ",
+        "html": "あa ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "emn8nhyhprrl",
-        "linkedEntryText": "あ"
+        "linkedEntryRef": "emn8njw0g2gl",
+        "linkedEntryText": "あa",
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn8nj9vhqo4",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8nj5djr81",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8nix1akhz",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8nijeb4lu",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-28": [
