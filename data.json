@@ -374,36 +374,6 @@
             }
           },
           {
-            "id": "emn8m8ptx1dw",
-            "type": "memo",
-            "text": "複合機スキャン設定",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3vmhrxw3m"
-            }
-          },
-          {
-            "id": "emn8m8ptxzsl",
-            "type": "memo",
-            "text": "障害時等富士通対応費用を運用フォルダに格納",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn44drrbn0n"
-            }
-          },
-          {
             "id": "emn8m8ptx3z9",
             "type": "memo",
             "text": "壬生店電話番号",
@@ -1035,6 +1005,21 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn1ncqsbkd1"
+            }
+          },
+          {
+            "id": "emn8m8ptxzsl",
+            "type": "memo",
+            "text": "障害時等富士通対応費用を運用フォルダに格納",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn44drrbn0n"
             }
           }
         ],
@@ -2214,6 +2199,21 @@
               "date": "2026-3-23",
               "nodeId": "mn1q3o2p63z"
             }
+          },
+          {
+            "id": "emn8m8ptx1dw",
+            "type": "memo",
+            "text": "複合機スキャン設定",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3vmhrxw3m"
+            }
           }
         ]
       },
@@ -2234,7 +2234,7 @@
           {
             "id": "emn8m8ptx2cn",
             "type": "memo",
-            "text": "Tracker不具合",
+            "text": "Tracker不具合 #",
             "note": "",
             "url": "",
             "images": [],
@@ -2325,7 +2325,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:06:41.561Z",
+  "savedAt": "2026-03-27T08:07:26.863Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3930,8 +3930,8 @@
       },
       {
         "id": "mn3vks74f81",
-        "text": "Tracker不具合",
-        "html": "Tracker不具合",
+        "text": "Tracker不具合 #",
+        "html": "Tracker不具合 #",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -3979,8 +3979,8 @@
       },
       {
         "id": "mn44drrbn0n",
-        "text": "障害時等富士通対応費用を運用フォルダに格納",
-        "html": "障害時等富士通対応費用を運用フォルダに格納",
+        "text": "障害時等富士通対応費用を運用フォルダに格納 ",
+        "html": "障害時等富士通対応費用を運用フォルダに格納 ",
         "indent": 0,
         "bold": false,
         "color": "",
