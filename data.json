@@ -1980,7 +1980,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:49:38.347Z",
+  "savedAt": "2026-03-27T07:50:11.562Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4696,12 +4696,12 @@
       },
       {
         "id": "mn8lmpxpi0z",
-        "text": "test2-1 ",
+        "text": "test2-1",
         "indent": 0,
         "isTodo": false,
         "checked": false,
         "linkedEntryRef": "emn8lmpxpzfb",
-        "html": "test2-1 "
+        "html": "test2-1"
       },
       {
         "id": "mn8lntbuhol",
