@@ -1935,8 +1935,8 @@
       "isPrivate": false
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-03-27T04:18:45.665Z",
+  "wOff": -1,
+  "savedAt": "2026-03-27T04:19:11.912Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4447,7 +4447,7 @@
       {
         "id": "mn88rig2j9c",
         "text": "１３３０　週次　久保田さん",
-        "html": "",
+        "html": "１３３０　週次　久保田さん",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4456,7 +4456,7 @@
       {
         "id": "mn8cjibz3bg",
         "text": "1430 冷蔵庫温度点検説明",
-        "html": "",
+        "html": "1430 冷蔵庫温度点検説明",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4478,7 +4478,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn8bqg25bew",
         "linkedEntryText": "ふかやバイオーダー",
         "isTodo": true,
