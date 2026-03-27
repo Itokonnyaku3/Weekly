@@ -432,6 +432,22 @@
             "tags": [],
             "start": "",
             "due": "2026-03-28"
+          },
+          {
+            "id": "emn8sh2624mf",
+            "type": "link",
+            "text": "あああ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8pfxfj93z"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -2369,7 +2385,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T09:34:35.036Z",
+  "savedAt": "2026-03-27T10:59:26.648Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5060,7 +5076,20 @@
       },
       {
         "id": "mn8pfxfj93z",
-        "text": "  ",
+        "text": "  あああ　　",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn8sh2624mf",
+        "linkedEntryText": "あああ　　・",
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn8sh8hkm2u",
+        "text": "",
         "html": "",
         "indent": 0,
         "bold": false,
