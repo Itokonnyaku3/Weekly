@@ -236,6 +236,23 @@
               "nodeId": "mn45h4j6c1b"
             },
             "collapsed": false
+          },
+          {
+            "id": "emn8kr97dh02",
+            "type": "todo",
+            "text": "test #管理・全般",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [
+              "管理・全般"
+            ],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8kr97efil"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -1932,7 +1949,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:58:16.965Z",
+  "savedAt": "2026-03-27T07:23:17.221Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4731,6 +4748,14 @@
         "checked": false,
         "linkedEntryRef": "",
         "html": "atest6"
+      },
+      {
+        "id": "mn8kr97efil",
+        "text": "test #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8kr97dh02"
       }
     ],
     "2026-3-28": [
