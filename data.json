@@ -538,16 +538,6 @@
             "tags": [],
             "parentId": "emn88c807cfl",
             "collapsed": false
-          },
-          {
-            "id": "emn8nktli71y",
-            "type": "todo",
-            "text": "test2",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": []
           }
         ],
         "2026-4-6": [
@@ -2387,7 +2377,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T11:41:38.850Z",
+  "savedAt": "2026-03-27T11:42:16.072Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4882,7 +4872,11 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8nktli71y",
+        "linkedEntryText": "1430 冷蔵庫温度点検説明",
+        "isTodo": false,
+        "checked": false
       },
       {
         "id": "mn8cjvjrh44",
