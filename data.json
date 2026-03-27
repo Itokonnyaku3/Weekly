@@ -238,26 +238,41 @@
             "collapsed": false
           },
           {
-            "id": "emn8kr97dh02",
+            "id": "emn8l571ogko",
             "type": "todo",
-            "text": "test #管理・全般",
+            "done": false,
+            "text": "test2 a",
             "note": "",
             "url": "",
             "images": [],
             "priority": "",
-            "tags": [
-              "管理・全般"
-            ],
+            "category": "",
+            "tags": [],
             "linkedNote": {
               "date": "2026-3-27",
-              "nodeId": "mn8kr97efil"
-            },
-            "done": false
+              "nodeId": "mn8l3hw8pj9"
+            }
           },
           {
-            "id": "emn8ksahenex",
-            "type": "todo",
-            "text": "test #管理・全般",
+            "id": "emn8la613ssq",
+            "type": "memo",
+            "done": false,
+            "text": "a",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8l6b2e9pq"
+            }
+          },
+          {
+            "id": "emn8lagkx4l7",
+            "type": "memo",
+            "text": "a  a",
             "note": "",
             "url": "",
             "images": [],
@@ -267,7 +282,7 @@
             ],
             "linkedNote": {
               "date": "2026-3-27",
-              "nodeId": "mn8ksahecsm"
+              "nodeId": "mn8lagkx6fq"
             },
             "done": false
           }
@@ -1966,7 +1981,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:29:52.688Z",
+  "savedAt": "2026-03-27T07:38:40.401Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4454,7 +4469,7 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "朝娘の水泳短期教室　０９００－１０１５<div>　　　</div><div><br></div>"
+        "html": "朝娘の水泳短期教室　０９００－１０１５<div>　　　</div><div><br></div><div><br></div>"
       },
       {
         "id": "mn88qws26l6",
@@ -4650,134 +4665,72 @@
         "collapsed": false
       },
       {
-        "id": "mn8iao3hxtf",
-        "text": "test",
-        "html": "",
+        "id": "mn8ksnue0k0",
+        "text": "test1 ",
+        "html": "test1 ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "emn8ias3dyxk",
-        "linkedEntryText": "test"
+        "linkedEntryRef": "emn8l348i8p3",
+        "linkedEntryText": "test1"
       },
       {
-        "id": "mn8ir227dao",
-        "text": "test",
-        "html": "test",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8iq36mxvv",
-        "text": "aaaU",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "",
-        "linkedEntryText": "aaaU",
-        "html": "aaaU"
-      },
-      {
-        "id": "mn8iqepjpvk",
-        "text": "aaaa",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8isscy5hp",
-        "text": "aaaIIIII",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "",
-        "linkedEntryText": "aaaIIIII",
-        "html": "aaaIIIII"
-      },
-      {
-        "id": "mn8itn2st4s",
-        "text": "aaaiiiuuu ",
-        "html": "aaaiiiuuu ",
-        "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "",
-        "linkedEntryText": "aaaiiiuuu /",
-        "isTodo": false,
-        "checked": false
-      },
-      {
-        "id": "mn8j5jytip4",
-        "text": "test2",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "",
-        "html": "test2",
-        "linkedEntryText": "test2"
-      },
-      {
-        "id": "mn8jup3gxcj",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8js1svjkj",
+        "id": "mn8l357o5fm",
         "text": "",
         "html": "<div><br></div><div><br></div>",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8l3hw8pj9",
+        "text": "test2 a ",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8l571ogko",
+        "html": "test2 a <div><br></div>"
+      },
+      {
+        "id": "mn8l4tee06x",
+        "text": "aaa",
+        "html": "aaa",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn8jshkrbmp",
-        "text": "atest6",
+        "id": "mn8l4w1hzz5",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8l4rw1kat",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8l6b2e9pq",
+        "text": "a #管理・全般aaa",
         "indent": 0,
         "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "",
-        "html": "atest6"
-      },
-      {
-        "id": "mn8kr97efil",
-        "text": "test #管理・全般",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8kr97dh02"
-      },
-      {
-        "id": "mn8ksahecsm",
-        "text": "test #管理・全般",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8ksahenex",
+        "linkedEntryRef": "emn8la613ssq",
         "html": ""
       },
       {
-        "id": "mn8ksng6ppg",
-        "text": "a ",
-        "html": "a ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn8kutqk66d",
-        "linkedEntryText": "a"
-      },
-      {
-        "id": "mn8ksnue0k0",
+        "id": "mn8lb1clah5",
         "text": "",
         "html": "",
         "indent": 0,
@@ -4786,7 +4739,16 @@
         "collapsed": false
       },
       {
-        "id": "mn8ksnwq5p4",
+        "id": "mn8lagkx6fq",
+        "text": "a  a",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "linkedEntryRef": "emn8lagkx4l7",
+        "html": "a&nbsp; a"
+      },
+      {
+        "id": "mn8laxktu58",
         "text": "",
         "html": "",
         "indent": 0,
@@ -4795,7 +4757,7 @@
         "collapsed": false
       },
       {
-        "id": "mn8ksnx1vuy",
+        "id": "mn8lav7nopt",
         "text": "",
         "html": "",
         "indent": 0,
@@ -4804,133 +4766,7 @@
         "collapsed": false
       },
       {
-        "id": "mn8kso0ac1m",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kso0j5pi",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kso3mz9l",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kso6l4e4",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksoaydr7",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kson0bha",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksossash",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksowuexh",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kspbvwww",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kspgaspp",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksplj8l7",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kspqe2h2",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8kspvmx1w",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksq0fcuh",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn8ksqc1b59",
+        "id": "mn8lao1zwv4",
         "text": "",
         "html": "",
         "indent": 0,
