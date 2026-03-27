@@ -305,6 +305,17 @@
             "tags": [],
             "start": "",
             "due": ""
+          },
+          {
+            "id": "emn8aur07mo4",
+            "type": "todo",
+            "text": "青果ユニット追加を計画に入れたか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn88c807cfl"
           }
         ],
         "2026-4-6": [
@@ -1874,7 +1885,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T02:13:28.947Z",
+  "savedAt": "2026-03-27T02:46:05.482Z",
   "dailyOutline": {
     "2026-3-18": [
       {
