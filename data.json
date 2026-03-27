@@ -60,6 +60,21 @@
               "date": "2026-3-23",
               "nodeId": "mn1q3o8qj2z"
             }
+          },
+          {
+            "id": "emn8mfu28chj",
+            "type": "memo",
+            "text": "3.24　日記",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn4mln9e3ag"
+            }
           }
         ],
         "2026-3-30": [
@@ -355,21 +370,6 @@
             "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn40asnc78g"
-            }
-          },
-          {
-            "id": "emn8m8ptx3z9",
-            "type": "memo",
-            "text": "壬生店電話番号",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn44dwxdr9z"
             }
           },
           {
@@ -2298,7 +2298,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:09:26.444Z",
+  "savedAt": "2026-03-27T08:10:23.619Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3656,7 +3656,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn3vpepax5r",
@@ -3775,7 +3775,7 @@
       {
         "id": "mn3vpj0f2wk",
         "text": "1430　冷ケース温度点検説明会",
-        "html": "",
+        "html": "1430　冷ケース温度点検説明会",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -3971,15 +3971,13 @@
         "collapsed": false
       },
       {
-        "id": "mn44dwxdr9z",
+        "id": "mn8mf9iac6t",
         "text": "壬生店電話番号　",
         "html": "壬生店電話番号　",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
-        "linkedEntryRef": "emn8m8ptx3z9",
-        "linkedEntryText": "壬生店電話番号"
+        "collapsed": false
       },
       {
         "id": "mn44uszpr1t",
@@ -4012,18 +4010,20 @@
       },
       {
         "id": "mn4mln9e3ag",
-        "text": "3.24　日記　 ",
-        "html": "3.24　日記　&nbsp;",
+        "text": "3.24　日記　 ",
+        "html": "3.24　日記　 ",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
-        "isPrivate": true
+        "isPrivate": true,
+        "linkedEntryRef": "emn8mfu28chj",
+        "linkedEntryText": "3.24　日記"
       },
       {
         "id": "mn4mm2vtfyt",
         "text": "今日も一日暇を見ては週次報告の改修。",
-        "html": "",
+        "html": "今日も一日暇を見ては週次報告の改修。",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4033,7 +4033,7 @@
         "id": "mn4mn1qu1oq",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
