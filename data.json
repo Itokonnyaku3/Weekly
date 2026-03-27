@@ -408,7 +408,7 @@
           {
             "id": "emn8nlsqhq7j",
             "type": "link",
-            "text": "aaa",
+            "text": "aaaああ",
             "note": "",
             "url": "",
             "images": [],
@@ -418,7 +418,8 @@
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8nj5djr81"
-            }
+            },
+            "done": false
           },
           {
             "id": "emn8nm02wrk3",
@@ -2368,7 +2369,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T09:03:00.559Z",
+  "savedAt": "2026-03-27T09:34:35.036Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5046,14 +5047,25 @@
       },
       {
         "id": "mn8nj5djr81",
-        "text": "aaa  ",
-        "html": "aaa  ",
+        "text": "aaaああ　",
+        "html": "aaaああ　",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn8nlsqhq7j",
-        "linkedEntryText": "aaa"
+        "linkedEntryText": "aaaああ　・",
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mn8pfxfj93z",
+        "text": "  ",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn8nlom5d2q",
