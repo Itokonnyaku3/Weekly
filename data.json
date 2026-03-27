@@ -30,6 +30,36 @@
               "date": "2026-3-26",
               "nodeId": "mn6twyvs6l2"
             }
+          },
+          {
+            "id": "emn8m8ptxhvc",
+            "type": "memo",
+            "text": "子ども会スケジュール(植竹幼稚園)",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn1q66924wn"
+            }
+          },
+          {
+            "id": "emn8m8ptxtk5",
+            "type": "memo",
+            "text": "欲しいもの",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn1q3o8qj2z"
+            }
           }
         ],
         "2026-3-30": [
@@ -313,52 +343,6 @@
             }
           },
           {
-            "id": "emn8m8ptxtk5",
-            "type": "memo",
-            "text": "欲しいもの",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1q3o8qj2z"
-            }
-          },
-          {
-            "id": "emn8m8ptxhvc",
-            "type": "memo",
-            "text": "子ども会スケジュール(植竹幼稚園)",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1q66924wn"
-            }
-          },
-          {
-            "id": "emn8m8ptxxjm",
-            "type": "memo",
-            "done": false,
-            "text": "1100 BE/BGS・IIJ定例",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-24",
-              "nodeId": "mn3v3wbsz78"
-            }
-          },
-          {
             "id": "emn8m8ptxo38",
             "type": "memo",
             "text": "岐南店",
@@ -416,66 +400,6 @@
             "linkedNote": {
               "date": "2026-3-25",
               "nodeId": "mn5sv0xs6sn"
-            }
-          },
-          {
-            "id": "emn8m8ptx2pq",
-            "type": "memo",
-            "text": "0900　品質改善会議",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn5db1s93ub"
-            }
-          },
-          {
-            "id": "emn8m8ptxbt9",
-            "type": "memo",
-            "text": "HACCP注文",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6qysrwuze"
-            }
-          },
-          {
-            "id": "emn8m8ptxl9o",
-            "type": "memo",
-            "text": "a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6v5089dx5"
-            }
-          },
-          {
-            "id": "emn8m8ptyn3o",
-            "type": "memo",
-            "text": "3.26　リストを見て対象を特定",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn75ig72viy"
             }
           }
         ],
@@ -1021,6 +945,21 @@
               "date": "2026-3-24",
               "nodeId": "mn44drrbn0n"
             }
+          },
+          {
+            "id": "emn8m8ptxbt9",
+            "type": "memo",
+            "text": "HACCP注文",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6qysrwuze"
+            }
           }
         ],
         "2026-3-30": [
@@ -1541,6 +1480,21 @@
               "nodeId": "mn6qlp3lk61"
             },
             "collapsed": false
+          },
+          {
+            "id": "emn8m8ptx2pq",
+            "type": "memo",
+            "text": "0900　品質改善会議",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn5db1s93ub"
+            }
           }
         ]
       },
@@ -2113,7 +2067,26 @@
     },
     {
       "name": "根岸さん",
-      "entries": {},
+      "entries": {
+        "2026-3-23": [
+          {
+            "id": "emn8m8ptxxjm",
+            "type": "memo",
+            "done": false,
+            "text": "1100 BE/BGS・IIJ定例",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-24",
+              "nodeId": "mn3v3wbsz78"
+            }
+          }
+        ]
+      },
       "links": [],
       "projEntries": [
         {
@@ -2325,7 +2298,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:07:26.863Z",
+  "savedAt": "2026-03-27T08:09:26.444Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3566,8 +3539,8 @@
       },
       {
         "id": "mn1q3o8qj2z",
-        "text": "欲しいもの",
-        "html": "欲しいもの",
+        "text": "欲しいもの ",
+        "html": "欲しいもの ",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -4402,14 +4375,14 @@
       },
       {
         "id": "mn6qysrwuze",
-        "text": "HACCP注文 ",
-        "html": "HACCP注文&nbsp;",
+        "text": "HACCP注文  ",
+        "html": "HACCP注文  ",
         "indent": 1,
         "bold": true,
         "color": "",
         "collapsed": true,
         "linkedEntryRef": "emn8m8ptxbt9",
-        "linkedEntryText": "tesut"
+        "linkedEntryText": "HACCP注文"
       },
       {
         "id": "mn6rfn03gaq",
@@ -4560,17 +4533,6 @@
         "collapsed": false
       },
       {
-        "id": "mn6v5089dx5",
-        "text": "a",
-        "html": "a",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn8m8ptxl9o",
-        "linkedEntryText": "a"
-      },
-      {
         "id": "mn78py392kr",
         "text": "1300 店舗UPSとHUB問題",
         "html": "",
@@ -4593,20 +4555,18 @@
         "checked": false
       },
       {
-        "id": "mn75ig72viy",
+        "id": "mn76bas3sxw",
         "text": "3.26　リストを見て対象を特定　",
         "html": "3.26　リストを見て対象を特定　",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "linkedEntryRef": "emn8m8ptyn3o",
-        "linkedEntryText": "test"
+        "collapsed": false
       },
       {
-        "id": "mn76bas3sxw",
+        "id": "mn8mdseiot1",
         "text": "月夜野は5台。",
-        "html": "",
+        "html": "月夜野は5台。",
         "indent": 2,
         "bold": false,
         "color": "",
