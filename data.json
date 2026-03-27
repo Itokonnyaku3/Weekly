@@ -1966,7 +1966,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:26:03.805Z",
+  "savedAt": "2026-03-27T07:29:52.688Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4720,24 +4720,6 @@
         "linkedEntryRef": "",
         "html": "test2",
         "linkedEntryText": "test2"
-      },
-      {
-        "id": "mn8j8aeyi13",
-        "text": "1aaa2",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "",
-        "html": "1aaa2"
-      },
-      {
-        "id": "mn8jlbbhl77",
-        "text": "テスト３",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "",
-        "html": ""
       },
       {
         "id": "mn8jup3gxcj",
