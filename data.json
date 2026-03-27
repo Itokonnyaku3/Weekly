@@ -233,24 +233,6 @@
               "date": "2026-3-24",
               "nodeId": "mn45h4j6c1b"
             }
-          },
-          {
-            "id": "emn6tcl59mk0",
-            "type": "todo",
-            "done": false,
-            "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6qw87cln3"
-            },
-            "start": "2026-03-30",
-            "due": "2026-04-03"
           }
         ],
         "2026-3-30": [
@@ -293,6 +275,24 @@
             "priority": "",
             "tags": [],
             "id": "emn7bub5cw3p"
+          },
+          {
+            "id": "emn6tcl59mk0",
+            "type": "todo",
+            "done": false,
+            "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6qw87cln3"
+            },
+            "start": "2026-03-30",
+            "due": "2026-04-03"
           }
         ],
         "2026-4-6": [
@@ -1860,7 +1860,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T00:14:03.188Z",
+  "savedAt": "2026-03-27T00:29:41.720Z",
   "dailyOutline": {
     "2026-3-18": [
       {
