@@ -809,7 +809,7 @@
             "images": [],
             "today": false,
             "id": "emmw2zro2l9s",
-            "collapsed": false,
+            "collapsed": true,
             "start": "",
             "due": "2026-03-25",
             "priority": "",
@@ -2377,7 +2377,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T11:43:23.372Z",
+  "savedAt": "2026-03-27T11:44:52.651Z",
   "dailyOutline": {
     "2026-3-18": [
       {
