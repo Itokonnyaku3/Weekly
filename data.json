@@ -238,7 +238,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T22:44:24.479Z",
+  "savedAt": "2026-03-27T22:45:29.927Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4544,30 +4544,51 @@
       {
         "id": "mn9hbci3ktk",
         "text": "asdasda",
-        "html": "asdasda",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mn9hbdhrlt1",
-        "text": "testa ",
-        "html": "testa&nbsp;<div><br></div>",
-        "indent": 1,
+        "id": "mn9hocc2dpe",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9hocz6xx2",
+        "text": "waasd ",
+        "html": "waasd&nbsp;",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "projTag": "管理・全般",
-        "type": "todo",
+        "type": "log",
         "isTodo": false,
-        "checked": false,
-        "url": "",
-        "note": "",
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": ""
+        "checked": false
+      },
+      {
+        "id": "mn9hon6gxyr",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9ho6eiqia",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn9hbsn5n5w",
