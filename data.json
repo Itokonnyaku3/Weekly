@@ -317,6 +317,21 @@
               "date": "2026-3-27",
               "nodeId": "mn8ls00mzp3"
             }
+          },
+          {
+            "id": "emn8ltv0z8vs",
+            "type": "link",
+            "text": "test5",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lsj2sims"
+            }
           }
         ],
         "2026-3-30": [
@@ -2013,7 +2028,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:52:16.276Z",
+  "savedAt": "2026-03-27T07:53:18.420Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4762,12 +4777,14 @@
       },
       {
         "id": "mn8lsj2sims",
-        "text": "",
-        "html": "",
+        "text": "test5 ",
+        "html": "test5 ",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8ltv0z8vs",
+        "linkedEntryText": "test5"
       },
       {
         "id": "mn8loffyru2",
