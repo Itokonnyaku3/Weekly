@@ -238,38 +238,50 @@
             "collapsed": false
           },
           {
-            "id": "emn8ldctqun9",
+            "id": "emn8lm014x50",
             "type": "todo",
-            "text": "a aa",
+            "text": "test1 /",
             "note": "",
             "url": "",
             "images": [],
             "priority": "",
-            "tags": [
-              "管理・全般"
-            ],
+            "category": "",
+            "tags": [],
             "linkedNote": {
               "date": "2026-3-27",
-              "nodeId": "mn8ldctqpbj"
+              "nodeId": "mn8llu90dfs"
+            },
+            "done": false
+          },
+          {
+            "id": "emn8lmpxpzfb",
+            "type": "todo",
+            "text": "test2-1",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lmpxpi0z"
             },
             "done": false,
             "start": "",
             "due": ""
           },
           {
-            "id": "emn8lg5mvcns",
-            "type": "todo",
-            "text": "test5",
+            "id": "emn8loffxolj",
+            "type": "memo",
+            "text": "test3",
             "note": "",
             "url": "",
             "images": [],
             "priority": "",
-            "tags": [
-              "管理・全般"
-            ],
+            "tags": [],
             "linkedNote": {
               "date": "2026-3-27",
-              "nodeId": "mn8lg5mvx04"
+              "nodeId": "mn8loffyru2"
             },
             "done": false
           }
@@ -756,22 +768,6 @@
             "tags": [],
             "start": "",
             "due": "2026-03-27"
-          },
-          {
-            "id": "emn8lemgh5nz",
-            "type": "todo",
-            "done": false,
-            "text": "a",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8lav7nopt"
-            }
           }
         ],
         "2026-3-30": [
@@ -1984,7 +1980,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:43:25.173Z",
+  "savedAt": "2026-03-27T07:49:38.347Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4677,28 +4673,20 @@
         "collapsed": false
       },
       {
-        "id": "mn8lav7nopt",
-        "text": "a ",
-        "html": "a <div><br></div>",
+        "id": "mn8llu90dfs",
+        "text": "test1 ",
+        "html": "test1 ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8lemgh5nz"
+        "linkedEntryRef": "emn8lm014x50",
+        "linkedEntryText": "test1 /",
+        "isTodo": false,
+        "checked": false
       },
       {
-        "id": "mn8ldctqpbj",
-        "text": "a aa",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8ldctqun9",
-        "html": "a aa"
-      },
-      {
-        "id": "mn8lfptadmg",
+        "id": "mn8lm2ciz6i",
         "text": "",
         "html": "",
         "indent": 0,
@@ -4707,7 +4695,16 @@
         "collapsed": false
       },
       {
-        "id": "mn8lfmwvap3",
+        "id": "mn8lmpxpi0z",
+        "text": "test2-1 ",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "linkedEntryRef": "emn8lmpxpzfb",
+        "html": "test2-1 "
+      },
+      {
+        "id": "mn8lntbuhol",
         "text": "",
         "html": "",
         "indent": 0,
@@ -4716,12 +4713,40 @@
         "collapsed": false
       },
       {
-        "id": "mn8lg5mvx04",
-        "text": "test5 #管理・全般",
+        "id": "mn8lnful81l",
+        "text": "",
+        "html": "<div><br></div><div><br></div>",
         "indent": 0,
-        "isTodo": true,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8loffyru2",
+        "text": "test3 #管理・全般",
+        "indent": 0,
+        "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "emn8lg5mvcns"
+        "linkedEntryRef": "emn8loffxolj",
+        "html": "test3 #管理・全般"
+      },
+      {
+        "id": "mn8lowi3qb3",
+        "text": "aa",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8loy5a2bl",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-28": [
