@@ -284,6 +284,23 @@
               "nodeId": "mn8loffyru2"
             },
             "done": false
+          },
+          {
+            "id": "emn8lqev8se5",
+            "type": "log",
+            "text": "test4",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lntbuhol"
+            },
+            "start": "",
+            "due": ""
           }
         ],
         "2026-3-30": [
@@ -1980,7 +1997,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:50:11.562Z",
+  "savedAt": "2026-03-27T07:51:02.844Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4705,12 +4722,15 @@
       },
       {
         "id": "mn8lntbuhol",
-        "text": "",
-        "html": "",
+        "text": "test4",
+        "html": "test4",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8lqev8se5",
+        "linkedEntryText": "test4",
+        "isTodo": false
       },
       {
         "id": "mn8lnful81l",
