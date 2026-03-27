@@ -595,32 +595,6 @@
           {
             "type": "todo",
             "text": "メールアドレス登録！",
-            "note": "",
-            "url": "",
-            "images": [],
-            "start": "",
-            "due": "2026-03-27",
-            "priority": "",
-            "tags": [],
-            "id": "emn5cymf24rd"
-          },
-          {
-            "type": "todo",
-            "text": "27日ごろセンサー早出し納品日確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "today": false,
-            "id": "emmw2zro2zw8",
-            "collapsed": false,
-            "start": "",
-            "due": "2026-03-27",
-            "priority": "",
-            "tags": []
-          },
-          {
-            "type": "todo",
-            "text": "メールアドレス登録！",
             "note": "大網白里店 店長(櫻井 建太郎)　BE\n都留(Fd)店 店長(栗原 泉弥)　BE\n東金店 店長(相澤 祐希)　BE\n日立（Fd）店 店長(渡辺 晃一)　BE\n八街（Fd）店 店長(中澤 弘樹)　BE\n富士吉田店 店長(鎌田 一輝)　BE\n富里店 店長(三輪 紘史)　BE",
             "url": "",
             "images": [],
@@ -630,16 +604,6 @@
             "tags": [],
             "id": "emn4cgny8k9i",
             "done": true
-          },
-          {
-            "type": "todo",
-            "text": "OTの高温対応どうするか考える",
-            "note": "",
-            "url": "",
-            "images": [],
-            "id": "emmw2zro21cn",
-            "done": false,
-            "collapsed": false
           },
           {
             "type": "log",
@@ -681,6 +645,42 @@
             "done": true,
             "start": "",
             "due": "2026-03-30",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "type": "todo",
+            "text": "OTの高温対応どうするか考える",
+            "note": "",
+            "url": "",
+            "images": [],
+            "id": "emmw2zro21cn",
+            "done": false,
+            "collapsed": false
+          },
+          {
+            "type": "todo",
+            "text": "メールアドレス登録！",
+            "note": "",
+            "url": "",
+            "images": [],
+            "start": "",
+            "due": "2026-03-27",
+            "priority": "",
+            "tags": [],
+            "id": "emn5cymf24rd"
+          },
+          {
+            "type": "todo",
+            "text": "27日ごろセンサー早出し納品日確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "today": false,
+            "id": "emmw2zro2zw8",
+            "collapsed": false,
+            "start": "",
+            "due": "2026-03-27",
             "priority": "",
             "tags": []
           }
@@ -1872,7 +1872,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T01:37:02.270Z",
+  "savedAt": "2026-03-27T01:47:43.801Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4355,7 +4355,44 @@
     "2026-3-27": [
       {
         "id": "mn84u7la0uq",
+        "text": "朝娘の水泳短期教室　０９００－１０１５",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mn88qws26l6",
+        "text": "1110　週次　根岸さん",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn88rd0ja1f",
+        "text": "1130　週次　山下さん",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn88rig2j9c",
+        "text": "１３３０　週次　久保田さん",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn88rptz4le",
         "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
