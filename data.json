@@ -1902,7 +1902,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T03:26:26.645Z",
+  "savedAt": "2026-03-27T03:33:35.991Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4413,7 +4413,25 @@
       {
         "id": "mn88rig2j9c",
         "text": "１３３０　週次　久保田さん",
-        "html": "１３３０　週次　久保田さん",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8cjibz3bg",
+        "text": "1430 冷蔵庫温度点検説明",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8cjvjrh44",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4462,7 +4480,7 @@
       {
         "id": "mn8bocxnjkw",
         "text": "天井施工",
-        "html": "天井施工",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4471,7 +4489,7 @@
       {
         "id": "mn8bofxn2sr",
         "text": "[03.27] 藤原さんに川村さんの連絡先を連携",
-        "html": "[03.27]&nbsp;藤原さんに川村さんの連絡先を連携",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -4480,7 +4498,7 @@
       {
         "id": "mn8botala8f",
         "text": "稟議",
-        "html": "稟議",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4489,7 +4507,7 @@
       {
         "id": "mn8bozyoavl",
         "text": "建設でやるのかデジタルでやるのか確認",
-        "html": "建設でやるのかデジタルでやるのか確認",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
