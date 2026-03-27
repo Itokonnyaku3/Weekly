@@ -1936,7 +1936,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T04:51:16.600Z",
+  "savedAt": "2026-03-27T04:51:51.872Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4603,8 +4603,17 @@
       },
       {
         "id": "mn8faw2s90i",
+        "text": "４月3日おおたモール現調",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8fcijzm5w",
         "text": "",
-        "html": "<br>",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
