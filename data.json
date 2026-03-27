@@ -251,6 +251,36 @@
               "date": "2026-3-27",
               "nodeId": "mn8iao3hxtf"
             }
+          },
+          {
+            "id": "emn8iq36m89g",
+            "type": "todo",
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8iq36mxvv"
+            }
+          },
+          {
+            "id": "emn8iq36x6w6",
+            "type": "todo",
+            "done": false,
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8iq36mxvv"
+            }
           }
         ],
         "2026-3-30": [
@@ -1962,8 +1992,8 @@
       "isPrivate": false
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-03-27T06:14:29.305Z",
+  "wOff": 0,
+  "savedAt": "2026-03-27T06:26:40.675Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4656,6 +4686,44 @@
         "collapsed": false,
         "linkedEntryRef": "emn8ias3dyxk",
         "linkedEntryText": "test"
+      },
+      {
+        "id": "mn8iq36mxvv",
+        "text": "aaa #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8iq36x6w6",
+        "linkedEntryText": "aaa",
+        "html": ""
+      },
+      {
+        "id": "mn8iqepjpvk",
+        "text": "aaaa",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8iqg5z87s",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-28": [
+      {
+        "id": "mn8ipnvpwx0",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ]
   }
