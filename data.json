@@ -301,6 +301,22 @@
             },
             "start": "",
             "due": ""
+          },
+          {
+            "id": "emn8ls2yuny1",
+            "type": "todo",
+            "done": false,
+            "text": "(無題タスク)",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8ls00mzp3"
+            }
           }
         ],
         "2026-3-30": [
@@ -1997,7 +2013,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:51:02.844Z",
+  "savedAt": "2026-03-27T07:51:55.399Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4723,7 +4739,7 @@
       {
         "id": "mn8lntbuhol",
         "text": "test4",
-        "html": "test4",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4733,13 +4749,16 @@
         "isTodo": false
       },
       {
-        "id": "mn8lnful81l",
+        "id": "mn8ls00mzp3",
         "text": "",
-        "html": "<div><br></div><div><br></div>",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8ls2yuny1"
       },
       {
         "id": "mn8loffyru2",
