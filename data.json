@@ -314,6 +314,21 @@
               "date": "2026-3-27",
               "nodeId": "mn8isscy5hp"
             }
+          },
+          {
+            "id": "emn8itqxqj0r",
+            "type": "link",
+            "text": "aaaiiiuuu",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8itn2st4s"
+            }
           }
         ],
         "2026-3-30": [
@@ -2026,7 +2041,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:28:29.471Z",
+  "savedAt": "2026-03-27T06:29:14.270Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4755,7 +4770,19 @@
         "isTodo": true,
         "checked": false,
         "linkedEntryRef": "emn8issdbu06",
-        "linkedEntryText": "IIIII"
+        "linkedEntryText": "IIIII",
+        "html": ""
+      },
+      {
+        "id": "mn8itn2st4s",
+        "text": "aaaiiiuuu ",
+        "html": "aaaiiiuuu ",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn8itqxqj0r",
+        "linkedEntryText": "aaaiiiuuu"
       }
     ],
     "2026-3-28": [
