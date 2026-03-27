@@ -15,6 +15,21 @@
             "tags": [],
             "id": "emn1fukaji8v",
             "collapsed": false
+          },
+          {
+            "id": "emn8m8ptyjn3",
+            "type": "memo",
+            "text": "ビジネスの現場では新しい言葉、概念を使いたがる",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6twyvs6l2"
+            }
           }
         ],
         "2026-3-30": [
@@ -491,21 +506,6 @@
             "linkedNote": {
               "date": "2026-3-26",
               "nodeId": "mn75ig72viy"
-            }
-          },
-          {
-            "id": "emn8m8ptyjn3",
-            "type": "memo",
-            "text": "ビジネスの現場では新しい言葉、概念を使いたがる",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6twyvs6l2"
             }
           }
         ],
@@ -2325,7 +2325,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:05:59.846Z",
+  "savedAt": "2026-03-27T08:06:41.561Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4790,15 +4790,6 @@
         "id": "mn6ulleyp9x",
         "text": "なので、結局別に意識が高いわけではなく・・",
         "html": "なので、結局別に意識が高いわけではなく・・",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn6uscrnmq0",
-        "text": "",
-        "html": "<br>",
         "indent": 1,
         "bold": false,
         "color": "",
