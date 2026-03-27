@@ -288,19 +288,21 @@
           },
           {
             "id": "emn8jl5niq8u",
-            "type": "memo",
+            "type": "todo",
             "done": false,
             "text": "test2",
-            "note": "",
+            "note": "てててて",
             "url": "",
             "images": [],
-            "priority": "",
+            "priority": "low",
             "category": "",
             "tags": [],
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8j5jytip4"
-            }
+            },
+            "start": "",
+            "due": ""
           },
           {
             "id": "emn8jlbbhj40",
@@ -309,13 +311,15 @@
             "note": "",
             "url": "",
             "images": [],
-            "priority": "",
+            "priority": "low",
             "tags": [],
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8jlbbhl77"
             },
-            "done": false
+            "done": false,
+            "start": "",
+            "due": "2026-03-27"
           }
         ],
         "2026-3-30": [
@@ -2012,7 +2016,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:50:51.625Z",
+  "savedAt": "2026-03-27T06:51:30.708Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4759,12 +4763,12 @@
       },
       {
         "id": "mn8j5jytip4",
-        "text": "test2 #管理・全般 ",
+        "text": "test2",
         "indent": 0,
-        "isTodo": false,
+        "isTodo": true,
         "checked": false,
         "linkedEntryRef": "emn8jl5niq8u",
-        "html": "test2 #管理・全般 ",
+        "html": "test2",
         "linkedEntryText": "test2"
       },
       {
@@ -4778,11 +4782,12 @@
       },
       {
         "id": "mn8jlbbhl77",
-        "text": "テスト３ #管理・全般",
+        "text": "テスト３",
         "indent": 0,
         "isTodo": true,
         "checked": false,
-        "linkedEntryRef": "emn8jlbbhj40"
+        "linkedEntryRef": "emn8jlbbhj40",
+        "html": "テスト３"
       }
     ],
     "2026-3-28": [
