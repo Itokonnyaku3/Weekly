@@ -1773,7 +1773,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T01:17:42.819Z",
+  "savedAt": "2026-03-27T01:18:08.140Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4254,12 +4254,21 @@
     "2026-3-27": [
       {
         "id": "mn87mue1fsm",
-        "text": "週次の報告書と",
+        "text": "週次の報告書とプロジェクトリストを一致させる。",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "週次の報告書と"
+        "html": ""
+      },
+      {
+        "id": "mn87pnyyvbn",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ]
   }
