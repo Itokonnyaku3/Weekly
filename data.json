@@ -1966,7 +1966,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:25:36.932Z",
+  "savedAt": "2026-03-27T07:26:03.805Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4785,12 +4785,14 @@
       },
       {
         "id": "mn8ksng6ppg",
-        "text": "",
-        "html": "",
+        "text": "a ",
+        "html": "a ",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8kutqk66d",
+        "linkedEntryText": "a"
       },
       {
         "id": "mn8ksnue0k0",
