@@ -90,6 +90,21 @@
               "date": "2026-3-27",
               "nodeId": "mn84u7la0uq"
             }
+          },
+          {
+            "id": "emn8nwlrojer",
+            "type": "link",
+            "text": "改善は改善として、・・・",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8nijeb4lu"
+            }
           }
         ],
         "2026-3-30": [
@@ -2353,7 +2368,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:44:53.653Z",
+  "savedAt": "2026-03-27T08:51:31.219Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5060,9 +5075,21 @@
       },
       {
         "id": "mn8nijeb4lu",
-        "text": "",
+        "text": "改善は改善として、・・・",
         "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn8nwlrojer",
+        "linkedEntryText": "改善は改善として、・・・",
+        "isPrivate": true
+      },
+      {
+        "id": "mn8nwpp98ul",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
