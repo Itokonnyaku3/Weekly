@@ -761,13 +761,15 @@
           },
           {
             "type": "todo",
-            "text": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
-            "note": "",
+            "text": "岡芹さんTeachme完了確認",
+            "note": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成。\n出来たら、読み合わせのMtg設定",
             "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn2qu5t7538"
+            "id": "emn2qu5t7538",
+            "start": "2026-04-01",
+            "due": "2026-04-03"
           },
           {
             "type": "todo",
@@ -1858,7 +1860,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T00:12:55.852Z",
+  "savedAt": "2026-03-27T00:14:03.188Z",
   "dailyOutline": {
     "2026-3-18": [
       {
