@@ -253,6 +253,23 @@
               "nodeId": "mn8kr97efil"
             },
             "done": false
+          },
+          {
+            "id": "emn8ksahenex",
+            "type": "todo",
+            "text": "test #管理・全般",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [
+              "管理・全般"
+            ],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8ksahecsm"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -1949,7 +1966,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:23:17.221Z",
+  "savedAt": "2026-03-27T07:24:23.285Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4756,6 +4773,114 @@
         "isTodo": true,
         "checked": false,
         "linkedEntryRef": "emn8kr97dh02"
+      },
+      {
+        "id": "mn8ksahecsm",
+        "text": "test #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8ksahenex",
+        "html": ""
+      },
+      {
+        "id": "mn8ksn49619",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8ksng6ppg",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8ksnue0k0",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8ksnwq5p4",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8ksnx1vuy",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso0ac1m",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso0j5pi",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso3mz9l",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso3vu50",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso6l4e4",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8kso6tceo",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-28": [
