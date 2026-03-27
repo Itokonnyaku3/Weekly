@@ -313,22 +313,7 @@
             "collapsed": false
           },
           {
-            "id": "emn8m8ptxxed",
-            "type": "memo",
-            "text": "1300 ESL業務分科会　※前半は久保田さんに任せる",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1prwebh7z"
-            }
-          },
-          {
-            "id": "emn8m8ptx1t9",
+            "id": "emn8m8ptxo38",
             "type": "memo",
             "text": "1700 稟議 (新店等、根岸さんと山下さん)",
             "note": "",
@@ -338,39 +323,11 @@
             "category": "",
             "tags": [],
             "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn1prxh48m6"
-            }
-          },
-          {
-            "id": "emn8m8ptxng6",
-            "type": "memo",
-            "text": "鳩山店超低温オフライン…メール送信",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-23",
-              "nodeId": "mn2g83gpwz7"
-            }
-          },
-          {
-            "id": "emn8m8ptxo38",
-            "type": "memo",
-            "text": "岐南店",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
               "date": "2026-3-24",
               "nodeId": "mn40asnc78g"
-            }
+            },
+            "start": "",
+            "due": ""
           },
           {
             "id": "emn8m8ptxmds",
@@ -960,6 +917,21 @@
               "date": "2026-3-26",
               "nodeId": "mn6qysrwuze"
             }
+          },
+          {
+            "id": "emn8m8ptxng6",
+            "type": "memo",
+            "text": "鳩山店超低温オフライン…メール送信",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn2g83gpwz7"
+            }
           }
         ],
         "2026-3-30": [
@@ -1340,6 +1312,21 @@
             "id": "emmw2zro2u62",
             "collapsed": false,
             "done": true
+          },
+          {
+            "id": "emn8m8ptxxed",
+            "type": "memo",
+            "text": "1300 ESL業務分科会　※前半は久保田さんに任せる",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-23",
+              "nodeId": "mn1prwebh7z"
+            }
           }
         ],
         "2026-3-30": [],
@@ -2298,7 +2285,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:10:23.619Z",
+  "savedAt": "2026-03-27T08:11:41.292Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3379,13 +3366,13 @@
       {
         "id": "mn1prwebh7z",
         "text": " 1300 ESL業務分科会　※前半は久保田さんに任せる ",
-        "html": "&nbsp;1300 ESL業務分科会　※前半は久保田さんに任せる ",
+        "html": " 1300 ESL業務分科会　※前半は久保田さんに任せる ",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
         "collapsed": true,
         "linkedEntryRef": "emn8m8ptxxed",
-        "linkedEntryText": "1300 ESL業務分科会　※前半は久保田さんに任せる /"
+        "linkedEntryText": "1300 ESL業務分科会　※前半は久保田さんに任せる"
       },
       {
         "id": "mn1pydeetyl",
@@ -3415,21 +3402,10 @@
         "collapsed": false
       },
       {
-        "id": "mn1prxh48m6",
-        "text": "1700 稟議 (新店等、根岸さんと山下さん)",
-        "html": "1700 稟議 (新店等、根岸さんと山下さん)",
-        "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": true,
-        "linkedEntryRef": "emn8m8ptx1t9",
-        "linkedEntryText": ""
-      },
-      {
         "id": "mn1pzsw9bf1",
-        "text": "",
-        "html": "",
-        "indent": 1,
+        "text": "1700 稟議 (新店等、根岸さんと山下さん)",
+        "html": "<span style=\"font-weight: 700;\">1700 稟議 (新店等、根岸さんと山下さん)</span>",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -3519,8 +3495,8 @@
       },
       {
         "id": "mn2g83gpwz7",
-        "text": "鳩山店超低温オフライン…メール送信",
-        "html": "鳩山店超低温オフライン…メール送信",
+        "text": "鳩山店超低温オフライン…メール送信 ",
+        "html": "鳩山店超低温オフライン…メール送信 ",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -3678,14 +3654,15 @@
       },
       {
         "id": "mn40asnc78g",
-        "text": "岐南店　",
-        "html": "岐南店　",
+        "text": "1700 稟議 (新店等、根岸さんと山下さん)",
+        "html": "1700 稟議 (新店等、根岸さんと山下さん)",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn8m8ptxo38",
-        "linkedEntryText": "岐南店"
+        "linkedEntryText": "1700 稟議 (新店等、根岸さんと山下さん)",
+        "isTodo": false
       },
       {
         "id": "mn40awqo9vt",
