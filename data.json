@@ -238,23 +238,8 @@
             "collapsed": false
           },
           {
-            "id": "emn8ias3dyxk",
-            "type": "link",
-            "text": "test",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8iao3hxtf"
-            }
-          },
-          {
             "id": "emn8j589kj6v",
-            "type": "link",
+            "type": "todo",
             "text": "aaaiiiuuu",
             "note": "",
             "url": "",
@@ -270,7 +255,7 @@
           },
           {
             "id": "emn8j8aeytqj",
-            "type": "log",
+            "type": "todo",
             "text": "1aaa",
             "note": "",
             "url": "",
@@ -284,6 +269,38 @@
             "done": false,
             "start": "",
             "due": ""
+          },
+          {
+            "id": "emn8jkgq7a0h",
+            "type": "memo",
+            "done": false,
+            "text": "IIIII",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8isscy5hp"
+            }
+          },
+          {
+            "id": "emn8jkgq73oe",
+            "type": "memo",
+            "done": false,
+            "text": "test2",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8j5jytip4"
+            }
           }
         ],
         "2026-3-30": [
@@ -1273,22 +1290,6 @@
               "nodeId": "mn6qlp3lk61"
             },
             "collapsed": false
-          },
-          {
-            "id": "emn7bv5orkrz",
-            "type": "link",
-            "text": "0900　品質改善会議",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn5db1s93ub"
-            },
-            "collapsed": false
           }
         ]
       },
@@ -1593,7 +1594,7 @@
           },
           {
             "id": "emn8bqg25bew",
-            "type": "log",
+            "type": "todo",
             "text": "ふかやバイオーダー",
             "note": "",
             "url": "",
@@ -1996,7 +1997,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:41:00.901Z",
+  "savedAt": "2026-03-27T06:50:00.751Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4724,7 +4725,7 @@
         "indent": 0,
         "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "",
+        "linkedEntryRef": "emn8jkgq7a0h",
         "linkedEntryText": "IIIII",
         "html": ""
       },
@@ -4747,7 +4748,7 @@
         "indent": 0,
         "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "emn8j5ze2afl",
+        "linkedEntryRef": "emn8jkgq73oe",
         "html": "test2 #管理・全般 ",
         "linkedEntryText": "test2"
       },
