@@ -839,11 +839,15 @@
           },
           {
             "type": "todo",
-            "text": "成電社請求書確認",
+            "text": "成電社請求書処理",
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn5qzvdokvt"
+            "id": "emn5qzvdokvt",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
           },
           {
             "id": "emn5sdxpgou1",
@@ -873,12 +877,40 @@
           {
             "id": "emn85bh6cxc7",
             "type": "todo",
-            "text": "不足分対応",
+            "text": "HACCP不足店舗の対応",
             "note": "",
             "url": "",
             "images": [],
             "priority": "",
-            "tags": []
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn75h93aiwi"
+            },
+            "done": false,
+            "collapsed": true
+          },
+          {
+            "id": "emn85d9trbtl",
+            "type": "todo",
+            "text": "根岸さんに設置頼めるか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn85bh6cxc7"
+          },
+          {
+            "id": "emn85dhauexe",
+            "type": "todo",
+            "text": "75台納品確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn85bh6cxc7"
           }
         ],
         "2026-3-9": []
@@ -1826,7 +1858,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T00:11:06.804Z",
+  "savedAt": "2026-03-27T00:12:55.852Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4088,8 +4120,10 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "2:2026-3-30:15",
-        "linkedEntryText": "HACCP不足店舗対応"
+        "linkedEntryRef": "emn85bh6cxc7",
+        "linkedEntryText": "不足分対応",
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn75ig72viy",
