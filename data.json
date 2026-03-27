@@ -373,6 +373,21 @@
               "date": "2026-3-25",
               "nodeId": "mn5sv0xs6sn"
             }
+          },
+          {
+            "id": "emn8nhyhprrl",
+            "type": "link",
+            "text": "あ",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8nhsuyngm"
+            }
           }
         ],
         "2026-3-30": [
@@ -2300,7 +2315,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:23:40.421Z",
+  "savedAt": "2026-03-27T08:40:02.269Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4949,10 +4964,21 @@
         "id": "mn8fcijzm5w",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn8nhsuyngm",
+        "text": "あ　",
+        "html": "あ　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn8nhyhprrl",
+        "linkedEntryText": "あ"
       }
     ],
     "2026-3-28": [
