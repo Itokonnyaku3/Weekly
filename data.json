@@ -1773,7 +1773,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T01:16:46.082Z",
+  "savedAt": "2026-03-27T01:17:42.819Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4254,11 +4254,12 @@
     "2026-3-27": [
       {
         "id": "mn87mue1fsm",
-        "text": "",
+        "text": "週次の報告書と",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "html": "週次の報告書と"
       }
     ]
   }
