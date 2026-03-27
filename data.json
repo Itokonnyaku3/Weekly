@@ -271,21 +271,6 @@
             "due": ""
           },
           {
-            "id": "emn8loffxolj",
-            "type": "memo",
-            "text": "test3",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8loffyru2"
-            },
-            "done": false
-          },
-          {
             "id": "emn8lqev8se5",
             "type": "log",
             "text": "test4",
@@ -320,8 +305,8 @@
           },
           {
             "id": "emn8ltv0z8vs",
-            "type": "link",
-            "text": "test5",
+            "type": "todo",
+            "text": "test5 /",
             "note": "",
             "url": "",
             "images": [],
@@ -331,7 +316,24 @@
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8lsj2sims"
-            }
+            },
+            "done": false
+          },
+          {
+            "id": "emn8lvjgsz1t",
+            "type": "todo",
+            "text": "test6 /",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8lv6r3koo"
+            },
+            "done": false
           }
         ],
         "2026-3-30": [
@@ -2028,7 +2030,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:53:18.420Z",
+  "savedAt": "2026-03-27T07:54:55.357Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4754,7 +4756,7 @@
       {
         "id": "mn8lntbuhol",
         "text": "test4",
-        "html": "",
+        "html": "test4",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4766,7 +4768,7 @@
       {
         "id": "mn8ls00mzp3",
         "text": "a",
-        "html": "",
+        "html": "a",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4778,37 +4780,34 @@
       {
         "id": "mn8lsj2sims",
         "text": "test5 ",
-        "html": "test5 ",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn8ltv0z8vs",
-        "linkedEntryText": "test5"
-      },
-      {
-        "id": "mn8loffyru2",
-        "text": "test3 #管理・全般",
-        "indent": 0,
+        "linkedEntryText": "test5 /",
         "isTodo": false,
-        "checked": false,
-        "linkedEntryRef": "emn8loffxolj",
-        "html": "test3 #管理・全般"
+        "checked": false
       },
       {
-        "id": "mn8lowi3qb3",
-        "text": "aa",
-        "html": "",
-        "indent": 1,
-        "bold": false,
+        "id": "mn8lv6r3koo",
+        "text": "test6 ",
+        "html": "test6 ",
+        "indent": 0,
+        "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "linkedEntryRef": "emn8lvjgsz1t",
+        "linkedEntryText": "test6 /",
+        "isTodo": false,
+        "checked": false
       },
       {
-        "id": "mn8loy5a2bl",
+        "id": "mn8lvfkxqya",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
