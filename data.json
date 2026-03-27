@@ -389,6 +389,31 @@
               "date": "2026-3-27",
               "nodeId": "mn8nhsuyngm"
             }
+          },
+          {
+            "id": "emn8nlsqhq7j",
+            "type": "link",
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8nj5djr81"
+            }
+          },
+          {
+            "id": "emn8nm02wrk3",
+            "type": "todo",
+            "text": "aaa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-3-30": [
@@ -477,6 +502,16 @@
             "tags": [],
             "parentId": "emn88c807cfl",
             "collapsed": false
+          },
+          {
+            "id": "emn8nktli71y",
+            "type": "todo",
+            "text": "test2",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
           }
         ],
         "2026-4-6": [
@@ -2316,7 +2351,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:41:58.819Z",
+  "savedAt": "2026-03-27T08:43:10.952Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4994,6 +5029,17 @@
       },
       {
         "id": "mn8nj5djr81",
+        "text": "aaa  ",
+        "html": "aaa  ",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "linkedEntryRef": "emn8nlsqhq7j",
+        "linkedEntryText": "aaa"
+      },
+      {
+        "id": "mn8nlom5d2q",
         "text": "",
         "html": "",
         "indent": 0,
