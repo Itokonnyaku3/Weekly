@@ -1885,7 +1885,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T03:08:23.836Z",
+  "savedAt": "2026-03-27T03:09:54.982Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4413,8 +4413,80 @@
       },
       {
         "id": "mn8blsyuyg5",
-        "text": "mit",
-        "html": "mit",
+        "text": "見積",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bnvunxhv",
+        "text": "アドセック…受領",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bo0hyhbu",
+        "text": "NCR…嶋村さん依頼済み",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bocxnjkw",
+        "text": "天井施工",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bofxn2sr",
+        "text": "[03.27] 藤原さんに川村さんの連絡先を連携",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8botala8f",
+        "text": "稟議",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bozyoavl",
+        "text": "建設でやるのかデジタルでやるのか確認",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bpa0pn82",
+        "text": "発注",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8bperhpje",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
