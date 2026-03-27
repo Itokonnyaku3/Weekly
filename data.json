@@ -238,7 +238,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T22:56:20.180Z",
+  "savedAt": "2026-03-27T22:57:23.345Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -1662,7 +1662,7 @@
       {
         "id": "mn1pspszwgj",
         "text": "田口さん、久保田さん問題",
-        "html": "",
+        "html": "田口さん、久保田さん問題",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -1848,7 +1848,7 @@
       {
         "id": "mn2yncodxma",
         "text": "ここでGeminiに相談",
-        "html": "",
+        "html": "ここでGeminiに相談",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -1857,7 +1857,7 @@
       {
         "id": "mn2yoiuy0na",
         "text": "https://gemini.google.com/share/81dc5dafaeea",
-        "html": "",
+        "html": "<a href=\"https://gemini.google.com/share/81dc5dafaeea\" target=\"_blank\" rel=\"noopener\">https://gemini.google.com/share/81dc5dafaeea</a>",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -2009,7 +2009,8 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "Private",
-        "type": "log"
+        "type": "log",
+        "html": "3.26 終業式、ハンドベル（14時から）"
       },
       {
         "id": "emmw2zro2h23",
@@ -2022,7 +2023,8 @@
         "checked": true,
         "isPrivate": false,
         "projTag": "管理・全般",
-        "type": "todo"
+        "type": "todo",
+        "html": "勤怠"
       },
       {
         "id": "emmxcrheobzo",
@@ -2036,7 +2038,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "todo",
-        "priority": "high"
+        "priority": "high",
+        "html": "田口さん・久さん問題をリーダー会で相談"
       },
       {
         "id": "emmx5rb3lu90",
@@ -2054,7 +2057,8 @@
         "tags": [
           "定例"
         ],
-        "due": "2026-03-27"
+        "due": "2026-03-27",
+        "html": "週次進捗確認（毎週金曜）"
       },
       {
         "id": "emmy5whstteq",
@@ -2068,7 +2072,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "todo",
-        "priority": "high"
+        "priority": "high",
+        "html": "小口経費精算、印刷して提出"
       },
       {
         "id": "emn1hfsbsfnd",
@@ -2081,7 +2086,8 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "HACCP",
-        "type": "log"
+        "type": "log",
+        "html": "🌡️説明会！"
       },
       {
         "id": "emmw2zro2zpo",
@@ -2096,7 +2102,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773809622340?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773809622340&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773809622340",
-        "note": "運用フォルダに移動させる"
+        "note": "運用フォルダに移動させる",
+        "html": "トラブルシュートガイドを確認"
       },
       {
         "id": "emmx5rb3l29i",
@@ -2110,7 +2117,8 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
-        "note": "根岸さんが1時から、米山がMtg終わり次第駆けつけ"
+        "note": "根岸さんが1時から、米山がMtg終わり次第駆けつけ",
+        "html": "おおたモール久保田さんか根岸さんに"
       },
       {
         "id": "emmw2zro2l9s",
@@ -2125,35 +2133,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "note": "■成電社\n■富士通\n■小泉成器",
-        "due": "2026-03-25"
-      },
-      {
-        "id": "emn1qfxtvazd",
-        "text": "成電社から見積受領！",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "priority": "high"
-      },
-      {
-        "id": "emn5cymf24rd",
-        "text": "メールアドレス登録！",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "due": "2026-03-27"
+        "due": "2026-03-25",
+        "html": "新狭山見積→発注"
       },
       {
         "id": "emmw2zro2zw8",
@@ -2167,22 +2148,8 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
-        "due": "2026-03-27"
-      },
-      {
-        "id": "emn4cgny8k9i",
-        "text": "メールアドレス登録！",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "note": "大網白里店 店長(櫻井 建太郎)　BE\n都留(Fd)店 店長(栗原 泉弥)　BE\n東金店 店長(相澤 祐希)　BE\n日立（Fd）店 店長(渡辺 晃一)　BE\n八街（Fd）店 店長(中澤 弘樹)　BE\n富士吉田店 店長(鎌田 一輝)　BE\n富里店 店長(三輪 紘史)　BE",
-        "due": "2026-03-25"
+        "due": "2026-03-27",
+        "html": "27日ごろセンサー早出し納品日確認"
       },
       {
         "id": "emmw2zro21cn",
