@@ -16,7 +16,18 @@
             "id": "emn1fukaji8v"
           }
         ],
-        "2026-3-30": []
+        "2026-3-30": [
+          {
+            "id": "emn83cyhgsao",
+            "type": "todo",
+            "text": "aa",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": []
+          }
+        ]
       },
       "links": [],
       "projEntries": [],
@@ -222,24 +233,6 @@
               "date": "2026-3-24",
               "nodeId": "mn45h4j6c1b"
             }
-          },
-          {
-            "id": "emn6tcl59mk0",
-            "type": "todo",
-            "done": false,
-            "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-26",
-              "nodeId": "mn6qw87cln3"
-            },
-            "start": "",
-            "due": ""
           }
         ],
         "2026-3-30": [
@@ -278,10 +271,40 @@
             "note": "",
             "url": "",
             "start": "",
-            "due": "",
+            "due": "2026-03-26",
             "priority": "",
             "tags": [],
             "id": "emn7bub5cw3p"
+          },
+          {
+            "id": "emn6tcl59mk0",
+            "type": "todo",
+            "done": false,
+            "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn6qw87cln3"
+            },
+            "start": "2026-03-30",
+            "due": "2026-04-03"
+          },
+          {
+            "id": "emn88c807cfl",
+            "type": "todo",
+            "text": "30期マスタースケジュール確認",
+            "note": "マスタースケジュール、週次報告、プロジェクト管理を統合させる",
+            "url": "",
+            "images": [],
+            "priority": "mid",
+            "tags": [],
+            "start": "",
+            "due": ""
           }
         ],
         "2026-4-6": [
@@ -347,14 +370,12 @@
           "type": "link",
           "text": "店舗インフラ部進捗報告",
           "note": "月次で亀山さんレビュー、週次でCIOオフィス室に送って進捗を確認。\n毎週金曜日までに各メンバーにも更新してもらっている",
-          "url": "https://beisiag.sharepoint.com/:x:/r/sites/be_team_001151/Shared%20Documents/General/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8/10_%E9%83%A8%E5%86%85%E5%85%B1%E9%80%9A/%E5%A0%B1%E5%91%8A%E8%B3%87%E6%96%99/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8_30%E6%9C%9F%E6%A1%88%E4%BB%B6%E5%A0%B1%E5%91%8A.xlsx?d=w5422fd87082c428eb1f2d9f8aca244ff&csf=1&web=1&e=G0wfTk",
+          "url": "https://beisiag.sharepoint.com/:x:/r/sites/be_team_001151/Shared%20Documents/General/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8/10_%E9%83%A8%E5%86%85%E5%85%B1%E9%80%9A/%E5%A0%B1%E5%91%8A%E8%B3%87%E6%96%99/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8_29%E6%9C%9F%E6%9C%AC%E9%83%A8%E5%86%85%E5%AE%9A%E4%BE%8B%E5%A0%B1%E5%91%8A.xlsx?d=w0f1db4ba84ff463d81663eb163641d45&csf=1&web=1&e=XncqlA",
           "images": [],
           "id": "emmw2zro22wq",
           "today": false,
           "priority": "",
-          "tags": [],
-          "start": "",
-          "due": ""
+          "tags": []
         },
         {
           "type": "link",
@@ -389,7 +410,7 @@
           "id": "emmw2zro2ubp"
         }
       ],
-      "projEntriesOpen": true,
+      "projEntriesOpen": false,
       "collapsed": false,
       "spanItems": [
         {
@@ -630,7 +651,7 @@
             "priority": "",
             "tags": [],
             "id": "emmy4wb1gj08",
-            "collapsed": false
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -702,6 +723,19 @@
           },
           {
             "type": "todo",
+            "text": "深谷国済寺1台送付済み状況確認",
+            "note": "[03.27] 確認催促した",
+            "url": "",
+            "images": [],
+            "parentId": "emn5khg5dcwl",
+            "id": "emn5lcx4rm60",
+            "start": "2026-03-24",
+            "due": "2026-03-30",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "type": "todo",
             "text": "大間々店1台送付",
             "note": "",
             "url": "",
@@ -709,20 +743,7 @@
             "parentId": "emn5khg5dcwl",
             "id": "emn5lcx4r630",
             "start": "2026-03-24",
-            "due": "2026-03-24",
-            "priority": "",
-            "tags": []
-          },
-          {
-            "type": "todo",
-            "text": "深谷国済寺1台送付済み状況確認",
-            "note": "",
-            "url": "",
-            "images": [],
-            "parentId": "emn5khg5dcwl",
-            "id": "emn5lcx4rm60",
-            "start": "2026-03-24",
-            "due": "2026-03-24",
+            "due": "2026-03-30",
             "priority": "",
             "tags": []
           },
@@ -752,22 +773,41 @@
           },
           {
             "type": "todo",
-            "text": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
-            "note": "",
+            "text": "岡芹さんTeachme完了確認",
+            "note": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成。\n出来たら、読み合わせのMtg設定",
             "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
             "images": [],
             "priority": "",
             "tags": [],
-            "id": "emn2qu5t7538"
+            "id": "emn2qu5t7538",
+            "start": "2026-04-01",
+            "due": "2026-04-03"
           },
           {
             "type": "todo",
             "text": "新狭山HACCP発注",
             "note": "",
-            "url": "",
+            "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/HACCP?csf=1&web=1&e=f3nJNz",
             "images": [],
             "id": "emn5jjkvhknn",
-            "collapsed": false
+            "collapsed": true,
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
+          },
+          {
+            "id": "emn84t1ep3t9",
+            "type": "link",
+            "text": "見積書",
+            "note": "",
+            "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General/%E6%96%B0%E7%8B%AD%E5%B1%B1/%E7%A8%9F%E8%AD%B0%E6%9B%B8/HACCP?csf=1&web=1&e=f3nJNz",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn5jjkvhknn",
+            "start": "",
+            "due": ""
           },
           {
             "type": "todo",
@@ -780,12 +820,16 @@
           },
           {
             "type": "todo",
-            "text": "成電社（見積もらってから）",
+            "text": "成電社",
             "note": "",
             "url": "",
             "images": [],
             "parentId": "emn5jjkvhknn",
-            "id": "emn5lcx4rojg"
+            "id": "emn5lcx4rojg",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
           },
           {
             "type": "todo",
@@ -809,11 +853,15 @@
           },
           {
             "type": "todo",
-            "text": "成電社請求書確認",
+            "text": "成電社請求書処理",
             "note": "",
             "url": "",
             "images": [],
-            "id": "emn5qzvdokvt"
+            "id": "emn5qzvdokvt",
+            "start": "",
+            "due": "",
+            "priority": "",
+            "tags": []
           },
           {
             "id": "emn5sdxpgou1",
@@ -839,6 +887,44 @@
             "due": "2026-03-30",
             "priority": "",
             "tags": []
+          },
+          {
+            "id": "emn85bh6cxc7",
+            "type": "todo",
+            "text": "HACCP不足店舗の対応",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-26",
+              "nodeId": "mn75h93aiwi"
+            },
+            "done": false,
+            "collapsed": true
+          },
+          {
+            "id": "emn85d9trbtl",
+            "type": "todo",
+            "text": "根岸さんに設置頼めるか確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn85bh6cxc7"
+          },
+          {
+            "id": "emn85dhauexe",
+            "type": "todo",
+            "text": "75台納品確認",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn85bh6cxc7"
           }
         ],
         "2026-3-9": []
@@ -1050,7 +1136,8 @@
             "due": "2026-04-24",
             "priority": "",
             "tags": [],
-            "id": "emn3vgzrbylq"
+            "id": "emn3vgzrbylq",
+            "collapsed": true
           },
           {
             "type": "todo",
@@ -1529,7 +1616,19 @@
             "priority": "",
             "tags": [],
             "start": "2026-03-26",
-            "due": "2026-04-10"
+            "due": "2026-04-10",
+            "collapsed": true
+          },
+          {
+            "id": "emn854q5pkn8",
+            "type": "todo",
+            "text": "松村さんに東村山用を一度BBCに送ってもらう",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "parentId": "emn6vdtsnwv9"
           }
         ]
       },
@@ -1772,8 +1871,8 @@
       "isPrivate": false
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-03-27T01:18:08.140Z",
+  "wOff": 0,
+  "savedAt": "2026-03-27T01:37:02.270Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4035,8 +4134,10 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "linkedEntryRef": "2:2026-3-30:15",
-        "linkedEntryText": "HACCP不足店舗対応"
+        "linkedEntryRef": "emn85bh6cxc7",
+        "linkedEntryText": "不足分対応",
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn75ig72viy",
@@ -4253,18 +4354,8 @@
     ],
     "2026-3-27": [
       {
-        "id": "mn87mue1fsm",
-        "text": "週次の報告書とプロジェクトリストを一致させる。",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "html": ""
-      },
-      {
-        "id": "mn87pnyyvbn",
+        "id": "mn84u7la0uq",
         "text": "",
-        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
