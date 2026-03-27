@@ -75,6 +75,21 @@
               "date": "2026-3-24",
               "nodeId": "mn4mln9e3ag"
             }
+          },
+          {
+            "id": "emn8muq4noq8",
+            "type": "memo",
+            "text": "朝娘の水泳短期教室　０９００－１０１５",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn84u7la0uq"
+            }
           }
         ],
         "2026-3-30": [
@@ -2285,7 +2300,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:11:41.292Z",
+  "savedAt": "2026-03-27T08:23:40.421Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3425,7 +3440,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "久保田さん育休後の体制…"
       },
       {
@@ -3453,7 +3468,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "linkedEntryRef": "emn8m8ptxst3",
         "linkedEntryText": "複合機スキャン設定どうする"
       },
@@ -3491,7 +3506,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mn2g83gpwz7",
@@ -4736,12 +4751,15 @@
     "2026-3-27": [
       {
         "id": "mn84u7la0uq",
-        "text": "朝娘の水泳短期教室　０９００－１０１５i　　　",
+        "text": "朝娘の水泳短期教室　０９００－１０１５ ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "朝娘の水泳短期教室　０９００－１０１５<div>i　　　</div><div><br></div><div><br></div>"
+        "html": "朝娘の水泳短期教室　０９００－１０１５ ",
+        "linkedEntryRef": "emn8muq4noq8",
+        "linkedEntryText": "朝娘の水泳短期教室　０９００－１０１５ /",
+        "isPrivate": true
       },
       {
         "id": "mn88qws26l6",
@@ -4898,7 +4916,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mn8falageug",
@@ -4942,6 +4960,45 @@
         "id": "mn8ipnvpwx0",
         "text": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-29": [
+      {
+        "id": "mn8mv6pqa1o",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-30": [
+      {
+        "id": "mn8mv6zcn04",
+        "text": "休日出勤についてグループの意見を共有",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mn8mvie22fg",
+        "text": "半日だと、別の日に休みをとってかつ残りの時間をどこかにつけないといけないので、一日フルで勤務する方がまし",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8mwf11j8n",
+        "text": "※GWとか子供がいるとイベントの調整が難しいが",
+        "html": "※GWとか子供がいるとイベントの調整が難しいが",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
