@@ -337,7 +337,7 @@
           },
           {
             "id": "emn8lzj0u3uw",
-            "type": "todo",
+            "type": "log",
             "text": "test7",
             "note": "",
             "url": "",
@@ -348,7 +348,9 @@
               "date": "2026-3-27",
               "nodeId": "mn8lzj0u3k4"
             },
-            "done": false
+            "done": false,
+            "start": "",
+            "due": ""
           }
         ],
         "2026-3-30": [
@@ -2045,7 +2047,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T07:58:19.545Z",
+  "savedAt": "2026-03-27T08:00:36.555Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4829,12 +4831,12 @@
       },
       {
         "id": "mn8lzj0u3k4",
-        "text": "test7 ",
+        "text": "test7",
         "indent": 0,
         "isTodo": false,
         "checked": false,
         "linkedEntryRef": "emn8lzj0u3uw",
-        "html": "test7&nbsp;"
+        "html": "test7"
       },
       {
         "id": "mn8m05j2vwl",
