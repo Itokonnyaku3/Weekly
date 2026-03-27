@@ -236,38 +236,6 @@
               "nodeId": "mn45h4j6c1b"
             },
             "collapsed": false
-          },
-          {
-            "id": "emn8jrwr1lx5",
-            "type": "todo",
-            "text": "test5",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8jrwr19um"
-            },
-            "done": false
-          },
-          {
-            "id": "emn8jshkrea0",
-            "type": "todo",
-            "text": "atest6",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-27",
-              "nodeId": "mn8jshkrbmp"
-            },
-            "done": false,
-            "start": "",
-            "due": ""
           }
         ],
         "2026-3-30": [
@@ -1964,7 +1932,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:56:19.984Z",
+  "savedAt": "2026-03-27T06:58:16.965Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4738,22 +4706,13 @@
         "html": ""
       },
       {
-        "id": "mn8jrpoar0i",
+        "id": "mn8jup3gxcj",
         "text": "",
-        "html": "<div><br></div><div><br></div>",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
-      },
-      {
-        "id": "mn8jrwr19um",
-        "text": "test5 #管理・全般",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "linkedEntryRef": "emn8jrwr1lx5",
-        "html": ""
       },
       {
         "id": "mn8js1svjkj",
@@ -4768,9 +4727,9 @@
         "id": "mn8jshkrbmp",
         "text": "atest6",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "linkedEntryRef": "emn8jshkrea0",
+        "linkedEntryRef": "",
         "html": "atest6"
       }
     ],
