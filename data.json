@@ -264,13 +264,14 @@
             "linkedNote": {
               "date": "2026-3-27",
               "nodeId": "mn8iq36mxvv"
-            }
+            },
+            "done": false
           },
           {
             "id": "emn8iq36x6w6",
             "type": "todo",
             "done": false,
-            "text": "aaa",
+            "text": "aaaU",
             "note": "",
             "url": "",
             "images": [],
@@ -283,6 +284,36 @@
             },
             "start": "",
             "due": "2026-03-27"
+          },
+          {
+            "id": "emn8isscyoap",
+            "type": "todo",
+            "text": "IIIII",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8isscy5hp"
+            }
+          },
+          {
+            "id": "emn8issdbu06",
+            "type": "todo",
+            "done": false,
+            "text": "IIIII",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-27",
+              "nodeId": "mn8isscy5hp"
+            }
           }
         ],
         "2026-3-30": [
@@ -1995,7 +2026,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T06:27:10.390Z",
+  "savedAt": "2026-03-27T06:28:29.471Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4700,13 +4731,13 @@
       },
       {
         "id": "mn8iq36mxvv",
-        "text": "aaa",
+        "text": "aaaU",
         "indent": 0,
         "isTodo": true,
         "checked": false,
         "linkedEntryRef": "emn8iq36x6w6",
-        "linkedEntryText": "aaa",
-        "html": "aaa"
+        "linkedEntryText": "aaaU",
+        "html": "aaaU"
       },
       {
         "id": "mn8iqepjpvk",
@@ -4718,13 +4749,13 @@
         "collapsed": false
       },
       {
-        "id": "mn8iqg5z87s",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
+        "id": "mn8isscy5hp",
+        "text": "IIIII #管理・全般",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "linkedEntryRef": "emn8issdbu06",
+        "linkedEntryText": "IIIII"
       }
     ],
     "2026-3-28": [
