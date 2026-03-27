@@ -2368,7 +2368,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-27T08:53:35.795Z",
+  "savedAt": "2026-03-27T09:03:00.559Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5105,6 +5105,24 @@
       },
       {
         "id": "mn8nz56b4ks",
+        "text": "ブログの方はどうもイマイチ納得いかない",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8ob770i27",
+        "text": "まあ、一回出してみて、気になったらあとでリライトすればいいか。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn8obho9bp1",
         "text": "",
         "html": "",
         "indent": 1,
