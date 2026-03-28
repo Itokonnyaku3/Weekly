@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:56:16.323Z",
+  "savedAt": "2026-03-28T05:56:47.853Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5098,7 +5098,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "行田店岸田店長から5度以上の乖離 "
       },
       {
         "id": "mn9x2skrsh6",
@@ -5115,11 +5116,20 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "テスト親ノード<div><br></div>"
+        "html": "テスト親ノード"
+      },
+      {
+        "id": "mn9x3qml56l",
+        "text": "aa",
+        "html": "aa",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn9x353pk6f",
-        "text": "テスト子ノード",
+        "text": "",
         "indent": 0,
         "isTodo": true,
         "checked": false,
@@ -5132,7 +5142,17 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mn9x2skrsh6"
+        "parentId": "mn9x2skrsh6",
+        "html": ""
+      },
+      {
+        "id": "mn9x3l06p0l",
+        "text": "テスト子ノード",
+        "html": "テスト子ノード",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-4-6": [
