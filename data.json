@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:56:47.853Z",
+  "savedAt": "2026-03-28T05:58:14.095Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5119,15 +5119,6 @@
         "html": "テスト親ノード"
       },
       {
-        "id": "mn9x3qml56l",
-        "text": "aa",
-        "html": "aa",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn9x353pk6f",
         "text": "",
         "indent": 0,
@@ -5142,13 +5133,60 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mn9x2skrsh6",
-        "html": ""
+        "html": "",
+        "parentId": "mn9x2skrsh6"
       },
       {
         "id": "mn9x3l06p0l",
         "text": "テスト子ノード",
-        "html": "テスト子ノード",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9x4amzdhf",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9x4cwdf0j",
+        "text": "テスト子ノード２　",
+        "html": "テスト子ノード２　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "projTag": "運用改善",
+        "type": "log"
+      },
+      {
+        "id": "mn9x4m9k7w8",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9x4memils",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9x4mi2yyi",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
