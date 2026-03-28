@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:58:39.833Z",
+  "savedAt": "2026-03-28T05:59:07.420Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5156,14 +5156,16 @@
       },
       {
         "id": "mn9x4cwdf0j",
-        "text": "テスト子ノード２　",
-        "html": "テスト子ノード２　",
+        "text": "テスト子ノード２ ",
+        "html": "テスト子ノード２ ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "projTag": "運用改善",
-        "type": "log"
+        "type": "todo",
+        "isTodo": true,
+        "checked": false
       },
       {
         "id": "mn9x4m9k7w8",
