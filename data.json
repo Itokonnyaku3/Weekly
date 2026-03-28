@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T03:00:31.757Z",
+  "savedAt": "2026-03-28T03:03:36.531Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4350,8 +4350,8 @@
       },
       {
         "id": "mn6qw87cln3",
-        "text": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
-        "html": "鹿喰さん提案冷蔵庫の費用削減機器POCやるか確認",
+        "text": "鹿喰さん提案冷蔵庫の費用削減機器やるか確認",
+        "html": "鹿喰さん提案冷蔵庫の費用削減機器やるか確認",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -5660,33 +5660,6 @@
         "id": "mn9mhjh8oe8",
         "text": "a",
         "html": "a",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9mhnr89wn",
-        "text": "test　",
-        "html": "test　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "projTag": "管理・全般",
-        "type": "link",
-        "url": "https://Itokonnyaku3.github.io/Weekly/project-weekly-tracker.html　/",
-        "note": "",
-        "isTodo": false,
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": ""
-      },
-      {
-        "id": "mn9n4n56vce",
-        "text": "",
-        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
