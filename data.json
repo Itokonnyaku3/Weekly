@@ -129,22 +129,6 @@
             }
           },
           {
-            "id": "emn9kqv86lpk",
-            "type": "todo",
-            "done": false,
-            "text": "OTの高温対応どうするか考える",
-            "note": "",
-            "url": "",
-            "images": [],
-            "priority": "",
-            "category": "",
-            "tags": [],
-            "linkedNote": {
-              "date": "2026-3-16",
-              "nodeId": "emmw2zro21cn"
-            }
-          },
-          {
             "id": "emn9kqv86jwc",
             "type": "todo",
             "done": true,
@@ -673,9 +657,7 @@
               "date": "2026-3-28",
               "nodeId": "mn9hocz6xx2"
             }
-          }
-        ],
-        "1999-12-27": [
+          },
           {
             "id": "emn9kqv88phc",
             "type": "todo",
@@ -691,8 +673,25 @@
               "date": "proj:0",
               "nodeId": "mn9kmqnqs4y"
             }
+          },
+          {
+            "id": "emn9kqv86lpk",
+            "type": "todo",
+            "done": false,
+            "text": "OTの高温対応どうするか考える",
+            "note": "",
+            "url": "",
+            "images": [],
+            "priority": "",
+            "category": "",
+            "tags": [],
+            "linkedNote": {
+              "date": "2026-3-16",
+              "nodeId": "emmw2zro21cn"
+            }
           }
         ],
+        "1999-12-27": [],
         "2026-3-30": [
           {
             "id": "emn9kqv887q3",
@@ -1227,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-28T00:10:45.273Z",
+  "savedAt": "2026-03-28T00:11:42.194Z",
   "dailyOutline": {
     "2026-3-18": [
       {
