@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:16:05.824Z",
+  "savedAt": "2026-03-28T05:16:28.175Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4169,7 +4169,7 @@
         "linkedEntryText": "行田店岸田店長から5度以上の乖離",
         "isTodo": true,
         "type": "todo",
-        "checked": false,
+        "checked": true,
         "projTag": "HACCP"
       },
       {
@@ -5072,6 +5072,22 @@
         "tags": [],
         "start": "",
         "due": "2026-03-30"
+      },
+      {
+        "id": "mn9vny1l6qp",
+        "text": "行田店岸田店長から5度以上の乖離 ",
+        "type": "todo",
+        "isTodo": true,
+        "checked": false,
+        "indent": 0,
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-4-6": [
