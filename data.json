@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T04:02:18.010Z",
+  "savedAt": "2026-03-28T04:06:55.086Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4095,10 +4095,10 @@
       {
         "id": "mn5mbgmu9vv",
         "text": "Windowsライセンス問題　",
-        "html": "",
+        "html": "Windowsライセンス問題　",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false,
         "linkedEntryText": "■Windowsアップデート",
         "type": "link",
@@ -4109,7 +4109,7 @@
       {
         "id": "mn5mcmo8o0r",
         "text": "イシダ…エビデンスがあるか再度確認",
-        "html": "",
+        "html": "イシダ…エビデンスがあるか再度確認",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4118,7 +4118,7 @@
       {
         "id": "mn5md66snx4",
         "text": "GOT…",
-        "html": "",
+        "html": "GOT…",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4142,7 +4142,7 @@
       {
         "id": "mn5mdsmemel",
         "text": "OTC…早急に使用を取りやめで担当部署と話を進める",
-        "html": "",
+        "html": "OTC…早急に使用を取りやめで担当部署と話を進める",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4151,7 +4151,7 @@
       {
         "id": "mn5r1ij3dkw",
         "text": "早ければ一か月くらいでできるかも　By山下さん",
-        "html": "",
+        "html": "早ければ一か月くらいでできるかも　By山下さん",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -4159,14 +4159,18 @@
       },
       {
         "id": "mn5sv0xs6sn",
-        "text": "行田店岸田店長から5度以上の乖離",
-        "html": "",
+        "text": "行田店岸田店長から5度以上の乖離 ",
+        "html": "行田店岸田店長から5度以上の乖離 ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "linkedEntryRef": "emn5sv7y3fyz",
-        "linkedEntryText": "行田店岸田店長から5度以上の乖離"
+        "linkedEntryText": "行田店岸田店長から5度以上の乖離",
+        "isTodo": true,
+        "type": "todo",
+        "checked": false,
+        "projTag": "HACCP"
       },
       {
         "id": "mn5svm3up8f",
@@ -5664,7 +5668,7 @@
       {
         "id": "mn9mhjh8oe8",
         "text": "test",
-        "html": "",
+        "html": "test",
         "indent": 0,
         "bold": false,
         "color": "",
