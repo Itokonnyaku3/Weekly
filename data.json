@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T06:13:33.581Z",
+  "savedAt": "2026-03-28T06:14:02.610Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4735,7 +4735,8 @@
         "projTag": "管理・全般",
         "type": "todo",
         "linkedEntryRef": "emn9kqv887q3",
-        "linkedEntryText": "週次進捗確認"
+        "linkedEntryText": "週次進捗確認",
+        "html": "週次進捗確認"
       },
       {
         "id": "emmw2zro2mh2",
@@ -5117,7 +5118,7 @@
         "start": "",
         "due": "",
         "html": "テスト親ノード　",
-        "gridCollapsed": true,
+        "gridCollapsed": false,
         "collapsed": false,
         "bold": true
       },
@@ -5166,7 +5167,7 @@
       {
         "id": "mn9x4m9k7w8",
         "text": "",
-        "html": "",
+        "html": "<div><br></div><div><br></div>",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -5270,6 +5271,23 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn9xpz0kg4k",
+        "text": "テスト3",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "運用改善",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "parentId": "mn9x2skrsh6"
       }
     ],
     "2026-4-6": [
@@ -6083,6 +6101,16 @@
         "id": "mn9mcysg4pn",
         "text": "",
         "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-31": [
+      {
+        "id": "mn9xq5d2kk2",
+        "text": "",
         "indent": 0,
         "bold": false,
         "color": "",
