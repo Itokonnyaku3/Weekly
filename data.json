@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-28T00:46:46.001Z",
+  "savedAt": "2026-03-28T01:16:46.965Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4694,7 +4694,8 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "管理・全般",
-        "type": "log"
+        "type": "log",
+        "html": "黒田さん30日在宅"
       },
       {
         "id": "emmw2zro2s6e",
@@ -4708,7 +4709,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "link",
-        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end"
+        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
+        "html": "★週次進捗OneNote"
       },
       {
         "id": "emn7bub5cw3p",
@@ -4723,7 +4725,8 @@
         "projTag": "管理・全般",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88bq4",
-        "linkedEntryText": "dasa"
+        "linkedEntryText": "dasa",
+        "html": "dasa"
       },
       {
         "id": "emn1hfsbsuj6",
@@ -5690,18 +5693,31 @@
       },
       {
         "id": "mn9hbsn5n5w",
-        "text": "",
-        "html": "",
+        "text": "test ",
+        "html": "test ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "type": "link",
+        "isTodo": false,
+        "url": "https://Itokonnyaku3.github.io/Weekly/project-weekly-tracker.html"
       },
       {
         "id": "mn9hbibbqan",
         "text": "",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-3-29": [
+      {
+        "id": "mn9n3dl7se2",
+        "text": "",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
