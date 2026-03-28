@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T08:08:37.380Z",
+  "savedAt": "2026-03-28T08:09:23.857Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2194,7 +2194,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv86lpk",
-        "linkedEntryText": "OTの高温対応どうするか考える"
+        "linkedEntryText": "OTの高温対応どうするか考える",
+        "parentId": "emmw2zro2zw8"
       },
       {
         "id": "emmw2zro2h7j",
