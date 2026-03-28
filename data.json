@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T03:59:34.229Z",
+  "savedAt": "2026-03-28T04:02:18.010Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3205,10 +3205,15 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
-        "due": "2026-03-27",
+        "due": "2026-03-30",
         "html": "27日ごろセンサー早出し納品日確認",
         "linkedEntryRef": "emn9kqv871dh",
-        "linkedEntryText": "27日ごろセンサー早出し納品日確認"
+        "linkedEntryText": "27日ごろセンサー早出し納品日確認",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "start": ""
       },
       {
         "id": "emmw2zro21cn",
