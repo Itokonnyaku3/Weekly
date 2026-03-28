@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:17:02.035Z",
+  "savedAt": "2026-03-28T05:18:08.093Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4837,9 +4837,14 @@
         "projTag": "HACCP",
         "type": "todo",
         "start": "2026-03-24",
-        "due": "2026-03-24",
+        "due": "2026-03-30",
         "linkedEntryRef": "emn9kqv88ts3",
-        "linkedEntryText": "大間々店1台送付"
+        "linkedEntryText": "大間々店1台送付",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "html": "大間々店1台送付"
       },
       {
         "id": "emn5lcx4rm60",
@@ -4854,9 +4859,14 @@
         "projTag": "HACCP",
         "type": "todo",
         "start": "2026-03-24",
-        "due": "2026-03-24",
+        "due": "2026-03-30",
         "linkedEntryRef": "emn9kqv88ubo",
-        "linkedEntryText": "深谷国済寺1台送付済み状況確認"
+        "linkedEntryText": "深谷国済寺1台送付済み状況確認",
+        "html": "深谷国済寺1台送付済み状況確認",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": []
       },
       {
         "id": "emmw2zro2w9x",
