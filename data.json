@@ -238,7 +238,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-27T22:57:23.345Z",
+  "savedAt": "2026-03-28T00:04:38.025Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2456,7 +2456,7 @@
       {
         "id": "mn45hkt1akf",
         "text": "関連する資料をぶっこんでClaudeに作ってもらうか",
-        "html": "",
+        "html": "関連する資料をぶっこんでClaudeに作ってもらうか",
         "indent": 3,
         "bold": false,
         "color": "",
@@ -2533,7 +2533,7 @@
       {
         "id": "mn3vpj0f2wk",
         "text": "1430　冷ケース温度点検説明会",
-        "html": "",
+        "html": "1430　冷ケース温度点検説明会",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -2815,7 +2815,7 @@
         "bold": true,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "今日の予定"
       },
       {
         "id": "mn5e2i7mahk",
