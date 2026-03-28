@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T02:41:29.346Z",
+  "savedAt": "2026-03-28T02:51:15.035Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4763,16 +4763,17 @@
       },
       {
         "id": "emn1hfsbsuj6",
-        "text": "🌡️説明会！",
+        "text": "🌡️説明会！ ",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#e74c3c",
         "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
         "projTag": "HACCP",
-        "type": "log"
+        "type": "log",
+        "html": "🌡️説明会！ "
       },
       {
         "id": "emn2qu5t7afh",
