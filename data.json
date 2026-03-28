@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-28T02:29:36.763Z",
+  "savedAt": "2026-03-28T02:33:16.071Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2111,7 +2111,15 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "log",
-        "url": "https://workflowy.com/#/e2e4884571c9"
+        "url": "https://workflowy.com/#/e2e4884571c9",
+        "note": "",
+        "priority": "",
+        "tags": [
+          "test"
+        ],
+        "start": "",
+        "due": "",
+        "html": "リーダー会"
       },
       {
         "id": "emmx5rb3lh70",
