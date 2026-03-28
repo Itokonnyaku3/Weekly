@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T03:03:36.531Z",
+  "savedAt": "2026-03-28T03:11:08.265Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4351,7 +4351,7 @@
       {
         "id": "mn6qw87cln3",
         "text": "鹿喰さん提案冷蔵庫の費用削減機器やるか確認",
-        "html": "鹿喰さん提案冷蔵庫の費用削減機器やるか確認",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -5749,10 +5749,10 @@
       },
       {
         "id": "mn9oskq7vvz",
-        "text": "西部モール　オフライン",
-        "html": "西部モール　オフライン",
+        "text": "西部モール　オフライン　",
+        "html": "西部モール　オフライン　",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "isTodo": true,
@@ -5778,26 +5778,35 @@
       {
         "id": "mn9otl80l1d",
         "text": "超低温→は昨日までオンラインだったので多分温度下限超過",
-        "html": "",
+        "html": "超低温→は昨日までオンラインだったので多分温度下限超過",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
+        "id": "mn9r65kfnt4",
+        "text": "画像",
+        "html": "画像",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
         "id": "mn9plvigzez",
         "text": "",
         "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-28T02-28-44-058Z_bmi5j.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mn9oti06gr8",
-        "text": "",
-        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-28T02-28-45-058Z_mq0d4.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 1,
+        "text": "ii",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-28T02-28-45-058Z_mq0d4.png\" alt=\"ペースト画像\"></span>ii",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
