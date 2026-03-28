@@ -464,45 +464,7 @@
     }
     /* ハンドル配置用の position:relative は個別 th 定義内に含まれています */
 
-    /* ── compact mode ── */
-    .compact-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--tx2);
-      padding: 3px 7px;
-      border-radius: 4px;
-      cursor: pointer;
-      user-select: none;
-      width: 100%;
-      min-height: 26px;
-    }
-
-    .compact-badge:hover {
-      background: var(--bg2)
-    }
-
-    .compact-todo-cnt {
-      font-weight: 600;
-      color: var(--tx-warn)
-    }
-
-    .compact-pname {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      padding: 5px 8px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .compact-pname:hover {
-      background: var(--bg2); z-index: 25;
-      border-radius: 4px;
-    }
+    /* ── compact mode（折りたたみ行用スタイル） ── */
 
     /* compact mode: project column shows only title row */
     .compact-mode tbody tr.compact-row td {
@@ -512,6 +474,63 @@
 
     .compact-mode tbody tr.compact-row td.col-proj .pcell {
       padding: 0
+    }
+
+    /* ── プロジェクトサマリーヘッダ行（常時表示・圧縮モード問わず） ── */
+    tbody tr.proj-hdr-row td {
+      height: auto;
+      padding: 0;
+      background: #3b4468;
+      color: #f0f2fa;
+    }
+    tbody tr.proj-hdr-row td.col-proj .pcell,
+    tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr {
+      padding: 0;
+      background: #2d3347;
+    }
+    tbody tr.proj-hdr-row .proj-hdr-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 5px 8px;
+      color: #f0f2fa;
+      user-select: none;
+    }
+    tbody tr.proj-hdr-row .proj-hdr-arrow {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    tbody tr.proj-hdr-row .proj-hdr-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      padding: 4px 8px;
+      width: 100%;
+      min-height: 28px;
+    }
+    tbody tr.proj-hdr-row .proj-hdr-cnt {
+      color: #c8cce8;
+    }
+    tbody tr.proj-hdr-row .proj-hdr-todo {
+      font-weight: 600;
+      color: #ffd166;
+    }
+    /* ダークモード時は少し明るめに調整 */
+    @media (prefers-color-scheme: dark) {
+      tbody tr.proj-hdr-row td { background: #2a3050; }
+      tbody tr.proj-hdr-row td.col-proj .pcell,
+      tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr { background: #1e2440; }
+    }
+    /* 圧縮モード: ヘッダ行フォーカスリング */
+    tbody tr.proj-hdr-row td.col-proj:focus {
+      outline: 3px solid #7eb8f7;
+      outline-offset: -3px;
+    }
+    tbody tr.proj-hdr-row.hdr-kfocus td {
+      box-shadow: inset 0 0 0 2px #7eb8f7;
     }
 
     /* ── project cell ── */
@@ -3987,36 +4006,48 @@
         if (_viewMode === 'private' && !proj.isPrivate) return; // プライベートモード→お仕事非表示
 
         const isCompactRow = _compactMode && !_compactExpanded.has(pi);
-        rows += `<tr class="${isCompactRow ? 'compact-row' : ''}${proj.isPrivate ? ' is-private' : ''}">`;
+
+        // ── 常にサマリーヘッダ行を出力（圧縮モードON/OFFを問わず） ──
+        rows += `<tr class="proj-hdr-row${proj.isPrivate ? ' is-private' : ''}">`;
+        rows += `<td class="col-proj" data-pi="${pi}" data-wk="proj"${_compactMode ? ` tabindex="0" onkeydown="projHdrKeyDown(event,${pi})"` : ''}>`;
+        rows += `<div class="pcell pcell-hdr">`;
+        if (_compactMode) {
+          const arrow = isCompactRow ? '▶' : '▼';
+          const ttl   = isCompactRow ? 'クリックで展開' : 'クリックで折りたたむ';
+          rows += `<div class="proj-hdr-name" onclick="compactToggleRow(${pi})" title="${ttl}" style="cursor:pointer">`;
+          rows += `<span class="proj-hdr-arrow">${arrow}</span>`;
+          rows += `<span>${esc(proj.name)}</span>`;
+          rows += `</div>`;
+        } else {
+          rows += `<div class="proj-hdr-name">`;
+          rows += `<span>${esc(proj.name)}</span>`;
+          rows += `</div>`;
+        }
+        rows += `</div></td>`;
+        weeks.forEach(w => {
+          const k = wkey(w);
+          const items = getGridItems(pi, k);
+          const isCur = k === cw;
+          const undone = items.filter(item => getNodeType(item.node) === 'todo' && !item.node.checked).length;
+          const total  = items.length;
+          const clickAttr = _compactMode ? `onclick="compactToggleRow(${pi})" style="cursor:pointer"` : '';
+          rows += `<td class="col-week${isCur ? ' cur-week' : ''}" ${clickAttr}>`;
+          rows += `<div class="proj-hdr-badge">`;
+          if (total) {
+            rows += `<span class="proj-hdr-cnt">${total}件</span>`;
+            if (undone) rows += `<span class="proj-hdr-todo">☐${undone}</span>`;
+          }
+          rows += `</div></td>`;
+        });
+        rows += `</tr>`;
+
+        // 圧縮モードで折りたたみ中ならヘッダ行のみで終了
+        if (isCompactRow) return;
+
+        rows += `<tr class="${proj.isPrivate ? 'is-private' : ''}">`;
         // ── project column ──
         rows += `<td class="col-proj" data-pi="${pi}" data-wk="proj" ondragover="pDragOver(event,${pi})" ondrop="pDrop(event,${pi})">`;
         rows += `<div class="pcell">`;
-
-        if (isCompactRow) {
-          // 圧縮モード: タイトル行のみ（クリックで展開）
-          rows += `<div class="compact-pname" onclick="compactToggleRow(${pi})" title="クリックで展開">`;
-          rows += `<span style="color:var(--tx3);font-size:10px">▶</span>`;
-          rows += `<span>${esc(proj.name)}</span>`;
-          rows += `</div>`;
-          rows += `</div></td>`;
-          // 週列: ToDoカウントのみ
-          weeks.forEach(w => {
-            const k = wkey(w);
-            const items = getGridItems(pi, k);
-            const isCur = k === cw;
-            const undone = items.filter(item => getNodeType(item.node) === 'todo' && !item.node.checked).length;
-            const total = items.length;
-            rows += `<td class="col-week${isCur ? ' cur-week' : ''}" onclick="compactToggleRow(${pi})" style="vertical-align:middle">`;
-            rows += `<div class="compact-badge">`;
-            if (total) {
-              rows += `<span style="color:var(--tx3)">${total}件</span>`;
-              if (undone) rows += `<span class="compact-todo-cnt">☐${undone}</span>`;
-            }
-            rows += `</div></td>`;
-          });
-          rows += `</tr>`;
-          return; // forEach の次へ
-        }
 
         rows += `<div class="pname">`;
         rows += `<span class="drag-handle" draggable="true" ondragstart="pDragStart(event,${pi})">⠿</span>`;
@@ -4424,6 +4455,16 @@
       const found = findNodeById(ei);
       const n = found ? found.node : null;
 
+      // Escape (圧縮モード中): 現プロジェクトを折りたたんでヘッダへ戻る
+      if (ev.key === 'Escape' && _compactMode && _compactExpanded.has(pi)) {
+        ev.preventDefault();
+        ev.stopPropagation(); // グローバルEscapeハンドラに渡さない
+        _compactExpanded.delete(pi);
+        render();
+        requestAnimationFrame(() => focusCompactHeader(pi));
+        return;
+      }
+
       // Ctrl+Enter: リンクタイプはリンク先を新しいタブで開く
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
         ev.preventDefault();
@@ -4528,6 +4569,12 @@
         document.querySelectorAll('.eitem.kfocus').forEach(x => x.classList.remove('kfocus'));
         // focusKey は保持（Alt+Shift ナビの起点として使うため）
       }
+      // ヘッダフォーカスリングのクリア（別のヘッダ行に移った場合はそのまま）
+      const leaving = ev.target.closest('tr.proj-hdr-row');
+      const entering = next && next.closest ? next.closest('tr.proj-hdr-row') : null;
+      if (leaving && leaving !== entering) {
+        leaving.classList.remove('hdr-kfocus');
+      }
     }, true);
 
 
@@ -4571,7 +4618,7 @@
       clearTimeout(showHint._t); showHint._t = setTimeout(() => h.classList.remove('show'), 1500);
     }
     function showHelp() {
-      alert('【キーボードショートカット】\n\n━━ グリッド（表） ━━\nCtrl+K  ……  コマンドパレットを開く\nTab / Shift+Tab  ……  インデント増 / 減（ノートと統一）\n↑ / ↓  ……  アイテム間を移動\n← / →  ……  前週 / 次週\nEnter  ……  ノートを開いてノードにフォーカス（グリッド→ノート）\nShift+Enter  ……  詳細パネルを開く\nCtrl+Enter  ……  リンクを別タブで開く\nSpace  ……  ToDoチェック切替\nAlt+Shift+↑ / ↓  ……  アイテムを上下に移動（ノートと統一）\nAlt+Shift+← / →  ……  前週 / 次週（ビュー移動）\nAlt+Shift+E  ……  新規追加\nAlt+Shift+N  ……  ノートを開く\nAlt+Shift+C  ……  圧縮モードON/OFF\nEsc  ……  パネルを閉じる\n\n━━ ノートエディタ ━━\nCtrl+↑ / ↓  ……  折りたたむ / 展開（グリッドと統一）\nAlt+Shift+↑ / ↓  ……  ノードを移動（グリッドと統一）\nTab / Shift+Tab  ……  インデント増 / 減（グリッドと統一）\nCtrl+L  ……  リンク挿入\nAlt+Enter  ……  グリッドへジャンプ（ノート→グリッド）\nAlt+↑ / ↓  ……  フォーカスモード戻る / 入る\nAlt+← / →  ……  前日 / 翌日\n→ / ←  ……  行端で次/前ノードへ\n\n━━ パネル内 ━━\nEnter  ……  テキスト欄で保存\nCtrl+Enter  ……  備考欄で保存');
+      alert('【キーボードショートカット】\n\n━━ グリッド（表） ━━\nCtrl+K  ……  コマンドパレットを開く\nTab / Shift+Tab  ……  インデント増 / 減（ノートと統一）\n↑ / ↓  ……  アイテム間を移動\n← / →  ……  前週 / 次週\nEnter  ……  ノートを開いてノードにフォーカス（グリッド→ノート）\nShift+Enter  ……  詳細パネルを開く\nCtrl+Enter  ……  リンクを別タブで開く\nSpace  ……  ToDoチェック切替\nAlt+Shift+↑ / ↓  ……  アイテムを上下に移動（ノートと統一）\nAlt+Shift+← / →  ……  前週 / 次週（ビュー移動）\nAlt+Shift+E  ……  新規追加\nAlt+Shift+N  ……  ノートを開く\nAlt+Shift+C  ……  圧縮モードON/OFF\nEsc  ……  パネルを閉じる\n\n━━ 圧縮モード（ヘッダ行フォーカス中） ━━\n↑ / ↓  ……  前後のプロジェクトへ移動\nEnter / →  ……  展開して先頭アイテムへ\n← / Space  ……  折りたたみ / トグル\nEsc（アイテム操作中） ……  折りたたんでヘッダへ戻る\n\n━━ ノートエディタ ━━\nCtrl+↑ / ↓  ……  折りたたむ / 展開（グリッドと統一）\nAlt+Shift+↑ / ↓  ……  ノードを移動（グリッドと統一）\nTab / Shift+Tab  ……  インデント増 / 減（グリッドと統一）\nCtrl+L  ……  リンク挿入\nAlt+Enter  ……  グリッドへジャンプ（ノート→グリッド）\nAlt+↑ / ↓  ……  フォーカスモード戻る / 入る\nAlt+← / →  ……  前日 / 翌日\n→ / ←  ……  行端で次/前ノードへ\n\n━━ パネル内 ━━\nEnter  ……  テキスト欄で保存\nCtrl+Enter  ……  備考欄で保存');
     }
 
     /* ================================================================
@@ -6403,6 +6450,91 @@
       if (_compactExpanded.has(pi)) _compactExpanded.delete(pi);
       else _compactExpanded.add(pi);
       render();
+    }
+
+    // ── 圧縮モード: プロジェクトヘッダ行のキーボードナビゲーション ──────────────
+
+    /** 現在のviewModeで表示される次/前のプロジェクトpi（dir=1:下/−1:上）を返す */
+    function getNextVisiblePi(pi, dir) {
+      let next = pi + dir;
+      while (next >= 0 && next < S.projects.length) {
+        const p = S.projects[next];
+        if (_viewMode === 'all') return next;
+        if (_viewMode === 'work' && !p.isPrivate) return next;
+        if (_viewMode === 'private' && p.isPrivate) return next;
+        next += dir;
+      }
+      return -1;
+    }
+
+    /** 圧縮ヘッダ行のtd[data-pi=pi]にフォーカスを移す */
+    function focusCompactHeader(pi) {
+      const td = document.querySelector(`tr.proj-hdr-row td.col-proj[data-pi="${pi}"]`);
+      if (td) {
+        _programmaticFocus = true;
+        td.focus();
+        // フォーカスリングを強調するためのクラスを一時付与
+        td.closest('tr').classList.add('hdr-kfocus');
+        requestAnimationFrame(() => { _programmaticFocus = false; });
+      }
+    }
+
+    function projHdrKeyDown(ev, pi) {
+      if (!_compactMode) return;
+      const isCollapsed = !_compactExpanded.has(pi);
+
+      // ↑/↓: 前後のプロジェクトヘッダへ
+      if (!ev.altKey && !ev.shiftKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+        ev.preventDefault();
+        const nextPi = getNextVisiblePi(pi, ev.key === 'ArrowDown' ? 1 : -1);
+        if (nextPi >= 0) {
+          showHint(ev.key === 'ArrowDown' ? '▼ 次プロジェクト' : '▲ 前プロジェクト');
+          focusCompactHeader(nextPi);
+        }
+        return;
+      }
+
+      // Enter / → (折りたたみ中): 展開して先頭アイテムへフォーカス移動
+      if ((ev.key === 'Enter' || (ev.key === 'ArrowRight' && isCollapsed)) && !ev.altKey && !ev.shiftKey) {
+        ev.preventDefault();
+        if (isCollapsed) {
+          _compactExpanded.add(pi);
+          render();
+          requestAnimationFrame(() => {
+            // 最初に表示されている週の先頭アイテムへ
+            const weeks = getWeeks();
+            for (const w of weeks) {
+              const k = wkey(w);
+              const items = getGridItems(pi, k);
+              if (items.length) { applyFocus(pi, k, items[0].node.id); return; }
+            }
+            focusCompactHeader(pi); // アイテムがなければヘッダへ戻る
+          });
+        }
+        return;
+      }
+
+      // ← (展開中) / Space: 折りたたんでヘッダにフォーカスを戻す
+      if ((ev.key === 'ArrowLeft' && !isCollapsed) || (ev.key === ' ')) {
+        ev.preventDefault();
+        if (!isCollapsed) _compactExpanded.delete(pi);
+        else _compactExpanded.add(pi);
+        render();
+        requestAnimationFrame(() => focusCompactHeader(pi));
+        return;
+      }
+
+      // Tab: 展開中なら先頭アイテムへ進む
+      if (ev.key === 'Tab' && !ev.shiftKey && !isCollapsed) {
+        ev.preventDefault();
+        const weeks = getWeeks();
+        for (const w of weeks) {
+          const k = wkey(w);
+          const items = getGridItems(pi, k);
+          if (items.length) { applyFocus(pi, k, items[0].node.id); return; }
+        }
+        return;
+      }
     }
 
 
