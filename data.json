@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T05:08:00.426Z",
+  "savedAt": "2026-03-28T05:16:05.824Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3201,7 +3201,7 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
@@ -5056,6 +5056,22 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv88ehx",
         "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう"
+      },
+      {
+        "id": "mn9vnfle493",
+        "text": "27日ごろセンサー早出し納品日確認",
+        "type": "todo",
+        "isTodo": true,
+        "checked": false,
+        "indent": 0,
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "2026-03-30"
       }
     ],
     "2026-4-6": [
