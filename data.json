@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T12:09:10.470Z",
+  "savedAt": "2026-03-28T12:13:00.701Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4765,7 +4765,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "link",
-        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end"
+        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
+        "html": "★週次進捗OneNote"
       },
       {
         "id": "emn7bub5cw3p",
@@ -4811,7 +4812,8 @@
         "type": "log",
         "note": "成電社から預かった不良品を根岸さんにもっていってもらう",
         "start": "2026-03-31",
-        "due": "2026-03-31"
+        "due": "2026-03-31",
+        "html": "3.31おおたモールで検証"
       },
       {
         "id": "emn5khg5dcwl",
@@ -4826,7 +4828,8 @@
         "projTag": "HACCP",
         "type": "log",
         "start": "2026-03-25",
-        "due": "2026-04-30"
+        "due": "2026-04-30",
+        "html": "個店対応"
       },
       {
         "id": "emn5lcx4r630",
@@ -5290,6 +5293,22 @@
         "start": "",
         "due": "",
         "parentId": "mn9x2skrsh6"
+      },
+      {
+        "id": "mnaajg4tuwg",
+        "text": "店舗PCの自動シャットダウン除外",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "その他細かいこと",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-4-6": [
