@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-28T00:11:42.194Z",
+  "savedAt": "2026-03-28T00:15:56.720Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -2020,7 +2020,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "log",
-        "note": "グループとしての取組"
+        "note": "グループとしての取組",
+        "html": "グループの30期の目標"
       },
       {
         "id": "emmw2zro2dgu",
@@ -2035,7 +2036,8 @@
         "projTag": "管理・全般",
         "type": "todo",
         "linkedEntryRef": "emn9kqv855ab",
-        "linkedEntryText": "出張申請処理！"
+        "linkedEntryText": "出張申請処理！",
+        "html": "出張申請処理！<br>"
       },
       {
         "id": "emmw2zro29eq",
