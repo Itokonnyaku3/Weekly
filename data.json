@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-28T06:10:03.096Z",
+  "savedAt": "2026-03-28T06:13:33.581Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5117,8 +5117,9 @@
         "start": "",
         "due": "",
         "html": "テスト親ノード　",
-        "gridCollapsed": false,
-        "collapsed": false
+        "gridCollapsed": true,
+        "collapsed": false,
+        "bold": true
       },
       {
         "id": "mn9x8h95het",
