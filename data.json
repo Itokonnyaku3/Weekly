@@ -1225,8 +1225,8 @@
       "isPrivate": false
     }
   ],
-  "wOff": 1,
-  "savedAt": "2026-03-28T08:16:30.199Z",
+  "wOff": 0,
+  "savedAt": "2026-03-28T12:09:10.470Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4750,7 +4750,8 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "管理・全般",
-        "type": "log"
+        "type": "log",
+        "html": "黒田さん30日在宅"
       },
       {
         "id": "emmw2zro2s6e",
