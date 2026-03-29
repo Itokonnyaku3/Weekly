@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:12:15.585Z",
+  "savedAt": "2026-03-29T03:13:00.929Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6133,15 +6133,26 @@
       },
       {
         "id": "mnb6njzj0ss",
-        "text": "　",
-        "html": "　",
+        "text": "あak",
+        "html": "あak",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "tags": [
           "あ"
-        ]
+        ],
+        "projTag": "管理・全般",
+        "type": "log"
+      },
+      {
+        "id": "mnb6ord7nuf",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mnb5p4qx1bb",
@@ -6216,7 +6227,7 @@
       "lastUsed": 1774753893824
     },
     "あ": {
-      "color": null,
+      "color": "#4a9eff",
       "lastUsed": 1774753934964
     }
   }
