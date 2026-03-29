@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T07:11:12.042Z",
+  "savedAt": "2026-03-29T07:13:04.505Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6172,9 +6172,9 @@
         "collapsed": false
       },
       {
-        "id": "mnbf2lxn33b",
-        "text": "掲示板",
-        "html": "掲示板",
+        "id": "mnbf53h6mus",
+        "text": "ダッシュボードの役割",
+        "html": "ダッシュボードの役割",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6192,25 +6192,7 @@
       {
         "id": "mnbf35yy7js",
         "text": "勤怠や提出物など、部会でやっていること→　連絡漏れの防止",
-        "html": "",
-        "indent": 4,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnbf6vp3qx4",
-        "text": "共通で使用する",
-        "html": "",
-        "indent": 3,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnbf6yzg5od",
-        "text": "稟議提出　→",
-        "html": "稟議提出　→",
+        "html": "勤怠や提出物など、部会でやっていること→　連絡漏れの防止",
         "indent": 4,
         "bold": false,
         "color": "",
@@ -6218,35 +6200,26 @@
       },
       {
         "id": "mnbf72prs31",
-        "text": "",
-        "html": "",
-        "indent": 4,
+        "text": "障害、インシデント、リクエスト　→ここで報告をまとめる",
+        "html": "障害、インシデント、リクエスト　→ここで報告をまとめる",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mnbf53h6mus",
-        "text": "ダッシュボードの役割",
-        "html": "ダッシュボードの役割",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnbf4k7imw6",
-        "text": "障害、インシデント、リクエスト…ここで報告をまとめる",
-        "html": "障害、インシデント、リクエスト…ここで報告をまとめる",
-        "indent": 2,
+        "id": "mnbf6yzg5od",
+        "text": "稟議提出　→SPのリストに登録、やり取りはTeams",
+        "html": "稟議提出　→SPのリストに登録、やり取りはTeams",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mnbf2unnw4m",
-        "text": "新店情報",
-        "html": "新店情報",
+        "text": "共通の情報…新店情報",
+        "html": "共通の情報…新店情報",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6254,8 +6227,8 @@
       },
       {
         "id": "mnbf4aoore5",
-        "text": "開店日、稟議、進捗",
-        "html": "開店日、稟議、進捗",
+        "text": "開店日、稟議、進捗　→詳細はリンク先",
+        "html": "開店日、稟議、進捗　→詳細はリンク先",
         "indent": 3,
         "bold": false,
         "color": "",
@@ -6263,8 +6236,8 @@
       },
       {
         "id": "mnbf3k387pp",
-        "text": "複数のメンバーが使う情報は入口を集約",
-        "html": "複数のメンバーが使う情報は入口を集約",
+        "text": "",
+        "html": "<br>",
         "indent": 1,
         "bold": false,
         "color": "",
