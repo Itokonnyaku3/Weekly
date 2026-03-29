@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-29T23:45:09.549Z",
+  "savedAt": "2026-03-29T23:46:04.393Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5235,20 +5235,49 @@
         "parentId": "emn2f6yeur0y"
       },
       {
-        "id": "mncepn3aohd",
-        "text": "安田さんに仕様確定でいいかチャットで確認",
+        "id": "mnceqlh95fw",
+        "text": "",
+        "html": "",
         "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "ふかやバイオーダー",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": ""
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnceqlm50d0",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnceqlryqlv",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnceqlwkpei",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnceqlyvj65",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-4-6": [
@@ -6196,6 +6225,23 @@
       }
     ],
     "2026-3-31": [
+      {
+        "id": "mncepn3aohd",
+        "text": "安田さんに仕様確定でいいかチャットで確認　",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "mid",
+        "tags": [],
+        "start": "2026-03-30",
+        "due": "2026-03-31",
+        "html": "安田さんに仕様確定でいいかチャットで確認　"
+      },
       {
         "id": "mn9xq5d2kk2",
         "text": "",
