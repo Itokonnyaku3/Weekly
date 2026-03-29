@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:40:33.424Z",
+  "savedAt": "2026-03-29T07:01:50.666Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5964,7 +5964,7 @@
         "text": "今日の作業メモ…もClaudeに書いてもらえばいいのか。",
         "html": "今日の作業メモ…もClaudeに書いてもらえばいいのか。",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "projTag": "Private",
