@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T14:11:30.710Z",
+  "savedAt": "2026-03-29T14:12:05.067Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5101,14 +5101,32 @@
         "due": "",
         "html": "テスト親ノード　",
         "gridCollapsed": false,
-        "collapsed": false,
+        "collapsed": true,
         "bold": true
+      },
+      {
+        "id": "mnbu8ds5yes",
+        "text": "なにがしか",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbu8n6jgb7",
+        "text": "ああｓｄ",
+        "html": "ああｓｄ",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn9x8h95het",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
