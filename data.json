@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:14:31.350Z",
+  "savedAt": "2026-03-29T03:15:54.061Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3485,7 +3485,8 @@
         "due": "2026-04-10",
         "linkedEntryRef": "emn9kqv875x7",
         "linkedEntryText": "熨斗紙印刷できない問題",
-        "html": "熨斗紙印刷できない問題"
+        "html": "熨斗紙印刷できない問題",
+        "gridCollapsed": false
       },
       {
         "id": "emmy6a1t3reo",
@@ -6131,8 +6132,8 @@
       },
       {
         "id": "mnb6r1o6eya",
-        "text": "",
-        "html": "",
+        "text": "a",
+        "html": "a",
         "indent": 0,
         "bold": false,
         "color": "",
