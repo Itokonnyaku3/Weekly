@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:35:58.241Z",
+  "savedAt": "2026-03-29T03:40:11.638Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4096,8 +4096,8 @@
       },
       {
         "id": "mn5mbgmu9vv",
-        "text": "Windowsライセンス問題　",
-        "html": "Windowsライセンス問題　",
+        "text": "Windowsライセンス問題 ",
+        "html": "Windowsライセンス問題&nbsp;",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
@@ -4106,7 +4106,14 @@
         "type": "link",
         "url": "https://teams.microsoft.com/l/message/19:baef615b8fc543558c494d2e9feb8921@thread.v2/1773624276242?context=%7B%22contextType%22%3A%22chat%22%7D",
         "note": "OTC",
-        "projTag": "山下さん"
+        "projTag": "山下さん",
+        "isTodo": false,
+        "priority": "",
+        "tags": [
+          "山下"
+        ],
+        "start": "",
+        "due": "2026-03-31"
       },
       {
         "id": "mn5mcmo8o0r",
@@ -6143,5 +6150,10 @@
     ]
   },
   "_nodesMigrated": true,
-  "tagMeta": {}
+  "tagMeta": {
+    "山下": {
+      "color": null,
+      "lastUsed": 1774755611022
+    }
+  }
 }
