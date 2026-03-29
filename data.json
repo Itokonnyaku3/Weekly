@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T07:09:37.116Z",
+  "savedAt": "2026-03-29T07:11:12.042Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6173,9 +6173,18 @@
       },
       {
         "id": "mnbf2lxn33b",
+        "text": "掲示板",
+        "html": "掲示板",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf6dd1def",
         "text": "朝来たら、SPを開いて確認事項をチェックする。必要に応じて確認ボタンを押す。",
         "html": "朝来たら、SPを開いて確認事項をチェックする。必要に応じて確認ボタンを押す。",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6183,17 +6192,53 @@
       {
         "id": "mnbf35yy7js",
         "text": "勤怠や提出物など、部会でやっていること→　連絡漏れの防止",
-        "html": "勤怠や提出物など、部会でやっていること→　連絡漏れの防止",
+        "html": "",
+        "indent": 4,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf6vp3qx4",
+        "text": "共通で使用する",
+        "html": "",
         "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mnbf3k387pp",
-        "text": "複数のメンバーが使う情報は入口を集約",
-        "html": "複数のメンバーが使う情報は入口を集約",
-        "indent": 1,
+        "id": "mnbf6yzg5od",
+        "text": "稟議提出　→",
+        "html": "稟議提出　→",
+        "indent": 4,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf72prs31",
+        "text": "",
+        "html": "",
+        "indent": 4,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf53h6mus",
+        "text": "ダッシュボードの役割",
+        "html": "ダッシュボードの役割",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf4k7imw6",
+        "text": "障害、インシデント、リクエスト…ここで報告をまとめる",
+        "html": "障害、インシデント、リクエスト…ここで報告をまとめる",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6217,18 +6262,9 @@
         "collapsed": false
       },
       {
-        "id": "mnbf4k7imw6",
-        "text": "障害、インシデント、リクエスト…ここで報告をまとめる",
-        "html": "障害、インシデント、リクエスト…ここで報告をまとめる",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnbf53h6mus",
-        "text": "",
-        "html": "",
+        "id": "mnbf3k387pp",
+        "text": "複数のメンバーが使う情報は入口を集約",
+        "html": "複数のメンバーが使う情報は入口を集約",
         "indent": 1,
         "bold": false,
         "color": "",
