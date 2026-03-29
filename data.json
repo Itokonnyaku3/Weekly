@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T02:26:11.158Z",
+  "savedAt": "2026-03-29T02:45:58.880Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6111,12 +6111,12 @@
     "2026-3-29": [
       {
         "id": "mn9mchihvbg",
-        "text": "@Mac本郷",
+        "text": "Mac本郷 ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "Mac本郷&nbsp;"
       },
       {
         "id": "mnb50pm9wqz",
@@ -6129,6 +6129,18 @@
       },
       {
         "id": "mnb508bb8ev",
+        "text": "あ",
+        "html": "あ",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "テスト"
+        ]
+      },
+      {
+        "id": "mn9mcysg4pn",
         "text": "",
         "html": "",
         "indent": 0,
@@ -6137,9 +6149,54 @@
         "collapsed": false
       },
       {
-        "id": "mn9mcysg4pn",
+        "id": "mnb5p4qx1bb",
+        "text": "あ　",
+        "html": "あ　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "テスト"
+        ]
+      },
+      {
+        "id": "mnb5p95f02q",
+        "text": "あああ",
+        "html": "あああ",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "テスト"
+        ]
+      },
+      {
+        "id": "mnb5phssrqf",
+        "text": "ああああああ",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "テスト"
+        ]
+      },
+      {
+        "id": "mnb5q4t0vr6",
         "text": "",
         "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnb5q8gypa1",
+        "text": "",
+        "html": "<br>",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -6157,5 +6214,11 @@
       }
     ]
   },
-  "_nodesMigrated": true
+  "_nodesMigrated": true,
+  "tagMeta": {
+    "テスト": {
+      "color": null,
+      "lastUsed": 1774752334978
+    }
+  }
 }
