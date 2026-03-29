@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:57:26.823Z",
+  "savedAt": "2026-03-29T13:59:04.746Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4149,7 +4149,7 @@
         "bold": true,
         "color": "#e67e22",
         "collapsed": true,
-        "html": "0900　品質改善会議　",
+        "html": "0900　品質改善会議　<br>",
         "linkedEntryText": "0900　品質改善会議",
         "type": "link",
         "projTag": "運用改善"
