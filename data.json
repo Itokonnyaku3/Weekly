@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:59:04.746Z",
+  "savedAt": "2026-03-29T14:09:30.632Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6126,20 +6126,18 @@
         "collapsed": false
       },
       {
-        "id": "mnbt8s5le3r",
+        "id": "emn2f6yeur0y",
         "text": "新狭山",
         "indent": 0,
-        "isTodo": true,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "isPrivate": false,
         "projTag": "📔新店改装店",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
+        "type": "log",
+        "due": "2026-06-26",
         "html": "新狭山"
       },
       {
@@ -6157,22 +6155,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "見積"
-      },
-      {
-        "id": "emn2f6yeur0y",
-        "text": "新狭山",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "📔新店改装店",
-        "type": "log",
-        "due": "2026-06-26",
-        "html": "新狭山"
+        "html": "見積",
+        "parentId": "emn2f6yeur0y"
       }
     ],
     "2026-3-31": [
