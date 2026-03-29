@@ -1143,7 +1143,7 @@
       "entries": {},
       "links": [],
       "projEntries": [],
-      "projEntriesOpen": false,
+      "projEntriesOpen": true,
       "collapsed": false,
       "spanItems": [],
       "recurringEntries": [],
@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:38:18.116Z",
+  "savedAt": "2026-03-29T13:42:18.072Z",
   "dailyOutline": {
     "2026-3-18": [
       {
