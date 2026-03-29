@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:02:12.602Z",
+  "savedAt": "2026-03-29T13:38:18.116Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5094,7 +5094,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": "2026-03-30"
+        "due": "2026-03-30",
+        "html": "27日ごろセンサー早出し納品日確認"
       },
       {
         "id": "mn9vny1l6qp",
@@ -5176,114 +5177,6 @@
         "url": ""
       },
       {
-        "id": "mn9x4m9k7w8",
-        "text": "",
-        "html": "<div><br></div><div><br></div>",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x4memils",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x68dqund",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x68ip2wh",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x68n5pz4",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x68uv7hx",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x68zcecv",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x69936mh",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x69eocu0",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x69tzstq",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x6a55yc6",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x4mi2yyi",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn9xpz0kg4k",
         "text": "テスト3",
         "indent": 0,
@@ -5298,7 +5191,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mn9x2skrsh6"
+        "parentId": "mn9x2skrsh6",
+        "html": "テスト3"
       },
       {
         "id": "mnaajg4tuwg",
@@ -5314,7 +5208,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "店舗PCの自動シャットダウン除外"
       }
     ],
     "2026-4-6": [
