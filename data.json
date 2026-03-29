@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:40:11.638Z",
+  "savedAt": "2026-03-29T03:40:33.424Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4096,8 +4096,8 @@
       },
       {
         "id": "mn5mbgmu9vv",
-        "text": "Windowsライセンス問題 ",
-        "html": "Windowsライセンス問題&nbsp;",
+        "text": "Windowsライセンス問題",
+        "html": "Windowsライセンス問題",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
@@ -4109,9 +4109,7 @@
         "projTag": "山下さん",
         "isTodo": false,
         "priority": "",
-        "tags": [
-          "山下"
-        ],
+        "tags": [],
         "start": "",
         "due": "2026-03-31"
       },
@@ -6150,10 +6148,5 @@
     ]
   },
   "_nodesMigrated": true,
-  "tagMeta": {
-    "山下": {
-      "color": null,
-      "lastUsed": 1774755611022
-    }
-  }
+  "tagMeta": {}
 }
