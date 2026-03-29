@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:43:36.652Z",
+  "savedAt": "2026-03-29T13:44:41.049Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3378,21 +3378,6 @@
         "type": "log",
         "due": "2026-06-26",
         "html": "新狭山"
-      },
-      {
-        "id": "emn2gkvhlcht",
-        "text": "東村山",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "📔新店改装店",
-        "type": "log",
-        "due": "2026-06-26",
-        "html": "東村山"
       },
       {
         "id": "emmw2zro2rmi",
@@ -6158,6 +6143,22 @@
       {
         "id": "mnbt824sqgf",
         "text": "見積",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "📔新店改装店",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
+      },
+      {
+        "id": "mnbt8s5le3r",
+        "text": "新狭山",
         "indent": 0,
         "isTodo": true,
         "checked": false,
