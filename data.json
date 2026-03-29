@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T14:12:05.067Z",
+  "savedAt": "2026-03-29T14:13:18.585Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4683,7 +4683,7 @@
     "2026-3-30": [
       {
         "id": "emn2x84q2hxd",
-        "text": "週次進捗確認",
+        "text": "週次進捗確認　",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4695,7 +4695,7 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv887q3",
         "linkedEntryText": "週次進捗確認",
-        "html": "週次進捗確認"
+        "html": "週次進捗確認　"
       },
       {
         "id": "emn7bub5cw3p",
