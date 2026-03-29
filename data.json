@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T07:13:04.505Z",
+  "savedAt": "2026-03-29T07:14:11.557Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6129,7 +6129,7 @@
       {
         "id": "mnb6r1ipohu",
         "text": "Sharepointの改善",
-        "html": "",
+        "html": "Sharepointの改善",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -6138,7 +6138,7 @@
       {
         "id": "mnbf1boxq41",
         "text": "目的",
-        "html": "",
+        "html": "目的",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6147,7 +6147,7 @@
       {
         "id": "mnbf1otygaa",
         "text": "業務効率化（探し物に使う時間を減らす）",
-        "html": "",
+        "html": "業務効率化（探し物に使う時間を減らす）",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6156,7 +6156,7 @@
       {
         "id": "mnbf23z6rhu",
         "text": "ボーディング・属人化の排除",
-        "html": "",
+        "html": "ボーディング・属人化の排除",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6165,7 +6165,7 @@
       {
         "id": "mnbf2f73phb",
         "text": "利用のイメージ",
-        "html": "",
+        "html": "利用のイメージ",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6236,9 +6236,27 @@
       },
       {
         "id": "mnbf3k387pp",
-        "text": "",
-        "html": "<br>",
+        "text": "その他",
+        "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbfaw6jj1p",
+        "text": "各リンク、情報の登録者、登録日などのメタ情報",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbfb9c8woa",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
