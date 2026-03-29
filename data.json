@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T03:13:00.929Z",
+  "savedAt": "2026-03-29T03:14:31.350Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6112,41 +6112,16 @@
     "2026-3-29": [
       {
         "id": "mn9mchihvbg",
-        "text": "Mac本郷 ",
+        "text": "",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "Mac本郷&nbsp;",
-        "tags": [
-          "テスト"
-        ]
+        "html": "",
+        "tags": []
       },
       {
-        "id": "mnb50pm9wqz",
-        "text": "なんかブラウザで　",
-        "html": "なんかブラウザで　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnb6njzj0ss",
-        "text": "あak",
-        "html": "あak",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "tags": [
-          "あ"
-        ],
-        "projTag": "管理・全般",
-        "type": "log"
-      },
-      {
-        "id": "mnb6ord7nuf",
+        "id": "mnb6r1ipohu",
         "text": "",
         "html": "",
         "indent": 0,
@@ -6155,54 +6130,9 @@
         "collapsed": false
       },
       {
-        "id": "mnb5p4qx1bb",
-        "text": "あ　",
-        "html": "あ　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "tags": [
-          "テスト"
-        ]
-      },
-      {
-        "id": "mnb5p95f02q",
-        "text": "あああ",
-        "html": "あああ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "tags": [
-          "テスト"
-        ]
-      },
-      {
-        "id": "mnb5phssrqf",
-        "text": "ああああああ",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "tags": [
-          "テスト"
-        ]
-      },
-      {
-        "id": "mnb5q4t0vr6",
+        "id": "mnb6r1o6eya",
         "text": "",
         "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnb5q8gypa1",
-        "text": "",
-        "html": "<br>",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -6221,14 +6151,5 @@
     ]
   },
   "_nodesMigrated": true,
-  "tagMeta": {
-    "テスト": {
-      "color": "#819cbb",
-      "lastUsed": 1774753893824
-    },
-    "あ": {
-      "color": "#4a9eff",
-      "lastUsed": 1774753934964
-    }
-  }
+  "tagMeta": {}
 }
