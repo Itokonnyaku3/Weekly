@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T13:47:03.094Z",
+  "savedAt": "2026-03-29T13:47:28.418Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3363,21 +3363,6 @@
         "type": "log",
         "note": "プロジェクト憲章・要件定義・計画書のテンプレートや条件を設定",
         "html": "プロジェクトとワークフロー作成"
-      },
-      {
-        "id": "emn2f6yeur0y",
-        "text": "新狭山",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "📔新店改装店",
-        "type": "log",
-        "due": "2026-06-26",
-        "html": "新狭山"
       },
       {
         "id": "emmw2zro2rmi",
@@ -6171,6 +6156,21 @@
         "tags": [],
         "start": "",
         "due": ""
+      },
+      {
+        "id": "emn2f6yeur0y",
+        "text": "新狭山",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "📔新店改装店",
+        "type": "log",
+        "due": "2026-06-26",
+        "html": "新狭山"
       }
     ],
     "2026-3-31": [
