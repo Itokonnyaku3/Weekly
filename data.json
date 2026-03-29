@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T07:06:04.726Z",
+  "savedAt": "2026-03-29T07:09:15.050Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6129,8 +6129,98 @@
       {
         "id": "mnb6r1ipohu",
         "text": "Sharepointの改善",
-        "html": "Sharepointの改善",
+        "html": "",
         "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf1boxq41",
+        "text": "目的",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf1otygaa",
+        "text": "業務効率化（探し物に使う時間を減らす）",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf23z6rhu",
+        "text": "ボーディング・属人化の排除",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf2f73phb",
+        "text": "利用のイメージ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf2lxn33b",
+        "text": "朝来たら、SPを開いて確認事項をチェックする。必要に応じて確認ボタンを押す。",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf35yy7js",
+        "text": "勤怠や提出物など、部会でやっていること",
+        "html": "",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf3k387pp",
+        "text": "複数のメンバーが使う情報は入口を集約",
+        "html": "複数のメンバーが使う情報は入口を集約",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf2unnw4m",
+        "text": "新店情報",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf4aoore5",
+        "text": "開店日、稟議、進捗",
+        "html": "",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnbf4k7imw6",
+        "text": "障害、インシデント、リクエスト…ここで",
+        "html": "障害、インシデント、リクエスト…ここで",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
