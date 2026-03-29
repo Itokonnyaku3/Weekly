@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-29T14:13:18.585Z",
+  "savedAt": "2026-03-29T14:42:04.874Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4715,7 +4715,7 @@
       },
       {
         "id": "emmw2zro2mh2",
-        "text": "黒田さん30日在宅",
+        "text": "黒田さん30日在宅 /",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4725,7 +4725,7 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "log",
-        "html": "黒田さん30日在宅"
+        "html": "黒田さん30日在宅 /"
       },
       {
         "id": "emmw2zro2s6e",
