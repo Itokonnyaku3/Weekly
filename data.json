@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-29T23:27:37.334Z",
+  "savedAt": "2026-03-29T23:45:09.549Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4878,7 +4878,8 @@
         "type": "todo",
         "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
         "linkedEntryRef": "emn9kqv88r80",
-        "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
+        "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
+        "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
       },
       {
         "id": "emn5jjkvhknn",
@@ -4893,7 +4894,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88a9l",
-        "linkedEntryText": "新狭山HACCP発注"
+        "linkedEntryText": "新狭山HACCP発注",
+        "html": "新狭山HACCP発注<div><br></div>"
       },
       {
         "id": "emn5lcx4ri72",
@@ -5231,6 +5233,22 @@
         "due": "",
         "html": "見積",
         "parentId": "emn2f6yeur0y"
+      },
+      {
+        "id": "mncepn3aohd",
+        "text": "安田さんに仕様確定でいいかチャットで確認",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-4-6": [
