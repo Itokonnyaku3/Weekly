@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T23:22:25.751Z",
+  "savedAt": "2026-03-30T23:23:48.018Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4777,18 +4777,6 @@
         "html": "★週次進捗OneNote"
       },
       {
-        "id": "mnci2z3xcwj",
-        "text": "ぷりんた万崎さんMac印刷確認 ",
-        "html": "ぷりんた万崎さんMac印刷確認 ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "type": "todo",
-        "checked": false
-      },
-      {
         "id": "emn2qu5t7afh",
         "text": "3.31おおたモールで検証",
         "indent": 0,
@@ -4979,7 +4967,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -6334,6 +6322,28 @@
     "2026-3-13": [
       {
         "id": "mnbge57izh9",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-4-1": [
+      {
+        "id": "mnci2z3xcwj",
+        "text": "ぷりんた万崎さんMac印刷確認　",
+        "html": "ぷりんた万崎さんMac印刷確認　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false
+      },
+      {
+        "id": "mndtdr024hv",
         "text": "",
         "indent": 0,
         "bold": false,
