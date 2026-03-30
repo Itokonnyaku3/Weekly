@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:08:39.264Z",
+  "savedAt": "2026-03-30T01:08:59.950Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6302,7 +6302,7 @@
       {
         "id": "mnchjbpg491",
         "text": "毎週金曜日に確認するもの→イベント追加！　",
-        "html": "",
+        "html": "毎週金曜日に確認するもの→イベント追加！　",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6310,15 +6310,6 @@
         "isTodo": true,
         "type": "todo",
         "checked": false
-      },
-      {
-        "id": "mnchnyukpb0",
-        "text": "西部モール電話 #HACCP",
-        "html": "西部モール電話 #HACCP",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
       },
       {
         "id": "mnchow5vhlc",
