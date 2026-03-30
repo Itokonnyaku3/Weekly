@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:47:16.872Z",
+  "savedAt": "2026-03-30T07:49:20.224Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5317,6 +5317,33 @@
         "id": "mnchijv1l1v",
         "text": "信号機更新…月末に椎名さんが取得している",
         "html": "信号機更新…月末に椎名さんが取得している",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncvzuv0lfl",
+        "text": "Sharepointサイト改善",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "log",
+        "projTag": "運用改善",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "Sharepointサイト改善",
+        "bold": true
+      },
+      {
+        "id": "mncw039ao2h",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
