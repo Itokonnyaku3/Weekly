@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T13:57:33.524Z",
+  "savedAt": "2026-03-30T13:59:22.875Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4811,7 +4811,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4823,18 +4823,9 @@
         "gridCollapsed": false
       },
       {
-        "id": "mncvj84y5c1",
-        "text": "本体",
-        "html": "本体",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": true
-      },
-      {
         "id": "emn5lcx4r630",
         "text": "大間々店1台送付",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4858,7 +4849,7 @@
         "id": "mncvw1g33q7",
         "text": "大間々店登録情回答待ち（3.30メールで催促） ",
         "html": "大間々店登録情回答待ち（3.30メールで催促） ",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4874,7 +4865,7 @@
         "type": "todo",
         "isTodo": true,
         "checked": false,
-        "indent": 2,
+        "indent": 1,
         "projTag": "HACCP",
         "url": "",
         "note": "",
@@ -4889,7 +4880,7 @@
       {
         "id": "mncfqnf1nv9",
         "text": "西部モール店、電話で確認",
-        "indent": 2,
+        "indent": 1,
         "isTodo": true,
         "checked": true,
         "type": "todo",
@@ -4909,7 +4900,7 @@
         "id": "mncvkvrxlxv",
         "text": "3台は富士通の予備、2台は30日に発送で様子を見ていただく",
         "html": "3台は富士通の予備、2台は30日に発送で様子を見ていただく",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -4917,7 +4908,7 @@
       {
         "id": "emmy5whstca9",
         "text": "大間々店状況確認",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4934,10 +4925,10 @@
       {
         "id": "emn5lcx4rm60",
         "text": "深谷国済寺1台送付済み状況確認",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": true,
         "checked": false,
         "isPrivate": false,
@@ -4947,7 +4938,7 @@
         "due": "2026-03-31",
         "linkedEntryRef": "emn9kqv88ubo",
         "linkedEntryText": "深谷国済寺1台送付済み状況確認",
-        "html": "",
+        "html": "深谷国済寺1台送付済み状況確認",
         "url": "",
         "note": "",
         "priority": "",
@@ -4957,8 +4948,8 @@
       {
         "id": "mncvls1fmp8",
         "text": "3.30再度確認のメール送った。",
-        "html": "",
-        "indent": 3,
+        "html": "3.30再度確認のメール送った。",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -4966,7 +4957,7 @@
       {
         "id": "mncvq08a5g1",
         "text": "宇都宮陽東店",
-        "indent": 0,
+        "indent": 1,
         "isTodo": true,
         "checked": false,
         "type": "todo",
@@ -4979,15 +4970,7 @@
         "start": "",
         "due": "2026-03-31",
         "parentId": "emn5khg5dcwl",
-        "html": "宇都宮陽東店"
-      },
-      {
-        "id": "mncvm2x1e7k",
-        "text": "3.31に回答あったら夕方行く",
-        "html": "3.31に回答あったら夕方行く",
-        "indent": 3,
-        "bold": false,
-        "color": "",
+        "html": "宇都宮陽東店",
         "collapsed": false
       },
       {
@@ -4996,7 +4979,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
