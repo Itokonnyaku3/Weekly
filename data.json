@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T05:19:51.041Z",
+  "savedAt": "2026-03-30T05:21:39.949Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4711,15 +4711,6 @@
         "html": "★週次進捗OneNote"
       },
       {
-        "id": "mnciwfapbp6",
-        "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
-        "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn9xq5d2kk2",
         "text": "0930 HACCPアラート頻度の件 ",
         "indent": 0,
@@ -4730,55 +4721,6 @@
         "tags": [],
         "projTag": "HACCP",
         "type": "log"
-      },
-      {
-        "id": "mnchyddhnb4",
-        "text": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
-        "html": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnci0n5utib",
-        "text": "一旦、朝8時、11時、15に変更。",
-        "html": "一旦、朝8時、11時、15に変更。",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnci0vxyi96",
-        "text": "そのあとどうするかは継続的に検討する",
-        "html": "そのあとどうするかは継続的に検討する",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnci1lg0pnc",
-        "text": "富士通にアラート時間変更依頼　",
-        "html": "富士通にアラート時間変更依頼　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "type": "todo",
-        "checked": false,
-        "projTag": "HACCP"
-      },
-      {
-        "id": "mnchxtkke3y",
-        "text": "1000　リーダー会 ",
-        "html": "1000　リーダー会 ",
-        "indent": 1,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": true
       },
       {
         "id": "mnchow5vhlc",
@@ -4792,67 +4734,10 @@
         "type": "log"
       },
       {
-        "id": "mnchjbpg491",
-        "text": "毎週金曜日に確認するもの→イベント追加！　",
-        "html": "毎週金曜日に確認するもの→イベント追加！　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "type": "todo",
-        "checked": false
-      },
-      {
-        "id": "mnchijv1l1v",
-        "text": "信号機更新…月末に椎名さんが取得している",
-        "html": "信号機更新…月末に椎名さんが取得している",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnchibtmfek",
-        "text": "マスタースケジュール更新、今日明日期限",
-        "html": "マスタースケジュール更新、今日明日期限",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnci2ww3dud",
-        "text": "その他 ",
-        "html": "その他 ",
-        "indent": 1,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": true
-      },
-      {
         "id": "mnbu8n6jgb7",
         "text": "ああｓｄ",
         "html": "ああｓｄ",
         "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": true
-      },
-      {
-        "id": "mn9x8h95het",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mncj1rqrb9a",
-        "text": "",
-        "html": "",
-        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -4861,7 +4746,7 @@
         "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？ ",
         "html": "日経クロステック取材受ける？ ",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4870,79 +4755,16 @@
         "type": "log"
       },
       {
-        "id": "mncfw1wv62w",
-        "text": "27日にメールで確認、明日まで回答待ち　",
-        "html": "27日にメールで確認、明日まで回答待ち　",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "emn5lcx4rm60",
-        "text": "深谷国済寺1台送付済み状況確認",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "start": "2026-03-24",
-        "due": "2026-03-31",
-        "linkedEntryRef": "emn9kqv88ubo",
-        "linkedEntryText": "深谷国済寺1台送付済み状況確認",
-        "html": "深谷国済寺1台送付済み状況確認",
-        "url": "",
-        "note": "",
-        "priority": "",
-        "tags": [],
-        "parentId": "emn5khg5dcwl"
-      },
-      {
-        "id": "mncepn3aohd",
-        "text": "安田さんに仕様確定でいいかチャットで確認　",
-        "indent": 1,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "ふかやバイオーダー",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "mid",
-        "tags": [],
-        "start": "2026-03-30",
-        "due": "2026-03-31",
-        "html": "安田さんに仕様確定でいいかチャットで確認　"
-      },
-      {
         "id": "mnci2z3xcwj",
         "text": "ぷりんた万崎さんMac印刷確認 ",
         "html": "ぷりんた万崎さんMac印刷確認 ",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
         "isTodo": true,
         "type": "todo",
         "checked": false
-      },
-      {
-        "id": "emn1hfsbsuj6",
-        "text": "🌡️説明会！ ",
-        "indent": 0,
-        "bold": true,
-        "color": "#e74c3c",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "log",
-        "html": "🌡️説明会！ <div><br></div>"
       },
       {
         "id": "emn2qu5t7afh",
@@ -4965,7 +4787,7 @@
         "id": "emn5khg5dcwl",
         "text": "個店対応",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": true,
         "isTodo": false,
@@ -5055,10 +4877,33 @@
         "html": "大間々店状況確認"
       },
       {
+        "id": "emn5lcx4rm60",
+        "text": "深谷国済寺1台送付済み状況確認",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "start": "2026-03-24",
+        "due": "2026-03-31",
+        "linkedEntryRef": "emn9kqv88ubo",
+        "linkedEntryText": "深谷国済寺1台送付済み状況確認",
+        "html": "深谷国済寺1台送付済み状況確認",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "parentId": "emn5khg5dcwl"
+      },
+      {
         "id": "emn5jjkvhknn",
         "text": "新狭山HACCP発注",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": true,
         "isTodo": true,
@@ -5173,6 +5018,161 @@
         "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
       },
       {
+        "id": "emn1hfsbsuj6",
+        "text": "🌡️説明会！",
+        "indent": 0,
+        "bold": true,
+        "color": "#e74c3c",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "html": "🌡️説明会！"
+      },
+      {
+        "id": "mncepn3aohd",
+        "text": "安田さんに仕様確定でいいかチャットで確認　",
+        "indent": 1,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "mid",
+        "tags": [],
+        "start": "2026-03-30",
+        "due": "2026-03-31",
+        "html": "安田さんに仕様確定でいいかチャットで確認　"
+      },
+      {
+        "id": "mncfw1wv62w",
+        "text": "27日にメールで確認、明日まで回答待ち　",
+        "html": "27日にメールで確認、明日まで回答待ち　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncj1rqrb9a",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mn9x8h95het",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci2ww3dud",
+        "text": "その他 ",
+        "html": "その他 ",
+        "indent": 1,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": true
+      },
+      {
+        "id": "mnchibtmfek",
+        "text": "マスタースケジュール更新、今日明日期限",
+        "html": "マスタースケジュール更新、今日明日期限",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnchijv1l1v",
+        "text": "信号機更新…月末に椎名さんが取得している",
+        "html": "信号機更新…月末に椎名さんが取得している",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnchjbpg491",
+        "text": "毎週金曜日に確認するもの→イベント追加！　",
+        "html": "毎週金曜日に確認するもの→イベント追加！　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false
+      },
+      {
+        "id": "mnchxtkke3y",
+        "text": "1000　リーダー会 ",
+        "html": "1000　リーダー会 ",
+        "indent": 1,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": true
+      },
+      {
+        "id": "mnci1lg0pnc",
+        "text": "富士通にアラート時間変更依頼　",
+        "html": "富士通にアラート時間変更依頼　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false,
+        "projTag": "HACCP"
+      },
+      {
+        "id": "mnci0vxyi96",
+        "text": "そのあとどうするかは継続的に検討する",
+        "html": "そのあとどうするかは継続的に検討する",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci0n5utib",
+        "text": "一旦、朝8時、11時、15に変更。",
+        "html": "一旦、朝8時、11時、15に変更。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnchyddhnb4",
+        "text": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
+        "html": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnciwfapbp6",
+        "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "emn5qzvdokvt",
         "text": "成電社請求書確認　",
         "indent": 0,
@@ -5187,24 +5187,6 @@
         "linkedEntryRef": "emn9kqv88vlw",
         "linkedEntryText": "成電社請求書確認",
         "html": "成電社請求書確認　"
-      },
-      {
-        "id": "emmx7gbbaehl",
-        "text": "岡芹さんとアラート頻度再調整",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
-        "due": "2026-03-30",
-        "html": "岡芹さんとアラート頻度再調整",
-        "linkedEntryRef": "emn9kqv88tjh",
-        "linkedEntryText": "岡芹さんとアラート頻度再調整 q"
       },
       {
         "id": "emmx7gbbaehl",
@@ -5305,39 +5287,6 @@
         "start": "",
         "due": "",
         "html": "店舗PCの自動シャットダウン除外"
-      },
-      {
-        "id": "emn2f6yeur0y",
-        "text": "新狭山",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "📔新店改装店",
-        "type": "log",
-        "due": "2026-06-26",
-        "html": "新狭山"
-      },
-      {
-        "id": "mnbt824sqgf",
-        "text": "見積",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "📔新店改装店",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "html": "見積",
-        "parentId": "emn2f6yeur0y"
       },
       {
         "id": "mnceqlh95fw",
@@ -6296,8 +6245,18 @@
     "2026-3-31": [
       {
         "id": "mncqjo8cgti",
-        "text": "",
+        "text": "0900 部会進捗報告",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mncqpe0vlje",
+        "text": "クロステック取材受ける？",
+        "html": "クロステック取材受ける？",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
