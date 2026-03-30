@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:36:08.791Z",
+  "savedAt": "2026-03-30T07:38:28.903Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4838,7 +4838,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "emn5lcx4r630",
@@ -4886,7 +4886,7 @@
         "text": "西部モール店、電話で確認",
         "indent": 2,
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "type": "todo",
         "projTag": "HACCP",
         "url": "",
@@ -4897,7 +4897,17 @@
         "start": "",
         "due": "2026-03-30",
         "parentId": "emn5khg5dcwl",
-        "html": "西部モール店、電話で確認"
+        "html": "西部モール店、電話で確認",
+        "collapsed": true
+      },
+      {
+        "id": "mncvkvrxlxv",
+        "text": "3台は富士通の予備、2台は30日に発送で様子を見ていただく",
+        "html": "3台は富士通の予備、2台は30日に発送で様子を見ていただく",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emmy5whstca9",
@@ -4932,12 +4942,30 @@
         "due": "2026-03-31",
         "linkedEntryRef": "emn9kqv88ubo",
         "linkedEntryText": "深谷国済寺1台送付済み状況確認",
-        "html": "深谷国済寺1台送付済み状況確認",
+        "html": "",
         "url": "",
         "note": "",
         "priority": "",
         "tags": [],
         "parentId": "emn5khg5dcwl"
+      },
+      {
+        "id": "mncvls1fmp8",
+        "text": "3.30再度確認のメール送った。",
+        "html": "",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncvm2x1e7k",
+        "text": "3.31に回答あったら夕方行く",
+        "html": "3.31に回答あったら夕方行く",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emn5jjkvhknn",
