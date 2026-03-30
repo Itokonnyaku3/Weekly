@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T14:05:04.271Z",
+  "savedAt": "2026-03-30T14:12:09.451Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4687,13 +4687,13 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "log",
-        "html": "1500 ソラカメ引継ぎ<div><br></div>"
+        "html": "1500 ソラカメ引継ぎ"
       },
       {
         "id": "mncs9pit8ou",
