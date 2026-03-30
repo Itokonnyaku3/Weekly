@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:22:47.252Z",
+  "savedAt": "2026-03-30T01:24:13.290Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6224,62 +6224,13 @@
     ],
     "2026-3-31": [
       {
-        "id": "mncepn3aohd",
-        "text": "安田さんに仕様確定でいいかチャットで確認　",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "ふかやバイオーダー",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "mid",
-        "tags": [],
-        "start": "2026-03-30",
-        "due": "2026-03-31",
-        "html": "安田さんに仕様確定でいいかチャットで確認　"
-      },
-      {
-        "id": "emn5lcx4rm60",
-        "text": "深谷国済寺1台送付済み状況確認",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "start": "2026-03-24",
-        "due": "2026-03-31",
-        "linkedEntryRef": "emn9kqv88ubo",
-        "linkedEntryText": "深谷国済寺1台送付済み状況確認",
-        "html": "深谷国済寺1台送付済み状況確認",
-        "url": "",
-        "note": "",
-        "priority": "",
-        "tags": [],
-        "parentId": "emn5khg5dcwl"
-      },
-      {
-        "id": "mncfw1wv62w",
-        "text": "27日にメールで確認、明日まで回答待ち　",
-        "html": "27日にメールで確認、明日まで回答待ち　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件  ",
+        "text": "0930 HACCPアラート頻度の件  ",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false,
-        "html": "0930 HACCPアラート頻度の件&nbsp;&nbsp;",
+        "html": "0930 HACCPアラート頻度の件&nbsp; ",
         "tags": [
           "HACCP"
         ]
@@ -6325,11 +6276,11 @@
       },
       {
         "id": "mnchxtkke3y",
-        "text": "1000　リーダー会",
-        "html": "1000　リーダー会",
+        "text": "1000　リーダー会 ",
+        "html": "1000　リーダー会 ",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -6373,11 +6324,11 @@
       },
       {
         "id": "mnci2ww3dud",
-        "text": "その他",
-        "html": "その他",
+        "text": "その他 ",
+        "html": "その他 ",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -6393,19 +6344,50 @@
         "checked": false
       },
       {
-        "id": "mnci77f8gm7",
-        "text": "",
-        "html": "",
+        "id": "mncepn3aohd",
+        "text": "安田さんに仕様確定でいいかチャットで確認　",
+        "indent": 1,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "mid",
+        "tags": [],
+        "start": "2026-03-30",
+        "due": "2026-03-31",
+        "html": "安田さんに仕様確定でいいかチャットで確認　"
+      },
+      {
+        "id": "emn5lcx4rm60",
+        "text": "深谷国済寺1台送付済み状況確認",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "start": "2026-03-24",
+        "due": "2026-03-31",
+        "linkedEntryRef": "emn9kqv88ubo",
+        "linkedEntryText": "深谷国済寺1台送付済み状況確認",
+        "html": "深谷国済寺1台送付済み状況確認",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "parentId": "emn5khg5dcwl"
       },
       {
-        "id": "mnci3g4ydx7",
-        "text": "",
-        "html": "",
-        "indent": 1,
+        "id": "mncfw1wv62w",
+        "text": "27日にメールで確認、明日まで回答待ち　",
+        "html": "27日にメールで確認、明日まで回答待ち　",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
