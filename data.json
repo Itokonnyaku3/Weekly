@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T05:24:07.054Z",
+  "savedAt": "2026-03-30T05:25:49.872Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5154,18 +5154,6 @@
         "collapsed": false
       },
       {
-        "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件 ",
-        "indent": 0,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": false,
-        "html": "0930 HACCPアラート頻度の件 ",
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log"
-      },
-      {
         "id": "mncepn3aohd",
         "text": "安田さんに仕様確定でいいかチャットで確認　",
         "indent": 0,
@@ -5192,24 +5180,6 @@
         "collapsed": false
       },
       {
-        "id": "mncj1rqrb9a",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x8h95het",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mnci2ww3dud",
         "text": "その他 ",
         "html": "その他 ",
@@ -5228,19 +5198,10 @@
         "collapsed": false
       },
       {
-        "id": "mnchijv1l1v",
-        "text": "信号機更新…月末に椎名さんが取得している",
-        "html": "信号機更新…月末に椎名さんが取得している",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mnchjbpg491",
         "text": "毎週金曜日に確認するもの→イベント追加！　",
         "html": "毎週金曜日に確認するもの→イベント追加！　",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -5252,7 +5213,7 @@
         "id": "mnchxtkke3y",
         "text": "1000　リーダー会 ",
         "html": "1000　リーダー会 ",
-        "indent": 1,
+        "indent": 0,
         "bold": true,
         "color": "#3498db",
         "collapsed": true
@@ -5261,7 +5222,7 @@
         "id": "mnci1lg0pnc",
         "text": "富士通にアラート時間変更依頼　",
         "html": "富士通にアラート時間変更依頼　",
-        "indent": 1,
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -5269,6 +5230,18 @@
         "type": "todo",
         "checked": false,
         "projTag": "HACCP"
+      },
+      {
+        "id": "mn9xq5d2kk2",
+        "text": "0930 HACCPアラート頻度の件 ",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": true,
+        "html": "0930 HACCPアラート頻度の件 ",
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log"
       },
       {
         "id": "mnchyddhnb4",
@@ -5292,6 +5265,15 @@
         "id": "mnci0vxyi96",
         "text": "そのあとどうするかは継続的に検討する",
         "html": "そのあとどうするかは継続的に検討する",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnchijv1l1v",
+        "text": "信号機更新…月末に椎名さんが取得している",
+        "html": "信号機更新…月末に椎名さんが取得している",
         "indent": 1,
         "bold": false,
         "color": "",
