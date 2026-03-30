@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T00:14:08.516Z",
+  "savedAt": "2026-03-30T00:17:26.529Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4844,8 +4844,9 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": "",
-        "parentId": "emn5khg5dcwl"
+        "due": "2026-03-30",
+        "parentId": "emn5khg5dcwl",
+        "html": "西部モール店、電話で確認"
       },
       {
         "id": "emn5lcx4rm60",
