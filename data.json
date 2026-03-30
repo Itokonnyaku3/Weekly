@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-29T23:46:04.393Z",
+  "savedAt": "2026-03-30T00:13:55.597Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4774,6 +4774,22 @@
         "html": "3.31おおたモールで検証"
       },
       {
+        "id": "emn5khg5dcwl",
+        "text": "個店対応",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "start": "2026-03-25",
+        "due": "2026-04-30",
+        "html": "個店対応"
+      },
+      {
         "id": "emn5lcx4r630",
         "text": "大間々店1台送付",
         "indent": 0,
@@ -4793,23 +4809,26 @@
         "note": "",
         "priority": "",
         "tags": [],
-        "html": "大間々店1台送付"
+        "html": "大間々店1台送付",
+        "parentId": "emn5khg5dcwl"
       },
       {
-        "id": "emn5khg5dcwl",
-        "text": "個店対応",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
+        "id": "mn9vny1l6qp",
+        "text": "行田店岸田店長から5度以上の乖離 ",
+        "type": "todo",
+        "isTodo": true,
         "checked": false,
-        "isPrivate": false,
+        "indent": 0,
         "projTag": "HACCP",
-        "type": "log",
-        "start": "2026-03-25",
-        "due": "2026-04-30",
-        "html": "個店対応"
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "行田店岸田店長から5度以上の乖離 ",
+        "parentId": "emn5khg5dcwl"
       },
       {
         "id": "emn5lcx4rm60",
@@ -4831,7 +4850,8 @@
         "url": "",
         "note": "",
         "priority": "",
-        "tags": []
+        "tags": [],
+        "parentId": "emn5khg5dcwl"
       },
       {
         "id": "emmw2zro2w9x",
@@ -5053,23 +5073,6 @@
         "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう"
       },
       {
-        "id": "mn9vny1l6qp",
-        "text": "行田店岸田店長から5度以上の乖離 ",
-        "type": "todo",
-        "isTodo": true,
-        "checked": false,
-        "indent": 0,
-        "projTag": "HACCP",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "html": "行田店岸田店長から5度以上の乖離 "
-      },
-      {
         "id": "mn9vnfle493",
         "text": "27日ごろセンサー早出し納品日確認",
         "type": "todo",
@@ -5278,6 +5281,22 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mncfqnf1nv9",
+        "text": "西部モール店、電話で確認",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-4-6": [
