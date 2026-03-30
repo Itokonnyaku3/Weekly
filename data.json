@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:19:51.922Z",
+  "savedAt": "2026-03-30T01:21:33.560Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6305,7 +6305,7 @@
       {
         "id": "mnci0vxyi96",
         "text": "そのあとどうするかは継続的に検討する",
-        "html": "",
+        "html": "そのあとどうするかは継続的に検討する",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6328,7 +6328,7 @@
         "text": "1000　リーダー会",
         "html": "1000　リーダー会",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -6374,16 +6374,16 @@
       {
         "id": "mnci2ww3dud",
         "text": "その他",
-        "html": "",
+        "html": "その他",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mnci2z3xcwj",
         "text": "ぷりんた万崎さんMac印刷確認",
-        "html": "",
+        "html": "ぷりんた万崎さんMac印刷確認",
         "indent": 1,
         "bold": false,
         "color": "",
