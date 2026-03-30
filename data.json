@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:40:48.184Z",
+  "savedAt": "2026-03-30T01:41:45.056Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4787,7 +4787,8 @@
         "type": "log",
         "start": "2026-03-25",
         "due": "2026-04-30",
-        "html": "個店対応"
+        "html": "個店対応",
+        "gridCollapsed": true
       },
       {
         "id": "emn5lcx4r630",
@@ -4925,7 +4926,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88mye",
-        "linkedEntryText": "富士通→cloudｓｉｇｎ"
+        "linkedEntryText": "富士通→cloudｓｉｇｎ",
+        "parentId": "emn5jjkvhknn"
       },
       {
         "id": "emn5lcx4rojg",
