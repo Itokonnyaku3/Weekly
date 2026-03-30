@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:10:39.765Z",
+  "savedAt": "2026-03-30T07:24:17.802Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4687,7 +4687,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4727,6 +4727,24 @@
         "text": "",
         "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-30T06-04-32-291Z_4u2ym.png\" alt=\"ペースト画像\"></span><br>",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncv3mqp2w6",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncv3nodebm",
+        "text": "あ",
+        "html": "あ",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
