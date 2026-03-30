@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T06:05:08.863Z",
+  "savedAt": "2026-03-30T06:05:57.066Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4697,8 +4697,8 @@
       },
       {
         "id": "mncs9pit8ou",
-        "text": "図面と台数が確認できたら田村さんから渡される",
-        "html": "",
+        "text": "台数が確認できたら田村さんから渡される",
+        "html": "台数が確認できたら田村さんから渡される",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -4706,6 +4706,15 @@
       },
       {
         "id": "mncsabmbrey",
+        "text": "ソラコムのアカウントが必要",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncsbcjlsks",
         "text": "",
         "html": "",
         "indent": 1,
