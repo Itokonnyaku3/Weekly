@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T05:27:20.714Z",
+  "savedAt": "2026-03-30T05:27:50.734Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4711,18 +4711,6 @@
         "html": "★週次進捗OneNote"
       },
       {
-        "id": "mncityp7jh6",
-        "text": "日経クロステック取材受ける？ ",
-        "html": "日経クロステック取材受ける？ ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log"
-      },
-      {
         "id": "mnci2z3xcwj",
         "text": "ぷりんた万崎さんMac印刷確認 ",
         "html": "ぷりんた万崎さんMac印刷確認 ",
@@ -5009,12 +4997,27 @@
         "html": "🌡️説明会！"
       },
       {
+        "id": "emmw2zro232f",
+        "text": "実プロジェクトで検証",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "上手い早い安い",
+        "type": "log",
+        "note": "AIにヒアリングさせてみて、その結果をもって要件整理・計画書の順で作成させる\n実用的か、抜けがないか、どれくらいの修正が必要かをレビュー",
+        "html": "実プロジェクトで検証"
+      },
+      {
         "id": "emn5qzvdokvt",
         "text": "成電社請求書確認　",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": true,
         "checked": false,
         "isPrivate": false,
@@ -5032,21 +5035,6 @@
         "bold": false,
         "color": "",
         "collapsed": false
-      },
-      {
-        "id": "emmw2zro232f",
-        "text": "実プロジェクトで検証",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "上手い早い安い",
-        "type": "log",
-        "note": "AIにヒアリングさせてみて、その結果をもって要件整理・計画書の順で作成させる\n実用的か、抜けがないか、どれくらいの修正が必要かをレビュー",
-        "html": "実プロジェクトで検証"
       },
       {
         "id": "emn5e23ayqa6",
@@ -6154,13 +6142,16 @@
         "html": ""
       },
       {
-        "id": "mncqpe0vlje",
-        "text": "クロステック取材受ける？",
-        "html": "クロステック取材受ける？",
+        "id": "mncityp7jh6",
+        "text": "日経クロステック取材受ける？ ",
+        "html": "日経クロステック取材受ける？ ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log"
       }
     ],
     "2026-3-14": [
