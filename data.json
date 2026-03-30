@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:41:45.056Z",
+  "savedAt": "2026-03-30T01:44:04.784Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4698,22 +4698,6 @@
         "html": "週次進捗確認　/"
       },
       {
-        "id": "emn7bub5cw3p",
-        "text": "dasa　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "管理・全般",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88bq4",
-        "linkedEntryText": "dasa",
-        "html": "dasa　"
-      },
-      {
         "id": "emmw2zro2mh2",
         "text": "黒田さん30日在宅 ",
         "indent": 0,
@@ -4850,8 +4834,24 @@
         "html": "西部モール店、電話で確認"
       },
       {
-        "id": "emmw2zro2w9x",
-        "text": "SDでの閲覧植田さん、長田さん確認",
+        "id": "emmy5whstca9",
+        "text": "大間々店状況確認",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": true,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "linkedEntryRef": "emn9kqv88tys",
+        "linkedEntryText": "大間々店状況確認",
+        "parentId": "emn5khg5dcwl"
+      },
+      {
+        "id": "emn5jjkvhknn",
+        "text": "新狭山HACCP発注",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4861,8 +4861,35 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
+        "linkedEntryRef": "emn9kqv88a9l",
+        "linkedEntryText": "新狭山HACCP発注",
+        "html": "新狭山HACCP発注<div><br></div>",
+        "gridCollapsed": true
+      },
+      {
+        "id": "emmw2zro2w9x",
+        "text": "SDでの閲覧植田さん、長田さん確認",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": true,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
         "linkedEntryRef": "emn9kqv88dhi",
-        "linkedEntryText": "SDでの閲覧植田さん、長田さん確認"
+        "linkedEntryText": "SDでの閲覧植田さん、長田さん確認",
+        "html": ""
+      },
+      {
+        "id": "mnciwfapbp6",
+        "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emmw2zro2yfv",
@@ -4878,7 +4905,8 @@
         "type": "todo",
         "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773799914268?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773799399508&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773799914268",
         "linkedEntryRef": "emn9kqv88aog",
-        "linkedEntryText": "オフラインの店舗の詳細を確認"
+        "linkedEntryText": "オフラインの店舗の詳細を確認",
+        "html": "オフラインの店舗の詳細を確認"
       },
       {
         "id": "emn2qu5t7538",
@@ -4896,22 +4924,6 @@
         "linkedEntryRef": "emn9kqv88r80",
         "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
         "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
-      },
-      {
-        "id": "emn5jjkvhknn",
-        "text": "新狭山HACCP発注",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88a9l",
-        "linkedEntryText": "新狭山HACCP発注",
-        "html": "新狭山HACCP発注<div><br></div>"
       },
       {
         "id": "emn5lcx4ri72",
@@ -4942,22 +4954,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv8822j",
-        "linkedEntryText": "成電社（見積もらってから）"
-      },
-      {
-        "id": "emmy5whstca9",
-        "text": "大間々店状況確認",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88tys",
-        "linkedEntryText": "大間々店状況確認"
+        "linkedEntryText": "成電社（見積もらってから）",
+        "parentId": "emn5jjkvhknn"
       },
       {
         "id": "emn5lcx4rmuq",
@@ -4972,7 +4970,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88k5y",
-        "linkedEntryText": "小泉成器"
+        "linkedEntryText": "小泉成器",
+        "parentId": "emn5jjkvhknn"
       },
       {
         "id": "emn5qzvdokvt",
@@ -4997,7 +4996,7 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
@@ -5026,21 +5025,6 @@
         "html": "岡芹さんとアラート頻度再調整"
       },
       {
-        "id": "emn5sdxpgou1",
-        "text": "テスト",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88hh8",
-        "linkedEntryText": "テスト"
-      },
-      {
         "id": "emmw2zro232f",
         "text": "実プロジェクトで検証",
         "indent": 0,
@@ -5052,7 +5036,8 @@
         "isPrivate": false,
         "projTag": "上手い早い安い",
         "type": "log",
-        "note": "AIにヒアリングさせてみて、その結果をもって要件整理・計画書の順で作成させる\n実用的か、抜けがないか、どれくらいの修正が必要かをレビュー"
+        "note": "AIにヒアリングさせてみて、その結果をもって要件整理・計画書の順で作成させる\n実用的か、抜けがないか、どれくらいの修正が必要かをレビュー",
+        "html": "実プロジェクトで検証"
       },
       {
         "id": "emn5e23ayqa6",
@@ -5067,14 +5052,15 @@
         "projTag": "AI_ビーコン用アンテナ撤去",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88ehx",
-        "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう"
+        "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう",
+        "html": "根岸さんに岩崎さんと打ち合わせしてもらう"
       },
       {
         "id": "mn9vnfle493",
         "text": "27日ごろセンサー早出し納品日確認",
         "type": "todo",
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "indent": 0,
         "projTag": "HACCP",
         "url": "",
@@ -5084,7 +5070,17 @@
         "tags": [],
         "start": "",
         "due": "2026-03-30",
-        "html": "27日ごろセンサー早出し納品日確認"
+        "html": "27日ごろセンサー早出し納品日確認",
+        "collapsed": true
+      },
+      {
+        "id": "mncixq4hjp7",
+        "text": "4月1日で変わらず",
+        "html": "4月1日で変わらず",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mn9x2skrsh6",
