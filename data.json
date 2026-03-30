@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:05:02.332Z",
+  "savedAt": "2026-03-30T01:07:11.549Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6276,10 +6276,10 @@
         "id": "mn9xq5d2kk2",
         "text": "1000　リーダー会",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "1000　リーダー会"
       },
       {
         "id": "mnchibtmfek",
