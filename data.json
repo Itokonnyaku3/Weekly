@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:43:57.057Z",
+  "savedAt": "2026-03-30T07:46:50.256Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4811,7 +4811,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4820,7 +4820,7 @@
         "start": "2026-03-25",
         "due": "2026-04-30",
         "html": "個店対応",
-        "gridCollapsed": false
+        "gridCollapsed": true
       },
       {
         "id": "mncvj84y5c1",
@@ -4851,7 +4851,21 @@
         "note": "",
         "priority": "",
         "tags": [],
-        "html": "大間々店1台送付",
+        "html": "",
+        "parentId": "emn5khg5dcwl"
+      },
+      {
+        "id": "mncvw1g33q7",
+        "text": "大間々店登録情回答待ち（3.30メールで催促） ",
+        "html": "大間々店登録情回答待ち（3.30メールで催促） ",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false,
+        "projTag": "HACCP",
         "parentId": "emn5khg5dcwl"
       },
       {
@@ -4958,13 +4972,14 @@
         "type": "todo",
         "projTag": "HACCP",
         "url": "",
-        "note": "",
+        "note": "メールで受信",
         "images": [],
         "priority": "",
         "tags": [],
         "start": "",
-        "due": "",
-        "parentId": "emn5khg5dcwl"
+        "due": "2026-03-31",
+        "parentId": "emn5khg5dcwl",
+        "html": "宇都宮陽東店"
       },
       {
         "id": "mncvm2x1e7k",
