@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:24:17.802Z",
+  "savedAt": "2026-03-30T07:35:31.406Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4839,7 +4839,7 @@
         "color": "",
         "collapsed": false,
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
