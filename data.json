@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T02:16:43.262Z",
+  "savedAt": "2026-03-30T02:17:05.280Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6395,8 +6395,8 @@
       },
       {
         "id": "mncityp7jh6",
-        "text": "日経クロステック取材受ける？ ",
-        "html": "日経クロステック取材受ける？&nbsp;",
+        "text": "日経クロステック取材受ける？",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6404,6 +6404,15 @@
         "tags": [],
         "projTag": "HACCP",
         "type": "log"
+      },
+      {
+        "id": "mnck51c0ar9",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-14": [
