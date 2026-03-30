@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T04:18:56.355Z",
+  "savedAt": "2026-03-30T04:19:57.074Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4919,22 +4919,6 @@
         "html": "小泉成器"
       },
       {
-        "id": "emmw2zro2w9x",
-        "text": "SDでの閲覧植田さん、長田さん確認",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88dhi",
-        "linkedEntryText": "SDでの閲覧植田さん、長田さん確認",
-        "html": "SDでの閲覧植田さん、長田さん確認"
-      },
-      {
         "id": "mnciwfapbp6",
         "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
         "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
@@ -4990,43 +4974,8 @@
         "projTag": "HACCP",
         "type": "todo",
         "linkedEntryRef": "emn9kqv88vlw",
-        "linkedEntryText": "成電社請求書確認"
-      },
-      {
-        "id": "emmx7gbbaehl",
-        "text": "岡芹さんとアラート頻度再調整 q",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
-        "due": "2026-03-30",
-        "html": "岡芹さんとアラート頻度再調整 q",
-        "linkedEntryRef": "emn9kqv88tjh",
-        "linkedEntryText": "岡芹さんとアラート頻度再調整 q"
-      },
-      {
-        "id": "emmx7gbbaehl",
-        "text": "岡芹さんとアラート頻度再調整",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
-        "due": "2026-03-30",
-        "linkedEntryRef": "emn9kqv87cct",
-        "linkedEntryText": "岡芹さんとアラート頻度再調整",
-        "html": "岡芹さんとアラート頻度再調整"
+        "linkedEntryText": "成電社請求書確認",
+        "html": "成電社請求書確認"
       },
       {
         "id": "emmw2zro232f",
@@ -5058,33 +5007,6 @@
         "linkedEntryRef": "emn9kqv88ehx",
         "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう",
         "html": "根岸さんに岩崎さんと打ち合わせしてもらう"
-      },
-      {
-        "id": "mn9vnfle493",
-        "text": "27日ごろセンサー早出し納品日確認",
-        "type": "todo",
-        "isTodo": true,
-        "checked": true,
-        "indent": 0,
-        "projTag": "HACCP",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "2026-03-30",
-        "html": "27日ごろセンサー早出し納品日確認",
-        "collapsed": true
-      },
-      {
-        "id": "mncixq4hjp7",
-        "text": "4月1日で変わらず",
-        "html": "4月1日で変わらず",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
       },
       {
         "id": "mnaajg4tuwg",
@@ -5146,40 +5068,65 @@
         "collapsed": false
       },
       {
-        "id": "mnceqlm50d0",
-        "text": "",
-        "html": "",
+        "id": "emmw2zro2w9x",
+        "text": "SDでの閲覧植田さん、長田さん確認",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": true,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "linkedEntryRef": "emn9kqv88dhi",
+        "linkedEntryText": "SDでの閲覧植田さん、長田さん確認",
+        "html": "SDでの閲覧植田さん、長田さん確認"
+      },
+      {
+        "id": "mn9vnfle493",
+        "text": "27日ごろセンサー早出し納品日確認",
+        "type": "todo",
+        "isTodo": true,
+        "checked": true,
+        "indent": 0,
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "2026-03-30",
+        "html": "27日ごろセンサー早出し納品日確認",
+        "collapsed": true
+      },
+      {
+        "id": "mncixq4hjp7",
+        "text": "4月1日で変わらず",
+        "html": "4月1日で変わらず",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
-        "id": "mnceqlryqlv",
-        "text": "",
-        "html": "",
+        "id": "emmx7gbbaehl",
+        "text": "岡芹さんとアラート頻度再調整",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnceqlwkpei",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnceqlyvj65",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": true,
+        "checked": true,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
+        "due": "2026-03-30",
+        "linkedEntryRef": "emn9kqv87cct",
+        "linkedEntryText": "岡芹さんとアラート頻度再調整",
+        "html": "岡芹さんとアラート頻度再調整"
       }
     ],
     "2026-4-6": [
