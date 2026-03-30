@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:18:44.182Z",
+  "savedAt": "2026-03-30T01:19:51.922Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6365,7 +6365,34 @@
       {
         "id": "mnchow5vhlc",
         "text": "",
-        "html": "<br>",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci2ww3dud",
+        "text": "その他",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci2z3xcwj",
+        "text": "ぷりんた万崎さんMac印刷確認",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci3g4ydx7",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
