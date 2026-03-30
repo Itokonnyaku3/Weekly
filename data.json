@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T23:48:59.086Z",
+  "savedAt": "2026-03-30T23:59:11.295Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6252,7 +6252,7 @@
         "id": "mncqjo8cgti",
         "text": "0900 部会進捗報告",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "html": "0900 部会進捗報告"
@@ -6274,8 +6274,8 @@
         "text": "1000 ミライトワンカメラ実演",
         "html": "1000 ミライトワンカメラ実演",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#2ecc71",
         "collapsed": false
       },
       {
