@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:16:00.520Z",
+  "savedAt": "2026-03-30T01:17:07.301Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6274,12 +6274,15 @@
       },
       {
         "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件 #HACCP",
+        "text": "0930 HACCPアラート頻度の件  ",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
-        "html": "0930 HACCPアラート頻度の件 #HACCP"
+        "html": "0930 HACCPアラート頻度の件&nbsp;&nbsp;",
+        "tags": [
+          "HACCP"
+        ]
       },
       {
         "id": "mnchyddhnb4",
@@ -6361,5 +6364,10 @@
     ]
   },
   "_nodesMigrated": true,
-  "tagMeta": {}
+  "tagMeta": {
+    "HACCP": {
+      "color": null,
+      "lastUsed": 1774833426663
+    }
+  }
 }
