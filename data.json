@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:11:53.544Z",
+  "savedAt": "2026-03-30T01:16:00.520Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6274,12 +6274,30 @@
       },
       {
         "id": "mn9xq5d2kk2",
-        "text": "1000　リーダー会",
+        "text": "0930 HACCPアラート頻度の件 #HACCP",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false,
-        "html": "1000　リーダー会"
+        "html": "0930 HACCPアラート頻度の件 #HACCP"
+      },
+      {
+        "id": "mnchyddhnb4",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnchxtkke3y",
+        "text": "1000　リーダー会",
+        "html": "1000　リーダー会",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mnchibtmfek",
@@ -6313,8 +6331,8 @@
       },
       {
         "id": "mnchow5vhlc",
-        "text": "/",
-        "html": "/",
+        "text": "",
+        "html": "<br>",
         "indent": 1,
         "bold": false,
         "color": "",
