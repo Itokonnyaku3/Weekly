@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T14:14:05.076Z",
+  "savedAt": "2026-03-30T23:19:31.144Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4807,7 +4807,7 @@
       },
       {
         "id": "emn5khg5dcwl",
-        "text": "個店対応",
+        "text": "🏪個店対応",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -4819,7 +4819,7 @@
         "type": "log",
         "start": "2026-03-25",
         "due": "2026-04-30",
-        "html": "個店対応<br>",
+        "html": "🏪個店対応<br>",
         "gridCollapsed": false
       },
       {
@@ -6267,12 +6267,12 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": ""
+        "html": "0900 部会進捗報告"
       },
       {
         "id": "mncityp7jh6",
-        "text": "日経クロステック取材受ける？ ",
-        "html": "日経クロステック取材受ける？ ",
+        "text": "日経クロステック取材受ける？",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6280,6 +6280,15 @@
         "tags": [],
         "projTag": "HACCP",
         "type": "log"
+      },
+      {
+        "id": "mndt8ipls0f",
+        "text": " ",
+        "html": " ",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-14": [
