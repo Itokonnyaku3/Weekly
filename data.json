@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:40:03.111Z",
+  "savedAt": "2026-03-30T07:41:34.411Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5129,7 +5129,7 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv88vlw",
         "linkedEntryText": "成電社請求書確認",
-        "html": "成電社請求書確認　"
+        "html": "成電社請求書確認　<div><br></div>"
       },
       {
         "id": "mncfw1wv62w",
@@ -5228,6 +5228,22 @@
         "bold": true,
         "color": "#3498db",
         "collapsed": true
+      },
+      {
+        "id": "mncvq08a5g1",
+        "text": "宇都宮陽東店",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       },
       {
         "id": "mnci1lg0pnc",
