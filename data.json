@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T04:14:26.119Z",
+  "savedAt": "2026-03-30T04:17:21.605Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5131,7 +5131,7 @@
       },
       {
         "id": "mn9x353pk6f",
-        "text": "テスト子ノード",
+        "text": "テスト子ノー",
         "indent": 0,
         "isTodo": true,
         "checked": false,
@@ -5144,7 +5144,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "テスト子ノード",
+        "html": "テスト子ノー",
         "parentId": "mn9x2skrsh6"
       },
       {
@@ -5161,24 +5161,6 @@
         "checked": false,
         "parentId": "mn9x2skrsh6",
         "url": ""
-      },
-      {
-        "id": "mn9xpz0kg4k",
-        "text": "テスト3",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "運用改善",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "parentId": "mn9x2skrsh6",
-        "html": "テスト3"
       },
       {
         "id": "mnaajg4tuwg",
