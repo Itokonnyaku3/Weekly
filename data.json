@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T23:19:31.144Z",
+  "savedAt": "2026-03-30T23:22:25.751Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6272,7 +6272,7 @@
       {
         "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？",
-        "html": "",
+        "html": "日経クロステック取材受ける？",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6283,9 +6283,39 @@
       },
       {
         "id": "mndt8ipls0f",
-        "text": " ",
-        "html": " ",
+        "text": "ソラカメ　",
+        "html": "ソラカメ　",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "sorakameソラカメ"
+        ]
+      },
+      {
+        "id": "mndtbida3pp",
+        "text": "365メールのソラカメ管理アカウント",
+        "html": "365メールのソラカメ管理アカウント",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndtbnib3ao",
+        "text": "アドレス：sorakame-admin@beisia.co.jp",
+        "html": "アドレス：sorakame-admin@beisia.co.jp",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndtbqn9mg4",
+        "text": "パスワード：ds6954k9",
+        "html": "パスワード：ds6954k9",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6313,5 +6343,10 @@
     ]
   },
   "_nodesMigrated": true,
-  "tagMeta": {}
+  "tagMeta": {
+    "sorakameソラカメ": {
+      "color": null,
+      "lastUsed": 1774912945132
+    }
+  }
 }
