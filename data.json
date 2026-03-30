@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T14:01:00.807Z",
+  "savedAt": "2026-03-30T14:05:04.271Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4777,6 +4777,15 @@
         "html": "★週次進捗OneNote"
       },
       {
+        "id": "mnd9cfpxfz5",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mnci2z3xcwj",
         "text": "ぷりんた万崎さんMac印刷確認 ",
         "html": "ぷりんた万崎さんMac印刷確認 ",
@@ -4819,7 +4828,7 @@
         "type": "log",
         "start": "2026-03-25",
         "due": "2026-04-30",
-        "html": "個店対応",
+        "html": "個店対応<br>",
         "gridCollapsed": false
       },
       {
