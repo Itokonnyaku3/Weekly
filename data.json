@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:22:19.437Z",
+  "savedAt": "2026-03-30T01:22:47.252Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4683,7 +4683,7 @@
     "2026-3-30": [
       {
         "id": "emn2x84q2hxd",
-        "text": "週次進捗確認　",
+        "text": "週次進捗確認　/",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4695,7 +4695,7 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv887q3",
         "linkedEntryText": "週次進捗確認",
-        "html": "週次進捗確認　"
+        "html": "週次進捗確認　/"
       },
       {
         "id": "emn7bub5cw3p",
@@ -6328,7 +6328,7 @@
         "text": "1000　リーダー会",
         "html": "1000　リーダー会",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
@@ -6376,14 +6376,26 @@
         "text": "その他",
         "html": "その他",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mnci2z3xcwj",
-        "text": "ぷりんた万崎さんMac印刷確認",
-        "html": "ぷりんた万崎さんMac印刷確認",
+        "text": "ぷりんた万崎さんMac印刷確認 ",
+        "html": "ぷりんた万崎さんMac印刷確認 ",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false
+      },
+      {
+        "id": "mnci77f8gm7",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6392,7 +6404,7 @@
       {
         "id": "mnci3g4ydx7",
         "text": "",
-        "html": "<br>",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6417,17 +6429,6 @@
         "bold": false,
         "color": "",
         "collapsed": false
-      }
-    ],
-    "2026-4-1": [
-      {
-        "id": "mnci6k3dxea",
-        "text": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "html": "<br>"
       }
     ]
   },
