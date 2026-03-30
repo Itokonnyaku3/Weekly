@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-03-30T01:17:07.301Z",
+  "savedAt": "2026-03-30T01:18:44.182Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6286,12 +6286,42 @@
       },
       {
         "id": "mnchyddhnb4",
-        "text": "",
+        "text": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
+        "html": "岡芹さん、石川さんはイマイチ納得いっていないご様子",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci0n5utib",
+        "text": "一旦、朝8時、11時、15に変更。",
+        "html": "一旦、朝8時、11時、15に変更。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnci0vxyi96",
+        "text": "そのあとどうするかは継続的に検討する",
         "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnci1lg0pnc",
+        "text": "富士通にアラート時間変更依頼　",
+        "html": "富士通にアラート時間変更依頼　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false
       },
       {
         "id": "mnchxtkke3y",
