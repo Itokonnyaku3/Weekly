@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T05:27:50.734Z",
+  "savedAt": "2026-03-30T05:28:52.959Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5986,16 +5986,6 @@
     ],
     "2026-3-29": [
       {
-        "id": "mn9mchihvbg",
-        "text": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "html": "<br>",
-        "tags": []
-      },
-      {
         "id": "mnb6r1ipohu",
         "text": "Sharepointの改善",
         "html": "Sharepointの改善",
@@ -6009,9 +5999,9 @@
         "text": "目的",
         "html": "目的",
         "indent": 1,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mnbf1otygaa",
@@ -6036,9 +6026,9 @@
         "text": "利用のイメージ",
         "html": "利用のイメージ",
         "indent": 1,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mnbf53h6mus",
@@ -6108,9 +6098,9 @@
         "text": "その他",
         "html": "その他",
         "indent": 1,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mnbfaw6jj1p",
