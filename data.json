@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T07:38:28.903Z",
+  "savedAt": "2026-03-30T07:40:03.111Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4732,18 +4732,9 @@
         "collapsed": false
       },
       {
-        "id": "mncv3mqp2w6",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mncv3nodebm",
-        "text": "あ",
-        "html": "あ",
+        "id": "mncvnm9dmfg",
+        "text": "ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー",
+        "html": "ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4820,7 +4811,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4974,15 +4965,16 @@
         "bold": true,
         "color": "",
         "collapsed": true,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
         "isPrivate": false,
         "projTag": "HACCP",
-        "type": "todo",
+        "type": "log",
         "linkedEntryRef": "emn9kqv88a9l",
         "linkedEntryText": "新狭山HACCP発注",
         "html": "新狭山HACCP発注",
-        "gridCollapsed": true
+        "gridCollapsed": true,
+        "url": ""
       },
       {
         "id": "emn5lcx4ri72",
