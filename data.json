@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T06:03:00.370Z",
+  "savedAt": "2026-03-30T06:05:08.863Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4696,9 +4696,27 @@
         "html": "1500 ソラカメ引継ぎ"
       },
       {
-        "id": "mncs749yatx",
+        "id": "mncs9pit8ou",
+        "text": "図面と台数が確認できたら田村さんから渡される",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncsabmbrey",
         "text": "",
         "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mncs749yatx",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-30T06-04-32-291Z_4u2ym.png\" alt=\"ペースト画像\"></span><br>",
         "indent": 1,
         "bold": false,
         "color": "",
