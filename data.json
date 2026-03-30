@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T05:25:49.872Z",
+  "savedAt": "2026-03-30T05:27:20.714Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4711,26 +4711,6 @@
         "html": "★週次進捗OneNote"
       },
       {
-        "id": "mnchow5vhlc",
-        "text": "1100 定例 ",
-        "html": "1100 定例 ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": true,
-        "projTag": "上手い早い安い",
-        "type": "log"
-      },
-      {
-        "id": "mnbu8n6jgb7",
-        "text": "ああｓｄ",
-        "html": "ああｓｄ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？ ",
         "html": "日経クロステック取材受ける？ ",
@@ -4961,7 +4941,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": true,
         "checked": true,
         "isPrivate": false,
@@ -4970,6 +4950,15 @@
         "linkedEntryRef": "emn9kqv88dhi",
         "linkedEntryText": "SDでの閲覧植田さん、長田さん確認",
         "html": "SDでの閲覧植田さん、長田さん確認"
+      },
+      {
+        "id": "mnciwfapbp6",
+        "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emmw2zro2yfv",
@@ -5036,22 +5025,13 @@
         "html": "成電社請求書確認　"
       },
       {
-        "id": "emmx7gbbaehl",
-        "text": "岡芹さんとアラート頻度再調整",
-        "indent": 0,
+        "id": "mncfw1wv62w",
+        "text": "27日にメールで確認、明日まで回答待ち　",
+        "html": "27日にメールで確認、明日まで回答待ち　",
+        "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "note": "[03.25] チャットで岡芹さんに頻度と1度の差分について聞いている\nネガティブな回答あり。30日に打合せセット",
-        "due": "2026-03-30",
-        "linkedEntryRef": "emn9kqv87cct",
-        "linkedEntryText": "岡芹さんとアラート頻度再調整",
-        "html": "岡芹さんとアラート頻度再調整"
+        "collapsed": false
       },
       {
         "id": "emmw2zro232f",
@@ -5069,22 +5049,6 @@
         "html": "実プロジェクトで検証"
       },
       {
-        "id": "emn2x84q2hxd",
-        "text": "週次進捗確認　/",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": true,
-        "isPrivate": false,
-        "projTag": "管理・全般",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv887q3",
-        "linkedEntryText": "週次進捗確認",
-        "html": "週次進捗確認　/"
-      },
-      {
         "id": "emn5e23ayqa6",
         "text": "根岸さんに岩崎さんと打ち合わせしてもらう",
         "indent": 0,
@@ -5099,24 +5063,6 @@
         "linkedEntryRef": "emn9kqv88ehx",
         "linkedEntryText": "根岸さんに岩崎さんと打ち合わせしてもらう",
         "html": "根岸さんに岩崎さんと打ち合わせしてもらう"
-      },
-      {
-        "id": "mn9vnfle493",
-        "text": "27日ごろセンサー早出し納品日確認",
-        "type": "todo",
-        "isTodo": true,
-        "checked": true,
-        "indent": 0,
-        "projTag": "HACCP",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "2026-03-30",
-        "html": "27日ごろセンサー早出し納品日確認",
-        "collapsed": false
       },
       {
         "id": "mnaajg4tuwg",
@@ -5136,24 +5082,6 @@
         "html": "店舗PCの自動シャットダウン除外"
       },
       {
-        "id": "mnceqlh95fw",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnciwfapbp6",
-        "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
-        "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mncepn3aohd",
         "text": "安田さんに仕様確定でいいかチャットで確認　",
         "indent": 0,
@@ -5171,22 +5099,13 @@
         "html": "安田さんに仕様確定でいいかチャットで確認　"
       },
       {
-        "id": "mncfw1wv62w",
-        "text": "27日にメールで確認、明日まで回答待ち　",
-        "html": "27日にメールで確認、明日まで回答待ち　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "mnci2ww3dud",
         "text": "その他 ",
         "html": "その他 ",
-        "indent": 1,
+        "indent": 0,
         "bold": true,
         "color": "#3498db",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mnchibtmfek",
