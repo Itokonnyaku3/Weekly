@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T04:17:21.605Z",
+  "savedAt": "2026-03-30T04:18:56.355Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4683,7 +4683,7 @@
     "2026-3-30": [
       {
         "id": "emn2x84q2hxd",
-        "text": "週次進捗確認　/",
+        "text": "週次進捗確認",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -4695,7 +4695,7 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv887q3",
         "linkedEntryText": "週次進捗確認",
-        "html": "週次進捗確認　/"
+        "html": "週次進捗確認"
       },
       {
         "id": "emmw2zro2mh2",
@@ -4761,9 +4761,9 @@
         "id": "emn5khg5dcwl",
         "text": "個店対応",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4777,7 +4777,7 @@
       {
         "id": "emn5lcx4r630",
         "text": "大間々店1台送付",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4803,7 +4803,7 @@
         "type": "todo",
         "isTodo": true,
         "checked": false,
-        "indent": 0,
+        "indent": 1,
         "projTag": "HACCP",
         "url": "",
         "note": "",
@@ -4818,7 +4818,7 @@
       {
         "id": "mncfqnf1nv9",
         "text": "西部モール店、電話で確認",
-        "indent": 0,
+        "indent": 1,
         "isTodo": true,
         "checked": false,
         "type": "todo",
@@ -4836,7 +4836,7 @@
       {
         "id": "emmy5whstca9",
         "text": "大間々店状況確認",
-        "indent": 0,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4847,12 +4847,30 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv88tys",
         "linkedEntryText": "大間々店状況確認",
-        "parentId": "emn5khg5dcwl"
+        "parentId": "emn5khg5dcwl",
+        "html": "大間々店状況確認"
       },
       {
         "id": "emn5jjkvhknn",
         "text": "新狭山HACCP発注",
         "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": true,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "linkedEntryRef": "emn9kqv88a9l",
+        "linkedEntryText": "新狭山HACCP発注",
+        "html": "新狭山HACCP発注",
+        "gridCollapsed": true
+      },
+      {
+        "id": "emn5lcx4rojg",
+        "text": "成電社（見積もらってから）",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -4861,10 +4879,44 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
-        "linkedEntryRef": "emn9kqv88a9l",
-        "linkedEntryText": "新狭山HACCP発注",
-        "html": "新狭山HACCP発注<div><br></div>",
-        "gridCollapsed": true
+        "linkedEntryRef": "emn9kqv8822j",
+        "linkedEntryText": "成電社（見積もらってから）",
+        "parentId": "emn5jjkvhknn",
+        "html": "成電社（見積もらってから）"
+      },
+      {
+        "id": "emn5lcx4ri72",
+        "text": "富士通→cloudｓｉｇｎ",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "linkedEntryRef": "emn9kqv88mye",
+        "linkedEntryText": "富士通→cloudｓｉｇｎ",
+        "parentId": "emn5jjkvhknn",
+        "html": "富士通→cloudｓｉｇｎ"
+      },
+      {
+        "id": "emn5lcx4rmuq",
+        "text": "小泉成器",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "linkedEntryRef": "emn9kqv88k5y",
+        "linkedEntryText": "小泉成器",
+        "parentId": "emn5jjkvhknn",
+        "html": "小泉成器"
       },
       {
         "id": "emmw2zro2w9x",
@@ -4880,13 +4932,13 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv88dhi",
         "linkedEntryText": "SDでの閲覧植田さん、長田さん確認",
-        "html": ""
+        "html": "SDでの閲覧植田さん、長田さん確認"
       },
       {
         "id": "mnciwfapbp6",
         "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
-        "html": "",
-        "indent": 1,
+        "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -4924,54 +4976,6 @@
         "linkedEntryRef": "emn9kqv88r80",
         "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
         "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
-      },
-      {
-        "id": "emn5lcx4ri72",
-        "text": "富士通→cloudｓｉｇｎ",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88mye",
-        "linkedEntryText": "富士通→cloudｓｉｇｎ",
-        "parentId": "emn5jjkvhknn"
-      },
-      {
-        "id": "emn5lcx4rojg",
-        "text": "成電社（見積もらってから）",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv8822j",
-        "linkedEntryText": "成電社（見積もらってから）",
-        "parentId": "emn5jjkvhknn"
-      },
-      {
-        "id": "emn5lcx4rmuq",
-        "text": "小泉成器",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "linkedEntryRef": "emn9kqv88k5y",
-        "linkedEntryText": "小泉成器",
-        "parentId": "emn5jjkvhknn"
       },
       {
         "id": "emn5qzvdokvt",
@@ -5081,86 +5085,6 @@
         "bold": false,
         "color": "",
         "collapsed": false
-      },
-      {
-        "id": "mn9x2skrsh6",
-        "text": "テスト親ノード　",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "type": "log",
-        "projTag": "運用改善",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "html": "テスト親ノード　",
-        "gridCollapsed": false,
-        "collapsed": true,
-        "bold": true
-      },
-      {
-        "id": "mnbu8ds5yes",
-        "text": "なにがしか",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnbu8n6jgb7",
-        "text": "ああｓｄ",
-        "html": "ああｓｄ",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x8h95het",
-        "text": "",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9x353pk6f",
-        "text": "テスト子ノー",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "運用改善",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "html": "テスト子ノー",
-        "parentId": "mn9x2skrsh6"
-      },
-      {
-        "id": "mn9x4cwdf0j",
-        "text": "テスト子ノード２　",
-        "html": "テスト子ノード２　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "projTag": "運用改善",
-        "type": "log",
-        "isTodo": false,
-        "checked": false,
-        "parentId": "mn9x2skrsh6",
-        "url": ""
       },
       {
         "id": "mnaajg4tuwg",
