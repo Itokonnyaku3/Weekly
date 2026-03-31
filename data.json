@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:40:49.184Z",
+  "savedAt": "2026-03-31T11:41:22.676Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6929,11 +6929,11 @@
       },
       {
         "id": "mnejp8m4tt7",
-        "text": "サマリ",
+        "text": "ふかやバイオーダーサマリ",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "log",
         "projTag": "ふかやバイオーダー",
         "url": "",
         "note": "",
@@ -6942,12 +6942,12 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": ""
+        "html": "ふかやバイオーダーサマリ"
       },
       {
         "id": "mnejpmgz97s",
         "text": "建設部担当は川村さん",
-        "html": "",
+        "html": "建設部担当は川村さん",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6955,8 +6955,17 @@
       },
       {
         "id": "mnejpuowhx1",
-        "text": "LANその他はデジタルで。→LANについては久保田さんとねぎｓ",
-        "html": "LANその他はデジタルで。→LANについては久保田さんとねぎｓ",
+        "text": "LANその他はデジタルで。→LANについては久保田さんと根岸さん",
+        "html": "LANその他はデジタルで。→LANについては久保田さんと根岸さん",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnejq83oe3c",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
