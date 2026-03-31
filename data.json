@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T07:21:33.325Z",
+  "savedAt": "2026-03-31T07:22:07.794Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4843,14 +4843,14 @@
         "collapsed": false,
         "isTodo": true,
         "type": "todo",
-        "checked": false,
+        "checked": true,
         "projTag": "HACCP",
         "parentId": "emn5khg5dcwl"
       },
       {
         "id": "mneag8vfvcx",
-        "text": "",
-        "html": "",
+        "text": "設置完了、OK",
+        "html": "設置完了、OK",
         "indent": 2,
         "bold": false,
         "color": "",
