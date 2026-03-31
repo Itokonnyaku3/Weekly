@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:28:12.291Z",
+  "savedAt": "2026-03-31T11:30:18.586Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4774,7 +4774,16 @@
         "projTag": "管理・全般",
         "type": "link",
         "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
-        "html": "★週次進捗OneNote"
+        "html": ""
+      },
+      {
+        "id": "mnejbf7bzsv",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emn2qu5t7afh",
@@ -4799,7 +4808,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4873,12 +4882,21 @@
         "due": "",
         "html": "行田店岸田店長から5度以上の乖離 ",
         "parentId": "emn5khg5dcwl",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mnebs8kprsg",
         "text": "見たところ、5度以上の乖離しているセンサーは見つからず。店舗にメールで再確認依頼",
         "html": "見たところ、5度以上の乖離しているセンサーは見つからず。店舗にメールで再確認依頼",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mneja6k8ta0",
+        "text": "店長からひとまずOKとの回答あり",
+        "html": "店長からひとまずOKとの回答あり",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -4913,6 +4931,15 @@
         "collapsed": false
       },
       {
+        "id": "mnejb8aday9",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "emmy5whstca9",
         "text": "大間々店状況確認",
         "indent": 1,
@@ -4928,6 +4955,15 @@
         "linkedEntryText": "大間々店状況確認",
         "parentId": "emn5khg5dcwl",
         "html": "大間々店状況確認"
+      },
+      {
+        "id": "mnejbsux49x",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emn5lcx4rm60",
@@ -4978,6 +5014,15 @@
         "due": "2026-03-31",
         "parentId": "emn5khg5dcwl",
         "html": "宇都宮陽東店",
+        "collapsed": false
+      },
+      {
+        "id": "mnejbpp32a7",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
         "collapsed": false
       },
       {
@@ -5050,6 +5095,15 @@
         "html": "小泉成器"
       },
       {
+        "id": "mnejbbrgzcz",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "emmw2zro2w9x",
         "text": "SDでの閲覧植田さん、長田さん確認",
         "indent": 0,
@@ -5069,6 +5123,15 @@
         "id": "mnciwfapbp6",
         "text": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
         "html": "3.30　植田さんと確認。きちんと調整すれば1日数件になるので、一旦保留",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnejbkgv1iz",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
