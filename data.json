@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:11:24.474Z",
+  "savedAt": "2026-03-31T01:13:13.920Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6379,8 +6379,17 @@
       },
       {
         "id": "mndx8ezhu0d",
-        "text": "",
+        "text": "病院食の配膳をする会社で実績あり。",
         "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxakzlpi7",
+        "text": "一人一人のアレルギーや塩分など",
+        "html": "一人一人のアレルギーや塩分など",
         "indent": 2,
         "bold": false,
         "color": "",
