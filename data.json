@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:33:53.331Z",
+  "savedAt": "2026-03-31T11:40:49.184Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6922,6 +6922,41 @@
         "id": "mnec6j915w6",
         "text": "現状、最後の10分に来た情報で登録しており、最初の50分は捨てられている",
         "html": "現状、最後の10分に来た情報で登録しており、最初の50分は捨てられている",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnejp8m4tt7",
+        "text": "サマリ",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": ""
+      },
+      {
+        "id": "mnejpmgz97s",
+        "text": "建設部担当は川村さん",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnejpuowhx1",
+        "text": "LANその他はデジタルで。→LANについては久保田さんとねぎｓ",
+        "html": "LANその他はデジタルで。→LANについては久保田さんとねぎｓ",
         "indent": 1,
         "bold": false,
         "color": "",
