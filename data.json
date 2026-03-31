@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T10:49:16.610Z",
+  "savedAt": "2026-03-31T11:11:01.090Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4782,7 +4782,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "isPrivate": false,
@@ -4792,6 +4792,23 @@
         "start": "2026-03-31",
         "due": "2026-03-31",
         "html": "3.31おおたモールで検証"
+      },
+      {
+        "id": "emn5khg5dcwl",
+        "text": "🏪個店対応",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": true,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "start": "2026-03-25",
+        "due": "2026-04-30",
+        "html": "🏪個店対応<br>",
+        "gridCollapsed": false
       },
       {
         "id": "emn5lcx4r630",
@@ -4813,7 +4830,7 @@
         "note": "",
         "priority": "",
         "tags": [],
-        "html": "",
+        "html": "大間々店1台送付",
         "parentId": "emn5khg5dcwl"
       },
       {
@@ -5288,18 +5305,6 @@
         "html": "Sharepointサイト改善",
         "bold": true,
         "collapsed": false
-      },
-      {
-        "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件　",
-        "indent": 0,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": false,
-        "html": "0930 HACCPアラート頻度の件　",
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log"
       }
     ],
     "2026-4-6": [
@@ -6247,20 +6252,34 @@
         "html": "0900 部会進捗報告"
       },
       {
-        "id": "mnees9pv48r",
+        "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？",
         "html": "日経クロステック取材受ける？",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "projTag": "HACCP"
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log"
+      },
+      {
+        "id": "mn9xq5d2kk2",
+        "text": "0930 HACCPアラート頻度の件 ",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": false,
+        "html": "0930 HACCPアラート頻度の件 ",
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log"
       },
       {
         "id": "mnebuuhxrxn",
         "text": "松田さんに確認する　",
         "html": "松田さんに確認する　",
-        "indent": 2,
+        "indent": 1,
         "bold": true,
         "color": "",
         "collapsed": false,
@@ -6268,13 +6287,13 @@
         "type": "todo",
         "checked": false,
         "projTag": "HACCP",
-        "parentId": "mnees9pv48r"
+        "parentId": "mncityp7jh6"
       },
       {
         "id": "mnebtvs2922",
         "text": "植田さん→",
         "html": "植田さん→",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6283,7 +6302,7 @@
         "id": "mnebu1cy4ol",
         "text": "長田さん→土谷さん　※長田さんは8割ネガティブ",
         "html": "長田さん→土谷さん　※長田さんは8割ネガティブ",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6292,7 +6311,7 @@
         "id": "mnebu69176z",
         "text": "米山→亀山さん　受けてもいいのでは？",
         "html": "米山→亀山さん　受けてもいいのでは？",
-        "indent": 3,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6301,7 +6320,7 @@
         "id": "mnduyboy3g5",
         "text": "停電の状況は？",
         "html": "停電の状況は？",
-        "indent": 3,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -6310,7 +6329,7 @@
         "id": "mndv4f0k4sm",
         "text": "マニュアルの改善等で障害は復旧してきた",
         "html": "マニュアルの改善等で障害は復旧してきた",
-        "indent": 4,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6319,7 +6338,7 @@
         "id": "mndv4ovxylo",
         "text": "夏まではまだちょこちょこ停電発生",
         "html": "夏まではまだちょこちょこ停電発生",
-        "indent": 4,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6328,7 +6347,7 @@
         "id": "mndv4zg89vj",
         "text": "新レジと新店",
         "html": "新レジと新店",
-        "indent": 3,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -6337,7 +6356,7 @@
         "id": "mndw7r1o74f",
         "text": "",
         "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-31T00-42-58-410Z_v6nyo.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 4,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6346,7 +6365,7 @@
         "id": "mndwag91m7w",
         "text": "注文機は内製？",
         "html": "注文機は内製？",
-        "indent": 4,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6764,8 +6783,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "改善等",
-        "gridCollapsed": true
+        "html": "改善等"
       },
       {
         "id": "mnci1lg0pnc",
@@ -6800,21 +6818,15 @@
         "html": ""
       },
       {
-        "id": "emn5khg5dcwl",
-        "text": "🏪個店対応",
+        "id": "mnec0npq29e",
+        "text": "不具合なセンサーの対応　",
+        "html": "不具合なセンサーの対応　",
         "indent": 0,
-        "bold": true,
+        "bold": false,
         "color": "",
         "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
         "projTag": "HACCP",
-        "type": "log",
-        "start": "2026-03-25",
-        "due": "2026-04-30",
-        "html": "🏪個店対応<br>",
-        "gridCollapsed": true
+        "type": "log"
       },
       {
         "id": "mnec0yuz05z",
