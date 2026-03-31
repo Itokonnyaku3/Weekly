@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T08:04:23.962Z",
+  "savedAt": "2026-03-31T08:06:07.021Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6254,7 +6254,7 @@
       {
         "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？",
-        "html": "",
+        "html": "日経クロステック取材受ける？",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6814,7 +6814,35 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mnebwcxhl4s"
+        "parentId": "mnebwcxhl4s",
+        "html": ""
+      },
+      {
+        "id": "mnec0npq29e",
+        "text": "不具合なセンサーの対応",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnec0yuz05z",
+        "text": "センサーIDと不具合内容のリストを富士通に送る",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnec1ldp1dl",
+        "text": "センサー自体をFCLに送る",
+        "html": "センサー自体をFCLに送る",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-3-14": [
