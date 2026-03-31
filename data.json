@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:24:01.533Z",
+  "savedAt": "2026-03-31T01:24:55.788Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6451,8 +6451,8 @@
       },
       {
         "id": "mndxnk7bx3l",
-        "text": "ひきのがぞう",
-        "html": "ひきのがぞう",
+        "text": "ひきの画像はできるか、遠隔で操作できるか",
+        "html": "ひきの画像はできるか、遠隔で操作できるか",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6497,8 +6497,17 @@
       {
         "id": "mndxny2mt3g",
         "text": "アルコールはまあ大丈夫、エチレンとかはＮＧ",
-        "html": "アルコールはまあ大丈夫、エチレンとかはＮＧ",
+        "html": "",
         "indent": 4,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxpn9q37y",
+        "text": "女性が多いので気にする人が多い",
+        "html": "女性が多いので気にする人が多い",
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
