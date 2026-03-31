@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:13:13.920Z",
+  "savedAt": "2026-03-31T01:13:58.754Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6342,9 +6342,27 @@
         "collapsed": false
       },
       {
+        "id": "mndxbh85rwu",
+        "text": "用途",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxblc7qvy",
+        "text": "お弁当、生鮮技術支援",
+        "html": "お弁当、生鮮技術支援",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mndx7wwurhm",
         "text": "Gopro試してみた",
-        "html": "",
+        "html": "Gopro試してみた",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6353,7 +6371,7 @@
       {
         "id": "mndx82dgf17",
         "text": "接続が面倒くさい",
-        "html": "",
+        "html": "接続が面倒くさい",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6362,7 +6380,7 @@
       {
         "id": "mndx86994ml",
         "text": "高い",
-        "html": "",
+        "html": "高い",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6371,7 +6389,7 @@
       {
         "id": "mndx88nb1w3",
         "text": "酔う",
-        "html": "",
+        "html": "酔う",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6380,7 +6398,7 @@
       {
         "id": "mndx8ezhu0d",
         "text": "病院食の配膳をする会社で実績あり。",
-        "html": "",
+        "html": "病院食の配膳をする会社で実績あり。",
         "indent": 1,
         "bold": false,
         "color": "",
