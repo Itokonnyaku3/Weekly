@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T02:08:31.745Z",
+  "savedAt": "2026-03-31T02:12:03.201Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6634,6 +6634,18 @@
       },
       {
         "id": "mndz9vr5t4m",
+        "text": "店舗に行くときの服装のルールは守ること！！　",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "tags": [
+          "kameyama亀山"
+        ]
+      },
+      {
+        "id": "mndzeewxqyg",
         "text": "",
         "html": "",
         "indent": 1,
@@ -6805,6 +6817,10 @@
     "sorakameソラカメ": {
       "color": null,
       "lastUsed": 1774912945132
+    },
+    "kameyama亀山": {
+      "color": null,
+      "lastUsed": 1774923121217
     }
   }
 }
