@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:05:22.609Z",
+  "savedAt": "2026-03-31T01:10:16.384Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6343,9 +6343,18 @@
       },
       {
         "id": "mndx0o1ddbb",
-        "text": "",
+        "text": "文字も数字も見える解像度",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndx6v88j3l",
+        "text": "色再現度は？",
+        "html": "色再現度は？",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
