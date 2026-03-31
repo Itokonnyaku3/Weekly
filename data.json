@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T02:04:57.396Z",
+  "savedAt": "2026-03-31T02:05:28.744Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6330,7 +6330,7 @@
         "indent": 0,
         "bold": true,
         "color": "#2ecc71",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndx03ky1ga",
@@ -6605,9 +6605,18 @@
       {
         "id": "mndunzaw2fb",
         "text": "1100　デジタル推進本部リーダー会",
-        "html": "1100　デジタル推進本部リーダー会",
+        "html": "",
         "indent": 0,
         "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndz5rp0ush",
+        "text": "バイオーダー開店時",
+        "html": "バイオーダー開店時",
+        "indent": 1,
+        "bold": false,
         "color": "",
         "collapsed": false
       },
