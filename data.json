@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T00:34:58.799Z",
+  "savedAt": "2026-03-31T00:43:00.670Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6298,9 +6298,18 @@
       },
       {
         "id": "mndv4zg89vj",
-        "text": "",
+        "text": "新レジと新店",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndw7r1o74f",
+        "text": "",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-31T00-42-58-410Z_v6nyo.png\" alt=\"ペースト画像\"></span><br>",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
