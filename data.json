@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T08:48:18.715Z",
+  "savedAt": "2026-03-31T10:48:48.925Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6235,44 +6235,20 @@
         "html": "0900 部会進捗報告"
       },
       {
-        "id": "mncityp7jh6",
+        "id": "mnees9pv48r",
         "text": "日経クロステック取材受ける？",
         "html": "日経クロステック取材受ける？",
         "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log",
-        "gridCollapsed": true
-      },
-      {
-        "id": "mnedix193gg",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件 ",
-        "indent": 0,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": false,
-        "html": "0930 HACCPアラート頻度の件 ",
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log"
+        "projTag": "HACCP"
       },
       {
         "id": "mnebuuhxrxn",
         "text": "松田さんに確認する　",
         "html": "松田さんに確認する　",
-        "indent": 1,
+        "indent": 2,
         "bold": true,
         "color": "",
         "collapsed": false,
@@ -6280,13 +6256,13 @@
         "type": "todo",
         "checked": false,
         "projTag": "HACCP",
-        "parentId": "mncityp7jh6"
+        "parentId": "mnees9pv48r"
       },
       {
         "id": "mnebtvs2922",
         "text": "植田さん→",
         "html": "植田さん→",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6295,7 +6271,7 @@
         "id": "mnebu1cy4ol",
         "text": "長田さん→土谷さん　※長田さんは8割ネガティブ",
         "html": "長田さん→土谷さん　※長田さんは8割ネガティブ",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6304,7 +6280,7 @@
         "id": "mnebu69176z",
         "text": "米山→亀山さん　受けてもいいのでは？",
         "html": "米山→亀山さん　受けてもいいのでは？",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6313,7 +6289,7 @@
         "id": "mnduyboy3g5",
         "text": "停電の状況は？",
         "html": "停電の状況は？",
-        "indent": 1,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -6322,7 +6298,7 @@
         "id": "mndv4f0k4sm",
         "text": "マニュアルの改善等で障害は復旧してきた",
         "html": "マニュアルの改善等で障害は復旧してきた",
-        "indent": 2,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6331,7 +6307,7 @@
         "id": "mndv4ovxylo",
         "text": "夏まではまだちょこちょこ停電発生",
         "html": "夏まではまだちょこちょこ停電発生",
-        "indent": 2,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6340,7 +6316,7 @@
         "id": "mndv4zg89vj",
         "text": "新レジと新店",
         "html": "新レジと新店",
-        "indent": 1,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -6349,7 +6325,7 @@
         "id": "mndw7r1o74f",
         "text": "",
         "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"https://raw.githubusercontent.com/Itokonnyaku3/repo/main/images/2026-03-31T00-42-58-410Z_v6nyo.png\" alt=\"ペースト画像\"></span><br>",
-        "indent": 2,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6358,10 +6334,22 @@
         "id": "mndwag91m7w",
         "text": "注文機は内製？",
         "html": "注文機は内製？",
-        "indent": 2,
+        "indent": 4,
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mn9xq5d2kk2",
+        "text": "0930 HACCPアラート頻度の件　",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": false,
+        "html": "0930 HACCPアラート頻度の件　",
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log"
       },
       {
         "id": "mndu24k1zvh",
