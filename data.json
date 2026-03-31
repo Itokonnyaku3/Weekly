@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:41:22.676Z",
+  "savedAt": "2026-03-31T11:42:25.596Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6846,13 +6846,14 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "改善等"
+        "html": "改善等",
+        "collapsed": false
       },
       {
         "id": "mnci1lg0pnc",
-        "text": "富士通にアラート時間変更依頼　",
-        "html": "富士通にアラート時間変更依頼　",
-        "indent": 0,
+        "text": "富士通にアラート時間変更依頼",
+        "html": "富士通にアラート時間変更依頼",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -6865,7 +6866,7 @@
       {
         "id": "mnebzg6exlr",
         "text": "システムのロゴ変更→可能",
-        "indent": 0,
+        "indent": 1,
         "isTodo": true,
         "checked": false,
         "type": "todo",
@@ -6942,7 +6943,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "ふかやバイオーダーサマリ"
+        "html": "ふかやバイオーダーサマリ",
+        "bold": true
       },
       {
         "id": "mnejpmgz97s",
