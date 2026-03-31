@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:43:22.540Z",
+  "savedAt": "2026-03-31T11:44:06.927Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5442,6 +5442,22 @@
         "projTag": "上手い早い安い",
         "type": "log",
         "note": "作業削減効果、品質、向いている業務と向いていない業務\n余裕があったらエージェント設計まで"
+      },
+      {
+        "id": "mneju39r2ct",
+        "text": "要件確定・アドセック発注",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "ふかやバイオーダー",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-3-2": [
