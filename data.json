@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T02:05:28.744Z",
+  "savedAt": "2026-03-31T02:07:16.669Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6276,7 +6276,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndv4f0k4sm",
@@ -6303,7 +6303,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndw7r1o74f",
@@ -6605,7 +6605,7 @@
       {
         "id": "mndunzaw2fb",
         "text": "1100　デジタル推進本部リーダー会",
-        "html": "",
+        "html": "1100　デジタル推進本部リーダー会",
         "indent": 0,
         "bold": true,
         "color": "",
@@ -6613,8 +6613,8 @@
       },
       {
         "id": "mndz5rp0ush",
-        "text": "バイオーダー開店時",
-        "html": "バイオーダー開店時",
+        "text": "バイオーダー開店時に音が出ない？干場さんには連絡済み？→",
+        "html": "バイオーダー開店時に音が出ない？干場さんには連絡済み？→",
         "indent": 1,
         "bold": false,
         "color": "",
