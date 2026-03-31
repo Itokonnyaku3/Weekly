@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:51:22.502Z",
+  "savedAt": "2026-03-31T02:04:57.396Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6452,7 +6452,7 @@
       {
         "id": "mndxnk7bx3l",
         "text": "ひきの画像はできるか、遠隔で操作できるか",
-        "html": "",
+        "html": "ひきの画像はできるか、遠隔で操作できるか",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6461,7 +6461,7 @@
       {
         "id": "mndymrym7t1",
         "text": "基本は引きで、デジタルズーム可能。遠隔OK、というか基本遠隔",
-        "html": "",
+        "html": "基本は引きで、デジタルズーム可能。遠隔OK、というか基本遠隔",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6470,7 +6470,7 @@
       {
         "id": "mndyncn30fk",
         "text": "マイクはのいきゃん",
-        "html": "",
+        "html": "マイクはのいきゃん",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6479,7 +6479,7 @@
       {
         "id": "mndyngqwnsn",
         "text": "録画可能",
-        "html": "",
+        "html": "録画可能",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6488,7 +6488,7 @@
       {
         "id": "mndynnmvltx",
         "text": "最高品質は２K？",
-        "html": "",
+        "html": "最高品質は２K？",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6589,6 +6589,15 @@
         "text": "酔う",
         "html": "酔う",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndz5ad0tx5",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
