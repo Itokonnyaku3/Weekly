@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:20:39.286Z",
+  "savedAt": "2026-03-31T01:22:31.760Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6335,7 +6335,7 @@
       {
         "id": "mndx03ky1ga",
         "text": "ミライコネクト",
-        "html": "",
+        "html": "ミライコネクト",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6353,8 +6353,17 @@
       {
         "id": "mndxblc7qvy",
         "text": "お弁当、生鮮技術支援",
-        "html": "お弁当、生鮮技術支援",
+        "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxl94m4g0",
+        "text": "説明",
+        "html": "説明",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6363,7 +6372,7 @@
         "id": "mndx8ezhu0d",
         "text": "病院食の配膳をする会社で実績あり。",
         "html": "病院食の配膳をする会社で実績あり。",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": true
@@ -6372,7 +6381,7 @@
         "id": "mndxakzlpi7",
         "text": "一人一人のアレルギーや塩分など",
         "html": "一人一人のアレルギーや塩分など",
-        "indent": 2,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -6380,43 +6389,7 @@
       {
         "id": "mndxcklky3x",
         "text": "リアルタイム通信も録画もできる",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndxd3h6wkn",
-        "text": "形態",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndxj611rem",
-        "text": "インターネットクラウド　セキュリティは低",
-        "html": "インターネットクラウド　セキュリティは低",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndxj8sxb78",
-        "text": "セキュアクラウド　専用SIMによる閉域網",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndxkbcmnmy",
-        "text": "",
-        "html": "",
+        "html": "リアルタイム通信も録画もできる",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6426,6 +6399,42 @@
         "id": "mndx0o1ddbb",
         "text": "文字も数字も見える解像度",
         "html": "文字も数字も見える解像度",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxd3h6wkn",
+        "text": "提供形態",
+        "html": "提供形態",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mndxj611rem",
+        "text": "インターネットクラウド　セキュリティは低",
+        "html": "インターネットクラウド　セキュリティは低",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxj8sxb78",
+        "text": "セキュアクラウド　専用SIMによる閉域網",
+        "html": "セキュアクラウド　専用SIMによる閉域網",
+        "indent": 3,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxkyqysnl",
+        "text": "質疑",
+        "html": "質疑",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6434,7 +6443,34 @@
       {
         "id": "mndx6v88j3l",
         "text": "色再現度は？",
-        "html": "色再現度は？",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxlnofaw6",
+        "text": "防水性能は大丈夫か？生活防水はＯＫ，水没はＮＧ",
+        "html": "防水性能は大丈夫か？生活防水はＯＫ，水没はＮＧ",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxlsfe4se",
+        "text": "デバイスの使いまわしによる殺菌消毒対応は？",
+        "html": "デバイスの使いまわしによる殺菌消毒対応は？",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxmq4wvld",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
