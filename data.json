@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T00:07:34.067Z",
+  "savedAt": "2026-03-31T00:12:55.405Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6271,6 +6271,33 @@
       },
       {
         "id": "mnduyboy3g5",
+        "text": "停電の状況は？",
+        "html": "停電の状況は？",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndv4f0k4sm",
+        "text": "マニュアルの改善等で障害は復旧してきた",
+        "html": "マニュアルの改善等で障害は復旧してきた",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndv4ovxylo",
+        "text": "夏まではまだちょこちょこ停電発生",
+        "html": "夏まではまだちょこちょこ停電発生",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndv4zg89vj",
         "text": "",
         "html": "",
         "indent": 1,
