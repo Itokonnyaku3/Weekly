@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T08:01:36.926Z",
+  "savedAt": "2026-03-31T08:02:11.844Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6291,7 +6291,7 @@
       {
         "id": "mnebuuhxrxn",
         "text": "松田さんに確認する　",
-        "html": "松田さんに確認する　",
+        "html": "松田さんに確認する　<div><br></div>",
         "indent": 2,
         "bold": true,
         "color": "",
@@ -6780,6 +6780,23 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnebwcxhl4s",
+        "text": "改善等",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "log",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "改善等"
       }
     ],
     "2026-3-14": [
