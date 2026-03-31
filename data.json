@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T08:03:57.474Z",
+  "savedAt": "2026-03-31T08:04:23.962Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6797,6 +6797,23 @@
         "type": "todo",
         "checked": false,
         "projTag": "HACCP",
+        "parentId": "mnebwcxhl4s"
+      },
+      {
+        "id": "mnebzg6exlr",
+        "text": "システムのロゴ変更→可能",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
         "parentId": "mnebwcxhl4s"
       }
     ],
