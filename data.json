@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-30T23:59:11.295Z",
+  "savedAt": "2026-03-31T00:00:30.842Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6253,14 +6253,14 @@
         "text": "0900 部会進捗報告",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false,
         "html": "0900 部会進捗報告"
       },
       {
         "id": "mncityp7jh6",
-        "text": "日経クロステック取材受ける？",
-        "html": "日経クロステック取材受ける？",
+        "text": "日経クロステック取材受ける？ｋ",
+        "html": "日経クロステック取材受ける？ｋ",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6276,6 +6276,24 @@
         "indent": 0,
         "bold": true,
         "color": "#2ecc71",
+        "collapsed": false
+      },
+      {
+        "id": "mndunzaw2fb",
+        "text": "1100　デジタル推進本部リーダー会",
+        "html": "1100　デジタル推進本部リーダー会",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnduoe8t1e6",
+        "text": "1300　早い安いうまい月次報告",
+        "html": "1300　早い安いうまい月次報告",
+        "indent": 0,
+        "bold": true,
+        "color": "",
         "collapsed": false
       },
       {
