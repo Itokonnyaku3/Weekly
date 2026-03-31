@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T00:12:55.405Z",
+  "savedAt": "2026-03-31T00:34:58.799Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6416,6 +6416,64 @@
       },
       {
         "id": "mndtdr024hv",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-4-2": [
+      {
+        "id": "mndvwq9z9es",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-4-3": [
+      {
+        "id": "mndvwr516fc",
+        "text": "定例での確認事項",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": "定例での確認事項"
+      },
+      {
+        "id": "mndvwxqbpja",
+        "text": "勤怠、勤務実施計画",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndvxfpyf1r",
+        "text": "イベント、障害",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndvxkdr4qf",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-4-4": [
+      {
+        "id": "mndvwrhu0yb",
         "text": "",
         "indent": 0,
         "bold": false,
