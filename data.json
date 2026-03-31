@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T11:11:01.090Z",
+  "savedAt": "2026-03-31T11:27:50.149Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6248,7 +6248,7 @@
         "indent": 0,
         "bold": true,
         "color": "#3498db",
-        "collapsed": false,
+        "collapsed": true,
         "html": "0900 部会進捗報告"
       },
       {
@@ -6269,7 +6269,7 @@
         "indent": 0,
         "bold": true,
         "color": "#3498db",
-        "collapsed": false,
+        "collapsed": true,
         "html": "0930 HACCPアラート頻度の件 ",
         "tags": [],
         "projTag": "HACCP",
@@ -6656,7 +6656,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndz5rp0ush",
@@ -6788,7 +6788,7 @@
       {
         "id": "mnci1lg0pnc",
         "text": "富士通にアラート時間変更依頼　",
-        "html": "",
+        "html": "富士通にアラート時間変更依頼　",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -6815,7 +6815,7 @@
         "start": "",
         "due": "",
         "parentId": "mnebwcxhl4s",
-        "html": ""
+        "html": "システムのロゴ変更→可能"
       },
       {
         "id": "mnec0npq29e",
@@ -6824,7 +6824,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "projTag": "HACCP",
         "type": "log"
       },
