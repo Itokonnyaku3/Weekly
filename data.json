@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T02:12:03.201Z",
+  "savedAt": "2026-03-31T02:24:34.349Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6614,7 +6614,7 @@
       {
         "id": "mndz5rp0ush",
         "text": "バイオーダー開店時に音が出ない？干場さんには連絡済み？→山崎さんが確認",
-        "html": "",
+        "html": "バイオーダー開店時に音が出ない？干場さんには連絡済み？→山崎さんが確認",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6623,7 +6623,7 @@
       {
         "id": "mndz8tnrcks",
         "text": "Docomoの4G、5Gが使いにくい？　",
-        "html": "",
+        "html": "Docomoの4G、5Gが使いにくい？　",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6635,7 +6635,7 @@
       {
         "id": "mndz9vr5t4m",
         "text": "店舗に行くときの服装のルールは守ること！！　",
-        "html": "",
+        "html": "店舗に行くときの服装のルールは守ること！！　",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6646,9 +6646,18 @@
       },
       {
         "id": "mndzeewxqyg",
+        "text": "4月末で亀山さん退職",
+        "html": "4月末で亀山さん退職",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndzuhy4lfi",
         "text": "",
         "html": "",
-        "indent": 1,
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
