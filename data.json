@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T07:58:52.023Z",
+  "savedAt": "2026-03-31T08:01:36.926Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4872,12 +4872,13 @@
         "start": "",
         "due": "",
         "html": "行田店岸田店長から5度以上の乖離 ",
-        "parentId": "emn5khg5dcwl"
+        "parentId": "emn5khg5dcwl",
+        "collapsed": true
       },
       {
         "id": "mnebs8kprsg",
-        "text": "見たところ",
-        "html": "見たところ",
+        "text": "見たところ、5度以上の乖離しているセンサーは見つからず。店舗にメールで再確認依頼",
+        "html": "見たところ、5度以上の乖離しているセンサーは見つからず。店舗にメールで再確認依頼",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6278,7 +6279,7 @@
       {
         "id": "mncityp7jh6",
         "text": "日経クロステック取材受ける？",
-        "html": "日経クロステック取材受ける？",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6286,6 +6287,47 @@
         "tags": [],
         "projTag": "HACCP",
         "type": "log"
+      },
+      {
+        "id": "mnebuuhxrxn",
+        "text": "松田さんに確認する　",
+        "html": "松田さんに確認する　",
+        "indent": 2,
+        "bold": true,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "type": "todo",
+        "checked": false,
+        "projTag": "HACCP",
+        "parentId": "mncityp7jh6"
+      },
+      {
+        "id": "mnebtvs2922",
+        "text": "植田さん→",
+        "html": "植田さん→",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnebu1cy4ol",
+        "text": "長田さん→土谷さん　※長田さんは8割ネガティブ",
+        "html": "長田さん→土谷さん　※長田さんは8割ネガティブ",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnebu69176z",
+        "text": "米山→亀山さん　受けてもいいのでは？",
+        "html": "米山→亀山さん　受けてもいいのでは？",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mnduyboy3g5",
