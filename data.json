@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T08:06:07.021Z",
+  "savedAt": "2026-03-31T08:09:51.129Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6838,7 +6838,25 @@
       {
         "id": "mnec1ldp1dl",
         "text": "センサー自体をFCLに送る",
-        "html": "センサー自体をFCLに送る",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnec5vtege1",
+        "text": "センサーは自動で電波の強いところに繋がりに行く。定期的につなぎなおすはず",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnec6j915w6",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
