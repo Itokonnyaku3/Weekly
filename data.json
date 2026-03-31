@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:13:58.754Z",
+  "savedAt": "2026-03-31T01:15:02.490Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6343,8 +6343,8 @@
       },
       {
         "id": "mndxbh85rwu",
-        "text": "用途",
-        "html": "",
+        "text": "ベイシア用途",
+        "html": "ベイシア用途",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -6360,13 +6360,67 @@
         "collapsed": false
       },
       {
+        "id": "mndx8ezhu0d",
+        "text": "病院食の配膳をする会社で実績あり。",
+        "html": "病院食の配膳をする会社で実績あり。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "mndxakzlpi7",
+        "text": "一人一人のアレルギーや塩分など",
+        "html": "一人一人のアレルギーや塩分など",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxcklky3x",
+        "text": "リアルタイム通信も録画もできる",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndxd3h6wkn",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndx0o1ddbb",
+        "text": "文字も数字も見える解像度",
+        "html": "文字も数字も見える解像度",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndx6v88j3l",
+        "text": "色再現度は？",
+        "html": "色再現度は？",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mndx7wwurhm",
         "text": "Gopro試してみた",
         "html": "Gopro試してみた",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndx82dgf17",
@@ -6390,42 +6444,6 @@
         "id": "mndx88nb1w3",
         "text": "酔う",
         "html": "酔う",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndx8ezhu0d",
-        "text": "病院食の配膳をする会社で実績あり。",
-        "html": "病院食の配膳をする会社で実績あり。",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndxakzlpi7",
-        "text": "一人一人のアレルギーや塩分など",
-        "html": "一人一人のアレルギーや塩分など",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndx0o1ddbb",
-        "text": "文字も数字も見える解像度",
-        "html": "文字も数字も見える解像度",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndx6v88j3l",
-        "text": "色再現度は？",
-        "html": "色再現度は？",
         "indent": 2,
         "bold": false,
         "color": "",
