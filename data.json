@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T02:29:38.981Z",
+  "savedAt": "2026-03-31T07:14:29.125Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6649,27 +6649,29 @@
         "text": "4月末で亀山さん退職！",
         "html": "4月末で亀山さん退職！",
         "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mndzuhy4lfi",
-        "text": "",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#9b59b6",
         "collapsed": false
       },
       {
         "id": "mnduoe8t1e6",
         "text": "1300　早い安いうまい月次報告",
-        "html": "",
+        "html": "1300　早い安いうまい月次報告",
         "indent": 0,
         "bold": true,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnea6oyayly",
+        "text": "１４００～おおたモール　",
+        "html": "１４００～おおたモール　",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "projTag": "HACCP",
+        "type": "log"
       },
       {
         "id": "mnduse9dcri",
