@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-03-31T01:24:55.788Z",
+  "savedAt": "2026-03-31T01:51:22.502Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6442,8 +6442,8 @@
       },
       {
         "id": "mndx6v88j3l",
-        "text": "色再現度は？",
-        "html": "",
+        "text": "色再現度は？階調はまあまあ。",
+        "html": "色再現度は？階調はまあまあ。",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6452,7 +6452,52 @@
       {
         "id": "mndxnk7bx3l",
         "text": "ひきの画像はできるか、遠隔で操作できるか",
-        "html": "ひきの画像はできるか、遠隔で操作できるか",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndymrym7t1",
+        "text": "基本は引きで、デジタルズーム可能。遠隔OK、というか基本遠隔",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndyncn30fk",
+        "text": "マイクはのいきゃん",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndyngqwnsn",
+        "text": "録画可能",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndynnmvltx",
+        "text": "最高品質は２K？",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mndynt9zsu7",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -6497,7 +6542,7 @@
       {
         "id": "mndxny2mt3g",
         "text": "アルコールはまあ大丈夫、エチレンとかはＮＧ",
-        "html": "",
+        "html": "アルコールはまあ大丈夫、エチレンとかはＮＧ",
         "indent": 4,
         "bold": false,
         "color": "",
