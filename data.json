@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T00:18:41.168Z",
+  "savedAt": "2026-04-01T06:57:47.130Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7033,7 +7033,8 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "html": ""
       },
       {
         "id": "mnfas2usl83",
@@ -7051,6 +7052,32 @@
         "start": "",
         "due": "2026-04-02",
         "html": "中目黒決定？"
+      },
+      {
+        "id": "mnfp1c3jtap",
+        "text": "深谷花園",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "📔新店改装店",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "深谷花園"
+      },
+      {
+        "id": "mnfp1iv4vzf",
+        "text": "■店舗名称変更\nココトクふかや花園店(仮) ■サービス変更対応(3/31Update)\n・ベイシアポイント→対象外\n・Beisia Pay→対象外\n・楽天ポイント→対象外\n・ご予約商品の受取店舗→対象外\n・ネットスーパー対応店舗→対象外",
+        "html": "<span data-teams=\"true\"><p><br></p><p>■店舗名称変更<br>\nココトクふかや花園店(仮)</p><p>&nbsp;</p><p>■サービス変更対応(3/31Update)<br>\n・ベイシアポイント→対象外<br>\n・Beisia Pay→対象外<br>\n・楽天ポイント→対象外<br>\n・ご予約商品の受取店舗→対象外<br>\n・ネットスーパー対応店舗→対象外</p></span>",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-4-2": [
