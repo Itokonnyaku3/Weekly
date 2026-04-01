@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T13:50:54.852Z",
+  "savedAt": "2026-04-01T23:27:26.309Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7116,7 +7116,11 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": false,
+        "type": "log",
+        "checked": false,
+        "url": ""
       },
       {
         "id": "mng3bx1jcsb",
@@ -7196,7 +7200,7 @@
         "html": "1500　FHESL工事定例",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -7205,7 +7209,7 @@
         "html": "1600 FHESL進捗会議",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
