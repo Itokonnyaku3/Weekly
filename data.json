@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T13:40:34.505Z",
+  "savedAt": "2026-04-01T13:47:13.599Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7068,7 +7068,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "深谷花園"
+        "html": "深谷花園",
+        "collapsed": true
       },
       {
         "id": "mnfp1iv4vzf",
@@ -7077,6 +7078,15 @@
         "indent": 1,
         "bold": false,
         "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mng3nvlouxa",
+        "text": "テスト　",
+        "html": "テスト　",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false
       }
     ],
