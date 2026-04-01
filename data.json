@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T13:38:00.848Z",
+  "savedAt": "2026-04-01T13:40:34.505Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7083,12 +7083,12 @@
     "2026-4-2": [
       {
         "id": "mndvwq9z9es",
-        "text": "0900　品質改善会議",
+        "text": "0900　品質改善会議　",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false,
-        "html": ""
+        "html": "0900　品質改善会議　"
       },
       {
         "id": "mng3bjyx7ld",
@@ -7102,7 +7102,7 @@
       {
         "id": "mng3bnax26p",
         "text": "ポータルについて",
-        "html": "",
+        "html": "ポータルについて",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7120,7 +7120,16 @@
       {
         "id": "mng3c6aoc9s",
         "text": "連絡事項回覧",
-        "html": "",
+        "html": "連絡事項回覧",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mng3d1c703o",
+        "text": "新店情報",
+        "html": "新店情報",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7128,8 +7137,8 @@
       },
       {
         "id": "mng3cf0wu56",
-        "text": "",
-        "html": "",
+        "text": "ダッシュボード",
+        "html": "ダッシュボード",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7140,8 +7149,8 @@
         "text": "0930 ストマネID申請運用",
         "html": "0930 ストマネID申請運用",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -7149,14 +7158,50 @@
         "text": "1000 IT稟議共有（なし）",
         "html": "1000 IT稟議共有（なし）",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false
       },
       {
         "id": "mng3be27nxh",
-        "text": "1100",
-        "html": "1100",
+        "text": "1100　デバイスサービス管理定例",
+        "html": "1100　デバイスサービス管理定例",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": false
+      },
+      {
+        "id": "mng3dj33cpo",
+        "text": "1400 都市型レジ要件Mtg",
+        "html": "1400 都市型レジ要件Mtg",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": false
+      },
+      {
+        "id": "mng3dvyz7id",
+        "text": "1500　FHESL工事定例",
+        "html": "1500　FHESL工事定例",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mng3e2fcy9j",
+        "text": "1600 FHESL進捗会議",
+        "html": "1600 FHESL進捗会議",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mng3eap28e7",
+        "text": "",
+        "html": "",
         "indent": 0,
         "bold": false,
         "color": "",
