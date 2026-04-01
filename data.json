@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T00:05:56.284Z",
+  "savedAt": "2026-04-01T00:07:01.117Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5039,7 +5039,7 @@
         "type": "log",
         "linkedEntryRef": "emn9kqv88a9l",
         "linkedEntryText": "新狭山HACCP発注",
-        "html": "新狭山HACCP発注",
+        "html": "新狭山HACCP発注<br>",
         "gridCollapsed": true,
         "url": ""
       },
