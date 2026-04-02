@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T00:55:43.248Z",
+  "savedAt": "2026-04-02T00:56:43.054Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7102,8 +7102,8 @@
       },
       {
         "id": "mng3bjyx7ld",
-        "text": "今後の課",
-        "html": "今後の課",
+        "text": "今後",
+        "html": "今後",
         "indent": 1,
         "bold": false,
         "color": "#3498db",
