@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T02:27:23.386Z",
+  "savedAt": "2026-04-02T02:43:04.976Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7179,10 +7179,28 @@
       {
         "id": "mng3be27nxh",
         "text": "1100　デバイスサービス管理定例",
-        "html": "1100　デバイスサービス管理定例",
+        "html": "",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
+        "collapsed": false
+      },
+      {
+        "id": "mngvdg4iyoq",
+        "text": "1130 根岸さん週次",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngvdpwiq92",
+        "text": "新里",
+        "html": "新里",
+        "indent": 1,
+        "bold": false,
+        "color": "",
         "collapsed": false
       },
       {
