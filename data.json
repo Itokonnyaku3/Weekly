@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T01:21:14.784Z",
+  "savedAt": "2026-04-02T02:26:46.781Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4789,7 +4789,7 @@
         "id": "emn2qu5t7afh",
         "text": "3.31おおたモールで検証",
         "indent": 0,
-        "bold": true,
+        "bold": false,
         "color": "",
         "collapsed": false,
         "isTodo": false,
@@ -4801,42 +4801,6 @@
         "start": "2026-03-31",
         "due": "2026-03-31",
         "html": "3.31おおたモールで検証"
-      },
-      {
-        "id": "mngsf05os7s",
-        "text": "ルータを論理的に2台に→あまり効果なし？",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mngsfe969j4",
-        "text": "ルータをラックの外に出す→ある程度効果あり",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mngsfnno8nh",
-        "text": "取得の間隔を広げる→ある程度効果あり",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mngsg3lip5b",
-        "text": "最後10分ではなく、1時間の間で1回でも取れればOKとする→これから確認してみる",
-        "html": "最後10分ではなく、1時間の間で1回でも取れればOKとする→これから確認してみる",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
       },
       {
         "id": "emn5khg5dcwl",
@@ -7104,7 +7068,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "深谷花園"
+        "html": "深谷花園",
+        "collapsed": true
       },
       {
         "id": "mnfp1iv4vzf",
@@ -7113,6 +7078,15 @@
         "indent": 1,
         "bold": false,
         "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mng3nvlouxa",
+        "text": "テスト　",
+        "html": "テスト　",
+        "indent": 0,
+        "bold": true,
+        "color": "#3498db",
         "collapsed": false
       }
     ],
@@ -7128,11 +7102,11 @@
       },
       {
         "id": "mng3bjyx7ld",
-        "text": "今後の課題の進め方",
-        "html": "今後の課題の進め方",
+        "text": "今後",
+        "html": "今後",
         "indent": 1,
         "bold": false,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -7142,7 +7116,11 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": false,
+        "type": "log",
+        "checked": false,
+        "url": ""
       },
       {
         "id": "mng3bx1jcsb",
@@ -7183,37 +7161,19 @@
       {
         "id": "mng3aouwiws",
         "text": "0930 ストマネID申請運用",
-        "html": "",
+        "html": "0930 ストマネID申請運用",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
-        "collapsed": false
-      },
-      {
-        "id": "mngs3d36dsf",
-        "text": "眞下さん転職のため、一旦保留。",
-        "html": "眞下さん転職のため、一旦保留。",
-        "indent": 1,
-        "bold": false,
-        "color": "",
         "collapsed": false
       },
       {
         "id": "mng3b65r4br",
-        "text": "1000 IT稟議共有",
-        "html": "",
+        "text": "1000 IT稟議共有（なし）",
+        "html": "1000 IT稟議共有（なし）",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
-        "collapsed": false
-      },
-      {
-        "id": "mngs3qnzkqm",
-        "text": "東村山の生鮮計量器。桐生境野からの転用とイシダの値引きで合計300万削減、800万の稟議",
-        "html": "東村山の生鮮計量器。桐生境野からの転用とイシダの値引きで合計300万削減、800万の稟議",
-        "indent": 1,
-        "bold": false,
-        "color": "",
         "collapsed": false
       },
       {
@@ -7240,7 +7200,7 @@
         "html": "1500　FHESL工事定例",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
@@ -7249,14 +7209,54 @@
         "html": "1600 FHESL進捗会議",
         "indent": 0,
         "bold": true,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
         "id": "mng3eap28e7",
-        "text": "",
+        "text": "その他",
         "html": "",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngurqa5gs5",
+        "text": "新店の営業時間の確認方法",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "projTag": "📔新店改装店",
+        "type": "todo",
+        "isTodo": true,
+        "checked": false
+      },
+      {
+        "id": "mngusnkktlo",
+        "text": "松村さんに聞いてみた。",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnguswfw3e6",
+        "text": "米山 大史　BE: 新店の営業時間 | 店舗システム部　新店対応 > General | Microsoft Teams",
+        "html": "<div itemprop=\"teams-copy-link\"><a href=\"https://teams.microsoft.com/l/message/19:wHlT2Cgyo9F96YTcURy3MwzwC6X3j4o7Dpl7yxwquFs1@thread.tacv2/1775096718769?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&amp;groupId=f5284113-022f-43b1-b578-11c6387f0366&amp;parentMessageId=1775096718769&amp;teamName=%E5%BA%97%E8%88%97%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E9%83%A8%E3%80%80%E6%96%B0%E5%BA%97%E5%AF%BE%E5%BF%9C&amp;channelName=General&amp;createdTime=1775096718769\" title=\"https://teams.microsoft.com/l/message/19:wHlT2Cgyo9F96YTcURy3MwzwC6X3j4o7Dpl7yxwquFs1@thread.tacv2/1775096718769?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&amp;groupId=f5284113-022f-43b1-b578-11c6387f0366&amp;parentMessageId=1775096718769&amp;teamName=%E5%BA%97%E8%88%97%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E9%83%A8%E3%80%80%E6%96%B0%E5%BA%97%E5%AF%BE%E5%BF%9C&amp;channelName=General&amp;createdTime=1775096718769\">米山 大史　BE: 新店の営業時間 | 店舗システム部　新店対応 &gt; General | Microsoft Teams</a></div>",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngut20tws2",
+        "text": "",
+        "html": "",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
