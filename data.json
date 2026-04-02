@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T01:11:39.213Z",
+  "savedAt": "2026-04-02T01:20:59.195Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4789,7 +4789,7 @@
         "id": "emn2qu5t7afh",
         "text": "3.31おおたモールで検証",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false,
         "isTodo": false,
@@ -4801,6 +4801,42 @@
         "start": "2026-03-31",
         "due": "2026-03-31",
         "html": "3.31おおたモールで検証"
+      },
+      {
+        "id": "mngsf05os7s",
+        "text": "ルータを論理的に2台に→あまり効果なし？",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngsfe969j4",
+        "text": "ルータをラックの外に出す→ある程度効果あり",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngsfnno8nh",
+        "text": "取得の間隔を広げる→ある程度効果あり",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngsg3lip5b",
+        "text": "最後10分ではなく、1時間の間でい",
+        "html": "最後10分ではなく、1時間の間でい",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "emn5khg5dcwl",
