@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T12:22:50.662Z",
+  "savedAt": "2026-04-02T12:23:38.701Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5465,6 +5465,54 @@
         "start": "",
         "due": "2026-04-06",
         "html": "成電社支払い午前中"
+      },
+      {
+        "id": "mnhg461xu6z",
+        "text": "マニュアル等色々作って店舗に発信",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
+      },
+      {
+        "id": "mnhg4cx6p9e",
+        "text": "予備センサー回収依頼",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
+      },
+      {
+        "id": "mnhg4mods2f",
+        "text": "おんどとり間隔",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-3-2": [
