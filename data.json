@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T12:38:17.201Z",
+  "savedAt": "2026-04-02T12:38:38.738Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5391,22 +5391,6 @@
         "linkedEntryText": "実家にチェーンストアの本なかったっけ"
       },
       {
-        "id": "emmx5rb3lb67",
-        "text": "久保田さん育休いつとるか確認",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "管理・全般",
-        "type": "todo",
-        "note": "計画、昇進プレゼント",
-        "linkedEntryRef": "emn9kqv88gmy",
-        "linkedEntryText": "久保田さん育休いつとるか確認"
-      },
-      {
         "id": "emmw2zro2vn0",
         "text": "4.7 久保田、根岸とNEC打合せ",
         "indent": 0,
@@ -7694,6 +7678,32 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      }
+    ],
+    "2026-4-13": [
+      {
+        "id": "mnhgnx5eyfl",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "emmx5rb3lb67",
+        "text": "久保田さん育休いつとるか確認",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "管理・全般",
+        "type": "todo",
+        "note": "計画、昇進プレゼント",
+        "linkedEntryRef": "emn9kqv88gmy",
+        "linkedEntryText": "久保田さん育休いつとるか確認"
       }
     ]
   },
