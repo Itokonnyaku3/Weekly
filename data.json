@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T06:03:07.447Z",
+  "savedAt": "2026-04-02T06:03:33.538Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7497,17 +7497,18 @@
         "id": "mnh2j9h35rr",
         "text": "ミライトワンカメラソリューション検討",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "log",
         "projTag": "水産試験他リモートカメラ",
         "url": "",
         "note": "",
         "images": [],
         "priority": "",
         "tags": [],
-        "start": "",
-        "due": ""
+        "start": "2026-04-02",
+        "due": "2026-04-17",
+        "html": "ミライトワンカメラソリューション検討"
       }
     ],
     "2026-4-3": [
