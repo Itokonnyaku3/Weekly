@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T12:23:38.701Z",
+  "savedAt": "2026-04-02T12:37:14.716Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7607,6 +7607,32 @@
         "text": "",
         "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnhglj7hihy",
+        "text": "バイオーダー写真を大橋さんにもらって田中さんに送る",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "その他細かいこと",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": ""
+      },
+      {
+        "id": "mnhglwzv8uk",
+        "text": "個別チャットでもらった",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
