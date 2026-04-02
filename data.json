@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T06:02:43.557Z",
+  "savedAt": "2026-04-02T06:03:07.447Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7375,7 +7375,7 @@
       {
         "id": "mnh2hd7wep4",
         "text": "",
-        "html": "",
+        "html": "<div><br></div><div><br></div>",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7492,6 +7492,22 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnh2j9h35rr",
+        "text": "ミライトワンカメラソリューション検討",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "水産試験他リモートカメラ",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ],
     "2026-4-3": [
