@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T02:43:36.115Z",
+  "savedAt": "2026-04-02T02:43:59.220Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7205,8 +7205,17 @@
       },
       {
         "id": "mngveosf06o",
-        "text": "吉井店もう一度いくっ",
-        "html": "吉井店もう一度いくっ",
+        "text": "吉井店もう一度行く。センサー6個持ってく",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngvf6nogj7",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
