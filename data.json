@@ -1229,11 +1229,14 @@
       "collapsed": false,
       "projEntriesOpen": true,
       "links": [],
-      "isPrivate": false
+      "isPrivate": false,
+      "projEntries": [],
+      "recurringEntries": [],
+      "recSectionOpen": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T12:38:38.738Z",
+  "savedAt": "2026-04-02T23:56:55.707Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7645,7 +7648,7 @@
       {
         "id": "mndvwxqbpja",
         "text": "勤怠、勤務実施計画",
-        "html": "",
+        "html": "勤怠、勤務実施計画",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7654,7 +7657,7 @@
       {
         "id": "mndvxfpyf1r",
         "text": "イベント、障害",
-        "html": "",
+        "html": "イベント、障害",
         "indent": 1,
         "bold": false,
         "color": "",
