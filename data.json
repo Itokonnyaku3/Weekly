@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T05:44:27.727Z",
+  "savedAt": "2026-04-02T05:51:46.623Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7117,8 +7117,8 @@
       },
       {
         "id": "mnfp1iv4vzf",
-        "text": "■店舗名称変更\nココトクふかや花園店(仮) ■サービス変更対応(3/31Update)\n・ベイシアポイント→対象外\n・Beisia Pay→対象外\n・楽天ポイント→対象外\n・ご予約商品の受取店舗→対象外\n・ネットスーパー対応店舗→対象外",
-        "html": "<span data-teams=\"true\"><p><br></p><p>■店舗名称変更<br>\nココトクふかや花園店(仮)</p><p>&nbsp;</p><p>■サービス変更対応(3/31Update)<br>\n・ベイシアポイント→対象外<br>\n・Beisia Pay→対象外<br>\n・楽天ポイント→対象外<br>\n・ご予約商品の受取店舗→対象外<br>\n・ネットスーパー対応店舗→対象外</p></span>",
+        "text": "",
+        "html": "<span data-teams=\"true\"><p><br></p><p><br></p></span>",
         "indent": 1,
         "bold": false,
         "color": "",
