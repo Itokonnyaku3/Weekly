@@ -1005,7 +1005,7 @@
       },
       "links": [],
       "projEntries": [],
-      "projEntriesOpen": true,
+      "projEntriesOpen": false,
       "collapsed": false,
       "spanItems": [
         {
@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T23:56:55.707Z",
+  "savedAt": "2026-04-02T23:57:38.973Z",
   "dailyOutline": {
     "2026-3-18": [
       {
