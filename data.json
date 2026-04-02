@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T05:41:17.050Z",
+  "savedAt": "2026-04-02T05:42:35.076Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5775,6 +5775,23 @@
         "projTag": "📔新店改装店",
         "type": "link",
         "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General?csf=1&web=1&e=bWSCsK"
+      },
+      {
+        "id": "mnh1sdehk9y",
+        "text": "BGS共有",
+        "type": "link",
+        "isTodo": false,
+        "checked": false,
+        "indent": 0,
+        "projTag": "📔新店改装店",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "BGS共有"
       }
     ],
     "proj:8": [
