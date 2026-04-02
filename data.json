@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-01T23:27:45.127Z",
+  "savedAt": "2026-04-02T00:53:00.167Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7102,11 +7102,11 @@
       },
       {
         "id": "mng3bjyx7ld",
-        "text": "今後の課題の進め方",
-        "html": "今後の課題の進め方",
+        "text": "今後の課題の進",
+        "html": "今後の課題の進",
         "indent": 1,
         "bold": false,
-        "color": "",
+        "color": "#3498db",
         "collapsed": false
       },
       {
