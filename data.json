@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T06:03:33.538Z",
+  "savedAt": "2026-04-02T06:04:07.312Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7509,6 +7509,24 @@
         "start": "2026-04-02",
         "due": "2026-04-17",
         "html": "ミライトワンカメラソリューション検討"
+      },
+      {
+        "id": "mnh2k7n6l8a",
+        "text": "貸出期間確認",
+        "indent": 1,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "水産試験他リモートカメラ",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "parentId": "mnh2j9h35rr",
+        "html": "貸出期間確認"
       }
     ],
     "2026-4-3": [
