@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T00:56:43.054Z",
+  "savedAt": "2026-04-02T01:11:39.213Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7068,8 +7068,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "深谷花園",
-        "collapsed": true
+        "html": "深谷花園"
       },
       {
         "id": "mnfp1iv4vzf",
@@ -7078,15 +7077,6 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mng3nvlouxa",
-        "text": "テスト　",
-        "html": "テスト　",
-        "indent": 0,
-        "bold": true,
-        "color": "#3498db",
         "collapsed": false
       }
     ],
@@ -7102,11 +7092,11 @@
       },
       {
         "id": "mng3bjyx7ld",
-        "text": "今後",
-        "html": "今後",
+        "text": "今後の課題の進め方",
+        "html": "今後の課題の進め方",
         "indent": 1,
         "bold": false,
-        "color": "#3498db",
+        "color": "",
         "collapsed": false
       },
       {
@@ -7116,11 +7106,7 @@
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "type": "log",
-        "checked": false,
-        "url": ""
+        "collapsed": false
       },
       {
         "id": "mng3bx1jcsb",
@@ -7161,19 +7147,37 @@
       {
         "id": "mng3aouwiws",
         "text": "0930 ストマネID申請運用",
-        "html": "0930 ストマネID申請運用",
+        "html": "",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
         "collapsed": false
       },
       {
+        "id": "mngs3d36dsf",
+        "text": "眞下さん転職のため、一旦保留。",
+        "html": "眞下さん転職のため、一旦保留。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "mng3b65r4br",
-        "text": "1000 IT稟議共有（なし）",
-        "html": "1000 IT稟議共有（なし）",
+        "text": "1000 IT稟議共有",
+        "html": "",
         "indent": 0,
         "bold": true,
         "color": "#3498db",
+        "collapsed": false
+      },
+      {
+        "id": "mngs3qnzkqm",
+        "text": "東村山の生鮮計量器。桐生境野からの転用とイシダの値引きで合計300万削減、800万の稟議",
+        "html": "東村山の生鮮計量器。桐生境野からの転用とイシダの値引きで合計300万削減、800万の稟議",
+        "indent": 1,
+        "bold": false,
+        "color": "",
         "collapsed": false
       },
       {
@@ -7200,7 +7204,7 @@
         "html": "1500　FHESL工事定例",
         "indent": 0,
         "bold": true,
-        "color": "#3498db",
+        "color": "",
         "collapsed": false
       },
       {
@@ -7209,7 +7213,7 @@
         "html": "1600 FHESL進捗会議",
         "indent": 0,
         "bold": true,
-        "color": "#3498db",
+        "color": "",
         "collapsed": false
       },
       {
