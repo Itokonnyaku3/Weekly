@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T12:37:14.716Z",
+  "savedAt": "2026-04-02T12:38:17.201Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5725,7 +5725,17 @@
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "log",
-        "note": "費用　157000\n期間　2025/3　2026/5"
+        "note": "費用　157000\n期間　2025/3　2026/5",
+        "html": ""
+      },
+      {
+        "id": "mnhgn6dqpu0",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-5-25": [
