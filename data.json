@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T02:43:59.220Z",
+  "savedAt": "2026-04-02T02:55:02.671Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7214,7 +7214,16 @@
       },
       {
         "id": "mngvf6nogj7",
-        "text": "",
+        "text": "Formsの問合せフローを根岸さんが作っていて来週くらいに見せるものが出来そう。",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngvsv8wytw",
+        "text": "新店のチェックリスト、細かいのを作る必要がある…根岸さんでも似たようなものを作っているのでそちらで進める",
         "html": "",
         "indent": 1,
         "bold": false,
