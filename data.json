@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T02:43:04.976Z",
+  "savedAt": "2026-04-02T02:43:36.115Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7196,8 +7196,17 @@
       },
       {
         "id": "mngvdpwiq92",
-        "text": "新里",
-        "html": "新里",
+        "text": "新里店　根岸さんに依頼",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mngveosf06o",
+        "text": "吉井店もう一度いくっ",
+        "html": "吉井店もう一度いくっ",
         "indent": 1,
         "bold": false,
         "color": "",
