@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T05:52:18.896Z",
+  "savedAt": "2026-04-02T05:53:25.354Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5808,14 +5808,77 @@
         "text": "深谷花園",
         "html": "深谷花園",
         "indent": 0,
-        "bold": false,
+        "bold": true,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mnh25bf5lay",
-        "text": "■店舗名称変更ココトクふかや花園店(仮)■サービス変更対応(3/31Update)・ベイシアポイント→対象外・Beisia Pay→対象外・楽天ポイント→対象外・ご予約商品の受取店舗→対象外・ネットスーパー対応店舗→対象外",
-        "html": "<div>■店舗名称変更</div><div>ココトクふかや花園店(仮)</div><div><br></div><div>■サービス変更対応(3/31Update)</div><div>・ベイシアポイント→対象外</div><div>・Beisia Pay→対象外</div><div>・楽天ポイント→対象外</div><div>・ご予約商品の受取店舗→対象外</div><div>・ネットスーパー対応店舗→対象外</div>",
+        "text": "■店舗名称変更",
+        "html": "■店舗名称変更",
+        "indent": 1,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh260yroow",
+        "text": "ココトクふかや花園店(仮)",
+        "html": "ココトクふかや花園店(仮)",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh266bp6fj",
+        "text": "■サービス変更対応(3/31Update)",
+        "html": "■サービス変更対応(3/31Update)",
+        "indent": 1,
+        "bold": true,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh26auu7f3",
+        "text": "ベイシアポイント→対象外・Beisia Pay→対象外",
+        "html": "ベイシアポイント→対象外・Beisia Pay→対象外",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh26e5j3be",
+        "text": "楽天ポイント→対象外",
+        "html": "楽天ポイント→対象外",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh26h23zdk",
+        "text": "ご予約商品の受取店舗→対象外",
+        "html": "ご予約商品の受取店舗→対象外",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh26j6eo1t",
+        "text": "ネットスーパー対応店舗→対象外",
+        "html": "ネットスーパー対応店舗→対象外",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh25tolrmz",
+        "text": "",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
