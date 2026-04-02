@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T05:51:46.623Z",
+  "savedAt": "2026-04-02T05:52:18.896Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5774,7 +5774,8 @@
         "isPrivate": false,
         "projTag": "📔新店改装店",
         "type": "link",
-        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General?csf=1&web=1&e=bWSCsK"
+        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_002055/Shared%20Documents/General?csf=1&web=1&e=bWSCsK",
+        "html": "新店改装店"
       },
       {
         "id": "mnh1sdehk9y",
@@ -5791,12 +5792,12 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": ""
+        "html": "BGS共有"
       },
       {
         "id": "mnh1tu0pz6u",
         "text": "a",
-        "html": "",
+        "html": "a",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -5804,9 +5805,18 @@
       },
       {
         "id": "mnh1tuvjbmu",
-        "text": "",
-        "html": "",
+        "text": "深谷花園",
+        "html": "深谷花園",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh25bf5lay",
+        "text": "■店舗名称変更ココトクふかや花園店(仮)■サービス変更対応(3/31Update)・ベイシアポイント→対象外・Beisia Pay→対象外・楽天ポイント→対象外・ご予約商品の受取店舗→対象外・ネットスーパー対応店舗→対象外",
+        "html": "<div>■店舗名称変更</div><div>ココトクふかや花園店(仮)</div><div><br></div><div>■サービス変更対応(3/31Update)</div><div>・ベイシアポイント→対象外</div><div>・Beisia Pay→対象外</div><div>・楽天ポイント→対象外</div><div>・ご予約商品の受取店舗→対象外</div><div>・ネットスーパー対応店舗→対象外</div>",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
