@@ -1233,7 +1233,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T06:48:36.810Z",
+  "savedAt": "2026-04-02T06:49:11.960Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7526,7 +7526,25 @@
         "start": "",
         "due": "",
         "parentId": "mnh2j9h35rr",
-        "html": "貸出期間確認<br>"
+        "html": ""
+      },
+      {
+        "id": "mnh464q1muv",
+        "text": "田中さん、水出さんに確認中4月20日、27日くらいできいている",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh46j2wlg6",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "2026-4-3": [
