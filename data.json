@@ -1226,7 +1226,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-02T02:55:02.671Z",
+  "savedAt": "2026-04-02T05:05:38.250Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7310,6 +7310,51 @@
         "id": "mngutpowt84",
         "text": "新店情報  (Web 表示)",
         "html": "<a href=\"onenote:https://beisiag.sharepoint.com/sites/bgits/Shared%20Documents/限定_非公開資料(作業用)/00.デバイスサービス管理/00.マネジメント/BGSデバイスサービス管理部_定例資料/ベイシア.one#新店情報&amp;section-id={801A7CA7-2777-4297-B3B4-F9FBD4905100}&amp;page-id={76C625A7-559B-4552-9364-851ADDC5EC03}&amp;end\">新店情報</a>&nbsp; (<a href=\"https://beisiag.sharepoint.com/sites/bgits/_layouts/Doc.aspx?sourcedoc=%7bEAA0C003-D9FA-428A-801A-A9913DECA127%7d&amp;wd=target%28%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A2.one%7C801A7CA7-2777-4297-B3B4-F9FBD4905100%2F%E6%96%B0%E5%BA%97%E6%83%85%E5%A0%B1%7C76C625A7-559B-4552-9364-851ADDC5EC03%2F%29&amp;wdpartid=%7b01077104-B09E-0A0F-3FC3-372252FBFA04%7d%7b1%7d&amp;wdsectionfileid=%7b7D6B0629-91CE-49D6-B26A-0E936480DD0D%7d&amp;end\">Web 表示</a>)",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh0gyg9op7",
+        "text": "自動でGitにアップする",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh0h9b8vnp",
+        "text": "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",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh0hb4p218",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh0hc8kinn",
+        "text": "",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnh0hcjuiwm",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
