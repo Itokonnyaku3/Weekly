@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T02:16:27.186Z",
+  "savedAt": "2026-04-03T02:17:26.468Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3310,7 +3310,8 @@
         "note": "NECのソリューションを確認し、運用改善に使えるか検討する。",
         "start": "2026-03-24",
         "due": "2026-04-24",
-        "html": "NEC資産管理"
+        "html": "NEC資産管理",
+        "gridCollapsed": true
       },
       {
         "id": "emn3wo53dnfv",
@@ -3326,7 +3327,8 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv87u8i",
         "linkedEntryText": "久保田さん根岸さんがNECとROI検証",
-        "html": "久保田さん根岸さんがNECとROI検証"
+        "html": "久保田さん根岸さんがNECとROI検証",
+        "parentId": "emn3vgzrbylq"
       },
       {
         "id": "emn3wo53d1m2",
@@ -3342,7 +3344,8 @@
         "type": "todo",
         "linkedEntryRef": "emn9kqv87t4r",
         "linkedEntryText": "塚越さんに状況聞いてみる",
-        "html": "塚越さんに状況聞いてみる"
+        "html": "塚越さんに状況聞いてみる",
+        "parentId": "emn3vgzrbylq"
       },
       {
         "id": "emmw2zro2xix",
