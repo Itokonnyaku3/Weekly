@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T02:28:54.652Z",
+  "savedAt": "2026-04-03T02:29:30.953Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7741,12 +7741,15 @@
     "2026-4-3": [
       {
         "id": "mndvwr516fc",
-        "text": "定例での確認事項",
+        "text": "定例での確認事項 ",
         "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "定例での確認事項"
+        "html": "定例での確認事項&nbsp;",
+        "tags": [
+          "定例"
+        ]
       },
       {
         "id": "mndvwxqbpja",
@@ -8181,6 +8184,10 @@
     "kameyama亀山": {
       "color": null,
       "lastUsed": 1774923121217
+    },
+    "定例": {
+      "color": null,
+      "lastUsed": 1775183370336
     }
   }
 }
