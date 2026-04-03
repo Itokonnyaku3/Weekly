@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T00:57:11.341Z",
+  "savedAt": "2026-04-03T01:03:02.148Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7780,6 +7780,15 @@
         "text": "稟議確認",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni793pxd9w",
+        "text": "来週はIT稟議なし",
+        "html": "来週はIT稟議なし",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
