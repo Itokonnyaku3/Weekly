@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T02:03:41.137Z",
+  "savedAt": "2026-04-03T02:11:01.383Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3111,14 +3111,17 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "todo",
-        "note": "・次週の予定\n・全体の確認",
+        "note": "・次週の予定\n・全体の確認あ",
         "tags": [
           "定例"
         ],
         "due": "2026-03-27",
         "html": "週次進捗確認（毎週金曜）",
         "linkedEntryRef": "emn9kqv86l59",
-        "linkedEntryText": "週次進捗確認（毎週金曜）"
+        "linkedEntryText": "週次進捗確認（毎週金曜）",
+        "url": "",
+        "priority": "",
+        "start": ""
       },
       {
         "id": "emmy5whstteq",
@@ -7754,7 +7757,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "html": "定例での確認事項"
       },
       {
@@ -7841,7 +7844,7 @@
       {
         "id": "mni71mscdfq",
         "text": "亀山さん",
-        "html": "亀山さん",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7850,16 +7853,16 @@
       {
         "id": "mni7q764a2x",
         "text": "ソラカメ引継ぎ",
-        "html": "ソラカメ引継ぎ",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mni8ka80cjw",
         "text": "新規はおぜん立ては作業改善、発注はデジタル",
-        "html": "新規はおぜん立ては作業改善、発注はデジタル",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7868,7 +7871,7 @@
       {
         "id": "mni8klj4t4d",
         "text": "故障は順次引継ぎ",
-        "html": "故障は順次引継ぎ",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7877,16 +7880,16 @@
       {
         "id": "mni8kuxdebc",
         "text": "大改装",
-        "html": "大改装",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mni8p6f4t6o",
         "text": "木更津で引継ぎ",
-        "html": "木更津で引継ぎ",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7895,16 +7898,16 @@
       {
         "id": "mni8pa4q8go",
         "text": "山下さん、SD",
-        "html": "山下さん、SD",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mni8xv9i1to",
         "text": "機器の情報",
-        "html": "機器の情報",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7913,7 +7916,7 @@
       {
         "id": "mni8xzqltoo",
         "text": "HUB、ESL予算",
-        "html": "HUB、ESL予算<br>",
+        "html": "HUB、ESL予算",
         "indent": 2,
         "bold": false,
         "color": "",
