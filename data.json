@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T01:50:36.381Z",
+  "savedAt": "2026-04-03T02:03:41.137Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7754,7 +7754,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
+        "collapsed": true,
         "html": "定例での確認事項"
       },
       {
@@ -7841,7 +7841,7 @@
       {
         "id": "mni71mscdfq",
         "text": "亀山さん",
-        "html": "",
+        "html": "亀山さん",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7850,16 +7850,16 @@
       {
         "id": "mni7q764a2x",
         "text": "ソラカメ引継ぎ",
-        "html": "",
+        "html": "ソラカメ引継ぎ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mni8ka80cjw",
         "text": "新規はおぜん立ては作業改善、発注はデジタル",
-        "html": "",
+        "html": "新規はおぜん立ては作業改善、発注はデジタル",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7868,7 +7868,7 @@
       {
         "id": "mni8klj4t4d",
         "text": "故障は順次引継ぎ",
-        "html": "",
+        "html": "故障は順次引継ぎ",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7877,16 +7877,16 @@
       {
         "id": "mni8kuxdebc",
         "text": "大改装",
-        "html": "",
+        "html": "大改装",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mni8p6f4t6o",
         "text": "木更津で引継ぎ",
-        "html": "",
+        "html": "木更津で引継ぎ",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7895,16 +7895,16 @@
       {
         "id": "mni8pa4q8go",
         "text": "山下さん、SD",
-        "html": "",
+        "html": "山下さん、SD",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mni8xv9i1to",
         "text": "機器の情報",
-        "html": "",
+        "html": "機器の情報",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7913,7 +7913,7 @@
       {
         "id": "mni8xzqltoo",
         "text": "HUB、ESL予算",
-        "html": "HUB、ESL予算",
+        "html": "HUB、ESL予算<br>",
         "indent": 2,
         "bold": false,
         "color": "",
