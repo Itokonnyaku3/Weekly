@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T02:30:11.597Z",
+  "savedAt": "2026-04-03T02:36:59.376Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7925,7 +7925,7 @@
       {
         "id": "mniacwmi6p0",
         "text": "",
-        "html": "<br>",
+        "html": "<br><div><br></div>",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8036,7 +8036,7 @@
         "start": "",
         "due": "2027-02-28",
         "html": "定例作業",
-        "gridCollapsed": true,
+        "gridCollapsed": false,
         "collapsed": true
       },
       {
@@ -8135,6 +8135,24 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnialst9r9x",
+        "text": "工数管理",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "link",
+        "projTag": "管理・全般",
+        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_001151/Shared%20Documents/%E7%A8%BC%E5%83%8D%E8%A8%88%E7%94%BB%E7%AE%A1%E7%90%86/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8?csf=1&web=1&e=k8wRK6",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "工数管理",
+        "parentId": "mnia2gwf927"
       }
     ],
     "2026-4-4": [
