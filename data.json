@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T00:37:29.132Z",
+  "savedAt": "2026-04-03T00:48:21.288Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5517,6 +5517,25 @@
         "due": "",
         "html": "おんどとり間隔<div><br></div>",
         "parentId": "mni55w0d23n"
+      },
+      {
+        "id": "mni6pekyp3z",
+        "text": "富士通HACCP請求処理",
+        "html": "富士通HACCP請求処理",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "url": "",
+        "note": "",
+        "isTodo": false,
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "2026-04-06",
+        "parentId": "mni54hxq2ju"
       }
     ],
     "2026-3-2": [
@@ -7780,7 +7799,7 @@
         "tags": [],
         "start": "2026-04-03",
         "due": "2026-04-30",
-        "html": "ログ",
+        "html": "ログ<br>",
         "collapsed": true,
         "gridCollapsed": true
       },
