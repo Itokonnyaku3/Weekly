@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:34:00.764Z",
+  "savedAt": "2026-04-03T00:34:48.293Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6067,7 +6067,7 @@
     "proj:11": [
       {
         "id": "emmw2zro24zs",
-        "text": "次期SD検討",
+        "text": "#780 次期SD検討",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -6077,7 +6077,13 @@
         "isPrivate": false,
         "projTag": "山下さん",
         "type": "log",
-        "note": "予算　４０１１６\n期間　２０２５０１ー２０２６０５"
+        "note": "予算　４０１１６\n期間　２０２５０１ー２０２６０５",
+        "url": "",
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "#780 次期SD検討"
       },
       {
         "id": "emmw2zro2zi8",
