@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T00:55:13.144Z",
+  "savedAt": "2026-04-03T00:57:11.341Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7777,8 +7777,26 @@
       },
       {
         "id": "mndvxkdr4qf",
-        "text": "",
+        "text": "稟議確認",
         "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni71jtcpza",
+        "text": "ポータル",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni71mscdfq",
+        "text": "亀山さん",
+        "html": "亀山さん",
         "indent": 1,
         "bold": false,
         "color": "",
