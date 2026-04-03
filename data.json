@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:05:57.309Z",
+  "savedAt": "2026-04-03T00:08:23.820Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5148,37 +5148,6 @@
         "collapsed": false
       },
       {
-        "id": "emn2qu5t7538",
-        "text": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
-        "linkedEntryRef": "emn9kqv88r80",
-        "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
-        "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼"
-      },
-      {
-        "id": "emn1hfsbsuj6",
-        "text": "🌡️説明会！",
-        "indent": 0,
-        "bold": true,
-        "color": "#e74c3c",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "log",
-        "html": "🌡️説明会！"
-      },
-      {
         "id": "emmw2zro232f",
         "text": "実プロジェクトで検証",
         "indent": 0,
@@ -5201,7 +5170,7 @@
         "color": "",
         "collapsed": true,
         "isTodo": true,
-        "checked": false,
+        "checked": true,
         "isPrivate": false,
         "projTag": "HACCP",
         "type": "todo",
@@ -5493,7 +5462,7 @@
         "start": "",
         "due": "2026-08-07",
         "html": "支払い関連<div><br></div>",
-        "gridCollapsed": true
+        "gridCollapsed": false
       },
       {
         "id": "mnhg461xu6z",
@@ -6597,18 +6566,6 @@
         "gridCollapsed": true
       },
       {
-        "id": "mn9xq5d2kk2",
-        "text": "0930 HACCPアラート頻度の件 ",
-        "indent": 0,
-        "bold": true,
-        "color": "#3498db",
-        "collapsed": true,
-        "html": "0930 HACCPアラート頻度の件 ",
-        "tags": [],
-        "projTag": "HACCP",
-        "type": "log"
-      },
-      {
         "id": "mnebuuhxrxn",
         "text": "松田さんに確認する　",
         "html": "松田さんに確認する　",
@@ -7043,17 +7000,6 @@
         "collapsed": false
       },
       {
-        "id": "mnea6oyayly",
-        "text": "１４００～おおたモール　",
-        "html": "１４００～おおたモール　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "projTag": "HACCP",
-        "type": "log"
-      },
-      {
         "id": "mnduse9dcri",
         "text": "------------------------------------",
         "html": "------------------------------------",
@@ -7121,6 +7067,24 @@
         "gridCollapsed": true
       },
       {
+        "id": "emn2qu5t7538",
+        "text": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "url": "https://teams.microsoft.com/l/message/19:37446bdf8267420082d0a96f754e82ac@thread.v2/1774243253888?context=%7B%22contextType%22%3A%22chat%22%7D",
+        "linkedEntryRef": "emn9kqv88r80",
+        "linkedEntryText": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
+        "html": "トラブルシュートガイド、岡芹さんにTeachmeでのマニュアル作成検討依頼",
+        "parentId": "mnebwcxhl4s"
+      },
+      {
         "id": "mnci1lg0pnc",
         "text": "富士通にアラート時間変更依頼",
         "html": "富士通にアラート時間変更依頼",
@@ -7151,34 +7115,6 @@
         "due": "",
         "parentId": "mnebwcxhl4s",
         "html": "システムのロゴ変更→可能"
-      },
-      {
-        "id": "mnec0npq29e",
-        "text": "不具合なセンサーの対応　",
-        "html": "不具合なセンサーの対応　",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": true,
-        "projTag": "HACCP",
-        "type": "log"
-      },
-      {
-        "id": "emmw2zro2yfv",
-        "text": "オフラインの店舗の詳細を確認",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": true,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "todo",
-        "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773799914268?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773799399508&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773799914268",
-        "linkedEntryRef": "emn9kqv88aog",
-        "linkedEntryText": "オフラインの店舗の詳細を確認",
-        "html": "オフラインの店舗の詳細を確認"
       },
       {
         "id": "mnec0yuz05z",
@@ -7763,6 +7699,95 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mni58i748zc",
+        "text": "ログ",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "log",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "ログ",
+        "collapsed": true,
+        "gridCollapsed": true
+      },
+      {
+        "id": "emmw2zro2yfv",
+        "text": "オフラインの店舗の詳細を確認",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": true,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "todo",
+        "url": "https://teams.microsoft.com/l/message/19:nQnzWLcI9DOPMOT3ozo_8kH4rFaUkbbbrVMWtAaVoG41@thread.tacv2/1773799914268?tenantId=ef8bb85c-5beb-44a9-b8c3-74d07de742b2&groupId=36b86e68-e0ce-48c5-81ae-48b69f9f2700&parentMessageId=1773799399508&teamName=%E5%86%B7%E3%82%B1%E3%83%BC%E3%82%B9%E6%B8%A9%E5%BA%A6%E7%82%B9%E6%A4%9C%E8%87%AA%E5%8B%95%E5%8C%96%E5%A4%96%E9%83%A8%E5%85%B1%E6%9C%89&channelName=General&createdTime=1773799914268",
+        "linkedEntryRef": "emn9kqv88aog",
+        "linkedEntryText": "オフラインの店舗の詳細を確認",
+        "html": "オフラインの店舗の詳細を確認",
+        "parentId": "mni58i748zc"
+      },
+      {
+        "id": "emn1hfsbsuj6",
+        "text": "🌡️説明会！",
+        "indent": 1,
+        "bold": true,
+        "color": "#e74c3c",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "html": "🌡️説明会！",
+        "parentId": "mni58i748zc"
+      },
+      {
+        "id": "mn9xq5d2kk2",
+        "text": "0930 HACCPアラート頻度の件 ",
+        "indent": 1,
+        "bold": true,
+        "color": "#3498db",
+        "collapsed": true,
+        "html": "0930 HACCPアラート頻度の件 ",
+        "tags": [],
+        "projTag": "HACCP",
+        "type": "log",
+        "parentId": "mni58i748zc"
+      },
+      {
+        "id": "mnea6oyayly",
+        "text": "１４００～おおたモール　",
+        "html": "１４００～おおたモール　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "parentId": "mni58i748zc"
+      },
+      {
+        "id": "mnec0npq29e",
+        "text": "不具合なセンサーの対応　",
+        "html": "不具合なセンサーの対応　",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true,
+        "projTag": "HACCP",
+        "type": "log",
+        "parentId": "mni58i748zc"
       }
     ],
     "2026-4-4": [
