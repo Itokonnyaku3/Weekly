@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T05:09:36.572Z",
+  "savedAt": "2026-04-03T05:11:22.438Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8029,18 +8029,6 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "projTag": "HACCP",
-        "type": "log",
-        "parentId": "mni58i748zc"
-      },
-      {
-        "id": "mnec0npq29e",
-        "text": "不具合なセンサーの対応　",
-        "html": "不具合なセンサーの対応　",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": true,
         "projTag": "HACCP",
         "type": "log",
         "parentId": "mni58i748zc"
