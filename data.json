@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T04:31:31.374Z",
+  "savedAt": "2026-04-03T04:32:45.340Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8051,79 +8051,7 @@
       {
         "id": "mnidnvbgidr",
         "text": "日付事前事後ホテル車0406OKR9前橋Times0413OKはりすWEST自家用車０４２０OKR9前橋Times0427OKコンフォート自家用車",
-        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"tbl-cell-focus\">自家用車</td></tr></tbody></table><br>",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid11lgigo",
-        "text": "日付　　事前/事後",
-        "html": "<u>日付　　事前/事後</u>",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid2n0ytyj",
-        "text": "０３２３　◎",
-        "html": "０３２３　◎",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid22tm8if",
-        "text": "０３３０　◎",
-        "html": "０３３０　◎",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid2426aff",
-        "text": "０４０６",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid26q6hha",
-        "text": "０４１３",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid28b6j19",
-        "text": "０４２０",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid2ba2fuk",
-        "text": "０４２７",
-        "html": "",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid2d9pjso",
-        "text": "",
-        "html": "",
+        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"\">自家用車</td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"tbl-cell-focus\"><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table><br>",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -8133,31 +8061,15 @@
         "id": "mnid1dn0bf2",
         "text": "リンク",
         "html": "リンク",
-        "indent": 1,
+        "indent": 3,
         "bold": false,
         "color": "",
         "collapsed": true
       },
       {
-        "id": "emmw2zro2s6e",
-        "text": "★週次進捗OneNote",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "管理・全般",
-        "type": "link",
-        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
-        "html": "★週次進捗OneNote",
-        "parentId": "mnia2gwf927"
-      },
-      {
         "id": "mnia7hulc7f",
         "text": "出張　じゃらん",
-        "indent": 2,
+        "indent": 4,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8175,7 +8087,7 @@
       {
         "id": "mnia81fqzpe",
         "text": "出張　ETC",
-        "indent": 2,
+        "indent": 4,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8193,7 +8105,7 @@
       {
         "id": "mnia8873y9z",
         "text": "出張　駅ネット",
-        "indent": 2,
+        "indent": 4,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8211,7 +8123,7 @@
       {
         "id": "mnia8rmrbfi",
         "text": "出張　Times",
-        "indent": 2,
+        "indent": 4,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8227,22 +8139,20 @@
         "parentId": "mnia2gwf927"
       },
       {
-        "id": "mniaavxqj8v",
-        "text": "",
-        "html": "",
-        "indent": 2,
+        "id": "emmw2zro2s6e",
+        "text": "★週次進捗OneNote",
+        "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnid1g0fmwb",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "管理・全般",
+        "type": "link",
+        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
+        "html": "★週次進捗OneNote",
+        "parentId": "mnia2gwf927"
       },
       {
         "id": "mnialst9r9x",
