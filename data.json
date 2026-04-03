@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T01:14:08.024Z",
+  "savedAt": "2026-04-03T01:14:14.651Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7831,8 +7831,17 @@
       },
       {
         "id": "mni7n4vor3j",
-        "text": "品質改善の議題",
-        "html": "品質改善の議題",
+        "text": "品質改善の議題ポータル載せて置き",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni7nmkbaaz",
+        "text": "",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
