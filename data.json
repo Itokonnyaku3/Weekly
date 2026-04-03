@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T01:16:14.949Z",
+  "savedAt": "2026-04-03T01:40:05.863Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7849,9 +7849,36 @@
       },
       {
         "id": "mni7q764a2x",
-        "text": "",
+        "text": "ソラカメ引継ぎ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8ka80cjw",
+        "text": "新規はおぜん立ては作業改善、発注はデジタル",
         "html": "",
         "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8klj4t4d",
+        "text": "故障は順次引継ぎ",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8kuxdebc",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
