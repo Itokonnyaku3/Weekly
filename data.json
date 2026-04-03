@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:32:46.250Z",
+  "savedAt": "2026-04-03T00:34:00.764Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6081,7 +6081,7 @@
       },
       {
         "id": "emmw2zro2zi8",
-        "text": "ラベル張り間違いソリューション",
+        "text": "#30117 ラベル張り間違いソリューション",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -6090,7 +6090,14 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "山下さん",
-        "type": "log"
+        "type": "log",
+        "url": "",
+        "note": "予算2500万円、吉野さん承認前",
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "#30117 ラベル張り間違いソリューション"
       },
       {
         "id": "emmw2zro28p0",
