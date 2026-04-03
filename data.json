@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T04:42:12.119Z",
+  "savedAt": "2026-04-03T04:42:55.732Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4712,6 +4712,25 @@
         "html": "1500 ソラカメ引継ぎ"
       },
       {
+        "id": "mnia2gwf927",
+        "text": "定例作業",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "log",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "□勤怠\n□週次作業報告\n□出張申請",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "定例作業",
+        "gridCollapsed": true,
+        "collapsed": false
+      },
+      {
         "id": "mncs9pit8ou",
         "text": "台数が確認できたら田村さんから渡される",
         "html": "台数が確認できたら田村さんから渡される",
@@ -8054,25 +8073,6 @@
         "due": "",
         "parentId": "mnia2gwf927",
         "html": "5月出張精算"
-      },
-      {
-        "id": "mnia2gwf927",
-        "text": "定例作業",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "type": "log",
-        "projTag": "管理・全般",
-        "url": "",
-        "note": "□勤怠\n□週次作業報告\n□出張申請",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "2027-02-28",
-        "html": "定例作業",
-        "gridCollapsed": true,
-        "collapsed": false
       },
       {
         "id": "mniex20j4d2",
