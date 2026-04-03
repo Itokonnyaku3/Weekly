@@ -1235,8 +1235,8 @@
       "recSectionOpen": false
     }
   ],
-  "wOff": -1,
-  "savedAt": "2026-04-03T04:32:45.340Z",
+  "wOff": 0,
+  "savedAt": "2026-04-03T04:33:56.801Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5027,24 +5027,6 @@
         "collapsed": false
       },
       {
-        "id": "emn5jjkvhknn",
-        "text": "新狭山HACCP発注",
-        "indent": 0,
-        "bold": true,
-        "color": "",
-        "collapsed": true,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "HACCP",
-        "type": "log",
-        "linkedEntryRef": "emn9kqv88a9l",
-        "linkedEntryText": "新狭山HACCP発注",
-        "html": "新狭山HACCP発注<br>",
-        "gridCollapsed": true,
-        "url": ""
-      },
-      {
         "id": "emn5lcx4ri72",
         "text": "富士通→cloudｓｉｇｎ",
         "indent": 1,
@@ -5103,6 +5085,24 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "emn5jjkvhknn",
+        "text": "新狭山HACCP発注",
+        "indent": 0,
+        "bold": true,
+        "color": "",
+        "collapsed": true,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "HACCP",
+        "type": "log",
+        "linkedEntryRef": "emn9kqv88a9l",
+        "linkedEntryText": "新狭山HACCP発注",
+        "html": "新狭山HACCP発注<br>",
+        "gridCollapsed": true,
+        "url": ""
       },
       {
         "id": "emmw2zro2w9x",
@@ -8050,8 +8050,8 @@
       },
       {
         "id": "mnidnvbgidr",
-        "text": "日付事前事後ホテル車0406OKR9前橋Times0413OKはりすWEST自家用車０４２０OKR9前橋Times0427OKコンフォート自家用車",
-        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"\">自家用車</td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"tbl-cell-focus\"><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table><br>",
+        "text": "日付事前事後ホテル車0406OKR9前橋Times0413OKはりすWEST自家用車０４２０OKR9前橋Times0427OKコンフォート自家用車5月",
+        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"\">自家用車</td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"tbl-cell-focus\"><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table><br><div>5月</div><div><br></div><div><br></div>",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -8171,6 +8171,56 @@
         "due": "",
         "html": "工数管理",
         "parentId": "mnia2gwf927"
+      },
+      {
+        "id": "mnierkq5bmy",
+        "text": "4月出張申請",
+        "indent": 0,
+        "isTodo": true,
+        "checked": true,
+        "type": "todo",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
+      },
+      {
+        "id": "mnierw9j4ey",
+        "text": "5月出張申請",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "parentId": "mnierkq5bmy"
+      },
+      {
+        "id": "mnies13lw37",
+        "text": "5月出張精算",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "parentId": "mnierkq5bmy"
       }
     ],
     "2026-4-4": [
