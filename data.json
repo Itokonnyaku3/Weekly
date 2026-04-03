@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T01:43:31.516Z",
+  "savedAt": "2026-04-03T01:50:36.381Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7894,6 +7894,33 @@
       },
       {
         "id": "mni8pa4q8go",
+        "text": "山下さん、SD",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8xv9i1to",
+        "text": "機器の情報",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8xzqltoo",
+        "text": "HUB、ESL予算",
+        "html": "HUB、ESL予算",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni8y9deq75",
         "text": "",
         "html": "",
         "indent": 2,
