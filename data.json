@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T00:48:21.288Z",
+  "savedAt": "2026-04-03T00:55:13.144Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4827,7 +4827,7 @@
         "start": "2026-03-25",
         "due": "2026-04-30",
         "html": "🏪個店対応<br>",
-        "gridCollapsed": false
+        "gridCollapsed": true
       },
       {
         "id": "emn5lcx4r630",
