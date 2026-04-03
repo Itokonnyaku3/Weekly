@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T02:26:15.039Z",
+  "savedAt": "2026-04-03T02:27:28.333Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8023,7 +8023,8 @@
         "tags": [],
         "start": "",
         "due": "2027-02-28",
-        "html": "定例作業"
+        "html": "定例作業",
+        "gridCollapsed": true
       },
       {
         "id": "emmw2zro2s6e",
@@ -8063,33 +8064,55 @@
         "id": "mnia81fqzpe",
         "text": "出張　ETC",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "link",
         "projTag": "管理・全般",
-        "url": "",
+        "url": "https://www2.etc-meisai.jp/etc/R?funccode=1013000000&nextfunc=1013000000",
         "note": "",
         "images": [],
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "出張　ETC",
+        "parentId": "mnia2gwf927"
       },
       {
         "id": "mnia8873y9z",
         "text": "出張　駅ネット",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "link",
         "projTag": "管理・全般",
-        "url": "",
+        "url": "https://www.eki-net.com/Personal/Top/Index",
         "note": "",
         "images": [],
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "出張　駅ネット",
+        "parentId": "mnia2gwf927"
+      },
+      {
+        "id": "mnia8rmrbfi",
+        "text": "出張　Times",
+        "indent": 0,
+        "isTodo": false,
+        "checked": false,
+        "type": "link",
+        "projTag": "管理・全般",
+        "url": "https://share.timescar.jp/",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "出張　Times",
+        "parentId": "mnia2gwf927"
       }
     ],
     "2026-4-4": [
