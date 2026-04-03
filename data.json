@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T03:41:25.758Z",
+  "savedAt": "2026-04-03T03:43:06.171Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3311,7 +3311,7 @@
         "start": "2026-03-24",
         "due": "2026-04-24",
         "html": "NEC資産管理",
-        "gridCollapsed": true
+        "gridCollapsed": false
       },
       {
         "id": "emn3wo53dnfv",
@@ -7835,7 +7835,7 @@
       {
         "id": "mni71mscdfq",
         "text": "亀山さん",
-        "html": "亀山さん",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7844,7 +7844,7 @@
       {
         "id": "mni7q764a2x",
         "text": "ソラカメ引継ぎ",
-        "html": "ソラカメ引継ぎ",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7853,7 +7853,7 @@
       {
         "id": "mni8ka80cjw",
         "text": "新規はおぜん立ては作業改善、発注はデジタル",
-        "html": "新規はおぜん立ては作業改善、発注はデジタル",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7862,7 +7862,7 @@
       {
         "id": "mni8klj4t4d",
         "text": "故障は順次引継ぎ",
-        "html": "故障は順次引継ぎ",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7871,7 +7871,7 @@
       {
         "id": "mni8kuxdebc",
         "text": "大改装",
-        "html": "大改装",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7880,7 +7880,7 @@
       {
         "id": "mni8p6f4t6o",
         "text": "木更津で引継ぎ",
-        "html": "木更津で引継ぎ",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7889,7 +7889,7 @@
       {
         "id": "mni8pa4q8go",
         "text": "山下さん、SD",
-        "html": "山下さん、SD",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7898,7 +7898,7 @@
       {
         "id": "mni8xv9i1to",
         "text": "機器の情報",
-        "html": "機器の情報",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -7907,7 +7907,7 @@
       {
         "id": "mni8xzqltoo",
         "text": "HUB、ESL予算",
-        "html": "HUB、ESL予算",
+        "html": "",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -8035,51 +8035,14 @@
         "tags": [],
         "start": "",
         "due": "2027-02-28",
-        "html": "",
+        "html": "定例作業",
         "gridCollapsed": false,
-        "collapsed": false,
-        "bold": true
-      },
-      {
-        "id": "mnicw1pjpg5",
-        "text": "出張　",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnicwnkkfvr",
-        "text": "0330 ",
-        "html": "0330&nbsp;",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnicwrpv08c",
-        "text": "0406",
-        "html": "0406",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnicvw89206",
-        "text": "リンク集",
-        "html": "リンク集",
-        "indent": 2,
-        "bold": false,
-        "color": "",
         "collapsed": true
       },
       {
         "id": "emmw2zro2s6e",
         "text": "★週次進捗OneNote",
-        "indent": 3,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false,
@@ -8095,7 +8058,7 @@
       {
         "id": "mnia7hulc7f",
         "text": "出張　じゃらん",
-        "indent": 3,
+        "indent": 1,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8113,7 +8076,7 @@
       {
         "id": "mnia81fqzpe",
         "text": "出張　ETC",
-        "indent": 3,
+        "indent": 1,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8131,7 +8094,7 @@
       {
         "id": "mnia8873y9z",
         "text": "出張　駅ネット",
-        "indent": 3,
+        "indent": 1,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8149,7 +8112,7 @@
       {
         "id": "mnia8rmrbfi",
         "text": "出張　Times",
-        "indent": 3,
+        "indent": 1,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8168,7 +8131,7 @@
         "id": "mniaavxqj8v",
         "text": "",
         "html": "",
-        "indent": 3,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
@@ -8176,7 +8139,7 @@
       {
         "id": "mnialst9r9x",
         "text": "工数管理",
-        "indent": 3,
+        "indent": 0,
         "isTodo": false,
         "checked": false,
         "type": "link",
@@ -8188,7 +8151,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "工数管理<br>",
+        "html": "工数管理",
         "parentId": "mnia2gwf927"
       }
     ],
