@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T04:42:55.732Z",
+  "savedAt": "2026-04-03T04:57:20.004Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -3328,7 +3328,13 @@
         "linkedEntryRef": "emn9kqv87u8i",
         "linkedEntryText": "久保田さん根岸さんがNECとROI検証",
         "html": "久保田さん根岸さんがNECとROI検証",
-        "parentId": "emn3vgzrbylq"
+        "parentId": "emn3vgzrbylq",
+        "url": "",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "2026-04-07"
       },
       {
         "id": "emn3wo53d1m2",
