@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T04:37:06.318Z",
+  "savedAt": "2026-04-03T04:38:15.870Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8052,7 +8052,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mnia2gwf927"
+        "parentId": "mnia2gwf927",
+        "html": "5月出張精算"
       },
       {
         "id": "mnia2gwf927",
@@ -8074,18 +8075,79 @@
         "collapsed": false
       },
       {
+        "id": "mniex20j4d2",
+        "text": "定常作業",
+        "html": "定常作業",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": true
+      },
+      {
+        "id": "emmw2zro2s6e",
+        "text": "★週次進捗OneNote",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "isPrivate": false,
+        "projTag": "管理・全般",
+        "type": "link",
+        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
+        "html": "★週次進捗OneNote",
+        "parentId": "mnia2gwf927"
+      },
+      {
+        "id": "mnialst9r9x",
+        "text": "工数管理",
+        "indent": 2,
+        "isTodo": false,
+        "checked": false,
+        "type": "link",
+        "projTag": "管理・全般",
+        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_001151/Shared%20Documents/%E7%A8%BC%E5%83%8D%E8%A8%88%E7%94%BB%E7%AE%A1%E7%90%86/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8?csf=1&web=1&e=k8wRK6",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "工数管理",
+        "parentId": "mnia2gwf927"
+      },
+      {
+        "id": "mnierkq5bmy",
+        "text": "4月出張申請",
+        "indent": 2,
+        "isTodo": true,
+        "checked": true,
+        "type": "todo",
+        "projTag": "管理・全般",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "parentId": "mnia2gwf927",
+        "html": "4月出張申請"
+      },
+      {
         "id": "mnid0w72mgx",
         "text": "出張申請",
         "html": "出張申請",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mnidnvbgidr",
-        "text": "日付事前事後ホテル車0406OKR9前橋Times0413OKはりすWEST自家用車０４１６私有車交通費精算０４２０OKR9前橋Times0427OKコンフォート自家用車5月",
-        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４１６</td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"tbl-cell-focus\">私有車交通費精算</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"\">自家用車</td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table><br><div>5月</div><div><br></div><div><br></div>",
+        "text": "日付事前事後ホテル車0406OKR9前橋Times0413OKはりすWEST自家用車０４１６私有車交通費精算０４２０OKR9前橋Times0427OKコンフォート自家用車",
+        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232); cursor: col-resize;\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\" class=\"\">車</th></tr><tr><td class=\"\">0406</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0413</td><td>OK</td><td class=\"\"><br></td><td class=\"\">はりすWEST</td><td class=\"\">自家用車</td></tr><tr><td class=\"\">０４１６</td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"tbl-cell-focus\">私有車交通費精算</td></tr><tr><td class=\"\">０４２０</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">R9前橋</td><td class=\"\">Times</td></tr><tr><td class=\"\">0427</td><td class=\"\">OK</td><td class=\"\"><br></td><td class=\"\">コンフォート</td><td class=\"\">自家用車</td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td><td class=\"\"><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table>",
         "indent": 2,
         "bold": false,
         "color": "",
@@ -8170,57 +8232,6 @@
         "start": "",
         "due": "",
         "html": "出張　Times",
-        "parentId": "mnia2gwf927"
-      },
-      {
-        "id": "emmw2zro2s6e",
-        "text": "★週次進捗OneNote",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "isPrivate": false,
-        "projTag": "管理・全般",
-        "type": "link",
-        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
-        "html": "★週次進捗OneNote",
-        "parentId": "mnia2gwf927"
-      },
-      {
-        "id": "mnialst9r9x",
-        "text": "工数管理",
-        "indent": 0,
-        "isTodo": false,
-        "checked": false,
-        "type": "link",
-        "projTag": "管理・全般",
-        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_001151/Shared%20Documents/%E7%A8%BC%E5%83%8D%E8%A8%88%E7%94%BB%E7%AE%A1%E7%90%86/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8?csf=1&web=1&e=k8wRK6",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
-        "html": "工数管理",
-        "parentId": "mnia2gwf927"
-      },
-      {
-        "id": "mnierkq5bmy",
-        "text": "4月出張申請",
-        "indent": 0,
-        "isTodo": true,
-        "checked": true,
-        "type": "todo",
-        "projTag": "管理・全般",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": "",
         "parentId": "mnia2gwf927"
       }
     ],
