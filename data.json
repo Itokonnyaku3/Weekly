@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:02:43.323Z",
+  "savedAt": "2026-04-03T00:03:29.096Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5376,7 +5376,8 @@
         "isPrivate": false,
         "projTag": "管理・全般",
         "type": "link",
-        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end"
+        "url": "https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/_layouts/Doc.aspx?sourcedoc={1B125D58-6A2D-4407-A39C-6AEA723E684B}&wd=target%28%E3%80%90%E9%80%B1%E6%AC%A1%E3%80%91%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%BA%E4%BC%9A.one%7C4D55212B-CFB5-4183-8158-545FDB071E64%2F30%E6%9C%9F%EF%BC%9A%E4%B8%8A%E6%9C%9F%7C4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE%2F%29&wdpartid={EA6698D7-A887-0AB0-0850-7B068ACF99CD}{1}&wdsectionfileid={4D55212B-CFB5-4183-8158-545FDB071E64}&end onenote:https://beisiag-my.sharepoint.com/personal/kuroda-ke_beisia_co_jp/Documents/店舗インフラ部共有ノート/【週次】リーダーズ会.one#30期：上期&section-id={4D55212B-CFB5-4183-8158-545FDB071E64}&page-id={4B23F0B7-1F36-4633-8E76-C4AD33BD2BAE}&end",
+        "html": "★週次進捗OneNote"
       },
       {
         "id": "emmx7gbbat4u",
@@ -5391,7 +5392,8 @@
         "projTag": "管理・全般",
         "type": "todo",
         "linkedEntryRef": "emn9kqv880j9",
-        "linkedEntryText": "実家にチェーンストアの本なかったっけ"
+        "linkedEntryText": "実家にチェーンストアの本なかったっけ",
+        "html": "実家にチェーンストアの本なかったっけ"
       },
       {
         "id": "emmw2zro2vn0",
@@ -5404,7 +5406,8 @@
         "checked": false,
         "isPrivate": false,
         "projTag": "運用改善",
-        "type": "log"
+        "type": "log",
+        "html": "4.7 久保田、根岸とNEC打合せ"
       },
       {
         "id": "emmw2zro2tce",
@@ -5418,7 +5421,8 @@
         "isPrivate": false,
         "projTag": "上手い早い安い",
         "type": "log",
-        "note": "作業削減効果、品質、向いている業務と向いていない業務\n余裕があったらエージェント設計まで"
+        "note": "作業削減効果、品質、向いている業務と向いていない業務\n余裕があったらエージェント設計まで",
+        "html": "評価と報告"
       },
       {
         "id": "mneju39r2ct",
@@ -5434,7 +5438,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "要件確定・アドセック発注"
       },
       {
         "id": "mnhg3dt8qga",
@@ -5467,7 +5472,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "マニュアル等色々作って店舗に発信"
       },
       {
         "id": "mnhg4cx6p9e",
@@ -5483,7 +5489,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "予備センサー回収依頼"
       },
       {
         "id": "mnhg4mods2f",
@@ -5499,7 +5506,25 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "おんどとり間隔<div><br></div>"
+      },
+      {
+        "id": "mni54hxq2ju",
+        "text": "支払い関連",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "支払い関連<br>"
       }
     ],
     "2026-3-2": [
@@ -7751,6 +7776,16 @@
         "note": "計画、昇進プレゼント",
         "linkedEntryRef": "emn9kqv88gmy",
         "linkedEntryText": "久保田さん育休いつとるか確認"
+      }
+    ],
+    "2026-4-5": [
+      {
+        "id": "mni542s8n1a",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ]
   },
