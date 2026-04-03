@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T01:03:02.148Z",
+  "savedAt": "2026-04-03T01:13:14.334Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7798,6 +7798,24 @@
         "text": "ポータル",
         "html": "",
         "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni7lyfwyky",
+        "text": "あまり使わないのは別ページ",
+        "html": "",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni7m4f3p3b",
+        "text": "共通リンクはどれが何かがわからないので説明",
+        "html": "共通リンクはどれが何かがわからないので説明",
+        "indent": 2,
         "bold": false,
         "color": "",
         "collapsed": false
