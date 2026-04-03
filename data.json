@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:05:20.791Z",
+  "savedAt": "2026-04-03T00:05:57.309Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5023,13 +5023,13 @@
         "start": "",
         "due": "2026-03-31",
         "parentId": "emn5khg5dcwl",
-        "html": "宇都宮陽東店",
-        "collapsed": false
+        "html": "宇都宮陽東店<br>",
+        "collapsed": true
       },
       {
         "id": "mnejbpp32a7",
-        "text": "店舗にもう少しかかる旨",
-        "html": "店舗にもう少しかかる旨",
+        "text": "[04.03] 店舗にもう少しかかる旨連絡した",
+        "html": "[04.03]&nbsp;店舗にもう少しかかる旨連絡した",
         "indent": 2,
         "bold": false,
         "color": "",
