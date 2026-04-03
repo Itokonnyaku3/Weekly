@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T04:57:20.004Z",
+  "savedAt": "2026-04-03T05:09:36.572Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7973,7 +7973,7 @@
         "due": "2026-04-30",
         "html": "ログ<br>",
         "collapsed": true,
-        "gridCollapsed": true
+        "gridCollapsed": false
       },
       {
         "id": "emmw2zro2yfv",
@@ -8060,7 +8060,8 @@
         "tags": [],
         "start": "",
         "due": "",
-        "parentId": "mnia2gwf927"
+        "parentId": "mnia2gwf927",
+        "html": "5月出張申請"
       },
       {
         "id": "mnies13lw37",
