@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T02:21:46.384Z",
+  "savedAt": "2026-04-03T02:22:32.017Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8027,9 +8027,9 @@
         "id": "mnia2gwf927",
         "text": "定例作業",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "log",
         "projTag": "管理・全般",
         "url": "",
         "note": "",
@@ -8037,7 +8037,8 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "2027-02-28",
+        "html": "定例作業"
       }
     ],
     "2026-4-4": [
