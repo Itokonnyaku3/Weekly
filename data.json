@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T02:19:21.059Z",
+  "savedAt": "2026-04-03T02:20:01.662Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5563,7 +5563,7 @@
     "proj:1": [
       {
         "id": "emmw2zro2tlr",
-        "text": "30期マスタースケジュール",
+        "text": "30期MasterSchedule",
         "indent": 0,
         "bold": false,
         "color": "",
@@ -5579,7 +5579,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "30期マスタースケジュール"
+        "html": "30期MasterSchedule"
       },
       {
         "id": "emmw2zro22wq",
