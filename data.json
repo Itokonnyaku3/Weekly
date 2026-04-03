@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-03T04:06:53.281Z",
+  "savedAt": "2026-04-03T04:12:56.978Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8050,8 +8050,8 @@
       },
       {
         "id": "mnidnvbgidr",
-        "text": "日付事前事後ホテル04060413",
-        "html": "<table style=\"width: 299px;\"><colgroup><col style=\"width: 86px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 86px; background-color: rgb(98, 128, 157);\">日付</th><th style=\"width: 48px; background-color: rgb(98, 128, 157);\">事前</th><th style=\"width: 45px; background-color: rgb(98, 128, 157);\">事後</th><th style=\"width: 120px; background-color: rgb(98, 128, 157);\">ホテル</th></tr><tr><td>0406</td><td><br></td><td><br></td><td><br></td></tr><tr><td>0413</td><td><br></td><td><br></td><td><br></td></tr></tbody></table>",
+        "text": "日付事前事後ホテル列0406OK0413OK",
+        "html": "<table style=\"width: 395px;\"><colgroup><col style=\"width: 62px;\"><col style=\"width: 48px;\"><col style=\"width: 45px;\"><col style=\"width: 120px;\"><col style=\"width: 120px;\"></colgroup><tbody><tr><th style=\"width: 62px; background-color: rgb(187, 210, 232); cursor: col-resize;\">日付</th><th style=\"width: 48px; background-color: rgb(187, 210, 232);\">事前</th><th style=\"width: 45px; background-color: rgb(187, 210, 232);\">事後</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\">ホテル</th><th style=\"width: 120px; background-color: rgb(187, 210, 232);\">列</th></tr><tr><td>0406</td><td>OK</td><td><br></td><td><br></td><td><br></td></tr><tr><td>0413</td><td>OK</td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table><br>",
         "indent": 1,
         "bold": false,
         "color": "",
