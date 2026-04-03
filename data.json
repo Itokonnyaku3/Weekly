@@ -1235,8 +1235,8 @@
       "recSectionOpen": false
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-04-03T00:34:48.293Z",
+  "wOff": -1,
+  "savedAt": "2026-04-03T00:37:29.132Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7778,8 +7778,8 @@
         "images": [],
         "priority": "",
         "tags": [],
-        "start": "",
-        "due": "",
+        "start": "2026-04-03",
+        "due": "2026-04-30",
         "html": "ログ",
         "collapsed": true,
         "gridCollapsed": true
