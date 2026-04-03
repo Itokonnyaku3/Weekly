@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:30:49.679Z",
+  "savedAt": "2026-04-03T00:32:46.250Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6230,7 +6230,33 @@
         "url": "https://github.com/Itokonnyaku3/repo"
       }
     ],
-    "proj:15": [],
+    "proj:15": [
+      {
+        "id": "mni65yr559e",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni65yr58wt",
+        "text": "30期マスタ#551",
+        "type": "log",
+        "isTodo": false,
+        "checked": false,
+        "indent": 0,
+        "projTag": "IDSMARTII",
+        "url": "",
+        "note": "予算計上ナシ？　一旦放置にするか…",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "30期マスタ#551"
+      }
+    ],
     "proj:16": [
       {
         "id": "emn5e23ayl67",
