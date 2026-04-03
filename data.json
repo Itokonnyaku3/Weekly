@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:08:23.820Z",
+  "savedAt": "2026-04-03T00:30:49.679Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6173,7 +6173,33 @@
         "type": "log"
       }
     ],
-    "proj:13": [],
+    "proj:13": [
+      {
+        "id": "mni63cczkh7",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mni63ccz416",
+        "text": "10.案件対応➡複合機改善",
+        "type": "link",
+        "isTodo": false,
+        "checked": false,
+        "indent": 0,
+        "projTag": "複合機改善",
+        "url": "https://beisiag.sharepoint.com/:f:/r/sites/be_team_001151/Shared%20Documents/General/%E5%90%84%E9%83%A8%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/%E5%BA%97%E8%88%97%E3%82%A4%E3%83%B3%E3%83%95%E3%83%A9%E9%83%A8/02_NWDG/10.%E6%A1%88%E4%BB%B6%E5%AF%BE%E5%BF%9C/%E8%A4%87%E5%90%88%E6%A9%9F%E9%81%8B%E7%94%A8%E6%94%B9%E5%96%84%E9%96%A2%E9%80%A3?csf=1&web=1&e=BisKAf",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "10.案件対応➡複合機改善"
+      }
+    ],
     "proj:14": [
       {
         "id": "emn2gkvhlpck",
