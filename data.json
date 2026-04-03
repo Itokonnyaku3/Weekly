@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T00:03:29.096Z",
+  "savedAt": "2026-04-03T00:03:55.278Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -5442,23 +5442,6 @@
         "html": "要件確定・アドセック発注"
       },
       {
-        "id": "mnhg3dt8qga",
-        "text": "成電社支払い午前中",
-        "indent": 0,
-        "isTodo": true,
-        "checked": false,
-        "type": "todo",
-        "projTag": "HACCP",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "high",
-        "tags": [],
-        "start": "",
-        "due": "2026-04-06",
-        "html": "成電社支払い午前中"
-      },
-      {
         "id": "mnhg461xu6z",
         "text": "マニュアル等色々作って店舗に発信",
         "indent": 0,
@@ -5513,9 +5496,9 @@
         "id": "mni54hxq2ju",
         "text": "支払い関連",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "log",
         "projTag": "HACCP",
         "url": "",
         "note": "",
@@ -5523,8 +5506,26 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": "",
-        "html": "支払い関連<br>"
+        "due": "2026-08-07",
+        "html": "支払い関連"
+      },
+      {
+        "id": "mnhg3dt8qga",
+        "text": "成電社支払い午前中",
+        "indent": 0,
+        "isTodo": true,
+        "checked": false,
+        "type": "todo",
+        "projTag": "HACCP",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "high",
+        "tags": [],
+        "start": "",
+        "due": "2026-04-06",
+        "html": "成電社支払い午前中",
+        "parentId": "mni54hxq2ju"
       }
     ],
     "2026-3-2": [
