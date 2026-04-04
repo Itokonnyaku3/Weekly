@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T05:56:39.228Z",
+  "savedAt": "2026-04-04T10:44:50.159Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4732,7 +4732,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "定例作業<br><br>",
+        "html": "定例作業<br>",
         "gridCollapsed": true,
         "collapsed": false
       },
@@ -8285,12 +8285,15 @@
       },
       {
         "id": "mnjn5fsik7k",
-        "text": "おんどとりのデータ収集時間変更←急ぎ",
-        "html": "おんどとりのデータ収集時間変更←急ぎ",
+        "text": "おんどとりのデータ収集時間変更←急ぎ　",
+        "html": "おんどとりのデータ収集時間変更←急ぎ　",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false
+        "collapsed": false,
+        "tags": [
+          "kameyama亀山"
+        ]
       },
       {
         "id": "mnjn5tou1a5",
@@ -8407,7 +8410,7 @@
     },
     "kameyama亀山": {
       "color": null,
-      "lastUsed": 1774923121217
+      "lastUsed": 1775299489532
     },
     "定例": {
       "color": null,
