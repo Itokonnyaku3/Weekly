@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T01:54:29.452Z",
+  "savedAt": "2026-04-04T01:55:08.859Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8251,15 +8251,15 @@
         "id": "mndvwrhu0yb",
         "text": "HACCP関連でやりたいこと…",
         "indent": 0,
-        "bold": false,
-        "color": "",
+        "bold": true,
+        "color": "#e67e22",
         "collapsed": false,
-        "html": ""
+        "html": "HACCP関連でやりたいこと…"
       },
       {
         "id": "mnjn4ulzdsz",
         "text": "これまでのナレッジを集約し、店舗に配信",
-        "html": "",
+        "html": "これまでのナレッジを集約し、店舗に配信",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8268,7 +8268,7 @@
       {
         "id": "mnjn52uclqq",
         "text": "アラートメール配信間隔の変更",
-        "html": "",
+        "html": "アラートメール配信間隔の変更",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8277,7 +8277,7 @@
       {
         "id": "mnjn5fsik7k",
         "text": "おんどとりのデータ収集時間変更←急ぎ",
-        "html": "",
+        "html": "おんどとりのデータ収集時間変更←急ぎ",
         "indent": 1,
         "bold": false,
         "color": "",
