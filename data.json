@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T12:46:25.084Z",
+  "savedAt": "2026-04-04T12:47:11.670Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7087,8 +7087,8 @@
       },
       {
         "id": "mndz9vr5t4m",
-        "text": "店舗に行くときの服装のルールは守ること！！　",
-        "html": "",
+        "text": "店舗に行くときの服装のルールは守ること！！　!!!",
+        "html": "店舗に行くときの服装のルールは守ること！！　!!!",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8316,7 +8316,7 @@
       {
         "id": "mnkbt9w61y7",
         "text": "検索結果（#kameyama亀山）",
-        "html": "",
+        "html": "検索結果（#kameyama亀山）",
         "type": "searchsummary",
         "savedQuery": {
           "q1": "",
