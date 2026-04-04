@@ -1235,8 +1235,8 @@
       "recSectionOpen": false
     }
   ],
-  "wOff": 0,
-  "savedAt": "2026-04-04T01:16:04.607Z",
+  "wOff": -2935,
+  "savedAt": "2026-04-04T01:19:32.415Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6250,6 +6250,15 @@
     ],
     "proj:14": [
       {
+        "id": "mnjna9aonl0",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
         "id": "emn2gkvhlpck",
         "text": "AG",
         "indent": 0,
@@ -6261,7 +6270,13 @@
         "isPrivate": false,
         "projTag": "Tracker改善",
         "type": "link",
-        "url": "C:\\Users\\13122180\\AG"
+        "url": "C:\\Users\\13122180\\AG",
+        "note": "",
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": "",
+        "html": "AG"
       },
       {
         "id": "emn2gkvhl821",
@@ -6275,7 +6290,8 @@
         "isPrivate": false,
         "projTag": "Tracker改善",
         "type": "link",
-        "url": "https://github.com/Itokonnyaku3/repo"
+        "url": "https://github.com/Itokonnyaku3/repo",
+        "html": ""
       }
     ],
     "proj:15": [
