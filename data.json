@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T10:44:50.159Z",
+  "savedAt": "2026-04-04T12:46:25.084Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -7062,7 +7062,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": true
+        "collapsed": false
       },
       {
         "id": "mndz5rp0ush",
@@ -7088,7 +7088,7 @@
       {
         "id": "mndz9vr5t4m",
         "text": "店舗に行くときの服装のルールは守ること！！　",
-        "html": "店舗に行くときの服装のルールは守ること！！　",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7096,6 +7096,15 @@
         "tags": [
           "kameyama亀山"
         ]
+      },
+      {
+        "id": "mnkbtjx563a",
+        "text": "test",
+        "html": "test",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       },
       {
         "id": "mndzeewxqyg",
@@ -8303,6 +8312,27 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnkbt9w61y7",
+        "text": "検索結果（#kameyama亀山）",
+        "html": "",
+        "type": "searchsummary",
+        "savedQuery": {
+          "q1": "",
+          "q2": "",
+          "tags": [
+            "kameyama亀山"
+          ]
+        },
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "tags": [],
+        "images": []
       }
     ],
     "2026-4-13": [
