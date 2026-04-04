@@ -1243,7 +1243,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T03:09:34.926Z",
+  "savedAt": "2026-04-04T03:10:17.939Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8352,6 +8352,32 @@
         "bold": false,
         "color": "",
         "collapsed": false
+      }
+    ],
+    "proj:18": [
+      {
+        "id": "mnjr8q4y0da",
+        "text": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjr8q4zgy2",
+        "text": "Noteのアイデア",
+        "type": "log",
+        "isTodo": false,
+        "checked": false,
+        "indent": 0,
+        "projTag": "Note",
+        "url": "",
+        "note": "",
+        "images": [],
+        "priority": "",
+        "tags": [],
+        "start": "",
+        "due": ""
       }
     ]
   },
