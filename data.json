@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T12:48:24.196Z",
+  "savedAt": "2026-04-04T13:33:31.026Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8328,7 +8328,7 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": true,
+        "collapsed": false,
         "isTodo": false,
         "checked": false,
         "tags": [],
