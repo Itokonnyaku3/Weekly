@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T13:33:31.026Z",
+  "savedAt": "2026-04-04T13:57:28.798Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4732,7 +4732,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "定例作業<br>",
+        "html": "定例作業",
         "gridCollapsed": true,
         "collapsed": false
       },
@@ -6292,6 +6292,24 @@
         "type": "link",
         "url": "https://github.com/Itokonnyaku3/repo",
         "html": ""
+      },
+      {
+        "id": "mnkech4jc5g",
+        "text": "Token (repo)",
+        "html": "Token (repo)",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnkecr8zvdo",
+        "text": "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",
+        "html": "<span class=\"ol-img-wrap\" contenteditable=\"false\" style=\"width:300px\"><img src=\"blob:https://itokonnyaku3.github.io/99ffd0b1-3c25-4d54-92a1-cdf05de81f4f\" alt=\"ペースト画像\"></span>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",
+        "indent": 2,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ],
     "proj:15": [
@@ -7062,7 +7080,7 @@
         "indent": 0,
         "bold": true,
         "color": "",
-        "collapsed": false
+        "collapsed": true
       },
       {
         "id": "mndz5rp0ush",
@@ -7087,8 +7105,8 @@
       },
       {
         "id": "mndz9vr5t4m",
-        "text": "店舗に行くときの服装のルールは守ること！！　!!!",
-        "html": "店舗に行くときの服装のルールは守ること！！　!!!",
+        "text": "店舗に行くときの服装のルールは守ること！！　",
+        "html": "店舗に行くときの服装のルールは守ること！！　",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -7096,15 +7114,6 @@
         "tags": [
           "kameyama亀山"
         ]
-      },
-      {
-        "id": "mnkbtjx563a",
-        "text": "test",
-        "html": "test",
-        "indent": 2,
-        "bold": false,
-        "color": "",
-        "collapsed": false
       },
       {
         "id": "mndzeewxqyg",
@@ -8263,12 +8272,12 @@
         "bold": false,
         "color": "",
         "collapsed": false,
-        "html": "HACCP関連でやりたいこと…"
+        "html": ""
       },
       {
         "id": "mnjn4ulzdsz",
         "text": "これまでのナレッジを集約し、店舗に配信",
-        "html": "これまでのナレッジを集約し、店舗に配信",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8277,32 +8286,20 @@
       {
         "id": "mnjn52uclqq",
         "text": "アラートメール配信間隔の変更",
-        "html": "アラートメール配信間隔の変更",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnjx54llzzi",
-        "text": "",
         "html": "",
-        "indent": 2,
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
       },
       {
         "id": "mnjn5fsik7k",
-        "text": "おんどとりのデータ収集時間変更←急ぎ　",
-        "html": "おんどとりのデータ収集時間変更←急ぎ　",
+        "text": "おんどとりのデータ収集時間変更←急ぎ",
+        "html": "おんどとりのデータ収集時間変更←急ぎ",
         "indent": 1,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "tags": [
-          "kameyama亀山"
-        ]
+        "collapsed": false
       },
       {
         "id": "mnjn5tou1a5",
@@ -8312,27 +8309,6 @@
         "bold": false,
         "color": "",
         "collapsed": false
-      },
-      {
-        "id": "mnkbt9w61y7",
-        "text": "検索結果（#kameyama亀山）",
-        "html": "検索結果（#kameyama亀山）",
-        "type": "searchsummary",
-        "savedQuery": {
-          "q1": "",
-          "q2": "",
-          "tags": [
-            "kameyama亀山"
-          ]
-        },
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "tags": [],
-        "images": []
       }
     ],
     "2026-4-13": [
@@ -8363,72 +8339,12 @@
     ],
     "2026-4-5": [
       {
-        "id": "mnjx49hbetl",
-        "text": "アラートメール配信間隔の変更",
-        "html": "アラートメール配信間隔の変更",
-        "type": "nodelink",
-        "linkedNodeId": "mnjn52uclqq",
-        "linkedNodeDate": "2026-4-4",
-        "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "tags": [],
-        "images": []
-      },
-      {
         "id": "mni542s8n1a",
         "text": "",
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "html": ""
-      },
-      {
-        "id": "mnjx5iwxl4c",
-        "text": "",
-        "html": "",
-        "indent": 1,
-        "bold": false,
-        "color": "",
         "collapsed": false
-      },
-      {
-        "id": "mnjx5j7m1b8",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnjx5jdw3w6",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnjx5ldl3e6",
-        "text": "アラートメール配信間隔の変更",
-        "html": "アラートメール配信間隔の変更",
-        "type": "nodelink",
-        "linkedNodeId": "mnjx49hbetl",
-        "linkedNodeDate": "2026-4-5",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "tags": [],
-        "images": []
       }
     ]
   },
@@ -8440,7 +8356,7 @@
     },
     "kameyama亀山": {
       "color": null,
-      "lastUsed": 1775299489532
+      "lastUsed": 1774923121217
     },
     "定例": {
       "color": null,
