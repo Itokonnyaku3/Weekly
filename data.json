@@ -1233,10 +1233,17 @@
       "projEntries": [],
       "recurringEntries": [],
       "recSectionOpen": false
+    },
+    {
+      "name": "Note",
+      "collapsed": false,
+      "projEntriesOpen": false,
+      "links": [],
+      "isPrivate": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T03:05:31.671Z",
+  "savedAt": "2026-04-04T03:09:34.926Z",
   "dailyOutline": {
     "2026-3-18": [
       {
