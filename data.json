@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T05:55:58.753Z",
+  "savedAt": "2026-04-04T05:56:39.228Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -4732,7 +4732,7 @@
         "tags": [],
         "start": "",
         "due": "",
-        "html": "定例作業",
+        "html": "定例作業<br><br>",
         "gridCollapsed": true,
         "collapsed": false
       },
