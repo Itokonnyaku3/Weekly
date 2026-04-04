@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T05:55:28.191Z",
+  "savedAt": "2026-04-04T05:55:58.753Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8259,7 +8259,7 @@
       {
         "id": "mnjn4ulzdsz",
         "text": "これまでのナレッジを集約し、店舗に配信",
-        "html": "",
+        "html": "これまでのナレッジを集約し、店舗に配信",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8268,7 +8268,7 @@
       {
         "id": "mnjn52uclqq",
         "text": "アラートメール配信間隔の変更",
-        "html": "",
+        "html": "アラートメール配信間隔の変更",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8351,7 +8351,51 @@
         "indent": 0,
         "bold": false,
         "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mnjx5iwxl4c",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
         "collapsed": false
+      },
+      {
+        "id": "mnjx5j7m1b8",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjx5jdw3w6",
+        "text": "",
+        "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjx5ldl3e6",
+        "text": "アラートメール配信間隔の変更",
+        "html": "アラートメール配信間隔の変更",
+        "type": "nodelink",
+        "linkedNodeId": "mnjx49hbetl",
+        "linkedNodeDate": "2026-4-5",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "tags": [],
+        "images": []
       }
     ]
   },
