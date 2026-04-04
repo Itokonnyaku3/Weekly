@@ -1233,17 +1233,10 @@
       "projEntries": [],
       "recurringEntries": [],
       "recSectionOpen": false
-    },
-    {
-      "name": "Note",
-      "collapsed": false,
-      "projEntriesOpen": false,
-      "links": [],
-      "isPrivate": false
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-04T03:10:17.939Z",
+  "savedAt": "2026-04-04T05:22:14.117Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -6266,24 +6259,6 @@
         "collapsed": false
       },
       {
-        "id": "mnjr2k9uetg",
-        "text": "週次プロジェクト管理",
-        "html": "<a href=\"https://itokonnyaku3.github.io/Weekly/project-weekly-tracker.html\">週次プロジェクト管理</a>",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnjr2l93xzh",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
         "id": "emn2gkvhlpck",
         "text": "AG",
         "indent": 0,
@@ -8276,15 +8251,15 @@
         "id": "mndvwrhu0yb",
         "text": "HACCP関連でやりたいこと…",
         "indent": 0,
-        "bold": true,
-        "color": "#e67e22",
+        "bold": false,
+        "color": "",
         "collapsed": false,
-        "html": "HACCP関連でやりたいこと…"
+        "html": ""
       },
       {
         "id": "mnjn4ulzdsz",
         "text": "これまでのナレッジを集約し、店舗に配信",
-        "html": "これまでのナレッジを集約し、店舗に配信",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8293,7 +8268,7 @@
       {
         "id": "mnjn52uclqq",
         "text": "アラートメール配信間隔の変更",
-        "html": "アラートメール配信間隔の変更",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8302,7 +8277,7 @@
       {
         "id": "mnjn5fsik7k",
         "text": "おんどとりのデータ収集時間変更←急ぎ",
-        "html": "おんどとりのデータ収集時間変更←急ぎ",
+        "html": "",
         "indent": 1,
         "bold": false,
         "color": "",
@@ -8352,32 +8327,6 @@
         "bold": false,
         "color": "",
         "collapsed": false
-      }
-    ],
-    "proj:18": [
-      {
-        "id": "mnjr8q4y0da",
-        "text": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnjr8q4zgy2",
-        "text": "Noteのアイデア",
-        "type": "log",
-        "isTodo": false,
-        "checked": false,
-        "indent": 0,
-        "projTag": "Note",
-        "url": "",
-        "note": "",
-        "images": [],
-        "priority": "",
-        "tags": [],
-        "start": "",
-        "due": ""
       }
     ]
   },
