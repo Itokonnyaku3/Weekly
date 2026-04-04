@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": 0,
-  "savedAt": "2026-04-03T05:11:22.438Z",
+  "savedAt": "2026-04-04T01:16:04.607Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8233,8 +8233,45 @@
     "2026-4-4": [
       {
         "id": "mndvwrhu0yb",
-        "text": "",
+        "text": "HACCP関連でやりたいこと…",
         "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "html": ""
+      },
+      {
+        "id": "mnjn4ulzdsz",
+        "text": "これまでのナレッジを集約し、店舗に配信",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjn52uclqq",
+        "text": "アラートメール配信間隔の変更",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjn5fsik7k",
+        "text": "おんどとりのデータ収集時間変更←急ぎ",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnjn5tou1a5",
+        "text": "",
+        "html": "",
+        "indent": 1,
         "bold": false,
         "color": "",
         "collapsed": false
