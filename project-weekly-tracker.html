@@ -8136,11 +8136,25 @@
           // olVisible を使わず独自に可視ノードを計算
           // フォーカスノード自身の collapsed を無視（子を必ず表示）
           // 各子ノードの collapsed は通常通り尊重（子の子以降を隠す）
+          // フォーカスモード内でもプライベートフィルタを適用（olVisible と同ロジック）
+          const fInheritedPrivate = new Set();
+          const fPrivStack = [];
+          for (let i = fIdx + 1; i < endRaw; i++) {
+            const n = nodes[i];
+            while (fPrivStack.length > 0 && fPrivStack[fPrivStack.length - 1] >= n.indent) fPrivStack.pop();
+            if (n.isPrivate || fPrivStack.length > 0) {
+              fInheritedPrivate.add(i);
+              if (n.isPrivate) fPrivStack.push(n.indent);
+            }
+          }
           const hidden = new Set();
           const fVis = [];
           for (let i = fIdx + 1; i < endRaw; i++) {
             if (hidden.has(i)) continue;
             const n = nodes[i];
+            // プライベートフィルタ
+            if (_viewMode === 'work' && fInheritedPrivate.has(i)) continue;
+            if (_viewMode === 'private' && !fInheritedPrivate.has(i)) continue;
             // 完了非表示フィルタ（フォーカスモード内でも折りたたみと同じルール）
             if (_hideDone && n.isTodo && n.checked) {
               for (let j = i + 1; j < endRaw; j++) {
@@ -8905,7 +8919,7 @@
         // ※ URLリンクはカーソル位置の計算が不正確になるためテキスト分割を行わない
         if (el.querySelector('img,table,a[href]') || isColl || nodes[idx].type === 'nodelink' || nodes[idx].type === 'searchsummary') {
           olSaveTxt(nodes, idx, el);
-          const newNode = { id: olNewId(), text: '', html: '', indent: newIndent, bold: false, color: '', collapsed: false };
+          const newNode = { id: olNewId(), text: '', html: '', indent: newIndent, bold: false, color: '', collapsed: false, isPrivate: nodes[idx].isPrivate || false };
           nodes.splice(insertIdx, 0, newNode);
           _olFocusId = newNode.id; _olFocusAtStart = true;
           saveState(); olRender('ol-container', date); return;
@@ -8916,7 +8930,7 @@
         const isAtEnd = offset >= full.length;
         nodes[idx].text = full.slice(0, offset);
         nodes[idx].html = '';
-        const newNode = { id: olNewId(), text: full.slice(offset), html: '', indent: newIndent, bold: false, color: '', collapsed: false };
+        const newNode = { id: olNewId(), text: full.slice(offset), html: '', indent: newIndent, bold: false, color: '', collapsed: false, isPrivate: nodes[idx].isPrivate || false };
         // 文中で分割した場合: タグ・プロジェクト・サブタスク紐づけを新ノード（後半）に移す
         if (!isAtEnd) {
           if (nodes[idx].tags && nodes[idx].tags.length) {
