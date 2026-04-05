@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-05T05:07:37.490Z",
+  "savedAt": "2026-04-05T05:20:32.732Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8340,7 +8340,7 @@
     "2026-4-5": [
       {
         "id": "mnl21hitw6v",
-        "text": "AntigravityでGitに同期する方法　",
+        "text": "AntigravityでGitに同期する手順",
         "indent": 0,
         "isTodo": false,
         "checked": false,
@@ -8355,7 +8355,7 @@
         ],
         "start": "",
         "due": "",
-        "html": "AntigravityでGitに同期する方法　",
+        "html": "AntigravityでGitに同期する手順",
         "collapsed": true
       },
       {
@@ -8386,16 +8386,14 @@
         "collapsed": false
       },
       {
-        "id": "mnlavgk14bl",
-        "text": "検索結果（HACCP and #備忘bibou）",
-        "html": "検索結果（HACCP and #備忘bibou）",
+        "id": "mnlbc2qkqp3",
+        "text": "検索結果（te）",
+        "html": "",
         "type": "searchsummary",
         "savedQuery": {
-          "q1": "HACCP",
-          "q2": "",
-          "tags": [
-            "備忘bibou"
-          ]
+          "q1": "te",
+          "q2": "q",
+          "tags": []
         },
         "indent": 0,
         "bold": false,
@@ -8405,15 +8403,6 @@
         "checked": false,
         "tags": [],
         "images": []
-      },
-      {
-        "id": "mnl2672th4g",
-        "text": "",
-        "html": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false
       }
     ],
     "2026-4-7": [
