@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-05T01:04:01.877Z",
+  "savedAt": "2026-04-05T05:07:37.490Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8271,8 +8271,8 @@
         "indent": 0,
         "bold": false,
         "color": "",
-        "collapsed": false,
-        "html": ""
+        "collapsed": true,
+        "html": "HACCP関連でやりたいこと…"
       },
       {
         "id": "mnjn4ulzdsz",
@@ -8386,9 +8386,40 @@
         "collapsed": false
       },
       {
+        "id": "mnlavgk14bl",
+        "text": "検索結果（HACCP and #備忘bibou）",
+        "html": "検索結果（HACCP and #備忘bibou）",
+        "type": "searchsummary",
+        "savedQuery": {
+          "q1": "HACCP",
+          "q2": "",
+          "tags": [
+            "備忘bibou"
+          ]
+        },
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "tags": [],
+        "images": []
+      },
+      {
         "id": "mnl2672th4g",
         "text": "",
         "html": "",
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      }
+    ],
+    "2026-4-7": [
+      {
+        "id": "mnlav3v108p",
+        "text": "",
         "indent": 0,
         "bold": false,
         "color": "",
