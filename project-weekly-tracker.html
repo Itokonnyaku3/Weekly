@@ -2522,7 +2522,7 @@
       opacity: 0.88; cursor: pointer;
       border-left: 2px dashed rgba(255,180,0,0.3) !important;
     }
-    .ol-ss-result:hover { background: var(--bg-hover); }
+    .ol-ss-result:hover, .ol-ss-result:focus { background: var(--bg-hover); outline: none; }
     .ol-ss-result-inner { display: flex; flex-direction: column; padding: 1px 0; flex: 1; min-width: 0; }
     .ol-ss-result-text { font-size: 13px; color: var(--tx); word-break: break-all; }
     .ol-ss-result-info { font-size: 10px; color: var(--tx3); margin-top: 1px; }
@@ -8365,7 +8365,7 @@
                 ssAction = `(function(){var _p=S.projects[${res.pi}];if(_p&&_p.collapsed){_p.collapsed=false;saveState();render();}var _wks=getWeeks();applyFocus(${res.pi},_wks.length?wkey(_wks[0]):null,null);})()`;
               }
               const typeIcon = { PROJECT: '📁', ENTRY: '·', NOTE: '📝', DAILY: '·' }[res.type] || '·';
-              html += `<div class="ol-row ol-ss-result" style="padding-left:${childPl}px" onclick="(function(){${ssAction}})()">`
+              html += `<div class="ol-row ol-ss-result" style="padding-left:${childPl}px" tabindex="0" onclick="(function(){${ssAction}})()" onkeydown="olSsResultKeyDown(event,this,'${date}','${n.id}')">`
                 + `<span class="ol-ss-bullet">${typeIcon}</span>`
                 + `<div class="ol-text-area">`
                 +   `<div class="ol-ss-result-inner">`
@@ -9194,12 +9194,23 @@
       // ↓: 次の可視ノードへ（Ctrl/Meta なし）
       if (ev.key === 'ArrowDown' && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
         _olSelected.clear(); // 移動時は選択解除
+        // searchsummary が展開中なら最初の結果行にフォーカス移動
+        if (nodes[idx] && nodes[idx].type === 'searchsummary' && !nodes[idx].collapsed) {
+          const ssRow = document.querySelector(`#ol-container .ol-row-searchsummary[data-id="${id}"]`);
+          const firstResult = ssRow && ssRow.nextElementSibling;
+          if (firstResult && firstResult.classList.contains('ol-ss-result') && firstResult.tabIndex === 0) {
+            ev.preventDefault();
+            try { olSaveTxt(nodes, idx, ev.target); } catch(e) {}
+            firstResult.focus();
+            return;
+          }
+        }
         const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
-        if (vi < vis.length - 1) { 
-          ev.preventDefault(); 
+        if (vi < vis.length - 1) {
+          ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
-          _olFocusId = vis[vi + 1].id; 
-          olRender('ol-container', date); 
+          _olFocusId = vis[vi + 1].id;
+          olRender('ol-container', date);
         }
         return;
       }
@@ -9390,6 +9401,58 @@
       const nodes = olGetNodes(date);
       const node = nodes.find(n => n.id === id);
       if (node) { node.collapsed = !node.collapsed; saveState(); olRender('ol-container', date); }
+    }
+
+    // searchsummary 結果行のキーボードナビゲーション
+    function olSsResultKeyDown(ev, el, date, ssParentId) {
+      // 同じ親に属する tabindex 付き結果行を収集
+      const container = document.getElementById('ol-container');
+      const ssParentRow = container && container.querySelector(`.ol-row-searchsummary[data-id="${ssParentId}"]`);
+      const allResults = [];
+      if (ssParentRow) {
+        let sib = ssParentRow.nextElementSibling;
+        while (sib && sib.classList.contains('ol-ss-result')) {
+          if (sib.tabIndex === 0) allResults.push(sib);
+          sib = sib.nextElementSibling;
+        }
+      }
+      const curIdx = allResults.indexOf(el);
+
+      if (ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        if (curIdx < allResults.length - 1) {
+          allResults[curIdx + 1].focus();
+        } else {
+          // 最後の結果行 → 次の通常ノードへ
+          const nodes = olGetNodes(date);
+          const vis = olVisible(nodes);
+          const vi = vis.findIndex(n => n.id === ssParentId);
+          if (vi >= 0 && vi < vis.length - 1) {
+            _olFocusId = vis[vi + 1].id;
+            olRender('ol-container', date);
+          }
+        }
+      } else if (ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        if (curIdx > 0) {
+          allResults[curIdx - 1].focus();
+        } else {
+          // 最初の結果行 → 親 searchsummary ノードへ
+          _olFocusId = ssParentId;
+          olRender('ol-container', date);
+        }
+      } else if (ev.key === 'Enter') {
+        ev.preventDefault();
+        el.click();
+      } else if (ev.key === 'Escape') {
+        ev.preventDefault();
+        _olFocusId = ssParentId;
+        olRender('ol-container', date);
+      } else if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && !ev.altKey && ev.key === 'ArrowUp') {
+        // Ctrl+↑ で親 searchsummary を折りたたむ
+        ev.preventDefault();
+        olToggle(date, ssParentId);
+      }
     }
 
     // 太字ボタン
