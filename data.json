@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-05T01:00:22.754Z",
+  "savedAt": "2026-04-05T01:03:14.752Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8339,21 +8339,12 @@
     ],
     "2026-4-5": [
       {
-        "id": "mni542s8n1a",
-        "text": "",
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "html": "<div><br></div><div><br></div>"
-      },
-      {
         "id": "mnl21hitw6v",
-        "text": "AntigravityでGitに同期する方法",
+        "text": "AntigravityでGitに同期する方法　#備忘bibou",
         "indent": 0,
-        "isTodo": true,
+        "isTodo": false,
         "checked": false,
-        "type": "todo",
+        "type": "log",
         "projTag": "Private",
         "url": "",
         "note": "",
@@ -8361,7 +8352,35 @@
         "priority": "",
         "tags": [],
         "start": "",
-        "due": ""
+        "due": "",
+        "html": "AntigravityでGitに同期する方法　#備忘bibou"
+      },
+      {
+        "id": "mnl221ayu38",
+        "text": "1. 初期設定で成功した手順（備忘録）GitHubで空のリポジトリを作った後、以下の順序で成功しました。ローカル初期化: git initリモート接続: git remote add origin https://github.com/Itokonnyaku3/AGブランチ名変更: git branch -M main （デフォルトがmasterだったため）初回コミット: git add . → git commit -m \"最新\"競合の解消: git pull origin main --allow-unrelated-historiesポイント: GitHub側のREADME等と手元の履歴が違ったため、この「強制合流」が必要でした。Vim脱出: Esc → :wq → Enter でマージを完了させました。最終プッシュ: git push -u origin main2. 日々の同期ルーティンカフェでの執筆前後に以下の操作を行うことで、データの先祖返りを防げます。作業開始時（最新の状態にする）Bashgit pull origin main作業終了時（GitHubに保存する）Bashgit add .git commit -m \"Update: %date% %time%\"git push origin main3. 知っておくべき注意点  ① 2台のPCで同時に開かないAntigravityはローカルファイルをリアルタイムで読み書きするため、PC AとPC Bで同時に作業し、両方でPushしようとすると高確率で「コンフリクト（衝突）」が発生します。対策: 「作業が終わったら必ずPushして蓋を閉じる」を徹底してください。  ② .gitignore の作成（推奨）Antigravityの設定ファイルや一時ファイルが同期を邪魔することがあります。フォルダ直下に .gitignore という名前のファイルを作り、中身を空にするか、不要な拡張子を書いておくとスッキリします。③ もし「Rejected（拒否）」されたらpush した時にエラーが出たら、それは「別のPCで行った作業がGitHub側に残っている」合図です。慌てず git pull を実行して、手元のデータを最新にしてから再度 push してください。④ 文字化け対策（バッチファイル）自動化バッチを作る際は、保存時の文字コードを UTF-8 にし、先頭に chcp 65001 を入れることで、Windows特有の文字化け問題を回避できます。",
+        "html": "1. 初期設定で成功した手順（備忘録）<br>GitHubで空のリポジトリを作った後、以下の順序で成功しました。<br>ローカル初期化: git init<br>リモート接続: git remote add origin <a href=\"https://github.com/Itokonnyaku3/AGブランチ名変更:\" target=\"_blank\" rel=\"noopener\">https://github.com/Itokonnyaku3/AG<br>ブランチ名変更:</a> git branch -M main （デフォルトがmasterだったため）<br>初回コミット: git add . → git commit -m \"最新\"<br>競合の解消: git pull origin main --allow-unrelated-histories<br>ポイント: GitHub側のREADME等と手元の履歴が違ったため、この「強制合流」が必要でした。Vim脱出: Esc → :wq → Enter でマージを完了させました。<br>最終プッシュ: git push -u origin main<br>2. 日々の同期ルーティンカフェでの執筆前後に以下の操作を行うことで、データの先祖返りを防げます。<br>作業開始時（最新の状態にする）Bashgit pull origin main<br>作業終了時（GitHubに保存する）Bashgit add .<br>git commit -m \"Update: %date% %time%\"<br>git push origin main<br>3. 知っておくべき注意点<br>&nbsp; ① 2台のPCで同時に開かないAntigravityはローカルファイルをリアルタイムで読み書きするため、PC AとPC Bで同時に作業し、両方でPushしようとすると高確率で「コンフリクト（衝突）」が発生します。対策: 「作業が終わったら必ずPushして蓋を閉じる」を徹底してください。<br>&nbsp; ② .gitignore の作成（推奨）Antigravityの設定ファイルや一時ファイルが同期を邪魔することがあります。フォルダ直下に .gitignore という名前のファイルを作り、中身を空にするか、不要な拡張子を書いておくとスッキリします。<br>③ もし「Rejected（拒否）」されたらpush した時にエラーが出たら、それは「別のPCで行った作業がGitHub側に残っている」合図です。慌てず git pull を実行して、手元のデータを最新にしてから再度 push してください。④ 文字化け対策（バッチファイル）自動化バッチを作る際は、保存時の文字コードを UTF-8 にし、先頭に chcp 65001 を入れることで、Windows特有の文字化け問題を回避できます。",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnl230z00gq",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
+      },
+      {
+        "id": "mnl22x2uhp0",
+        "text": "",
+        "html": "",
+        "indent": 1,
+        "bold": false,
+        "color": "",
+        "collapsed": false
       }
     ]
   },
