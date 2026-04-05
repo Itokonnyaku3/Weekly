@@ -1236,7 +1236,7 @@
     }
   ],
   "wOff": -1,
-  "savedAt": "2026-04-05T05:07:37.490Z",
+  "savedAt": "2026-04-05T05:21:31.084Z",
   "dailyOutline": {
     "2026-3-18": [
       {
@@ -8339,8 +8339,27 @@
     ],
     "2026-4-5": [
       {
+        "id": "mnlbc2qkqp3",
+        "text": "検索結果（te）",
+        "html": "検索結果（te）",
+        "type": "searchsummary",
+        "savedQuery": {
+          "q1": "te",
+          "q2": "q",
+          "tags": []
+        },
+        "indent": 0,
+        "bold": false,
+        "color": "",
+        "collapsed": false,
+        "isTodo": false,
+        "checked": false,
+        "tags": [],
+        "images": []
+      },
+      {
         "id": "mnl21hitw6v",
-        "text": "AntigravityでGitに同期する方法　",
+        "text": "AntigravityでGitに同期する手順",
         "indent": 0,
         "isTodo": false,
         "checked": false,
@@ -8355,7 +8374,7 @@
         ],
         "start": "",
         "due": "",
-        "html": "AntigravityでGitに同期する方法　",
+        "html": "AntigravityでGitに同期する手順",
         "collapsed": true
       },
       {
@@ -8381,36 +8400,6 @@
         "text": "",
         "html": "",
         "indent": 1,
-        "bold": false,
-        "color": "",
-        "collapsed": false
-      },
-      {
-        "id": "mnlavgk14bl",
-        "text": "検索結果（HACCP and #備忘bibou）",
-        "html": "検索結果（HACCP and #備忘bibou）",
-        "type": "searchsummary",
-        "savedQuery": {
-          "q1": "HACCP",
-          "q2": "",
-          "tags": [
-            "備忘bibou"
-          ]
-        },
-        "indent": 0,
-        "bold": false,
-        "color": "",
-        "collapsed": false,
-        "isTodo": false,
-        "checked": false,
-        "tags": [],
-        "images": []
-      },
-      {
-        "id": "mnl2672th4g",
-        "text": "",
-        "html": "",
-        "indent": 0,
         "bold": false,
         "color": "",
         "collapsed": false
