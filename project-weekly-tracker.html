@@ -8112,18 +8112,15 @@
 
     let _olLastRenderKey = '';
 
-    // アウトラインを描画する
-    function olRender(containerId, date) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      const nodes = olGetNodes(date);
+    // フォーカスモードを考慮した可視ノードリストを返す共通関数
+    // olRender と ArrowUp/Down ハンドラの両方から呼ぶことで、
+    // 「画面に表示されているノード」と「キー移動で対象にするノード」を一致させる。
+    // 戻り値: { visible: Array, focusNodeText: string }
+    //   visible の各要素は { ...node, _idx: number, indent: number（正規化済み） }
+    function olGetVisibleForDate(nodes, date) {
       let visible = olVisible(nodes);
-
-      // フォーカスモード: 指定ノードの子孫のみ表示（インデントを正規化）
-      // ★ フォーカスノード自身の collapsed は無視して常に子を表示する
-      //    （直下の子は常に表示、2階層以下は各ノードの collapsed を通常通り尊重）
-      //    フォーカスモード解除後は元の collapsed 状態に戻る（nodes を書き換えないため自動）
       let focusNodeText = '';
+
       if (_olFocusMode && _olFocusMode.date === date && _olFocusMode.nodeId) {
         const fIdx = nodes.findIndex(n => n.id === _olFocusMode.nodeId);
         if (fIdx >= 0) {
@@ -8133,7 +8130,6 @@
           // サブツリー範囲を collapsed を無視してスキャン
           let endRaw = fIdx + 1;
           while (endRaw < nodes.length && nodes[endRaw].indent > fIndent) endRaw++;
-          // olVisible を使わず独自に可視ノードを計算
           // フォーカスノード自身の collapsed を無視（子を必ず表示）
           // 各子ノードの collapsed は通常通り尊重（子の子以降を隠す）
           // フォーカスモード内でもプライベートフィルタを適用（olVisible と同ロジック）
@@ -8155,7 +8151,7 @@
             // プライベートフィルタ
             if (_viewMode === 'work' && fInheritedPrivate.has(i)) continue;
             if (_viewMode === 'private' && !fInheritedPrivate.has(i)) continue;
-            // 完了非表示フィルタ（フォーカスモード内でも折りたたみと同じルール）
+            // 完了非表示フィルタ
             if (_hideDone && n.isTodo && n.checked) {
               for (let j = i + 1; j < endRaw; j++) {
                 if (nodes[j].indent > n.indent) hidden.add(j);
@@ -8165,7 +8161,6 @@
             }
             fVis.push({ ...n, _idx: i });
             if (n.collapsed && olHasChildren(nodes, i)) {
-              // このノードの子を hidden に追加（孫以降を隠す）
               for (let j = i + 1; j < endRaw; j++) {
                 if (nodes[j].indent > n.indent) hidden.add(j);
                 else break;
@@ -8177,6 +8172,16 @@
           _olFocusMode = null; // フォーカスノードが消えた場合は解除
         }
       }
+
+      return { visible, focusNodeText };
+    }
+
+    // アウトラインを描画する
+    function olRender(containerId, date) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const nodes = olGetNodes(date);
+      let { visible, focusNodeText } = olGetVisibleForDate(nodes, date);
 
       // フォーカスモード用パンくずバー
       let html = '';
@@ -9129,7 +9134,7 @@
       // →: 行末から次の可視ノードの先頭へ（Ctrl/Alt なし）
       if (ev.key === 'ArrowRight' && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !ev.shiftKey) {
         if (olCaretAtEnd(ev.target)) {
-          const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
+          const vis = olGetVisibleForDate(nodes, date).visible; const vi = vis.findIndex(n => n.id === id);
           if (vi < vis.length - 1) {
             ev.preventDefault();
             _olFocusId = vis[vi + 1].id; _olFocusAtStart = true;
@@ -9142,7 +9147,7 @@
       // ←: 行頭から前の可視ノードの末尾へ（Ctrl/Alt なし）
       if (ev.key === 'ArrowLeft' && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !ev.shiftKey) {
         if (olCaretAtStart(ev.target)) {
-          const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
+          const vis = olGetVisibleForDate(nodes, date).visible; const vi = vis.findIndex(n => n.id === id);
           if (vi > 0) {
             ev.preventDefault();
             _olFocusId = vis[vi - 1].id; _olFocusAtStart = false;
@@ -9155,7 +9160,7 @@
       // Shift+↑: マルチセレクト（前の行も選択に追加）
       if (ev.key === 'ArrowUp' && !ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.shiftKey) {
         ev.preventDefault();
-        const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
+        const vis = olGetVisibleForDate(nodes, date).visible; const vi = vis.findIndex(n => n.id === id);
         if (vi > 0) {
           if (_olSelected.size === 0) _olSelected.add(id);
           const targetId = vis[vi - 1].id;
@@ -9175,7 +9180,7 @@
       // Shift+↓: マルチセレクト（次の行も選択に追加）
       if (ev.key === 'ArrowDown' && !ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.shiftKey) {
         ev.preventDefault();
-        const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
+        const vis = olGetVisibleForDate(nodes, date).visible; const vi = vis.findIndex(n => n.id === id);
         if (vi < vis.length - 1) {
           if (_olSelected.size === 0) _olSelected.add(id);
           const targetId = vis[vi + 1].id;
@@ -9195,12 +9200,14 @@
       // ↑: 前の可視ノードへ（Ctrl/Meta なし）
       if (ev.key === 'ArrowUp' && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
         _olSelected.clear(); // 移動時は選択解除
-        const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
-        if (vi > 0) { 
-          ev.preventDefault(); 
+        // フォーカスモード中は olGetVisibleForDate を使い、描画と同じ可視リストを参照する
+        const vis = olGetVisibleForDate(nodes, date).visible;
+        const vi = vis.findIndex(n => n.id === id);
+        if (vi > 0) {
+          ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
-          _olFocusId = vis[vi - 1].id; 
-          olRender('ol-container', date); 
+          _olFocusId = vis[vi - 1].id;
+          olRender('ol-container', date);
         }
         return;
       }
@@ -9219,7 +9226,9 @@
             return;
           }
         }
-        const vis = olVisible(nodes); const vi = vis.findIndex(n => n.id === id);
+        // フォーカスモード中は olGetVisibleForDate を使い、描画と同じ可視リストを参照する
+        const vis = olGetVisibleForDate(nodes, date).visible;
+        const vi = vis.findIndex(n => n.id === id);
         if (vi < vis.length - 1) {
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
@@ -9233,7 +9242,7 @@
       // ※ 未選択時はブラウザのネイティブコピー動作に委ねる
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'c' && _olSelected.size > 0) {
         ev.preventDefault();
-        const vis = olVisible(nodes);
+        const vis = olGetVisibleForDate(nodes, date).visible;
         const lines = vis
           .filter(n => _olSelected.has(n.id))
           .map(n => ('  '.repeat(n.indent)) + (n.text || ''));
@@ -9354,7 +9363,7 @@
       if (ev.target.closest('.ol-toggle,.ol-linked-ref')) return;
 
       const nodes = olGetNodes(_olCurrentDate);
-      const vis = olVisible(nodes);
+      const vis = olGetVisibleForDate(nodes, _olCurrentDate).visible;
       if (!vis.length) return;
 
       let targetOlText = null;
@@ -9439,7 +9448,7 @@
         } else {
           // 最後の結果行 → 次の通常ノードへ
           const nodes = olGetNodes(date);
-          const vis = olVisible(nodes);
+          const vis = olGetVisibleForDate(nodes, date).visible;
           const vi = vis.findIndex(n => n.id === ssParentId);
           if (vi >= 0 && vi < vis.length - 1) {
             _olFocusId = vis[vi + 1].id;
