@@ -52,7 +52,8 @@
       --week-col-w: 336px;
       --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --radius: 8px;
+      --radius: 6px;
+      --radius-sm: 4px;
     }
 
     /* ── Dark Mode Logic ── */
@@ -165,7 +166,7 @@
     }
     ::-webkit-scrollbar-thumb {
       background: var(--bd2);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       border: 2px solid var(--bg2);
     }
     ::-webkit-scrollbar-thumb:hover {
@@ -341,7 +342,7 @@
       align-items: flex-start;
       gap: 6px;
       padding: 4px 6px;
-      border-radius: 5px;
+      border-radius: var(--radius);
       margin-bottom: 2px;
       cursor: pointer;
       font-size: 11px;
@@ -387,7 +388,8 @@
 
     th,
     td {
-      border: 1px solid var(--bd);
+      border: none;
+      border-bottom: 1px solid var(--bd);
       vertical-align: top;
       padding: 0
     }
@@ -576,7 +578,7 @@
 
     .nm { flex: 1; cursor: pointer }
     .nm:hover { color: var(--accent); }
-    .note-btn { cursor: pointer; opacity: 0.4; font-size: 12px; margin-left: 4px; transition: opacity 0.2s, transform 0.2s; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 4px; }
+    .note-btn { cursor: pointer; opacity: 0.4; font-size: 12px; margin-left: 4px; transition: opacity 0.2s, transform 0.2s; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: var(--radius-sm); }
     .note-btn:hover { opacity: 1; transform: scale(1.1); background: var(--bg3); }
 
     /* project entries section */
@@ -771,7 +773,7 @@
       font-size: 11.5px;
       line-height: 1.5;
       padding: 5px 8px 5px 24px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       user-select: none;
       outline: none;
@@ -814,7 +816,7 @@
       flex-shrink: 0;
       margin-top: 1px;
       border: 1.5px solid var(--bd2);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       background: var(--bg);
       cursor: pointer;
       position: relative;
@@ -1064,7 +1066,7 @@
       font-size: 11px;
       padding: 4px 10px;
       border: 1px solid var(--bd);
-      border-radius: 6px;
+      border-radius: var(--radius);
       background: var(--bg2);
       color: var(--tx2);
       font-family: inherit;
@@ -1094,7 +1096,7 @@
       line-height: 1;
       padding: 2px 8px;
       border: 1px solid transparent;
-      border-radius: 5px;
+      border-radius: var(--radius);
       background: transparent;
       color: transparent;
       cursor: pointer;
@@ -1129,7 +1131,7 @@
       font-size: 12px;
       padding: 5px 8px;
       border: 1px solid var(--bd2);
-      border-radius: 5px;
+      border-radius: var(--radius);
       background: var(--bg);
       color: var(--tx);
       font-family: inherit;
@@ -1197,7 +1199,7 @@
       font-size: 11px;
       padding: 4px 8px;
       border: 1px solid var(--bd2);
-      border-radius: 5px;
+      border-radius: var(--radius);
       background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
@@ -1221,7 +1223,7 @@
       font-size: 12px;
       line-height: 1.6;
       padding: 8px 10px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       white-space: pre-wrap;
       word-break: break-all
     }
@@ -1253,7 +1255,7 @@
       font-size: 10px;
       padding: 2px 6px;
       border: 1px solid var(--bd2);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       background: var(--bg);
       color: var(--tx2);
       cursor: pointer;
@@ -1276,7 +1278,7 @@
       font-size: 12px;
       padding: 6px 8px;
       border: 1px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
@@ -1302,7 +1304,7 @@
       flex: 1;
       font-size: 12px;
       padding: 5px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       font-family: inherit;
       font-weight: 600;
@@ -1323,7 +1325,7 @@
     .ai-weekly-btn {
       font-size: 11px;
       padding: 5px 8px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       font-family: inherit;
       border: 1px solid var(--bd-info);
@@ -1356,7 +1358,7 @@
       padding: 5px 7px;
       margin-top: 4px;
       border: 1px solid var(--bd2);
-      border-radius: 5px;
+      border-radius: var(--radius);
       background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
@@ -1478,7 +1480,7 @@
       font-size: 13px;
       padding: 7px 9px;
       border: 1.5px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       background: var(--bg);
       color: var(--tx);
       font-family: inherit;
@@ -1520,7 +1522,7 @@
       justify-content: center;
       background: rgba(14, 79, 150, .1);
       border: 2px dashed var(--accent);
-      border-radius: 6px;
+      border-radius: var(--radius);
       font-size: 13px;
       color: var(--tx-info);
       pointer-events: none;
@@ -1542,7 +1544,7 @@
       width: 100%;
       font-size: 12px;
       padding: 7px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       font-family: inherit;
       margin-bottom: 6px;
@@ -1615,7 +1617,7 @@
       width: 100%;
       aspect-ratio: 4/3;
       object-fit: cover;
-      border-radius: 5px;
+      border-radius: var(--radius);
       border: 1px solid var(--bd2);
       cursor: pointer;
       display: block
@@ -1641,7 +1643,7 @@
       font-size: 11px;
       padding: 5px 10px;
       border: 1px dashed var(--bd2);
-      border-radius: 5px;
+      border-radius: var(--radius);
       background: var(--bg2); z-index: 25;
       color: var(--tx2);
       cursor: pointer;
@@ -1690,7 +1692,7 @@
       font-size: 13px;
       padding: 7px 9px;
       border: 1.5px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       background: var(--bg2); z-index: 25;
       color: var(--tx);
       font-family: inherit;
@@ -1713,7 +1715,7 @@
     .mact button {
       font-size: 13px;
       padding: 6px 14px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       font-family: inherit;
       font-weight: 500
@@ -1763,7 +1765,7 @@
       gap: 4px;
       font-size: 11px;
       padding: 2px 4px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       color: var(--tx2);
     }
 
@@ -1877,7 +1879,7 @@
       color: var(--tx3);
       background: var(--bg2);
       padding: 2px 6px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--bd2);
       white-space: nowrap;
       flex-shrink: 0;
@@ -1922,7 +1924,7 @@
       font-size: 11px;
       font-weight: 500;
       padding: 5px 12px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       opacity: 0;
       transition: opacity .3s;
       z-index: 500;
@@ -1951,7 +1953,7 @@
     #img-full img {
       max-width: 90vw;
       max-height: 90vh;
-      border-radius: 6px;
+      border-radius: var(--radius);
       box-shadow: 0 4px 32px rgba(0, 0, 0, .6)
     }
 
@@ -2012,7 +2014,7 @@
       flex: 1;
       font-size: 11px;
       padding: 5px 4px;
-      border-radius: 5px;
+      border-radius: var(--radius);
       cursor: pointer;
       font-family: inherit;
       border: 1px solid var(--bd2);
@@ -2121,7 +2123,7 @@
       position: fixed;
       background: var(--bg);
       border: 1px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       box-shadow: 0 4px 16px rgba(0,0,0,.18);
       min-width: 160px;
       max-width: 280px;
@@ -2152,7 +2154,7 @@
       position: fixed;
       background: var(--bg);
       border: 1px solid var(--bd2);
-      border-radius: 8px;
+      border-radius: var(--radius);
       box-shadow: 0 4px 20px rgba(0,0,0,.2);
       padding: 10px 14px 10px;
       z-index: 10000;
@@ -2160,9 +2162,9 @@
     }
     .tcp-header { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--tx2); }
     .tcp-row { display: flex; align-items: center; gap: 6px; }
-    #tcp-color-inp { width: 40px; height: 28px; border: none; padding: 0; cursor: pointer; border-radius: 4px; }
-    .tcp-apply { padding: 3px 10px; font-size: 12px; background: var(--accent); color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-    .tcp-reset  { padding: 3px 8px;  font-size: 12px; background: var(--bg3); color: var(--tx2); border: 1px solid var(--bd); border-radius: 4px; cursor: pointer; }
+    #tcp-color-inp { width: 40px; height: 28px; border: none; padding: 0; cursor: pointer; border-radius: var(--radius-sm); }
+    .tcp-apply { padding: 3px 10px; font-size: 12px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; }
+    .tcp-reset  { padding: 3px 8px;  font-size: 12px; background: var(--bg3); color: var(--tx2); border: 1px solid var(--bd); border-radius: var(--radius-sm); cursor: pointer; }
 
     .e-tags-row {
       margin-top: 2px;
@@ -2192,7 +2194,7 @@
       gap: 4px;
       align-items: center;
       border: 1.5px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       padding: 4px 8px;
       background: var(--bg);
       cursor: text;
@@ -2211,7 +2213,7 @@
       gap: 3px;
       font-size: 11px;
       padding: 1px 6px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       background: var(--bg-info);
       color: var(--tx-info);
       border: 1px solid var(--bd-info);
@@ -2301,7 +2303,7 @@
     .settings-row input[type="password"] {
       width: 100%;
       padding: 8px 10px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       border: 1px solid var(--bd);
       background: var(--bg2); z-index: 25;
       color: var(--tx);
@@ -2382,7 +2384,7 @@
       width: 100%;
       min-height: 72px;
       border: 1px solid var(--bd2);
-      border-radius: 6px;
+      border-radius: var(--radius);
       padding: 8px;
       font-size: 13px;
       font-family: inherit;
@@ -2435,7 +2437,7 @@
     .search-inp {
       flex: 1;
       height: 36px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       border: 1px solid var(--bd2);
       background: var(--bg);
       color: var(--tx);
@@ -2511,7 +2513,7 @@
     .search-save-btn {
       font-size: 12px; padding: 6px 14px;
       background: var(--accent); color: #fff;
-      border: none; border-radius: 6px; cursor: pointer;
+      border: none; border-radius: var(--radius); cursor: pointer;
       white-space: nowrap;
     }
     .search-save-btn:hover { opacity: 0.85; }
@@ -2552,7 +2554,7 @@
         font-size: 11px;
         padding: 3px 6px;
         border: 1px solid var(--bd2);
-        border-radius: 5px;
+        border-radius: var(--radius);
         background: var(--bg);
         color: var(--tx);
         font-family: inherit;
@@ -2567,7 +2569,7 @@
       .ol-nav-btn {
         font-size: 11px;
         padding: 3px 8px;
-        border-radius: 5px;
+        border-radius: var(--radius);
         cursor: pointer;
         border: 1px solid var(--bd2);
         background: var(--bg);
@@ -2585,7 +2587,7 @@
         color: var(--tx-info);
         background: var(--bg-info);
         border: 1px solid var(--bd-info);
-        border-radius: 8px;
+        border-radius: var(--radius);
         padding: 1px 7px;
         cursor: pointer;
         white-space: nowrap;
@@ -2595,7 +2597,7 @@
       .link-note-btn {
         font-size: 11px;
         padding: 4px 10px;
-        border-radius: 5px;
+        border-radius: var(--radius);
         cursor: pointer;
         border: 1px solid var(--bd-info);
         background: var(--bg-info);
@@ -2614,7 +2616,7 @@
       .ol-linked-chip {
         font-size: 10px;
         padding: 1px 6px;
-        border-radius: 8px;
+        border-radius: var(--radius);
         background: var(--bg-info);
         color: var(--tx-info);
         border: 1px solid var(--bd-info);
@@ -2747,7 +2749,7 @@
       align-items: flex-start;
       gap: 8px;
       padding: 6px 8px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       margin-bottom: 4px;
       border: 1px solid var(--bd);
       background: var(--bg2); z-index: 25;
@@ -2823,7 +2825,7 @@
     .ol-tbtn {
       font-size: 11px;
       padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       border: 1px solid var(--bd2);
       background: var(--bg);
@@ -2893,7 +2895,7 @@
       background: var(--bg2);
       border: 1px solid var(--bd);
       border-left: 3px solid var(--accent, #4a90d9);
-      border-radius: 6px;
+      border-radius: var(--radius);
       color: var(--tx2);
     }
 
@@ -2918,7 +2920,7 @@
     .ol-bc-back {
       font-size: 11px;
       padding: 2px 7px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--bd);
       background: var(--bg);
       color: var(--tx);
@@ -2950,12 +2952,12 @@
       gap: 2px;
       min-height: 26px;
       padding: 1px 0;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
     }
 
     .ol-row.ol-selected {
       background: var(--bg-info);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
     }
 
     .ol-row:hover>.ol-toggle-ph {
@@ -3155,7 +3157,7 @@
       color: var(--tx3);
       background: var(--bg3);
       border: 1px solid var(--bd);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       padding: 1px 6px;
       max-width: 220px;
       overflow: hidden;
@@ -3186,7 +3188,7 @@
       color: var(--tx3);
       background: var(--bg3);
       padding: 0 4px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       font-size: 0.85em;
       opacity: 0.4;
       margin: 0 2px;
@@ -3235,7 +3237,7 @@
       color: var(--accent);
       background: transparent;
       padding: 0 3px;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       font-size: 0.85em;
       opacity: 0.3;
       margin: 0 2px;
@@ -3293,7 +3295,7 @@
       z-index: 9999;
       background: var(--bg);
       border: 1px solid var(--bdr);
-      border-radius: 6px;
+      border-radius: var(--radius);
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
       padding: 4px 0;
       min-width: 180px;
@@ -3341,7 +3343,7 @@
       min-width: 80px;
       max-width: 100%;
       border: 1px dashed var(--bd);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       margin: 4px 0;
       padding: 2px;
       cursor: se-resize;
@@ -3368,7 +3370,7 @@
     /* カーソルがある行をハイライト */
     .ol-row:has(.ol-text:focus) {
       background: rgba(14, 79, 150, .06);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
     }
 
     @media(prefers-color-scheme:dark) {
@@ -3384,7 +3386,7 @@
     }
     .ol-row.ol-grid-highlight {
       background: rgba(14, 79, 150, .06);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       animation: ol-grid-blink 0.6s ease-out forwards;
       outline: 1px solid rgba(14, 79, 150, .25);
     }
@@ -3423,7 +3425,7 @@
       z-index: 5000;
       background: var(--bg);
       border: 1px solid var(--bd2);
-      border-radius: 8px;
+      border-radius: var(--radius);
       box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
       padding: 4px;
       min-width: 180px;
@@ -3439,7 +3441,7 @@
       align-items: center;
       gap: 8px;
       padding: 6px 10px;
-      border-radius: 5px;
+      border-radius: var(--radius);
       cursor: pointer;
       color: var(--tx);
       transition: background .1s;
@@ -3723,9 +3725,9 @@
         onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter')saveQA()"></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
         <button class="m-cancel" onclick="closeQA()"
-          style="font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:500;border:1px solid var(--bd2);background:var(--bg2);color:var(--tx)">キャンセル</button>
+          style="font-size:13px;padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-family:inherit;font-weight:500;border:1px solid var(--bd2);background:var(--bg2);color:var(--tx)">キャンセル</button>
         <button class="m-ok" onclick="saveQA()"
-          style="font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff">追加</button>
+          style="font-size:13px;padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-family:inherit;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff">追加</button>
       </div>
     </div>
   </div>
@@ -3868,7 +3870,7 @@
       </div>
       <div style="display:flex;gap:4px;align-items:center">
         <input type="date" id="slash-date-input"
-          style="flex:1;font-size:11px;padding:3px 5px;border:1px solid var(--bd2);border-radius:4px;background:var(--bg2);color:var(--tx)"
+          style="flex:1;font-size:11px;padding:3px 5px;border:1px solid var(--bd2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--tx)"
           onchange="olSlashDateUpdatePreview()"
           onkeydown="if(event.key==='Enter'){event.preventDefault();olSlashDateConfirm()}">
         <button class="btn" style="font-size:11px;padding:3px 8px;background:var(--accent);color:#fff;border-color:var(--accent)"
@@ -3879,19 +3881,19 @@
   </div>
 
   <!-- リンク変換: インラインURLポップオーバー -->
-  <div id="ol-url-popup" style="display:none;position:fixed;z-index:500;background:var(--bg);border:1px solid var(--bd2);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:10px 12px;min-width:280px;">
+  <div id="ol-url-popup" style="display:none;position:fixed;z-index:500;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--radius);box-shadow:0 6px 20px rgba(0,0,0,.18);padding:10px 12px;min-width:280px;">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:6px;">🔗 URLを入力してEnter</div>
     <div style="display:flex;gap:6px;align-items:center;">
       <input id="ol-url-input-field" type="url" placeholder="https://"
-        style="flex:1;padding:5px 8px;border:1px solid var(--bd2);border-radius:5px;font-size:12px;background:var(--bg2);color:var(--tx);outline:none;"
+        style="flex:1;padding:5px 8px;border:1px solid var(--bd2);border-radius:var(--radius);font-size:12px;background:var(--bg2);color:var(--tx);outline:none;"
         onkeydown="_olUrlInputKey(event)">
-      <button onclick="_applyOlUrlInput()" style="padding:5px 10px;background:var(--accent);color:#fff;border:none;border-radius:5px;font-size:11px;cursor:pointer;white-space:nowrap;">設定</button>
+      <button onclick="_applyOlUrlInput()" style="padding:5px 10px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:11px;cursor:pointer;white-space:nowrap;">設定</button>
     </div>
     <div style="font-size:10px;color:var(--tx3);margin-top:5px;">Esc: キャンセル</div>
   </div>
 
   <div id="ol-proj-menu"
-    style="display:none;position:absolute;z-index:400;background:var(--bg);border:1px solid var(--bd2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:4px;min-width:180px;max-height:240px;overflow-y:auto;font-size:12px;">
+    style="display:none;position:absolute;z-index:400;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--radius);box-shadow:0 8px 24px rgba(0,0,0,.15);padding:4px;min-width:180px;max-height:240px;overflow-y:auto;font-size:12px;">
   </div>
 
   <!-- 設定モーダル -->
@@ -3923,7 +3925,7 @@
           <label for="gh-enabled-s" style="font-size:12px;cursor:pointer;font-weight:600">自動同期を有効にする</label>
         </div>
 
-        <div style="background:var(--bg2);padding:10px;border-radius:6px;margin-top:12px;border:1px solid var(--bd)">
+        <div style="background:var(--bg2);padding:10px;border-radius:var(--radius);margin-top:12px;border:1px solid var(--bd)">
           <div id="gh-status" style="font-size:11px;color:var(--tx3);margin-bottom:8px;min-height:1.2em">同期ステータス: 未設定
           </div>
           <div style="display:flex;gap:8px">
@@ -3945,7 +3947,7 @@
 
       <div class="settings-section">
         <h4>🛠️ メンテナンス</h4>
-        <div style="background:var(--bg-warn);padding:10px;border-radius:6px;margin-top:8px;border:1px solid #d4a020">
+        <div style="background:var(--bg-warn);padding:10px;border-radius:var(--radius);margin-top:8px;border:1px solid #d4a020">
           <p style="font-size:11px;color:var(--tx-warn);margin-bottom:8px"><strong>画像を GitHub フォルダへ移行</strong></p>
           <p style="font-size:10px;color:var(--tx-warn);margin-bottom:10px">
             ノート内に埋め込まれた base64 画像を検出し、GitHub リポジトリの <code>images/</code> フォルダにアップロードしてリンクに置換します。これにより
@@ -3964,7 +3966,7 @@
         </div>
         <div style="border-top:1px solid var(--bd);padding-top:10px">
           <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px">テーマ設定</label>
-          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:6px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;width:100%;cursor:pointer">
+          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;width:100%;cursor:pointer">
             <option value="auto">🌗 システム設定に従う (Auto)</option>
             <option value="light">☀️ ライトモード (Light)</option>
             <option value="dark">🌙 ダークモード (Dark)</option>
@@ -4140,7 +4142,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.2-04121840';
+    const APP_VERSION = 'v0.9.2-04121920';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
