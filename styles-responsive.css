@@ -1,0 +1,343 @@
+/**
+ * Weekly アプリ - レスポンシブ・モバイル対応スタイル
+ * ユーザビリティ・UI改善版 v2
+ */
+
+/* ========================================
+   モバイル端末対応 (@media max-width: 768px)
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* ── レイアウト最適化: 4パネルから2パネルへ ── */
+  
+  :root {
+    --panel-right: 100vw;  /* フルスクリーン */
+    --panel-left: 100vw;   /* フルスクリーン */
+    --proj-col-w: 150px;   /* 狭める */
+    --week-col-w: 240px;   /* 狭める */
+  }
+
+  body {
+    font-size: 14px;  /* モバイルは少し大きく */
+  }
+
+  /* ── ツールバー改善 ── */
+  #toolbar {
+    gap: 6px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+  }
+
+  #toolbar h1 {
+    font-size: 14px;
+    margin-right: 6px;
+  }
+
+  .btn {
+    font-size: 11px;
+    height: 28px;
+    padding: 0 10px;
+  }
+
+  /* ── メインレイアウト: パネルの表示/非表示を切り替え ── */
+  #main {
+    flex-direction: column;  /* スタック */
+  }
+
+  #todo-panel {
+    position: fixed;
+    left: 0;
+    top: 40px;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    border-right: none;
+    border-bottom: 1px solid var(--bd);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  #todo-panel.open {
+    width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── グリッドエリア ── */
+  #grid-wrap {
+    flex: 1;
+    width: 100%;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 4px 2px;
+  }
+
+  /* ── 右パネルのスライドイン ── */
+  #panel {
+    position: fixed;
+    right: 0;
+    top: 40px;
+    width: 100%;
+    height: calc(100vh - 40px);
+    z-index: 250;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-left: 1px solid var(--bd);
+  }
+
+  #panel.open {
+    transform: translateX(0);
+  }
+
+  /* ── AIパネルのスライドイン ── */
+  #ai-panel {
+    position: fixed;
+    left: 0;
+    top: 40px;
+    width: 100%;
+    height: calc(100vh - 40px);
+    z-index: 240;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    border-right: 1px solid var(--bd);
+  }
+
+  #ai-panel.open {
+    transform: translateX(0);
+  }
+
+  /* ── リサイズハンドル: モバイルでは非表示 ── */
+  .rz-handle, .rz-handle-ai {
+    display: none;
+  }
+
+  /* ── ノートパネルの改善 ── */
+  #note-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 300px;
+    z-index: 220;
+    border-top: 1px solid var(--bd);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  #note-panel.open {
+    transform: translateY(0);
+  }
+
+  /* ── ボタングループの改善 ── */
+  .btn-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .btn-icon {
+    padding: 6px 10px;
+    font-size: 12px;
+    aspect-ratio: 1;
+  }
+}
+
+/* ========================================
+   タブレット対応 (768px < width < 1024px)
+   ======================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --panel-right: 320px;
+    --panel-left: 180px;
+    --proj-col-w: 200px;
+    --week-col-w: 280px;
+  }
+
+  #toolbar {
+    gap: 8px;
+  }
+
+  .btn {
+    font-size: 11px;
+    height: 28px;
+    padding: 0 10px;
+  }
+}
+
+/* ========================================
+   デスクトップ最適化 (width >= 1024px)
+   ======================================== */
+
+@media (min-width: 1024px) {
+  /* 既存スタイルを維持 */
+}
+
+/* ========================================
+   ダークモード: コントラスト改善
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-theme) {
+    /* テキストのコントラストを強化 */
+    --tx: #f5f3f0;        /* より白く */
+    --tx2: #d4cfc8;       /* 対比を上げる */
+    --tx3: #a39f9b;       /* より明るく */
+    
+    /* 背景のコントラスト改善 */
+    --bg-info: #0d3050;   /* より濃く */
+    --tx-info: #8fd0ff;   /* より明るく */
+    
+    --bg-warn: #4a3500;   /* より濃く */
+    --tx-warn: #ffd699;   /* より明るく */
+    
+    --bg-ok: #113d23;     /* より濃く */
+    --tx-ok: #88dd99;     /* より明るく */
+    
+    --bg-danger: #4a1515; /* より濃く */
+    --tx-danger: #ff9999; /* より明るく */
+  }
+}
+
+:root.dark-theme {
+  /* ダークテーマ手動選択時も同じ */
+  --tx: #f5f3f0;
+  --tx2: #d4cfc8;
+  --tx3: #a39f9b;
+  
+  --bg-info: #0d3050;
+  --tx-info: #8fd0ff;
+  
+  --bg-warn: #4a3500;
+  --tx-warn: #ffd699;
+  
+  --bg-ok: #113d23;
+  --tx-ok: #88dd99;
+  
+  --bg-danger: #4a1515;
+  --tx-danger: #ff9999;
+}
+
+/* ========================================
+   ユーザビリティ改善: 標準的なUI要素
+   ======================================== */
+
+/* ターゲットサイズの改善（モバイルで重要） */
+button, a[role="button"], .btn, input[type="checkbox"], input[type="radio"] {
+  min-height: 44px;  /* WCAG推奨: 44×44px */
+  min-width: 44px;
+}
+
+/* フォーカス可視性の改善 */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--bd-focus);
+  outline-offset: 2px;
+}
+
+/* タッチターゲットの改善 */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 44px;
+  }
+
+  table button,
+  .btn-sm {
+    min-height: 36px;
+  }
+
+  /* ホバーエフェクトを無効化（不要なため） */
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* ========================================
+   フォント・テキスト改善
+   ======================================== */
+
+/* 可読性向上 */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+/* 長いテキストの折り返し */
+input[type="text"],
+textarea {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ========================================
+   アニメーション・トランジション最適化
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   その他UX改善
+   ======================================== */
+
+/* スクロール動作の改善 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* インプットの背景色を統一 */
+input,
+textarea,
+select {
+  background-color: var(--bg);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+  border-radius: var(--radius);
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--bd-focus);
+  background-color: var(--bg2);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* ディセーブル状態 */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* エラー状態 */
+input.error,
+textarea.error,
+select.error {
+  border-color: var(--tx-danger);
+  background-color: var(--bg-danger);
+}
+
