@@ -4177,7 +4177,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.3-04121820';
+    const APP_VERSION = 'v0.9.3-04121830';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -7957,9 +7957,14 @@
             items.push({ node: n, date, idx, isSpanStart: !!n.endDate });
           } else if (n.endDate) {
             // スパン: endDate が設定されている場合、開始週〜終了週の範囲内の週にも表示
+            // ※ wkey は "YYYY-M-D"（ゼロ埋めなし）のため文字列比較は不正確。
+            //   wkeyToDate() でミリ秒に変換してから数値比較する。
             let endWk;
             try { endWk = wkey(new Date(n.endDate.replace(/-/g, '/'))); } catch(e) { return; }
-            if (wk > dateWk && wk <= endWk) {
+            const wkMs      = wkeyToDate(wk).getTime();
+            const dateWkMs  = wkeyToDate(dateWk).getTime();
+            const endWkMs   = wkeyToDate(endWk).getTime();
+            if (wkMs > dateWkMs && wkMs <= endWkMs) {
               // 継続週として追加（isSpanContinue フラグを立てる）
               items.push({ node: n, date, idx, isSpanContinue: true, spanStartWk: dateWk });
             }
