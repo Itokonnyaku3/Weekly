@@ -973,43 +973,6 @@
       line-height: 1.4;
       flex-shrink: 0;
     }
-
-    /* ── スパン継続アイテム ── */
-    .eitem.eitem-span-continue {
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      opacity: 0.75;
-      cursor: default;
-      pointer-events: none;  /* クリック・ホバー無効 */
-    }
-    .eitem.eitem-span-continue .etxt {
-      color: var(--tx2);
-      font-style: italic;
-    }
-    .eitem.eitem-span-continue .edel {
-      display: none;  /* 削除ボタンは継続週では非表示 */
-    }
-    .span-continue-badge {
-      display: inline-block;
-      font-size: 9px;
-      color: var(--accent);
-      background: var(--accent-soft);
-      border-radius: 2px;
-      padding: 0 2px;
-      margin-right: 3px;
-      vertical-align: middle;
-      line-height: 1.4;
-      flex-shrink: 0;
-    }
-    /* ダークモード対応 */
-    @media (prefers-color-scheme: dark) {
-      :root:not(.light-theme) .eitem.eitem-span-continue {
-        background: rgba(122, 180, 232, 0.08);
-      }
-    }
-    :root.dark-theme .eitem.eitem-span-continue {
-      background: rgba(122, 180, 232, 0.08);
-    }
     .mirror-divider {
       font-size: 10px;
       color: var(--tx3);
@@ -4177,7 +4140,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.3-04121830';
+    const APP_VERSION = 'v0.9.2-04121840';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4831,16 +4794,11 @@
           if (!proj.collapsed) {
             rows += `<div class="elist" id="el-${pi}-${k}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'${k}')">`;
             const treeItems = getTreeOrderedItems(pi, k);
-            // isSpanContinue / spanStartWk は getTreeOrderedItems 内で
-            // getGridItems の結果が ...item でスプレッドされているので treeItems から直接参照
             treeItems.forEach(item => {
-              const isSC = !!item.isSpanContinue;
               rows += renderEntry(item.node, pi, k, item.node.id, {
                 date: item.date, idx: item.idx,
                 isParent: item.isParent, isChild: item.isChild,
-                childCount: item.children.length,
-                isSpanContinue: isSC,
-                originWk: isSC ? item.spanStartWk : k
+                childCount: item.children.length
               });
             });
             // ── 今週のみ: 前週以前の未完了アイテムをミラー表示 ──
@@ -4897,11 +4855,10 @@
     function renderEntry(n, pi, k, nodeId, ctx) {
       if (!n) return '';
       ctx = ctx || {};
-      const isParentNode    = !!ctx.isParent;
-      const isChildNode     = !!ctx.isChild;
-      const isMirror        = !!ctx.isMirror;
-      const isSpanContinue  = !!ctx.isSpanContinue;  // スパン継続週
-      const originWk        = ctx.originWk || k; // ミラー/スパン継続の場合は元の週
+      const isParentNode = !!ctx.isParent;
+      const isChildNode  = !!ctx.isChild;
+      const isMirror     = !!ctx.isMirror;
+      const originWk     = ctx.originWk || k; // ミラーの場合は元の週、通常は同じ
       const nodeType = getNodeType(n);
       const isProj = k === 'proj';
       const badges = (n.note && n.note.trim() ? '📄' : '') + ((n.images && n.images.length ? '🖼' : ''));
@@ -4910,27 +4867,25 @@
       const tags = n.tags || [];
       // タグフィルタ一致チェック
       const tagMatch = !_tagFilter || tags.includes(_tagFilter);
-      // スパン継続週はクリック不可（編集は開始週のみ）
-      const clickHandler = (nodeType === 'link' || isSpanContinue) ? '' : `onclick="eitemClick(event,this)" ondblclick="eitemDblClick(event,this)"`;
+      // リンクタイプはクリックでパネルを開かず <a> のリンク遷移を優先
+      const clickHandler = nodeType === 'link' ? '' : `onclick="eitemClick(event,this)" ondblclick="eitemDblClick(event,this)"`;
       // 親子クラス
       const parentChildClass = (isParentNode ? ' eitem-parent' : '') + (isChildNode ? ' eitem-child' : '');
-      // ミラー / スパン継続クラス
-      const mirrorClass = isMirror ? ' eitem-mirror' : (isSpanContinue ? ' eitem-span-continue' : '');
+      // ミラークラス
+      const mirrorClass = isMirror ? ' eitem-mirror' : '';
       // ミラー属性: data-wk=今週(ナビ用)、data-origin-wk=元週(データ操作用)
       const mirrorAttr = isMirror ? ` data-origin-wk="${originWk}"` : '';
-      // ミラー・スパン継続はドラッグ不可
-      const draggable = (isMirror || isSpanContinue) ? 'false' : 'true';
-      const dragHandler = (isMirror || isSpanContinue) ? '' : `ondragstart="eDragStart(event,${pi},'${originWk}','${nodeId}')"`;
+      // ミラーはドラッグ不可
+      const draggable = isMirror ? 'false' : 'true';
+      const dragHandler = isMirror ? '' : `ondragstart="eDragStart(event,${pi},'${originWk}','${nodeId}')"`;
       // 子ノードはラッパーでインデント
       const wrapOpen  = isChildNode ? `<div class="eitem-child-wrap">` : '';
       const wrapClose = isChildNode ? `</div>` : '';
-      let o = `${wrapOpen}<div class="eitem${isFocused ? ' kfocus' : ''}${(n.checked && nodeType === 'todo') ? ' e-done' : ''}${tagMatch ? ' tag-match' : ''}${parentChildClass}${mirrorClass}" tabindex="${isSpanContinue ? -1 : 0}" data-pi="${pi}" data-wk="${k}"${mirrorAttr} data-ei="${nodeId}" data-tags="${escA(tags.join(','))}" draggable="${draggable}" ${dragHandler} ondragover="event.preventDefault();event.stopPropagation()" ondrop="${(isMirror || isSpanContinue) ? '' : `eDropOnItem(event,${pi},'${k}','${nodeId}')`}" ${clickHandler} onkeydown="eitemKeyDown(event,this)"${isProj ? ' style="font-size:12px"' : ''}>`;
+      let o = `${wrapOpen}<div class="eitem${isFocused ? ' kfocus' : ''}${(n.checked && nodeType === 'todo') ? ' e-done' : ''}${tagMatch ? ' tag-match' : ''}${parentChildClass}${mirrorClass}" tabindex="0" data-pi="${pi}" data-wk="${k}"${mirrorAttr} data-ei="${nodeId}" data-tags="${escA(tags.join(','))}" draggable="${draggable}" ${dragHandler} ondragover="event.preventDefault();event.stopPropagation()" ondrop="${isMirror ? '' : `eDropOnItem(event,${pi},'${k}','${nodeId}')`}" ${clickHandler} onkeydown="eitemKeyDown(event,this)"${isProj ? ' style="font-size:12px"' : ''}>`;
       // 優先度バー
       o += `<span class="e-prio-bar e-prio-${prio || 'none'}" title="${prio === 'high' ? '高優先度' : prio === 'mid' ? '中優先度' : prio === 'low' ? '低優先度' : ''}"></span>`;
       // ミラーバッジ（↩ アイコン）
       if (isMirror) o += `<span class="mirror-badge" title="継続中（${originWk.replace(/-/g, '/')} 週発生）">↩</span>`;
-      // スパン継続バッジ（→ アイコン）
-      if (isSpanContinue) o += `<span class="span-continue-badge" title="複数週タスク（開始: ${originWk.replace(/-/g, '/')})">→</span>`;
       if (nodeType === 'todo' || (isProj && nodeType === 'todo')) {
         // ミラーの場合: originWkでデータ更新、kでフォーカス維持(displayWk)
         const toggleCall = isMirror
@@ -5794,16 +5749,6 @@
       h += `    <input class="fi" id="pf-due" type="date" value="${n.due || ''}" oninput="markDirty()">`;
       h += `  </div>`;
       h += `</div>`;
-      // ── 複数週スパン ──
-      h += `<div style="display:flex;gap:10px;margin-bottom:10px;align-items:center">`;
-      h += `  <div style="flex:1">`;
-      h += `    <label class="fl" title="設定するとグリッド上で複数週にまたがって表示されます">終了週 <span style="font-size:10px;color:var(--tx3)">(スパン表示)</span></label>`;
-      h += `    <input class="fi" id="pf-enddate" type="date" value="${n.endDate || ''}" oninput="markDirty()">`;
-      h += `  </div>`;
-      h += `  <div style="flex:1;padding-top:20px;font-size:11px;color:var(--tx3);line-height:1.4">`;
-      h += `    設定すると開始週〜この週まで<br>グリッドをまたいで表示されます`;
-      h += `  </div>`;
-      h += `</div>`;
 
       h += `<div id="img-list">`;
       if (!isNew) {
@@ -5930,7 +5875,6 @@
       const tagChips = $('pf-tag-wrap') ? [...$('pf-tag-wrap').querySelectorAll('.tag-chip-del')].map(el => el.dataset.tag) : [];
       const start = $('pf-start') ? ($('pf-start').value || '') : '';
       const due = $('pf-due') ? ($('pf-due').value || '') : '';
-      const endDate = $('pf-enddate') ? ($('pf-enddate').value || '') : '';  // スパン終了日
 
       const projTag = S.projects[pi].name.replace(/\s+/g, '_');
 
@@ -5948,8 +5892,7 @@
         const nodes = olGetNodes(targetDate);
         nodes.push({
           id: olNewId(), text, type, isTodo: type === 'todo', checked: false,
-          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due,
-          endDate: endDate || undefined  // 空の場合はフィールド自体を省略
+          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due
         });
       } else {
         // Edit existing node
@@ -5957,8 +5900,6 @@
         if (found) {
           const n = found.node;
           Object.assign(n, { type, text, url, note, isTodo: type === 'todo', priority, tags: tagChips, start, due });
-          // endDate: 空の場合はフィールドを削除してスパンを解除
-          if (endDate) { n.endDate = endDate; } else { delete n.endDate; }
           // Update html to match text
           n.html = esc(text);
           // Refresh note panel if open
@@ -7948,26 +7889,12 @@
         try {
           dateWk = wkey(new Date(date.replace(/-/g, '/')));
         } catch(e) { continue; }
+        if (dateWk !== wk) continue;
         const nodes = S.dailyOutline[date];
         if (!Array.isArray(nodes)) continue;
         nodes.forEach((n, idx) => {
-          if (n.projTag !== projTag) return;
-          if (dateWk === wk) {
-            // 通常: ノードが属する週のセルに表示（開始週）
-            items.push({ node: n, date, idx, isSpanStart: !!n.endDate });
-          } else if (n.endDate) {
-            // スパン: endDate が設定されている場合、開始週〜終了週の範囲内の週にも表示
-            // ※ wkey は "YYYY-M-D"（ゼロ埋めなし）のため文字列比較は不正確。
-            //   wkeyToDate() でミリ秒に変換してから数値比較する。
-            let endWk;
-            try { endWk = wkey(new Date(n.endDate.replace(/-/g, '/'))); } catch(e) { return; }
-            const wkMs      = wkeyToDate(wk).getTime();
-            const dateWkMs  = wkeyToDate(dateWk).getTime();
-            const endWkMs   = wkeyToDate(endWk).getTime();
-            if (wkMs > dateWkMs && wkMs <= endWkMs) {
-              // 継続週として追加（isSpanContinue フラグを立てる）
-              items.push({ node: n, date, idx, isSpanContinue: true, spanStartWk: dateWk });
-            }
+          if (n.projTag === projTag) {
+            items.push({ node: n, date, idx });
           }
         });
       }
@@ -8031,11 +7958,10 @@
           if (item.isChild) continue; // トップレベルのみ判定
           const n = item.node;
           const nodeType = getNodeType(n);
-          // ミラー条件（スパンノードはミラー表示しない — スパン機能で継続週に表示されるため）
+          // ミラー条件
           const shouldMirror =
-            !n.endDate &&
-            ((nodeType === 'todo' && !n.checked) ||
-             (nodeType !== 'todo' && n.due && n.due.trim()));
+            (nodeType === 'todo' && !n.checked) ||
+            (nodeType !== 'todo' && n.due && n.due.trim());
           if (!shouldMirror) continue;
           if (seenIds.has(n.id)) continue;
           seenIds.add(n.id);
