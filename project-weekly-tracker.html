@@ -4177,7 +4177,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.3-04121800';
+    const APP_VERSION = 'v0.9.3-04121820';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4831,18 +4831,16 @@
           if (!proj.collapsed) {
             rows += `<div class="elist" id="el-${pi}-${k}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'${k}')">`;
             const treeItems = getTreeOrderedItems(pi, k);
-            // getGridItems の isSpanContinue / spanStartWk フラグを id→情報マップに変換
-            const spanContinueMap = new Map(
-              items.filter(i => i.isSpanContinue).map(i => [i.node.id, i.spanStartWk])
-            );
+            // isSpanContinue / spanStartWk は getTreeOrderedItems 内で
+            // getGridItems の結果が ...item でスプレッドされているので treeItems から直接参照
             treeItems.forEach(item => {
-              const isSC = spanContinueMap.has(item.node.id);
+              const isSC = !!item.isSpanContinue;
               rows += renderEntry(item.node, pi, k, item.node.id, {
                 date: item.date, idx: item.idx,
                 isParent: item.isParent, isChild: item.isChild,
                 childCount: item.children.length,
                 isSpanContinue: isSC,
-                originWk: isSC ? spanContinueMap.get(item.node.id) : k
+                originWk: isSC ? item.spanStartWk : k
               });
             });
             // ── 今週のみ: 前週以前の未完了アイテムをミラー表示 ──
