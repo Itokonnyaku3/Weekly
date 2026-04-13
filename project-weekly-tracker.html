@@ -2947,6 +2947,21 @@
       white-space: nowrap;
     }
 
+    /* 編集可能なパンくずタイトル（ズームモード時） */
+    .ol-bc-title[contenteditable] {
+      white-space: pre-wrap;
+      overflow: visible;
+      text-overflow: clip;
+      cursor: text;
+      border-radius: var(--radius-sm);
+      padding: 1px 3px;
+    }
+    .ol-bc-title[contenteditable]:focus {
+      outline: 2px solid var(--accent, #4a90d9);
+      outline-offset: 1px;
+      background: var(--bg);
+    }
+
     .ol-row {
       display: flex;
       align-items: flex-start;
@@ -4143,7 +4158,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.2-04122115';
+    const APP_VERSION = 'v0.9.3-04131030';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5292,10 +5307,18 @@
         return;
       }
 
-      // Enter: ノートパネルを開いてこのノードにフォーカス（カーソルをノードに移動）
+      // Enter: ノートパネルをズームモードで開く（そのノードにフォーカスインして子ノードを表示）
       if (ev.key === 'Enter' && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
         ev.preventDefault();
-        if (found) openNotePanelToDate(found.date, ei);
+        if (found) {
+          // ズームモードを設定してからパネルを開く
+          _olFocusMode = { date: found.date, nodeId: ei };
+          const fNodes = olGetNodes(found.date);
+          const fIdx = fNodes.findIndex(n => n.id === ei);
+          // 子ノードがあれば最初の子にフォーカス、なければ自身（パンくず編集）
+          const firstChild = fIdx >= 0 ? fNodes.slice(fIdx + 1).find(n => n.indent > fNodes[fIdx].indent) : null;
+          openNotePanelToDate(found.date, firstChild ? firstChild.id : ei);
+        }
         return;
       }
 
@@ -5535,6 +5558,7 @@
           requestAnimationFrame(() => focusCompactHeader(pi));
         }},
         { id: 'note', icon: '📝', label: _notePanelOpen ? 'ノートを閉じる' : 'ノートを開く', romaji: 'note', key: 'Alt+Shift+N', fn: () => { _notePanelOpen ? toggleNotePanel() : focusNotePanel() } },
+        { id: 'today-note', icon: '📅', label: '今日のノートを開く', romaji: 'today kyou note', key: 'Alt+T', fn: () => { closeCmdPalette(); openNotePanelToDate(todayDateStr(), null); } },
         { id: 'fs-focus', icon: '🔲', label: _fsFocus ? 'フルスクリーン解除' : 'フルスクリーン集中モード', romaji: 'fullscreen', key: 'Alt+Shift+M', fn: () => { toggleFsFocus() } },
         { id: 'todo', icon: '☑', label: '未完ToDoパネル', romaji: 'todo', key: '', fn: () => toggleTodoPanel() },
         { id: 'backup', icon: '💾', label: 'JSONバックアップを保存', romaji: 'backup/save', key: '', fn: () => manualExport() },
@@ -7333,6 +7357,12 @@
         requestAnimationFrame(() => focusCompactHeader(pi));
         return;
       }
+      // Alt+T: 今日のノートを開く
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
+        ev.preventDefault();
+        openNotePanelToDate(todayDateStr(), null);
+        return;
+      }
       // Alt+Shift+E: 新規追加モーダルを開く
       if (ev.altKey && ev.shiftKey && ev.key === 'E') { ev.preventDefault(); openQA(); return }
       // Alt+Shift+C: 圧縮モードトグル
@@ -8259,9 +8289,15 @@
         html += `<div class="ol-breadcrumb">`
           + `<div class="ol-bc-nav">`
           +   `<button class="ol-bc-back" onmousedown="event.preventDefault()" onclick="olExitFocus('${date}')" title="フォーカスモードを終了 (Escape)">◀ 戻る</button>`
-          +   `<span class="ol-bc-sep" style="font-size:10px">ズーム中</span>`
+          +   `<span class="ol-bc-sep" style="font-size:10px">ズーム中（タイトルは編集可）</span>`
           + `</div>`
-          + `<span class="ol-bc-title">${safeText}</span>`
+          + `<div class="ol-bc-title ol-text" id="olt-${_olFocusMode.nodeId}" contenteditable="true" spellcheck="false"`
+          + ` data-date="${date}" data-nid="${_olFocusMode.nodeId}"`
+          + ` title="クリックして親ノードのタイトルを編集 / Enter・↓で子ノードへ移動"`
+          + ` oninput="olInput('${date}','${_olFocusMode.nodeId}',this)"`
+          + ` onkeydown="olKeyDown(event,'${date}','${_olFocusMode.nodeId}')"`
+          + ` onfocus="_olFocusId='${_olFocusMode.nodeId}';updateOlFmt('${date}')">`
+          + `${safeText}</div>`
           + `</div>`;
       }
 
@@ -8519,6 +8555,38 @@
             }
           }
         });
+      // パンくず親ノードのコンテンツを設定（ズームモード時 — visible には含まれないため別途処理）
+      if (_olFocusMode && _olFocusMode.date === date) {
+        const bcEl = document.getElementById('olt-' + _olFocusMode.nodeId);
+        if (bcEl) {
+          const isBcFocused = document.activeElement === bcEl;
+          const fNodeData = nodes.find(n => n.id === _olFocusMode.nodeId);
+          if (fNodeData) {
+            if (fNodeData.html && fNodeData.html.trim() && fNodeData.html !== fNodeData.text) {
+              const fH = _olPreTokenize(fNodeData.html);
+              if (!isBcFocused || bcEl.innerHTML !== fH) bcEl.innerHTML = fH;
+            } else {
+              const fTxt = fNodeData.text || '';
+              const fEsc = fTxt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+              let fFinal = fEsc.replace(/\n/g, '<br>');
+              if (/https?:\/\//.test(fTxt)) {
+                fFinal = fFinal.replace(/(https?:\/\/[^\s<>"&]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+              }
+              if (/#[\w\u3000-\u9FFF:/-]+/.test(fTxt)) {
+                fFinal = fFinal.replace(/(#[\w\u3000-\u9FFF:/-]+)/g, (m) => {
+                  const isAttr = /^#(prio|due|done|p|status|start)[:]/i.test(m) || /^#(done|p[0-3])$/i.test(m);
+                  const isProjTag = S.projects && S.projects.some(p => '#' + p.name.replace(/\s+/g, '_') === m || '#' + p.name === m);
+                  const cls = isAttr ? 'ol-tag-attr' : (isProjTag ? 'ol-tag-proj' : 'ol-tag');
+                  const clk = isAttr ? '' : ` onclick="event.stopPropagation();openSearch('${m.replace(/'/g, "\\'")}')"`;
+                  return `<span class="${cls}"${clk}>${m}</span>`;
+                });
+              }
+              fFinal = _olPreTokenize(fFinal);
+              if (!isBcFocused || bcEl.innerHTML !== fFinal) bcEl.innerHTML = fFinal;
+            }
+          }
+        }
+      }
       // フォーカス復元
       let focusTarget = null;
       if (_olFocusId) {
@@ -8903,6 +8971,28 @@
         }
       }
 
+      // ── ズームモードのパンくず親ノードにフォーカスが当たっているときの特殊処理 ──
+      // Enter / ↓ / Tab → 最初の子ノードへ移動（インデント操作などは行わない）
+      if (_olFocusMode && _olFocusMode.date === date && id === _olFocusMode.nodeId) {
+        if (ev.key === 'Enter' || ev.key === 'ArrowDown' || ev.key === 'Tab') {
+          ev.preventDefault();
+          const { visible: bcVis } = olGetVisibleForDate(nodes, date);
+          if (bcVis.length > 0) {
+            _olFocusId = bcVis[0].id;
+            olRender('ol-container', date);
+          }
+          return;
+        }
+        // Escape・その他のCtrl/Metaキーは以降の共通ハンドラへ
+        // 通常の文字入力・Backspace・Home/End などはそのまま通過させる
+        if (ev.key !== 'Escape' && !ev.ctrlKey && !ev.metaKey) {
+          if (ev.key === 'ArrowUp' || (ev.key === 'ArrowLeft' && olCaretAtStart(ev.target)) || (ev.key === 'ArrowRight' && olCaretAtEnd(ev.target))) {
+            ev.preventDefault(); // 行頭←・行末→・↑ で子ノードリストの外に出ないようにする
+          }
+          return; // テキスト編集キーはネイティブ動作に任せ、以降のハンドラをスキップ
+        }
+      }
+
       // Ctrl+Enter → サブタスク参照行の展開/折りたたみ
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
         const curNode = nodes[idx];
@@ -9002,6 +9092,20 @@
         const offset = olGetCaretOffset(el);
         const full = el.textContent;
         const isAtEnd = offset >= full.length;
+
+        // 行頭（offset=0）で内容あり: 空ノードを直前に挿入し、元ノードはすべての修飾を保持
+        if (offset === 0 && full.length > 0) {
+          const emptyNode = {
+            id: olNewId(), text: '', html: '',
+            indent: newIndent, bold: false, color: '',
+            isTodo: false, checked: false, tags: [],
+            isPrivate: nodes[idx].isPrivate || false, collapsed: false,
+          };
+          nodes.splice(idx, 0, emptyNode); // 元ノードの直前に空ノードを挿入
+          _olFocusId = emptyNode.id; _olFocusAtStart = true;
+          saveState(); olRender('ol-container', date); return;
+        }
+
         nodes[idx].text = full.slice(0, offset);
         nodes[idx].html = '';
         const newNode = { id: olNewId(), text: full.slice(offset), html: '', indent: newIndent, bold: false, color: '', collapsed: false, isPrivate: nodes[idx].isPrivate || false };
@@ -9148,7 +9252,11 @@
         const maxI = idx > 0 ? nodes[idx - 1].indent + 1 : 0;
         if (nodes[idx].indent < maxI) {
           const sub = olGetSubtree(nodes, idx);
-          for (let i = idx; i < idx + sub; i++)nodes[i].indent++;
+          for (let i = idx; i < idx + sub; i++) nodes[i].indent++;
+          // 新しい親が折りたたまれていれば展開してノードが消えないようにする
+          if (idx > 0 && nodes[idx - 1].collapsed) {
+            nodes[idx - 1].collapsed = false;
+          }
           saveState(); _olFocusId = id; olRender('ol-container', date);
         }
         return;
@@ -9354,17 +9462,14 @@
       }
 
       // Alt+↓（Shiftなし）: そのノードにフォーカスモードでクローズアップ
+      // 子ノードがない葉ノードでもズーム可能（パンくずのみ表示 → タイトル編集モード）
       if (ev.altKey && !ev.shiftKey && ev.key === 'ArrowDown') {
         ev.preventDefault();
         olSaveTxt(nodes, idx, ev.target);
-        if (olHasChildren(nodes, idx)) {
-          _olFocusMode = { date, nodeId: id };
-          // フォーカスモード中は最初の子にフォーカスを当てる
-          const firstChild = nodes.slice(idx + 1).find(n => n.indent > nodes[idx].indent);
-          _olFocusId = firstChild ? firstChild.id : id;
-        } else {
-          showToast('子ノードがないためフォーカスモードに入れません');
-        }
+        _olFocusMode = { date, nodeId: id };
+        // 子ノードがあれば最初の子にフォーカス、なければ親（パンくず）自身にフォーカス
+        const firstChild = nodes.slice(idx + 1).find(n => n.indent > nodes[idx].indent);
+        _olFocusId = firstChild ? firstChild.id : id;
         olRender('ol-container', date); return;
       }
 
