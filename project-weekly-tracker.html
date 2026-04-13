@@ -4158,7 +4158,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.3-04131030';
+    const APP_VERSION = 'v0.9.3-04131120';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -7860,6 +7860,7 @@
     let _olShiftSelecting = false; // Shift+↑↓ 操作中フラグ（フォーカス変更時の選択クリアを抑制）
     let _olFocusMode = null;    // フォーカスモード {date, nodeId} or null
     let _olRefRowsExpanded = false; // フォーカス中ノードのサブタスク参照行を展開中か
+    let _imgResizeObs = null;   // ResizeObserver for ol-img-wrap size persistence
     let _notePanelOpen = false; // ノートペイン開閉状態
 
     // ── ノート閲覧履歴（Alt+←/→ で戻る/進む）──
@@ -8620,6 +8621,59 @@
       }
       olUpdatePrivateBtn();
       ghAuthInContainer(container);
+      // 画像リサイズのサイズ変化を監視してノードデータに永続化
+      olObserveImgSizes();
+    }
+
+    // 画像リサイズサイズの永続化 — ResizeObserver で ol-img-wrap の幅変化を監視
+    // ユーザーが CSS resize ハンドルで画像を拡縮したとき、node.html 内の style="width:Xpx" を更新して保存する
+    function olObserveImgSizes() {
+      if (_imgResizeObs) _imgResizeObs.disconnect();
+      if (typeof ResizeObserver === 'undefined') return;
+      _imgResizeObs = new ResizeObserver((entries) => {
+        let changed = false;
+        for (const entry of entries) {
+          const wrap = entry.target;
+          // 初期描画直後の fire (幅が初期値と同じ) はスキップ
+          const newW = Math.round(wrap.offsetWidth);
+          if (!newW) continue;
+          const olText = wrap.closest('.ol-text[data-nid]');
+          if (!olText) continue;
+          const date = olText.dataset.date;
+          const nid  = olText.dataset.nid;
+          if (!date || !nid) continue;
+          const nodes = olGetNodes(date);
+          const node  = nodes.find(n => n.id === nid);
+          if (!node || !node.html) continue;
+          // ol-img-wrap 内で何番目か（複数画像対応）
+          const allWraps = Array.from(olText.querySelectorAll('.ol-img-wrap'));
+          const wrapIdx  = allWraps.indexOf(wrap);
+          if (wrapIdx === -1) continue;
+          // node.html 内の同番目の ol-img-wrap の style="...width:Npx..." を更新
+          let count = -1;
+          const updated = node.html.replace(/(<span class="ol-img-wrap"[^>]*style=")([^"]*)"/g, (m, pre, style) => {
+            count++;
+            if (count !== wrapIdx) return m;
+            // width:Npx を新しい値に置換（なければ末尾に追記）
+            const hasWidth = /\bwidth:[^;]+/.test(style);
+            const newStyle = hasWidth
+              ? style.replace(/\bwidth:[^;]+;?\s*/g, '').replace(/;?\s*$/, '') + (style.replace(/\bwidth:[^;]+;?\s*/g, '').trim() ? ';' : '') + 'width:' + newW + 'px'
+              : (style.trim() ? style.trimEnd().replace(/;?$/, '') + ';width:' + newW + 'px' : 'width:' + newW + 'px');
+            return pre + newStyle + '"';
+          });
+          if (updated !== node.html) {
+            node.html = updated;
+            changed = true;
+          }
+        }
+        if (changed) {
+          clearTimeout(olObserveImgSizes._timer);
+          olObserveImgSizes._timer = setTimeout(() => saveState(), 600);
+        }
+      });
+      const container = document.getElementById('ol-container');
+      if (!container) return;
+      container.querySelectorAll('.ol-img-wrap').forEach(el => _imgResizeObs.observe(el));
     }
 
     // ノードのテキスト＋HTMLを両方保存するヘルパー（keydown等で利用）
