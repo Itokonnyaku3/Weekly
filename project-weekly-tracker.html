@@ -983,6 +983,12 @@
       border-top: 1px dashed var(--bdr);
       margin-top: 3px;
       user-select: none;
+      cursor: default;
+    }
+
+    /* ミラーアイテム: 編集可能なことを示すカーソル */
+    .eitem-mirror .etxt {
+      cursor: text;
     }
 
     .e-toggle {
@@ -4158,7 +4164,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.3-04131120';
+    const APP_VERSION = 'v0.9.4-04151500';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4823,13 +4829,16 @@
             if (isCur) {
               const mirrorItems = getMirrorItems(pi, k);
               if (mirrorItems.length > 0) {
-                rows += `<div class="mirror-divider">↩ 継続中</div>`;
+                rows += `<div class="mirror-divider" title="前週以前から継続中のアイテム。直接編集できます（元の週に保存されます）">↩ 継続中（前週より）</div>`;
                 mirrorItems.forEach(item => {
+                  // isMirror: item.isMirror（現在週の子はfalse）
+                  // originWk: ミラーは元週、現在週の子は設定しない（通常アイテムとして扱う）
                   rows += renderEntry(item.node, pi, k, item.node.id, {
                     date: item.date, idx: item.idx,
                     isParent: item.isParent, isChild: item.isChild,
                     childCount: (item.children || []).length,
-                    isMirror: true, originWk: item.originWk
+                    isMirror: item.isMirror !== false, // デフォルトtrue（後方互換）
+                    originWk: item.isMirror !== false ? item.originWk : undefined
                   });
                 });
               }
@@ -4877,6 +4886,7 @@
       const isChildNode  = !!ctx.isChild;
       const isMirror     = !!ctx.isMirror;
       const originWk     = ctx.originWk || k; // ミラーの場合は元の週、通常は同じ
+      const originDate   = isMirror ? (ctx.date || '') : ''; // ミラーの元の具体的な日付
       const nodeType = getNodeType(n);
       const isProj = k === 'proj';
       const badges = (n.note && n.note.trim() ? '📄' : '') + ((n.images && n.images.length ? '🖼' : ''));
@@ -4891,8 +4901,8 @@
       const parentChildClass = (isParentNode ? ' eitem-parent' : '') + (isChildNode ? ' eitem-child' : '');
       // ミラークラス
       const mirrorClass = isMirror ? ' eitem-mirror' : '';
-      // ミラー属性: data-wk=今週(ナビ用)、data-origin-wk=元週(データ操作用)
-      const mirrorAttr = isMirror ? ` data-origin-wk="${originWk}"` : '';
+      // ミラー属性: data-wk=今週(ナビ用)、data-origin-wk=元週(データ操作用)、data-origin-date=元の日付(子追加など)
+      const mirrorAttr = isMirror ? ` data-origin-wk="${originWk}" data-origin-date="${originDate}"` : '';
       // ミラーはドラッグ不可
       const draggable = isMirror ? 'false' : 'true';
       const dragHandler = isMirror ? '' : `ondragstart="eDragStart(event,${pi},'${originWk}','${nodeId}')"`;
@@ -4903,7 +4913,7 @@
       // 優先度バー
       o += `<span class="e-prio-bar e-prio-${prio || 'none'}" title="${prio === 'high' ? '高優先度' : prio === 'mid' ? '中優先度' : prio === 'low' ? '低優先度' : ''}"></span>`;
       // ミラーバッジ（↩ アイコン）
-      if (isMirror) o += `<span class="mirror-badge" title="継続中（${originWk.replace(/-/g, '/')} 週発生）">↩</span>`;
+      if (isMirror) o += `<span class="mirror-badge" title="継続中 — ${originWk.replace(/-/g, '/')} 週のデータ。編集・子追加は元週に保存されます">↩</span>`;
       if (nodeType === 'todo' || (isProj && nodeType === 'todo')) {
         // ミラーの場合: originWkでデータ更新、kでフォーカス維持(displayWk)
         const toggleCall = isMirror
@@ -5048,6 +5058,9 @@
       const key = ev.key;
       // 現在の列内での位置インデックス（←/→ナビ用）
       const rowIdx = getRowIdx(pi, wk, currentEl);
+      // ミラー判定: data-origin-wk があれば元週でデータ操作、フォーカスは表示週(wk)で維持
+      const dataWkNav = (currentEl && currentEl.dataset.originWk) || wk;
+      const isMirrorNav = !!(currentEl && currentEl.dataset.originWk);
 
       if (isAltShift && (key === 'ArrowLeft' || key === 'ArrowRight')) {
         ev.preventDefault();
@@ -5078,8 +5091,9 @@
         const dir = key === 'ArrowUp' ? -1 : 1;
 
         // アイテムが有効かつプロジェクト列でない場合: セル内でアイテムを上下に移動
+        // ミラーアイテムの場合は元週(dataWkNav)のツリーで順序操作、フォーカスは表示週(wk)で維持
         if (ei !== undefined && ei !== -1 && ei !== -2 && wk !== 'proj') {
-          const treeItems = getTreeOrderedItems(pi, wk);
+          const treeItems = getTreeOrderedItems(pi, dataWkNav);
           const myItem = treeItems.find(i => i.node.id === ei);
           if (myItem && !myItem.isChild) {
             // 親アイテムのみで上下位置を決定（子アイテムはスキップ）
@@ -5121,10 +5135,14 @@
                   }
                   saveState(); triggerAutoSave(); render();
                   showHint(dir < 0 ? '↑ 上に移動' : '↓ 下に移動');
-                  // 移動先の週キーを計算してフォーカスを追従させる
-                  const [ty, tm, td] = targetItem.date.split('-').map(Number);
-                  const targetWk = wkey(new Date(ty, tm - 1, td));
-                  requestAnimationFrame(() => applyFocus(pi, targetWk, ei));
+                  // ミラーの場合は表示週(wk)でフォーカス維持、通常は移動先の週へ追従
+                  if (isMirrorNav) {
+                    requestAnimationFrame(() => applyFocus(pi, wk, ei));
+                  } else {
+                    const [ty, tm, td] = targetItem.date.split('-').map(Number);
+                    const targetWk = wkey(new Date(ty, tm - 1, td));
+                    requestAnimationFrame(() => applyFocus(pi, targetWk, ei));
+                  }
                   return;
                 }
               }
@@ -5341,14 +5359,11 @@
         return;
       }
 
-      // ミラーアイテムは構造変更操作（Tab/Alt+Shift+Arrow）を無効化
-      if (isMirrorItem && ev.key === 'Tab') { ev.preventDefault(); return; }
-      if (isMirrorItem && ev.altKey && ev.shiftKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) { ev.preventDefault(); return; }
-
       // Tab: サブタスク化（1階層のみ、プロジェクト列を除く）
-      // 直上がトップレベル → その子、直上が子ノード → 同じ親の子（兄弟として追加）
+      // ミラーアイテムの場合も元週のツリーで処理（透過的書き込み）
       if (ev.key === 'Tab' && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && wk !== 'proj' && n && !n.parentId) {
-        const treeItems = getTreeOrderedItems(pi, wk);
+        // ミラーの場合は元週のツリーで直上のアイテムを探す
+        const treeItems = getTreeOrderedItems(pi, isMirrorItem ? dataWk : wk);
         const myIdx = treeItems.findIndex(i => i.node.id === ei);
         if (myIdx > 0) {
           const above = treeItems[myIdx - 1];
@@ -5361,9 +5376,10 @@
             return;
           }
         }
+        if (isMirrorItem) { ev.preventDefault(); return; } // ミラーは他処理へフォールスルーしない
       }
 
-      // Shift+Tab: サブタスク解除
+      // Shift+Tab: サブタスク解除（ミラー子アイテムも元週で処理）
       if (ev.key === 'Tab' && ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && wk !== 'proj' && n && n.parentId) {
         ev.preventDefault();
         delete n.parentId;
@@ -8076,6 +8092,22 @@
           }
         }
       }
+
+      // 現在週に存在するが parentId がミラー親を指しているアイテムも継続中セクションに含める
+      // （パネルや別経路で現在週に追加された子アイテムをミラー親の下にグルーピング）
+      const mirrorParentIds = new Set(result.filter(r => !r.isChild).map(r => r.node.id));
+      if (mirrorParentIds.size > 0) {
+        const curItems = getGridItems(pi, currentWk);
+        for (const item of curItems) {
+          const n = item.node;
+          if (n.parentId && mirrorParentIds.has(n.parentId) && !seenIds.has(n.id)) {
+            seenIds.add(n.id);
+            // 現在週の子なのでミラーではなく通常アイテムとして扱うが、継続中セクションに表示
+            result.push({ ...item, isMirror: false, isChild: true, children: [], originWk: currentWk });
+          }
+        }
+      }
+
       return result;
     }
 
