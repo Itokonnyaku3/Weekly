@@ -4164,7 +4164,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.4-04151500';
+    const APP_VERSION = 'v0.9.4-04151600';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -11039,12 +11039,11 @@
         if (res.type === 'DAILY') {
           action = `openNotePanelToDate('${res.date}','${res.id}');closeSearch();`;
         } else if (res.type === 'ENTRY' || res.type === 'NOTE') {
-          if (res.wk && res.ei) {
-            // グリッドアイテムへジャンプ → 折りたたみ自動展開は jumpTo 内で実施済み
-            action = `jumpTo(${res.pi},'${res.wk}','${res.ei}');closeSearch();`;
-          } else if (res.date && res.ei) {
-            // proj: の場合はノートパネルへ
-            action = `openNotePanelToDate('${res.date}','${res.ei}');closeSearch();`;
+          if (res.ei) {
+            // ノードに直接ジャンプ（グリッドではなくノートパネル）
+            // findNodeById で実行時に date を解決 → proj: キーの案件にも対応
+            const safeEi = res.ei.replace(/'/g, "\\'");
+            action = `(function(){var _f=findNodeById('${safeEi}');if(_f){openNotePanelToDate(_f.date,'${safeEi}');closeSearch();}else{showToast('ノードが見つかりません',true);}})();`;
           }
         } else if (res.type === 'PROJECT') {
           // プロジェクト行にフォーカス（折りたたみ解除）
