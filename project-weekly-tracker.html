@@ -4164,7 +4164,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.4-04151600';
+    const APP_VERSION = 'v0.9.4-04161000';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -9064,7 +9064,18 @@
           ev.preventDefault();
           const { visible: bcVis } = olGetVisibleForDate(nodes, date);
           if (bcVis.length > 0) {
+            // 子ノードがあれば最初の子へ移動
             _olFocusId = bcVis[0].id;
+            olRender('ol-container', date);
+          } else if (ev.key === 'Enter') {
+            // Enter かつ子ノードがない → 新規子ノードを作成してフォーカス
+            olPushHistory(date);
+            olSaveTxt(nodes, idx, ev.target);
+            const newNode = { id: olNewId(), text: '', indent: nodes[idx].indent + 1, bold: false, color: '', collapsed: false };
+            nodes.splice(idx + 1, 0, newNode);
+            _olFocusId = newNode.id;
+            _olFocusAtStart = true;
+            saveState();
             olRender('ol-container', date);
           }
           return;
@@ -9488,6 +9499,12 @@
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
           _olFocusId = vis[vi - 1].id;
+          olRender('ol-container', date);
+        } else if (vi === 0 && _olFocusMode && _olFocusMode.date === date) {
+          // フォーカスモードの最初の子から↑ → パンくずタイトルへ戻る
+          ev.preventDefault();
+          try { olSaveTxt(nodes, idx, ev.target); } catch(e) {}
+          _olFocusId = _olFocusMode.nodeId;
           olRender('ol-container', date);
         }
         return;
