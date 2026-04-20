@@ -4164,7 +4164,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.4-04161000';
+    const APP_VERSION = 'v0.9.4-04201200';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6555,14 +6555,26 @@
       const found = findNodeById(ei);
       if (!found) return;
       const nodes = S.dailyOutline[found.date];
-      nodes.splice(found.idx, 1);
-      // このノードを親としているサブタスクの parentId をクリア
-      if (S.dailyOutline) {
+      // アウトラインの子ノード（同日付・より深いインデント）ごと削除
+      const subtreeCount = olGetSubtree(nodes, found.idx);
+      nodes.splice(found.idx, subtreeCount);
+      // parentId でリンクされた子ノードを再帰的に削除（子の子も含む）
+      const deleteLinkedChildren = (parentId) => {
+        if (!S.dailyOutline) return;
         for (const d in S.dailyOutline) {
           const dn = S.dailyOutline[d];
-          if (Array.isArray(dn)) dn.forEach(n => { if (n.parentId === ei) delete n.parentId; });
+          if (!Array.isArray(dn)) continue;
+          for (let i = dn.length - 1; i >= 0; i--) {
+            if (dn[i].parentId === parentId) {
+              const childId = dn[i].id;
+              deleteLinkedChildren(childId); // 孫ノード以降も再帰削除
+              const childSubtree = olGetSubtree(dn, i);
+              dn.splice(i, childSubtree);
+            }
+          }
         }
-      }
+      };
+      deleteLinkedChildren(ei);
       saveState(); render();
       if (_notePanelOpen && _olCurrentDate === found.date) {
         olRender('ol-container', found.date);
