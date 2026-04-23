@@ -395,6 +395,92 @@
     }
     function fkey(pi, wk, ei) { return pi + ':' + wk + ':' + ei }
 
+    /* ================================================================
+       グリッド列幅 & 期限バッジ — 復元関数
+    ================================================================ */
+
+    function getDueBadge(e) {
+      if (!e) return '';
+      const todayVal = todayDateStr();
+      const pad = s => s.split('-').map(x => x.padStart(2, '0')).join('-');
+      const today = pad(todayVal);
+      const due = e.due ? pad(e.due) : '';
+      let cls = 'e-due-badge';
+      let disp = '__/__';
+      if (due && !e.checked) {
+        if (due < today) cls += ' e-due-over';
+        else if (due === today) cls += ' e-due-today';
+        const m = due.match(/-(\d+)-(\d+)$/);
+        disp = m ? `${m[1]}/${m[2]}` : due;
+      } else if (due && e.checked) {
+        const m = due.match(/-(\d+)-(\d+)$/);
+        disp = m ? `${m[1]}/${m[2]}` : due;
+        cls += ' e-due-none';
+      } else {
+        cls += ' e-due-none';
+      }
+      return `<span class="${cls}">${disp}</span>`;
+    }
+
+    function doRollover() {
+      showToast('繰り越しは各アイテムの「延期」ボタンをお使いください');
+    }
+
+    let _projColWidth = parseInt(localStorage.getItem('pwt_proj_col_w')) || 240;
+    let _weekColWidth = parseInt(localStorage.getItem('pwt_week_col_w')) || 336;
+    let _weekColWidthMap = {};
+    try {
+      const savedMap = localStorage.getItem('pwt_week_col_w_map');
+      if (savedMap) _weekColWidthMap = JSON.parse(savedMap);
+    } catch (e) { }
+
+    function applyWeekColWidths() {
+      let total = _projColWidth;
+      const colP = $('gc-proj');
+      if (colP) colP.style.width = _projColWidth + 'px';
+      document.querySelectorAll('col[id^="gc-wk-"]').forEach(col => {
+        const k = col.id.replace('gc-wk-', '');
+        const w = (_weekColWidthMap[k] || _weekColWidth);
+        col.style.width = w + 'px';
+        total += w;
+      });
+      const grid = $('grid');
+      if (grid) grid.style.width = total + 'px';
+    }
+
+    function initColumnWidths() {
+      document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
+      applyWeekColWidths();
+    }
+
+    function startColResize(e, type, colKey) {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startW = (type === 'proj') ? _projColWidth : (_weekColWidthMap[colKey] || _weekColWidth);
+      const onMouseMove = ev => {
+        const delta = ev.clientX - startX;
+        const newW = Math.max(type === 'proj' ? 80 : 100, startW + delta);
+        if (type === 'proj') {
+          _projColWidth = newW;
+          document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
+          const cp = $('gc-proj'); if (cp) cp.style.width = _projColWidth + 'px';
+        } else {
+          _weekColWidthMap[colKey] = newW;
+          const cwk = $('gc-wk-' + colKey); if (cwk) cwk.style.width = newW + 'px';
+        }
+        applyWeekColWidths();
+      };
+      const onMouseUp = () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        localStorage.setItem('pwt_proj_col_w', _projColWidth);
+        localStorage.setItem('pwt_week_col_w_map', JSON.stringify(_weekColWidthMap));
+      };
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    }
+
+
 
     let _loadStateError = '';
     function loadState() {
@@ -3131,6 +3217,11 @@
     $('lm-bg').addEventListener('click', e => { if (e.target === $('lm-bg')) closeLM() });
     $('qa-bg').addEventListener('click', e => { if (e.target === $('qa-bg')) closeQA() });
     document.addEventListener('keydown', ev => {
+
+      // Ctrl+F: 検索
+      if ((ev.ctrlKey || ev.metaKey) && ev.key === 'f') {
+        ev.preventDefault(); openSearch(); return;
+      }
 
       // Ctrl+K: コマンドパレット
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'k') {
