@@ -1,6 +1,8 @@
-const CACHE_NAME = 'weekly-tracker-v10';
+const CACHE_NAME = 'weekly-tracker-v11';
 const urlsToCache = [
   './project-weekly-tracker.html',
+  './style.css',
+  './app.js',
   './manifest.json',
   './icon.svg'
 ];
