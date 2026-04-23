@@ -460,4 +460,32 @@
     <div id="search-box">
       <div id="search-header">
         <span style="font-size:18px">🔍</span>
-        <
+        <input type="text" id="search-input" class="search-inp"
+          placeholder="キーワード1で検索..."
+          oninput="_searchRun()"
+          onkeydown="_searchKeyDown(event)">
+        <button class="btn" onclick="closeSearch()" style="padding:4px 12px;flex-shrink:0">✕</button>
+      </div>
+      <div id="search-row2">
+        <span id="search-row2-label">絞り込み▼</span>
+        <input type="text" id="search-input2" class="search-inp"
+          placeholder="キーワード2でさらに絞り込み..."
+          oninput="_searchRun()"
+          onkeydown="_searchKeyDown(event)">
+      </div>
+      <div id="search-row3" style="display:none">
+        <span id="search-row3-label">🏷 タグ▼</span>
+      </div>
+      <div id="search-results"></div>
+      <div id="search-footer">
+        <span class="search-save-hint">現在の検索条件でノードを生成</span>
+        <button class="search-save-btn" onclick="_searchSave()">💾 検索を保存</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+
+</html>
