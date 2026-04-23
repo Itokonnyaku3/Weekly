@@ -555,7 +555,8 @@
         const perm = await handle.queryPermission({ mode: 'readwrite' });
         if (perm === 'granted') {
           _fsaActive = true;
-          await fsaLoadFromFile(); // ファイルが新しければ上書き
+          // DEBUGモード: 自動ロードを一時無効化（空グリッド問題の切り分け用）
+          // await fsaLoadFromFile(); // ファイルが新しければ上書き
         }
       } catch(e) {
         console.warn('fsaInit:', e);
@@ -738,7 +739,19 @@
 
     /* ── RENDER ── */
     function render() {
+      try { _renderImpl(); } catch(e) {
+        console.error('render() ERROR:', e);
+        // 画面上に赤いエラー表示
+        document.body.insertAdjacentHTML('afterbegin',
+          `<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#fee2e2;color:#b91c1c;padding:8px 12px;font-size:12px;font-family:monospace;border-bottom:2px solid #b91c1c">
+            🚨 render()エラー: ${e.message}<br><small>${(e.stack||'').split('\n').slice(0,3).join(' | ')}</small>
+          </div>`);
+      }
+    }
+    function _renderImpl() {
+      console.log('[render] start, S.projects:', S.projects ? S.projects.length : 'null');
       const weeks = getWeeks();
+      console.log('[render] weeks:', weeks.length, 'wOff:', S.wOff);
       const cw = wkey(new Date());
 
       // ツールバーのモードボタン表示更新
@@ -4310,16 +4323,24 @@
       const proj = S.projects[pi];
       if (!proj) return [];
       const projTag = proj.name.replace(/\s+/g, '_');
-      // Phase 2: getAllNodes() で全日付横断フィルタ
-      return getAllNodes().filter(({ node, date }) => {
-        if (node.projTag !== projTag) return false;
+      const items = [];
+      if (!S.dailyOutline) return items;
+      for (const date in S.dailyOutline) {
+        if (date.startsWith('proj:')) continue;
+        let dateWk;
         try {
-          return wkey(new Date(date.replace(/-/g, '/'))) === wk;
-        } catch(e) { return false; }
-      }).map(({ node, date }) => ({
-        node, date,
-        idx: (S.dailyOutline[date] || []).indexOf(node)
-      }));
+          dateWk = wkey(new Date(date.replace(/-/g, '/')));
+        } catch(e) { continue; }
+        if (dateWk !== wk) continue;
+        const nodes = S.dailyOutline[date];
+        if (!Array.isArray(nodes)) continue;
+        nodes.forEach((n, idx) => {
+          if (n.projTag === projTag) {
+            items.push({ node: n, date, idx });
+          }
+        });
+      }
+      return items;
     }
 
     // グリッドセルのアイテムを親子ツリー順に整理して返す
