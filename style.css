@@ -3626,3 +3626,29 @@ td.has-span-lane.span-last {
   opacity: .6;
   margin-right: 2px;
 }
+
+/* ── ズームナビゲーション ヘッダ (Phase 3) ── */
+.tree-zoom-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tx);
+  border-bottom: 1px solid var(--bd);
+  margin-bottom: 4px;
+}
+.tree-zoom-back {
+  background: none;
+  border: 1px solid var(--bd);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background .12s;
+}
+.tree-zoom-back:hover {
+  background: var(--accent-soft);
+}

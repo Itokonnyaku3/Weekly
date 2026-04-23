@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.8-04232151';
+    const APP_VERSION = 'v0.9.9-04232309';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3627,6 +3627,25 @@
         ev.preventDefault(); toggleTodoPanel(); return;
       }
 
+      // Alt+↑: ズームアウト（日→月→年→全体）※ノートパネル内
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && ev.key === 'ArrowUp') {
+        const inNote = $('note-panel') && ($('note-panel').contains(document.activeElement) || _olTreeMode);
+        if (inNote || _olTreeMode) {
+          ev.preventDefault();
+          if (!_notePanelOpen) focusNotePanel();
+          olZoomOut();
+          return;
+        }
+      }
+      // Alt+↓: ズームイン（全体→年→月→日）※ツリービュー内
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && ev.key === 'ArrowDown') {
+        if (_olTreeMode && _olZoomLevel !== 'day') {
+          ev.preventDefault();
+          olZoomIn(null);
+          return;
+        }
+      }
+
       // Alt+Shift+T: WorkFlowy ツリービュー切替
       if (ev.altKey && ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
         ev.preventDefault();
@@ -4077,6 +4096,11 @@
     /** ツリービュー ON/OFF トグル */
     function olToggleTreeMode() {
       _olTreeMode = !_olTreeMode;
+      if (_olTreeMode) {
+        _olZoomLevel = 'all';
+      } else {
+        _olZoomLevel = 'day';
+      }
       _applyTreeModeUI();
       if (_olTreeMode) {
         olRenderTree();
@@ -4111,9 +4135,9 @@
     /** 日付にズームイン（ツリーモードを終了して指定日へ） */
     function olZoomToDate(dateKey) {
       _olTreeMode = false;
+      _olZoomLevel = 'day'; // ズームレベルをリセット
       olGoDate(dateKey);
       _applyTreeModeUI();
-      // パネルが閉じていれば開く
       if (!_notePanelOpen) focusNotePanel();
     }
 
@@ -4212,6 +4236,27 @@
         html += `</div></div>`; // tree-year-body / tree-year
       }
 
+      // ── プロジェクトノートセクション ──
+      html += `<div class="tree-proj-section">
+        <div class="tree-proj-hdr">📋 プロジェクトノート</div>`;
+      S.projects.forEach((proj, pi) => {
+        const projNodes = (S.dailyOutline && S.dailyOutline['proj:' + pi]) || [];
+        const nonEmpty  = projNodes.filter(n => n.text && n.text.trim());
+        if (nonEmpty.length === 0) return;
+        const cntCls = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0 ? 'has-tasks' : '';
+        const cntTxt = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0
+          ? `☐${nonEmpty.filter(n=>n.isTodo&&!n.checked).length}`
+          : `${nonEmpty.length}件`;
+        html += `<div class="tree-date-entry"
+          onclick="olZoomToDate('proj:${pi}')">
+          <div class="tree-date-hdr">
+            <span class="tree-date-label">📂 ${esc(proj.name)}</span>
+            <span class="tree-date-cnt ${cntCls}">${cntTxt}</span>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+
       container.innerHTML = html;
     }
 
@@ -4298,6 +4343,174 @@
     let _olFocusAtStart = false; // true=先頭 false=末尾にカーソルを置く
     let _olSaveTimer = null;
     let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
+
+    /* ================================================================
+       WorkFlowy ズームナビゲーション (Phase 3 拡張)
+       ズームレベル: 'day' → 'month' → 'year' → 'all'
+       Alt+↑ でズームアウト、Alt+↓ でズームイン
+       プロジェクトノートはツリービューの別セクションに表示
+    ================================================================ */
+
+    let _olZoomLevel = 'day';   // 'day' | 'month' | 'year' | 'all'
+    let _olZoomYear  = null;    // 年ビュー表示中の年
+    let _olZoomMonth = null;    // 月ビュー表示中の月
+
+    /** ズームレベルのブレッドクラムを生成 */
+    function _updateZoomBreadcrumb() {
+      const disp = $('ol-date-disp');
+      if (!disp) return;
+      if (_olZoomLevel === 'all') {
+        disp.textContent = '🌳 全ノート';
+      } else if (_olZoomLevel === 'year') {
+        disp.textContent = `📅 ${_olZoomYear}年`;
+      } else if (_olZoomLevel === 'month') {
+        disp.textContent = `📅 ${_olZoomYear}年 ${_olZoomMonth}月`;
+      }
+    }
+
+    /** ズームアウト（Alt+↑）*/
+    function olZoomOut() {
+      if (_olZoomLevel === 'day') {
+        // 日 → 月ビュー
+        if (_olCurrentDate && !_olCurrentDate.startsWith('proj:')) {
+          const parts = _olCurrentDate.split('-');
+          _olZoomYear  = parseInt(parts[0]);
+          _olZoomMonth = parseInt(parts[1]);
+        } else {
+          const now = new Date();
+          _olZoomYear  = now.getFullYear();
+          _olZoomMonth = now.getMonth() + 1;
+        }
+        _olZoomLevel = 'month';
+        _olTreeMode  = true;
+        _applyTreeModeUI();
+        olRenderMonthView(_olZoomYear, _olZoomMonth);
+      } else if (_olZoomLevel === 'month') {
+        // 月 → 年ビュー
+        _olZoomLevel = 'year';
+        _applyTreeModeUI();
+        olRenderYearView(_olZoomYear);
+      } else if (_olZoomLevel === 'year') {
+        // 年 → 全体ビュー
+        _olZoomLevel = 'all';
+        _applyTreeModeUI();
+        olRenderTree();
+      }
+      // ナビゲーションバーのラベル更新
+      _updateZoomBreadcrumb();
+      // ol-nav は表示（ブレッドクラムとして機能）
+      const olNav = $('ol-nav');
+      if (olNav && _olZoomLevel !== 'day') olNav.style.display = 'flex';
+    }
+
+    /** ズームイン（Alt+↓ / クリック）*/
+    function olZoomIn(key) {
+      if (_olZoomLevel === 'all') {
+        // 全体 → 最初の年（または指定年）
+        const year = key ? parseInt(key) : _olZoomYear;
+        if (year) {
+          _olZoomYear  = year;
+          _olZoomLevel = 'year';
+          olRenderYearView(year);
+          _updateZoomBreadcrumb();
+        }
+      } else if (_olZoomLevel === 'year') {
+        // 年 → 月
+        const month = key ? parseInt(key) : _olZoomMonth || new Date().getMonth() + 1;
+        _olZoomMonth = month;
+        _olZoomLevel = 'month';
+        olRenderMonthView(_olZoomYear, month);
+        _updateZoomBreadcrumb();
+      } else if (_olZoomLevel === 'month') {
+        // 月 → 日
+        if (key) olZoomToDate(key);
+      }
+    }
+
+    /** 月ビュー描画 */
+    function olRenderMonthView(year, month) {
+      const container = $('ol-tree-container');
+      if (!container) return;
+      const todayStr = todayDateStr();
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      let html = `<div class="tree-zoom-hdr">
+        <button class="tree-zoom-back" onclick="olZoomOut()" title="年ビューへ">◀ ${year}年</button>
+        <span>${month}月</span>
+      </div>`;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateKey = `${year}-${month}-${d}`;
+        const dt = new Date(year, month - 1, d);
+        const dow = _DOW_JA[dt.getDay()];
+        const isToday = dateKey === todayStr;
+        const nodes = (S.dailyOutline && S.dailyOutline[dateKey]) || [];
+        const nonEmpty = nodes.filter(n => n.text && n.text.trim());
+
+        const cntCls = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0 ? 'has-tasks' : '';
+        const cntTxt = nonEmpty.length > 0 ? `${nonEmpty.length}件` : '';
+
+        let previews = '';
+        nonEmpty.slice(0, 2).forEach(n => {
+          const icon = n.isTodo ? (n.checked ? '☑' : '☐') : '•';
+          previews += `<div class="tree-node-preview">${icon} ${esc(n.text.slice(0,50))}</div>`;
+        });
+
+        html += `<div class="tree-date-entry${isToday ? ' today' : ''}"
+          onclick="olZoomIn('${dateKey}')">
+          <div class="tree-date-hdr">
+            <span class="tree-date-label">${month}/${d} (${dow})${isToday ? ' ★今日' : ''}</span>
+            ${cntTxt ? `<span class="tree-date-cnt ${cntCls}">${cntTxt}</span>` : ''}
+          </div>
+          ${previews}
+        </div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    /** 年ビュー描画 */
+    function olRenderYearView(year) {
+      const container = $('ol-tree-container');
+      if (!container) return;
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear  = now.getFullYear();
+
+      let html = `<div class="tree-zoom-hdr">
+        <button class="tree-zoom-back" onclick="olZoomOut()" title="全体ビューへ">◀ 全体</button>
+        <span>${year}年</span>
+      </div>`;
+
+      for (let m = 1; m <= 12; m++) {
+        // その月のノード数を集計
+        let total = 0, tasks = 0;
+        if (S.dailyOutline) {
+          for (const date in S.dailyOutline) {
+            const parts = date.split('-');
+            if (parseInt(parts[0]) === year && parseInt(parts[1]) === m) {
+              const nodes = (S.dailyOutline[date] || []).filter(n => n.text && n.text.trim());
+              total += nodes.length;
+              tasks += nodes.filter(n => n.isTodo && !n.checked).length;
+            }
+          }
+        }
+        const isCurrentMonth = year === currentYear && m === currentMonth;
+        const cntCls = tasks > 0 ? 'has-tasks' : '';
+        const cntTxt = total > 0 ? (tasks > 0 ? `☐${tasks}` : `${total}件`) : '';
+
+        html += `<div class="tree-date-entry${isCurrentMonth ? ' today' : ''}"
+          onclick="olZoomIn(${m})">
+          <div class="tree-date-hdr">
+            <span class="tree-date-label">${m}月${isCurrentMonth ? ' ★今月' : ''}</span>
+            ${cntTxt ? `<span class="tree-date-cnt ${cntCls}">${cntTxt}</span>` : ''}
+          </div>
+        </div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
     let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
     // Undo/Redo履歴（日付ごとに独立したスタック）
