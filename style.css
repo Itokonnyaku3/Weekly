@@ -42,31 +42,31 @@
     /* 1. システム設定がダーク、かつ手動ライトモードではない場合 */
     @media (prefers-color-scheme: dark) {
       :root:not(.light-theme) {
-        --bg: #141414;
-        --bg-glass: rgba(20, 20, 20, 0.88);
-        --bg2: #1e1e1e;
-        --bg3: #262626;
-        --bg4: #333333;
-        --bg-info: #0a2440;
-        --bg-warn: #3a2800;
-        --bg-ok: #0e2e1a;
-        --bg-danger: #380e0e;
-        --bg-cur: #102a4a;
-        --tx: #e8e4dc;
-        --tx2: #b8b4ac;
-        --tx3: #7b7874;
-        --tx-info: #7ab4e8;
-        --tx-warn: #f0c060;
-        --tx-ok: #70c88a;
-        --tx-danger: #e89090;
-        --bd: #333333;
-        --bd2: #444444;
-        --bd-info: #2a5488;
-        --bd-focus: #7ab4e8;
-        --accent: #7ab4e8;
-        --accent-soft: rgba(122, 180, 232, 0.15);
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-        --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+        --bg: #1c1e22;
+        --bg-glass: rgba(28, 30, 34, 0.92);
+        --bg2: #24272e;
+        --bg3: #2d3038;
+        --bg4: #383c46;
+        --bg-info: #0e2d4a;
+        --bg-warn: #2e1f00;
+        --bg-ok: #0d2818;
+        --bg-danger: #2e1010;
+        --bg-cur: #162640;
+        --tx: #dfe2e8;
+        --tx2: #9ea4b0;
+        --tx3: #6b7280;
+        --tx-info: #79b8e8;
+        --tx-warn: #e8b840;
+        --tx-ok: #5ec87a;
+        --tx-danger: #e07070;
+        --bd: #363a44;
+        --bd2: #454a58;
+        --bd-info: #2a5088;
+        --bd-focus: #6ea8dc;
+        --accent: #6ea8dc;
+        --accent-soft: rgba(110, 168, 220, 0.18);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
+        --shadow-md: 0 4px 16px rgba(0,0,0,0.45);
       }
     }
 
@@ -3567,4 +3567,62 @@
 .tree-proj-hdr {
   font-size: 11px; font-weight: 700; color: var(--tx3);
   padding: 4px 12px 2px; letter-spacing: .04em;
+}
+
+/* ── 週マタギ スパンバー (Phase 3) ── */
+.span-overlay-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+.span-bar {
+  position: absolute;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  opacity: .85;
+  transition: opacity .15s, box-shadow .15s;
+  min-width: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.span-bar:hover {
+  opacity: 1;
+  box-shadow: 0 3px 10px rgba(0,0,0,.3);
+}
+.span-bar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: rgba(0,0,0,.2);
+  border-radius: 5px 0 0 5px;
+}
+/* 左端が切れている（表示範囲外から継続）*/
+.span-bar.clip-left  { border-radius: 0 5px 5px 0; }
+.span-bar.clip-left::before { display: none; }
+/* 右端が切れている（表示範囲外に続く）*/
+.span-bar.clip-right { border-radius: 5px 0 0 5px; }
+/* スパンノードのグリッドセル装飾 */
+td.has-span-lane {
+  border-bottom: none !important;
+}
+td.has-span-lane.span-last {
+  border-bottom: 2px solid var(--bd) !important;
+}
+/* グリッド内の大項目アイコン */
+.span-node-icon {
+  font-size: 10px;
+  opacity: .6;
+  margin-right: 2px;
 }

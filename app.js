@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.7-04231259';
+    const APP_VERSION = 'v0.9.8-04232151';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -567,8 +567,7 @@
         const perm = await handle.queryPermission({ mode: 'readwrite' });
         if (perm === 'granted') {
           _fsaActive = true;
-          // DEBUGモード: 自動ロードを一時無効化（空グリッド問題の切り分け用）
-          // await fsaLoadFromFile(); // ファイルが新しければ上書き
+          await fsaLoadFromFile(); // ファイルが新しければ上書き
         }
       } catch(e) {
         console.warn('fsaInit:', e);
@@ -750,6 +749,135 @@
     }
 
     /* ── RENDER ── */
+
+    /* ================================================================
+       週マタギ スパンバー機能 (Phase 3)
+       startDate / endDate を持つノードをグリッド上に
+       position:absolute のバーとして描画する。
+       ================================================================ */
+
+    /**
+     * スパンノードを全プロジェクト・全週から収集する
+     * @returns {{ node, date, pi, projTag }[]}
+     */
+    function getSpanNodes() {
+      const result = [];
+      S.projects.forEach((proj, pi) => {
+        const projTag = proj.name.replace(/\s+/g, '_');
+        getAllNodes().forEach(({ node, date }) => {
+          if (node.projTag !== projTag) return;
+          if (!node.startDate || !node.endDate) return;
+          result.push({ node, date, pi, projTag });
+        });
+      });
+      return result;
+    }
+
+    /**
+     * スパンバーを描画する（render() の末尾から呼ぶ）
+     */
+    function renderSpanBars() {
+      // 既存のスパンレイヤーを削除
+      document.querySelectorAll('.span-overlay-layer').forEach(el => el.remove());
+
+      const spanNodes = getSpanNodes();
+      if (!spanNodes.length) return;
+
+      const gridWrap = $('grid-wrap');
+      if (!gridWrap) return;
+      gridWrap.style.position = 'relative';
+
+      const weeks = getWeeks();
+      const firstWk = wkey(weeks[0]);
+      const lastWk  = wkey(weeks[weeks.length - 1]);
+
+      // スパンレイヤー作成
+      const layer = document.createElement('div');
+      layer.className = 'span-overlay-layer';
+      layer.id = 'span-layer';
+      gridWrap.appendChild(layer);
+
+      const wrapRect = gridWrap.getBoundingClientRect();
+
+      // プロジェクト × 重複スパンでレーン管理
+      // pi → [{ node, startWk, endWk }] でレーン番号を決める
+      const piLanes = {}; // pi -> [ {spanId, laneIdx} ]
+
+      spanNodes.forEach(({ node, pi }) => {
+        const startWk = wkey(new Date(node.startDate.replace(/-/g, '/')));
+        const endWk   = wkey(new Date(node.endDate.replace(/-/g, '/')));
+
+        // 表示範囲外なら完全スキップ
+        if (endWk < firstWk || startWk > lastWk) return;
+
+        const visStartWk = startWk < firstWk ? firstWk : startWk;
+        const visEndWk   = endWk   > lastWk  ? lastWk  : endWk;
+
+        // 対応するセル要素を探す（proj-hdr-row の col-week セル）
+        // グリッドの thead thk-{wk} で週位置を特定
+        const startTh = $('thk-' + visStartWk);
+        const endTh   = $('thk-' + visEndWk);
+        if (!startTh || !endTh) return;
+
+        // プロジェクトヘッダ行の位置
+        const projRows = document.querySelectorAll(
+          `tr.proj-hdr-row td.col-proj[data-pi="${pi}"]`
+        );
+        if (!projRows.length) return;
+        const projTd = projRows[0];
+        const rowRect = projTd.closest('tr').getBoundingClientRect();
+
+        const startRect = startTh.getBoundingClientRect();
+        const endRect   = endTh.getBoundingClientRect();
+
+        const left   = startRect.left - wrapRect.left + gridWrap.scrollLeft;
+        const width  = endRect.right  - startRect.left;
+        const top    = rowRect.top    - wrapRect.top + 4;
+        const height = 18;
+
+        // レーン番号（同じプロジェクト内の複数スパン対応）
+        if (!piLanes[pi]) piLanes[pi] = [];
+        const laneIdx = piLanes[pi].length;
+        piLanes[pi].push({ nodeId: node.id });
+        const barTop = top + laneIdx * (height + 3);
+
+        // バー色：projTag のハッシュから決定
+        const colors = ['#3b82f6','#8b5cf6','#059669','#f59e0b','#ef4444','#06b6d4','#ec4899','#10b981'];
+        const colorIdx = (pi + laneIdx) % colors.length;
+        const color = colors[colorIdx];
+
+        const bar = document.createElement('div');
+        bar.className = 'span-bar';
+        if (startWk < firstWk) bar.classList.add('clip-left');
+        if (endWk   > lastWk)  bar.classList.add('clip-right');
+
+        bar.style.cssText = `left:${Math.max(0, left)}px;top:${barTop}px;` +
+          `width:${Math.max(20, width)}px;height:${height}px;background:${color}`;
+        bar.title = `${node.text}\n${node.startDate} 〜 ${node.endDate}`;
+        bar.textContent = node.text || '（無題）';
+
+        // クリックでノート編集
+        bar.addEventListener('click', () => {
+          const found = findNodeById(node.id);
+          if (found) openNotePanelToDate(found.date, node.id);
+        });
+
+        layer.appendChild(bar);
+      });
+    }
+
+    // ResizeObserver でグリッドサイズ変更時に再描画
+    let _spanRo = null;
+    function initSpanObserver() {
+      const gridWrap = $('grid-wrap');
+      if (!gridWrap) return;
+      if (_spanRo) _spanRo.disconnect();
+      _spanRo = new ResizeObserver(() => {
+        requestAnimationFrame(renderSpanBars);
+      });
+      _spanRo.observe(gridWrap);
+    }
+
     function render() {
       try { _renderImpl(); } catch(e) {
         console.error('render() ERROR:', e);
@@ -761,9 +889,7 @@
       }
     }
     function _renderImpl() {
-      console.log('[render] start, S.projects:', S.projects ? S.projects.length : 'null');
       const weeks = getWeeks();
-      console.log('[render] weeks:', weeks.length, 'wOff:', S.wOff);
       const cw = wkey(new Date());
 
       // ツールバーのモードボタン表示更新
@@ -956,6 +1082,8 @@
       const noteHasFocus = _notePanelOpen || (ae && (ae.closest('#ol-container') || ae.closest('#note-panel') || ae.closest('#ol-slash-menu') || ae.closest('#ol-proj-menu')));
       if (focusKey && !noteHasFocus) requestAnimationFrame(() => requestAnimationFrame(() => applyFocusKey(focusKey)));
       if (todoOpen) renderTodo();
+      // スパンバー描画（startDate/endDateを持つノード）
+      requestAnimationFrame(renderSpanBars);
     }
 
 
@@ -1640,13 +1768,13 @@
       const list = [
         { id: 'search', icon: '🔍', label: '検索を開く', romaji: 'kensaku search', key: 'Ctrl+F', fn: () => { closeCmdPalette(); openSearch(); } },
         { id: 'new', icon: '＋', label: '新規追加', romaji: 'shinkitsuika', key: 'Alt+Shift+E', fn: () => openQA() },
-        { id: 'view_all', icon: '🌐', label: '全表示モード', romaji: 'zenshyoji', key: '', fn: () => { _viewMode = 'all'; saveState(); render(); } },
-        { id: 'view_work', icon: '💼', label: 'お仕事モード', romaji: 'oshigoto', key: '', fn: () => { _viewMode = 'work'; saveState(); render(); } },
-        { id: 'view_private', icon: '🏠', label: 'プライベートモード', romaji: 'private', key: '', fn: () => { _viewMode = 'private'; saveState(); render(); } },
-        { id: 'goToday', icon: '📅', label: '今週へ移動', romaji: 'konshu', key: '', fn: () => goToday() },
+        { id: 'view_all', icon: '🌐', label: '全表示モード', romaji: 'zenshyoji', key: 'Alt+1', fn: () => { closeCmdPalette(); _viewMode = 'all'; saveState(); render(); } },
+        { id: 'view_work', icon: '💼', label: 'お仕事モード', romaji: 'oshigoto', key: 'Alt+2', fn: () => { closeCmdPalette(); _viewMode = 'work'; saveState(); render(); } },
+        { id: 'view_private', icon: '🏠', label: 'プライベートモード', romaji: 'private', key: 'Alt+3', fn: () => { closeCmdPalette(); _viewMode = 'private'; saveState(); render(); } },
+        { id: 'goToday', icon: '📅', label: '今週へ移動', romaji: 'konshu', key: 'Alt+0', fn: () => { closeCmdPalette(); goToday(); } },
         { id: 'prevW', icon: '◀', label: '前週へ移動', romaji: 'zenshu', key: 'Alt+Shift+←', fn: () => { prevW(); showHint('◀ 前週') } },
         { id: 'nextW', icon: '▶', label: '次週へ移動', romaji: 'jisshu', key: 'Alt+Shift+→', fn: () => { nextW(); showHint('▶ 次週') } },
-        { id: 'hideDone', icon: '☑', label: _hideDone ? '完了済みを表示' : '完了済みを非表示', romaji: 'kanryo', key: '', fn: () => toggleHideDone() },
+        { id: 'hideDone', icon: '☑', label: _hideDone ? '完了済みを表示' : '完了済みを非表示', romaji: 'kanryo', key: 'Alt+D', fn: () => { closeCmdPalette(); toggleHideDone(); } },
         { id: 'compact', icon: '⊟', label: _compactMode ? '圧縮モードOFF' : '圧縮モードON', romaji: 'asshuku', key: 'Alt+Shift+C', fn: () => toggleCompactMode() },
         { id: 'hdr-focus', icon: '⬆', label: _compactMode ? 'ヘッダ行へフォーカス（折りたたまず）' : 'ヘッダ行へフォーカス（圧縮モードを有効化）', romaji: 'hedda header', key: 'Alt+H', fn: () => {
           let pi = -1;
@@ -1663,7 +1791,7 @@
         { id: 'tree-view', icon: '🌳', label: 'ツリービュー切替', romaji: 'tree tsurii', key: 'Alt+Shift+T', fn: () => { closeCmdPalette(); if (!_notePanelOpen) focusNotePanel(); olToggleTreeMode(); } },
         { id: 'today-note', icon: '📅', label: '今日のノートを開く', romaji: 'today kyou note', key: 'Alt+T', fn: () => { closeCmdPalette(); openNotePanelToDate(todayDateStr(), null); } },
         { id: 'fs-focus', icon: '🔲', label: _fsFocus ? 'フルスクリーン解除' : 'フルスクリーン集中モード', romaji: 'fullscreen', key: 'Alt+Shift+M', fn: () => { toggleFsFocus() } },
-        { id: 'todo', icon: '☑', label: '未完ToDoパネル', romaji: 'todo', key: '', fn: () => toggleTodoPanel() },
+        { id: 'todo', icon: '☑', label: '未完ToDoパネル', romaji: 'todo', key: 'Alt+Shift+D', fn: () => { closeCmdPalette(); toggleTodoPanel(); } },
         { id: 'backup', icon: '💾', label: 'JSONバックアップを保存', romaji: 'backup/save', key: '', fn: () => manualExport() },
         { id: 'import', icon: '📂', label: 'JSONを読み込む', romaji: 'import', key: '', fn: () => $('imp').click() },
         { id: 'ai', icon: '🤖', label: 'AIアシスタント', romaji: 'ai/chat', key: '', fn: () => toggleAiPanel() },
@@ -3480,6 +3608,25 @@
         requestAnimationFrame(() => focusCompactHeader(pi));
         return;
       }
+      // Alt+0: 今週へ
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && ev.key === '0') {
+        ev.preventDefault(); goToday(); return;
+      }
+      // Alt+1/2/3: 表示モード切替
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
+        if (ev.key === '1') { ev.preventDefault(); _viewMode='all';   saveState(); render(); return; }
+        if (ev.key === '2') { ev.preventDefault(); _viewMode='work';  saveState(); render(); return; }
+        if (ev.key === '3') { ev.preventDefault(); _viewMode='private'; saveState(); render(); return; }
+      }
+      // Alt+D: 完了非表示トグル
+      if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'd' || ev.key === 'D')) {
+        ev.preventDefault(); toggleHideDone(); return;
+      }
+      // Alt+Shift+D: ToDoパネル
+      if (ev.altKey && ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'd' || ev.key === 'D')) {
+        ev.preventDefault(); toggleTodoPanel(); return;
+      }
+
       // Alt+Shift+T: WorkFlowy ツリービュー切替
       if (ev.altKey && ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
         ev.preventDefault();
@@ -7508,19 +7655,14 @@
       }
     }
 
-    console.log('[startup] loadState...');
     loadState();
-    console.log('[startup] loadState done. projects:', S.projects ? S.projects.length : 'null', 'wOff:', S.wOff);
     ensureEntryIds();
-    console.log('[startup] ensureEntryIds done');
     ensureNodeDates(); // Phase 2: 全ノードに date プロパティ付与
-    console.log('[startup] ensureNodeDates done');
     if (!S.projects || !S.projects.length) initSample();
-    console.log('[startup] calling render()...');
     render();
-    console.log('[startup] render() done');
     doRollover();
     initColumnWidths();
+    initSpanObserver(); // Phase 3: スパンバーの ResizeObserver
     updateSaveTimeDisplay();
     if (_loadStateError) { setTimeout(() => alert(_loadStateError), 400); }
     ghSyncLoad(false);
