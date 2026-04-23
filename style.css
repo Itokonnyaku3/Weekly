@@ -3483,3 +3483,88 @@
       filter: none !important;
     }
 
+
+/* ── WorkFlowy ツリービュー (Phase 2) ── */
+#ol-tree-container {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+#ol-tree-container.active { display: block; }
+#ol-container.tree-hidden { display: none; }
+
+.tree-toggle-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Year/Month headers */
+.tree-year { margin: 4px 0; }
+.tree-year-hdr {
+  font-size: 11px; font-weight: 700;
+  color: var(--tx3); text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 6px 12px 2px;
+  cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.tree-year-hdr:hover { color: var(--tx2); }
+.tree-year-hdr .tree-arrow { font-size: 9px; transition: transform .15s; }
+.tree-year-hdr.collapsed .tree-arrow { transform: rotate(-90deg); }
+
+.tree-month { margin-left: 8px; }
+.tree-month-hdr {
+  font-size: 12px; font-weight: 700; color: var(--tx2);
+  padding: 4px 10px 2px;
+  cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.tree-month-hdr:hover { color: var(--tx); }
+.tree-month-hdr .tree-arrow { font-size: 9px; transition: transform .15s; }
+.tree-month-hdr.collapsed .tree-arrow { transform: rotate(-90deg); }
+
+.tree-month-body { margin-left: 8px; }
+
+/* Date entries */
+.tree-date-entry {
+  padding: 5px 10px;
+  border-radius: 6px; margin: 1px 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .1s;
+}
+.tree-date-entry:hover { background: var(--bg2); border-color: var(--bd); }
+.tree-date-entry.today { background: var(--bg-cur); border-color: var(--bd-focus); }
+
+.tree-date-hdr {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: var(--tx);
+  margin-bottom: 3px;
+}
+.tree-date-label { flex: 1; }
+.tree-date-cnt {
+  font-size: 10px; color: var(--tx3); font-weight: 400;
+  background: var(--bg3); border-radius: 10px;
+  padding: 1px 6px;
+}
+.tree-date-cnt.has-tasks { color: var(--accent); background: var(--accent-soft); }
+
+.tree-node-preview {
+  font-size: 11px; color: var(--tx2);
+  padding: 1px 0 1px 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.5;
+}
+.tree-node-preview .todo-icon { font-size: 10px; margin-right: 3px; }
+.tree-node-preview.done { opacity: .45; text-decoration: line-through; }
+.tree-more-hint {
+  font-size: 10px; color: var(--tx3);
+  padding: 1px 0 1px 12px;
+}
+
+/* Proj entries in tree */
+.tree-proj-section { margin: 8px 0 4px; }
+.tree-proj-hdr {
+  font-size: 11px; font-weight: 700; color: var(--tx3);
+  padding: 4px 12px 2px; letter-spacing: .04em;
+}

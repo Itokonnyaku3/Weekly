@@ -114,7 +114,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.6-04230932';
+    const APP_VERSION = 'v0.9.7-04231259';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1635,6 +1635,7 @@
           requestAnimationFrame(() => focusCompactHeader(pi));
         }},
         { id: 'note', icon: '📝', label: _notePanelOpen ? 'ノートを閉じる' : 'ノートを開く', romaji: 'note', key: 'Alt+Shift+N', fn: () => { _notePanelOpen ? toggleNotePanel() : focusNotePanel() } },
+        { id: 'tree-view', icon: '🌳', label: 'ツリービュー切替', romaji: 'tree tsurii', key: 'Alt+Shift+T', fn: () => { closeCmdPalette(); if (!_notePanelOpen) focusNotePanel(); olToggleTreeMode(); } },
         { id: 'today-note', icon: '📅', label: '今日のノートを開く', romaji: 'today kyou note', key: 'Alt+T', fn: () => { closeCmdPalette(); openNotePanelToDate(todayDateStr(), null); } },
         { id: 'fs-focus', icon: '🔲', label: _fsFocus ? 'フルスクリーン解除' : 'フルスクリーン集中モード', romaji: 'fullscreen', key: 'Alt+Shift+M', fn: () => { toggleFsFocus() } },
         { id: 'todo', icon: '☑', label: '未完ToDoパネル', romaji: 'todo', key: '', fn: () => toggleTodoPanel() },
@@ -2336,6 +2337,14 @@
     }
 
     /* ── todo left panel ── */
+    function toggleTodoShowAll() {
+      _todoShowAll = !_todoShowAll;
+      const btn = $('todo-all-btn');
+      if (btn) btn.classList.toggle('active', _todoShowAll);
+      if (!todoOpen) toggleTodoPanel();
+      else renderTodo();
+    }
+
     function toggleTodoPanel() {
       todoOpen = !todoOpen;
       $('tv-btn').classList.toggle('btn-active', todoOpen);
@@ -2343,37 +2352,34 @@
       $('rz-left').classList.toggle('visible', todoOpen);
       if (todoOpen) renderTodo();
     }
+    let _todoShowAll = false; // false=プロジェクト付きのみ / true=全タスク
+
     function renderTodo() {
       const today = getMonday(new Date());
       let grouped = {};
 
-      if (S.dailyOutline) {
-        for (const date in S.dailyOutline) {
-          const nodes = S.dailyOutline[date];
-          if (!Array.isArray(nodes)) continue;
+      // Phase 2: getAllNodes() で全日付横断
+      const allNodes = getAllNodes({ includeProj: true });
+      allNodes.forEach(({ node: n, date }) => {
+        if (getNodeType(n) !== 'todo' || n.checked) return;
+        if (!_todoShowAll && !n.projTag) return; // プロジェクト付きモードはプロジェクト必須
 
-          nodes.forEach(n => {
-            if (getNodeType(n) !== 'todo' || n.checked) return;
-            if (!n.projTag) return; // Only show project-tagged todos
+        const projIdx = n.projTag
+          ? S.projects.findIndex(p => p.name.replace(/\s+/g, '_') === n.projTag)
+          : -1;
+        const proj = projIdx >= 0 ? S.projects[projIdx] : null;
+        if (!_todoShowAll && !proj) return;
 
-            // Find which project this belongs to
-            const projIdx = S.projects.findIndex(p => p.name.replace(/\s+/g, '_') === n.projTag);
-            if (projIdx < 0) return;
-            const proj = S.projects[projIdx];
-
-            // Determine week key
-            let wk;
-            if (date.startsWith('proj:')) {
-              wk = 'proj';
-            } else {
-              try { wk = wkey(new Date(date.replace(/-/g, '/'))); } catch(e) { return; }
-            }
-
-            if (!grouped[wk]) grouped[wk] = [];
-            grouped[wk].push({ proj, pi: projIdx, wk, nodeId: n.id, n, date });
-          });
+        let wk;
+        if (date.startsWith('proj:')) {
+          wk = 'proj';
+        } else {
+          try { wk = wkey(new Date(date.replace(/-/g, '/'))); } catch(e) { return; }
         }
-      }
+
+        if (!grouped[wk]) grouped[wk] = [];
+        grouped[wk].push({ proj, pi: projIdx, wk, nodeId: n.id, n, date });
+      });
 
       const keys = Object.keys(grouped).filter(k => k !== 'proj').sort();
       if (grouped['proj']) keys.unshift('proj');
@@ -3449,6 +3455,14 @@
         requestAnimationFrame(() => focusCompactHeader(pi));
         return;
       }
+      // Alt+Shift+T: WorkFlowy ツリービュー切替
+      if (ev.altKey && ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
+        ev.preventDefault();
+        if (!_notePanelOpen) focusNotePanel();
+        olToggleTreeMode();
+        return;
+      }
+
       // Alt+T: 今日のノートを開く
       if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
         ev.preventDefault();
@@ -3868,6 +3882,177 @@
       olNavFinish();
     }
 
+
+    /* ================================================================
+       WorkFlowy ツリービュー (Phase 2)
+       全日付を年 > 月 > 日 の階層で一覧表示。
+       ノードをブラウズしながら任意の日付にズームインできる。
+    ================================================================ */
+
+    const _DOW_JA = ['日', '月', '火', '水', '木', '金', '土'];
+
+    /** 日付文字列 "YYYY-M-D" → { year, month, day, dow, label } */
+    function _parseDateKey(dateKey) {
+      const [y, m, d] = dateKey.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      const todayStr = todayDateStr();
+      const isToday = dateKey === todayStr;
+      const dow = _DOW_JA[dt.getDay()];
+      const label = `${m}/${d} (${dow})${isToday ? ' ★今日' : ''}`;
+      return { year: y, month: m, day: d, dow, label, isToday, dt };
+    }
+
+    /** ツリービュー ON/OFF トグル */
+    function olToggleTreeMode() {
+      _olTreeMode = !_olTreeMode;
+      _applyTreeModeUI();
+      if (_olTreeMode) {
+        olRenderTree();
+      }
+    }
+
+    /** ツリーモードの表示切り替え */
+    function _applyTreeModeUI() {
+      const container   = $('ol-container');
+      const treeContainer = $('ol-tree-container');
+      const olNav       = $('ol-nav');
+      const todayHd     = $('today-ol-hd');
+      const toggleBtn   = $('ol-tree-toggle-btn');
+
+      if (_olTreeMode) {
+        if (container)    container.classList.add('tree-hidden');
+        if (treeContainer) treeContainer.classList.add('active');
+        if (olNav)        olNav.style.display = 'none';
+        if (todayHd)      todayHd.style.display = 'none';
+        if (toggleBtn)    toggleBtn.classList.add('active');
+      } else {
+        if (container)    container.classList.remove('tree-hidden');
+        if (treeContainer) treeContainer.classList.remove('active');
+        if (olNav)        olNav.style.display = '';
+        if (todayHd)      todayHd.style.display = '';
+        if (toggleBtn)    toggleBtn.classList.remove('active');
+        // 日付ビューを再描画
+        if (_olCurrentDate) olRender('ol-container', _olCurrentDate);
+      }
+    }
+
+    /** 日付にズームイン（ツリーモードを終了して指定日へ） */
+    function olZoomToDate(dateKey) {
+      _olTreeMode = false;
+      olGoDate(dateKey);
+      _applyTreeModeUI();
+      // パネルが閉じていれば開く
+      if (!_notePanelOpen) focusNotePanel();
+    }
+
+    /** ツリービューのレンダリング */
+    function olRenderTree() {
+      const container = $('ol-tree-container');
+      if (!container) return;
+
+      const todayStr = todayDateStr();
+
+      // dailyOutline の日付キーを収集（proj:N は除外）
+      const dateMeta = [];
+      for (const dateKey in S.dailyOutline) {
+        if (dateKey.startsWith('proj:')) continue;
+        const nodes = S.dailyOutline[dateKey];
+        if (!Array.isArray(nodes)) continue;
+        // 空の初期プレースホルダー（text が空の1件のみ）はスキップ
+        const nonEmpty = nodes.filter(n => n.text && n.text.trim());
+        if (nonEmpty.length === 0) continue;
+        const info = _parseDateKey(dateKey);
+        dateMeta.push({ dateKey, nodes, nonEmpty, ...info });
+      }
+
+      // 新しい日付順にソート
+      dateMeta.sort((a, b) => b.dt - a.dt);
+
+      if (dateMeta.length === 0) {
+        container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--tx3);font-size:12px">
+          ノートがまだありません。<br>日付ビューからノードを追加してください。
+        </div>`;
+        return;
+      }
+
+      // 年 > 月 でグルーピング
+      const byYear = new Map();
+      for (const dm of dateMeta) {
+        if (!byYear.has(dm.year)) byYear.set(dm.year, new Map());
+        const byMonth = byYear.get(dm.year);
+        if (!byMonth.has(dm.month)) byMonth.set(dm.month, []);
+        byMonth.get(dm.month).push(dm);
+      }
+
+      let html = '';
+
+      for (const [year, byMonth] of byYear) {
+        const yearId = `tree-yr-${year}`;
+        html += `<div class="tree-year">
+          <div class="tree-year-hdr" onclick="_treeToggle('${yearId}')">
+            <span class="tree-arrow">▼</span>
+            ${year}年
+          </div>
+          <div id="${yearId}" class="tree-year-body">`;
+
+        for (const [month, days] of byMonth) {
+          const monthId = `tree-mo-${year}-${month}`;
+          html += `<div class="tree-month">
+            <div class="tree-month-hdr" onclick="_treeToggle('${monthId}')">
+              <span class="tree-arrow">▼</span>
+              ${month}月
+            </div>
+            <div id="${monthId}" class="tree-month-body">`;
+
+          for (const dm of days) {
+            const isToday = dm.dateKey === todayStr;
+            const taskCnt = dm.nonEmpty.filter(n => n.isTodo && !n.checked).length;
+            const cntCls  = taskCnt > 0 ? 'has-tasks' : '';
+            const cntTxt  = taskCnt > 0 ? `☐${taskCnt}` : `${dm.nonEmpty.length}件`;
+
+            // ノードのプレビュー（最大3件）
+            const PREVIEW_MAX = 3;
+            let previews = '';
+            dm.nonEmpty.slice(0, PREVIEW_MAX).forEach(n => {
+              const isDone = n.isTodo && n.checked;
+              const icon   = n.isTodo ? (n.checked ? '☑' : '☐') : '•';
+              const txt    = esc(n.text.slice(0, 60));
+              previews += `<div class="tree-node-preview${isDone ? ' done' : ''}">
+                <span class="todo-icon">${icon}</span>${txt}
+              </div>`;
+            });
+            if (dm.nonEmpty.length > PREVIEW_MAX) {
+              previews += `<div class="tree-more-hint">…他 ${dm.nonEmpty.length - PREVIEW_MAX} 件</div>`;
+            }
+
+            html += `<div class="tree-date-entry${isToday ? ' today' : ''}"
+              onclick="olZoomToDate('${dm.dateKey}')">
+              <div class="tree-date-hdr">
+                <span class="tree-date-label">${dm.label}</span>
+                <span class="tree-date-cnt ${cntCls}">${cntTxt}</span>
+              </div>
+              ${previews}
+            </div>`;
+          }
+
+          html += `</div></div>`; // tree-month-body / tree-month
+        }
+        html += `</div></div>`; // tree-year-body / tree-year
+      }
+
+      container.innerHTML = html;
+    }
+
+    /** ツリーの年/月ヘッダのトグル */
+    function _treeToggle(id) {
+      const body = $(id);
+      const hdr  = body && body.previousElementSibling;
+      if (!body) return;
+      const isCollapsed = body.style.display === 'none';
+      body.style.display = isCollapsed ? '' : 'none';
+      if (hdr) hdr.classList.toggle('collapsed', !isCollapsed);
+    }
+
     function olGoDate(dateStr) {
       if (!dateStr) return;
       // input[type=date] の値は YYYY-MM-DD 形式なので変換
@@ -3941,6 +4126,7 @@
     let _olFocusAtStart = false; // true=先頭 false=末尾にカーソルを置く
     let _olSaveTimer = null;
     let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
+    let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
     // Undo/Redo履歴（日付ごとに独立したスタック）
     const _olUndoStacks = {};  // { [date]: [ JSON文字列, ... ] }
@@ -4066,30 +4252,74 @@
       return S.dailyOutline[date];
     }
 
+    /* ================================================================
+       UNIFIED NODE ACCESS — Phase 2
+       S.dailyOutline 構造は保持しつつ、全ノードを横断するAPIを追加。
+       各ノードに date プロパティを付与することで、
+       日付またぎの検索・一覧・フィルタリングを可能にする。
+    ================================================================ */
+
+    /** 全 dailyOutline のノードを date プロパティ付きのフラット配列で返す
+     *  @param {object} [opts]
+     *  @param {boolean} [opts.includeProj=false] proj:N キーのノードも含める
+     *  @returns {{node: object, date: string}[]}
+     */
+    function getAllNodes({ includeProj = false } = {}) {
+      if (!S.dailyOutline) return [];
+      const result = [];
+      for (const date in S.dailyOutline) {
+        if (!includeProj && date.startsWith('proj:')) continue;
+        const nodes = S.dailyOutline[date];
+        if (!Array.isArray(nodes)) continue;
+        for (const node of nodes) {
+          // date プロパティを付与（まだない場合）
+          if (!node.date) node.date = date;
+          result.push({ node, date });
+        }
+      }
+      return result;
+    }
+
+    /** 既存ノード全てに date プロパティを付与するマイグレーション
+     *  loadState 後に一度だけ呼ぶ。既存データへの影響は date 追加のみ。
+     */
+    function ensureNodeDates() {
+      if (!S.dailyOutline) return;
+      for (const date in S.dailyOutline) {
+        const nodes = S.dailyOutline[date];
+        if (!Array.isArray(nodes)) continue;
+        for (const node of nodes) {
+          if (!node.date) node.date = date;
+        }
+      }
+    }
+
+    /** 新規ノード作成時のデフォルトフィールドに date を含める
+     *  既存の olNewNode() 相当のファクトリ
+     */
+    function olMakeNode(date, overrides = {}) {
+      return {
+        id: olNewId(), text: '', indent: 0, bold: false, color: '',
+        collapsed: false, date,
+        ...overrides
+      };
+    }
+
     // Node query engine functions
     function getGridItems(pi, wk) {
       const proj = S.projects[pi];
       if (!proj) return [];
       const projTag = proj.name.replace(/\s+/g, '_');
-      const items = [];
-      if (!S.dailyOutline) return items;
-      for (const date in S.dailyOutline) {
-        if (date.startsWith('proj:')) continue;
-        // Check if this date falls in week wk
-        let dateWk;
+      // Phase 2: getAllNodes() で全日付横断フィルタ
+      return getAllNodes().filter(({ node, date }) => {
+        if (node.projTag !== projTag) return false;
         try {
-          dateWk = wkey(new Date(date.replace(/-/g, '/')));
-        } catch(e) { continue; }
-        if (dateWk !== wk) continue;
-        const nodes = S.dailyOutline[date];
-        if (!Array.isArray(nodes)) continue;
-        nodes.forEach((n, idx) => {
-          if (n.projTag === projTag) {
-            items.push({ node: n, date, idx });
-          }
-        });
-      }
-      return items;
+          return wkey(new Date(date.replace(/-/g, '/'))) === wk;
+        } catch(e) { return false; }
+      }).map(({ node, date }) => ({
+        node, date,
+        idx: (S.dailyOutline[date] || []).indexOf(node)
+      }));
     }
 
     // グリッドセルのアイテムを親子ツリー順に整理して返す
@@ -4212,12 +4442,14 @@
     }
 
     function findNodeById(id) {
-      if (!S.dailyOutline || !id) return null;
-      for (const date in S.dailyOutline) {
-        const nodes = S.dailyOutline[date];
-        if (!Array.isArray(nodes)) continue;
-        for (let idx = 0; idx < nodes.length; idx++) {
-          if (nodes[idx].id === id) return { node: nodes[idx], date, idx };
+      if (!id) return null;
+      // getAllNodes() で全日付横断検索（Phase 2）
+      const all = getAllNodes({ includeProj: true });
+      for (let i = 0; i < all.length; i++) {
+        const { node, date } = all[i];
+        if (node.id === id) {
+          const idx = S.dailyOutline[date].indexOf(node);
+          return { node, date, idx };
         }
       }
       return null;
@@ -7245,6 +7477,7 @@
 
     loadState();
     ensureEntryIds();
+    ensureNodeDates(); // Phase 2: 全ノードに date プロパティ付与
     if (!S.projects || !S.projects.length) initSample();
     render();
     doRollover();
