@@ -359,6 +359,20 @@
         <button class="btn" onclick="closeSettings()" style="padding:4px 10px">✕</button>
       </div>
 
+      <!-- ── File System Access API ── -->
+      <div class="settings-section">
+        <h4>💾 ファイル自動保存</h4>
+        <p style="font-size:11px;color:var(--tx2);margin-bottom:10px">
+          ローカルの <code>data.json</code> に直接保存します。Chrome / Edge のみ対応。
+        </p>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span id="fsa-status" style="font-size:12px;font-weight:600;flex:1">確認中...</span>
+          <button class="btn btn-accent" onclick="fsaSelectFile()" id="fsa-select-btn" style="padding:5px 12px;font-size:11px">📁 ファイルを選ぶ</button>
+          <button class="btn" onclick="fsaRequestPermission()" id="fsa-perm-btn" style="padding:5px 12px;font-size:11px;display:none">🔑 許可する</button>
+        </div>
+        <p style="font-size:10px;color:var(--tx3)">※ 選択したファイルは次回以降も自動的に使用されます（ブラウザの許可が必要）。localStorage も同時に更新します。</p>
+      </div>
+
       <div class="settings-section">
         <h4>📦 GitHub 同期設定</h4>
         <div class="settings-row">

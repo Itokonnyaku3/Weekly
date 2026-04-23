@@ -114,7 +114,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.5-04230902';
+    const APP_VERSION = 'v0.9.6-04230932';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -482,6 +482,170 @@
 
 
 
+
+    /* ================================================================
+       FILE SYSTEM ACCESS API — ローカルファイルへの直接保存
+       Chrome/Edge 86+ 対応。非対応時は localStorage のみ使用。
+    ================================================================ */
+
+    const _fsaEnabled = ('showOpenFilePicker' in window);
+    let _fsaHandle = null;   // FileSystemFileHandle | null
+    let _fsaActive = false;  // 許可済みでファイルへの読み書きが可能
+
+    /* ── IndexedDB helper（FileSystemFileHandle の永続化） ── */
+    function _idbOpen() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open('pwt_fsa_v1', 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore('h');
+        req.onsuccess  = e => resolve(e.target.result);
+        req.onerror    = () => reject(req.error);
+      });
+    }
+    async function _idbGet(key) {
+      try {
+        const db = await _idbOpen();
+        return new Promise(resolve => {
+          const req = db.transaction('h', 'readonly').objectStore('h').get(key);
+          req.onsuccess = () => resolve(req.result ?? null);
+          req.onerror   = () => resolve(null);
+        });
+      } catch(e) { return null; }
+    }
+    async function _idbSet(key, val) {
+      try {
+        const db = await _idbOpen();
+        return new Promise(resolve => {
+          const tx = db.transaction('h', 'readwrite');
+          tx.objectStore('h').put(val, key);
+          tx.oncomplete = resolve;
+          tx.onerror    = resolve;
+        });
+      } catch(e) {}
+    }
+
+    /* ── FSA ステータス UI 更新 ── */
+    function updateFsaStatusUI() {
+      const el     = $('fsa-status');
+      const permBtn= $('fsa-perm-btn');
+      if (!el) return;
+      if (!_fsaEnabled) {
+        el.textContent = '⚠ 非対応（Chrome/Edge をご利用ください）';
+        el.style.color = 'var(--tx3)';
+      } else if (_fsaActive) {
+        el.textContent = '✅ ファイル同期中';
+        el.style.color = 'var(--tx-ok)';
+        if (permBtn) permBtn.style.display = 'none';
+      } else if (_fsaHandle) {
+        el.textContent = '⏳ 許可が必要です';
+        el.style.color = 'var(--tx-warn)';
+        if (permBtn) permBtn.style.display = '';
+      } else {
+        el.textContent = '📁 未設定（ファイルを選んで保存先を設定）';
+        el.style.color = 'var(--tx3)';
+      }
+    }
+
+    /* ── FSA 初期化（IndexedDB からハンドル復元） ── */
+    async function fsaInit() {
+      if (!_fsaEnabled) { updateFsaStatusUI(); return; }
+      try {
+        const handle = await _idbGet('datafile');
+        if (!handle) { updateFsaStatusUI(); return; }
+        _fsaHandle = handle;
+        const perm = await handle.queryPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+          _fsaActive = true;
+          await fsaLoadFromFile(); // ファイルが新しければ上書き
+        }
+      } catch(e) {
+        console.warn('fsaInit:', e);
+      }
+      updateFsaStatusUI();
+    }
+
+    /* ── FSA: ユーザージェスチャーで許可を要求 ── */
+    async function fsaRequestPermission() {
+      if (!_fsaHandle) return;
+      try {
+        const perm = await _fsaHandle.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+          _fsaActive = true;
+          await fsaLoadFromFile();
+          showToast('✅ ファイルへのアクセスが許可されました');
+        }
+      } catch(e) { console.warn('fsaRequestPermission:', e); }
+      updateFsaStatusUI();
+    }
+
+    /* ── FSA: ファイル選択ダイアログ ── */
+    async function fsaSelectFile() {
+      if (!_fsaEnabled) {
+        alert('このブラウザは File System Access API に対応していません。Chrome または Edge をご利用ください。');
+        return;
+      }
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'JSON Data', accept: { 'application/json': ['.json'] } }],
+          multiple: false
+        });
+        _fsaHandle = handle;
+        await _idbSet('datafile', handle);
+        const perm = await handle.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+          _fsaActive = true;
+          await fsaLoadFromFile();
+          showToast('📂 ファイルを開きました。以降は自動保存されます。');
+        }
+      } catch(e) {
+        if (e.name !== 'AbortError') console.error('fsaSelectFile:', e);
+      }
+      updateFsaStatusUI();
+    }
+
+    /* ── FSA: ファイルからデータ読み込み（タイムスタンプ比較） ── */
+    async function fsaLoadFromFile() {
+      if (!_fsaHandle || !_fsaActive) return false;
+      try {
+        const file   = await _fsaHandle.getFile();
+        const text   = await file.text();
+        const parsed = JSON.parse(text);
+        if (!parsed || !Array.isArray(parsed.projects)) return false;
+
+        const fileTime = new Date(parsed.savedAt  || 0).getTime();
+        const lsTime   = new Date(S.savedAt       || 0).getTime();
+
+        if (fileTime > lsTime) {
+          S = parsed;
+          if (!S.tagMeta) S.tagMeta = {};
+          localStorage.setItem(SK, JSON.stringify(S));
+          render();
+          if (typeof renderTodo === 'function' && todoOpen) renderTodo();
+          showToast('📂 ファイルから最新データを読み込みました');
+        }
+        return true;
+      } catch(e) {
+        console.warn('fsaLoadFromFile:', e);
+        return false;
+      }
+    }
+
+    /* ── FSA: ファイルへ書き込み ── */
+    async function fsaWriteToFile() {
+      if (!_fsaHandle || !_fsaActive) return false;
+      try {
+        const writable = await _fsaHandle.createWritable();
+        await writable.write(JSON.stringify(S, null, 2));
+        await writable.close();
+        return true;
+      } catch(e) {
+        console.warn('fsaWriteToFile:', e);
+        // 権限が失われた可能性
+        _fsaActive = false;
+        updateFsaStatusUI();
+        return false;
+      }
+    }
+
     let _loadStateError = '';
     function loadState() {
       try {
@@ -504,6 +668,8 @@
 
     function saveState(immediateSync = false) {
       S.savedAt = new Date().toISOString();
+
+      // ── localStorage（キャッシュ） ──
       try {
         localStorage.setItem(SK, JSON.stringify(S));
       } catch (e) {
@@ -514,6 +680,12 @@
         }
         return;
       }
+
+      // ── FSA: ローカルファイルに書き込み（fire-and-forget） ──
+      if (_fsaActive) {
+        fsaWriteToFile(); // async, エラーは内部でハンドリング
+      }
+
       updateSaveTimeDisplay();
       _ghDirty = true;
       const { enabled } = ghGetSettings();
@@ -1824,7 +1996,7 @@
         const nodes = olGetNodes(targetDate);
         nodes.push({
           id: olNewId(), text, type, isTodo: type === 'todo', checked: false,
-          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due
+          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due, startDate: '', endDate: ''
         });
       } else {
         // Edit existing node
@@ -2413,7 +2585,7 @@
       nodes.push({
         id: nodeId, text: txt, indent: 0, isTodo: true, checked: false,
         type: 'todo', projTag: projTag,
-        url: '', note: '', images: [], priority: '', tags: [], start: '', due: ''
+        url: '', note: '', images: [], priority: '', tags: [], start: '', due: '', startDate: '', endDate: ''
       });
 
       saveState();
@@ -7080,6 +7252,15 @@
     updateSaveTimeDisplay();
     if (_loadStateError) { setTimeout(() => alert(_loadStateError), 400); }
     ghSyncLoad(false);
+
+    // ── FSA 初期化（非同期・ノンブロッキング） ──
+    // loadState() が localStorage から同期読み込みした後に実行
+    // ファイルの方が新しければ自動的に再描画される
+    if (_fsaEnabled) {
+      fsaInit().then(() => updateFsaStatusUI());
+    } else {
+      updateFsaStatusUI();
+    }
 
     /* ── 別タブ検知 ──
        別タブでデータが更新されたら警告トースト（自動反映はしない）
