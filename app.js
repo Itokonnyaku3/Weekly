@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04232309';
+    const APP_VERSION = 'v0.9.9-04232323';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3654,10 +3654,14 @@
         return;
       }
 
-      // Alt+T: 今日のノートを開く
+      // Alt+T: 今日のノートを開く（ツリー/ズームビュー中でも常に機能）
       if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && (ev.key === 'T' || ev.key === 't')) {
         ev.preventDefault();
-        openNotePanelToDate(todayDateStr(), null);
+        if (_olTreeMode || _olZoomLevel !== 'day') {
+          olZoomToDate(todayDateStr()); // ツリーモードを終了して今日へ
+        } else {
+          openNotePanelToDate(todayDateStr(), null);
+        }
         return;
       }
       // Alt+Shift+E: 新規追加モーダルを開く
@@ -4437,36 +4441,124 @@
       let html = `<div class="tree-zoom-hdr">
         <button class="tree-zoom-back" onclick="olZoomOut()" title="年ビューへ">◀ ${year}年</button>
         <span>${month}月</span>
-      </div>`;
+        <span style="font-size:10px;color:var(--tx3);margin-left:8px">↑↓:移動 / Enter:開く / Ctrl+↑↓:折りたたみ</span>
+      </div>
+      <div class="ol-mv-list" id="ol-mv-list">`;
 
       for (let d = 1; d <= daysInMonth; d++) {
         const dateKey = `${year}-${month}-${d}`;
-        const dt = new Date(year, month - 1, d);
+        const dt  = new Date(year, month - 1, d);
         const dow = _DOW_JA[dt.getDay()];
         const isToday = dateKey === todayStr;
         const nodes = (S.dailyOutline && S.dailyOutline[dateKey]) || [];
         const nonEmpty = nodes.filter(n => n.text && n.text.trim());
+        const undone = nonEmpty.filter(n => n.isTodo && !n.checked).length;
+        const cntTxt = undone > 0 ? `☐${undone}` : (nonEmpty.length > 0 ? `${nonEmpty.length}件` : '');
+        const cntCls = undone > 0 ? 'has-tasks' : '';
 
-        const cntCls = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0 ? 'has-tasks' : '';
-        const cntTxt = nonEmpty.length > 0 ? `${nonEmpty.length}件` : '';
-
-        let previews = '';
-        nonEmpty.slice(0, 2).forEach(n => {
-          const icon = n.isTodo ? (n.checked ? '☑' : '☐') : '•';
-          previews += `<div class="tree-node-preview">${icon} ${esc(n.text.slice(0,50))}</div>`;
-        });
-
-        html += `<div class="tree-date-entry${isToday ? ' today' : ''}"
-          onclick="olZoomIn('${dateKey}')">
-          <div class="tree-date-hdr">
-            <span class="tree-date-label">${month}/${d} (${dow})${isToday ? ' ★今日' : ''}</span>
+        html += `<div class="ol-mv-day" data-date="${dateKey}">
+          <div class="ol-mv-hdr${isToday ? ' today' : ''}" tabindex="0"
+               data-mv-type="date" data-date="${dateKey}"
+               onkeydown="_mvKeyDown(event,this)">
+            <span class="ol-mv-arrow">▼</span>
+            <span class="ol-mv-label">${month}/${d}（${dow}）${isToday ? ' ★今日' : ''}</span>
             ${cntTxt ? `<span class="tree-date-cnt ${cntCls}">${cntTxt}</span>` : ''}
           </div>
-          ${previews}
-        </div>`;
+          <div class="ol-mv-body" id="mvb-${dateKey}">`;
+
+        if (nonEmpty.length > 0) {
+          nonEmpty.forEach(n => {
+            const icon = n.isTodo ? (n.checked ? '☑' : '☐') : (n.type === 'link' ? '🔗' : '•');
+            const done = n.checked ? ' ol-mv-done' : '';
+            const prio = n.priority === 'high' ? ' ol-mv-hi' : '';
+            html += `<div class="ol-mv-node${done}${prio}" tabindex="0"
+              data-mv-type="node" data-date="${dateKey}" data-id="${n.id}"
+              style="padding-left:${(n.indent||0)*14+8}px"
+              onkeydown="_mvKeyDown(event,this)"
+              ondblclick="olMvOpenNode('${dateKey}','${n.id}')">
+              <span class="ol-mv-icon">${icon}</span>
+              <span class="ol-mv-text">${esc(n.text)}</span>
+              ${n.due ? `<span class="e-due-badge${n.due<todayStr?' e-due-over':n.due===todayStr?' e-due-today':''}">${n.due.slice(5).replace('-','/')}</span>` : ''}
+            </div>`;
+          });
+        } else {
+          html += `<div class="ol-mv-empty" onclick="olZoomToDate('${dateKey}')">— クリックして記録を追加 —</div>`;
+        }
+
+        html += `</div></div>`; // ol-mv-body / ol-mv-day
       }
 
+      html += `</div>`; // ol-mv-list
       container.innerHTML = html;
+
+      // 今日にスクロール
+      const todayEl = container.querySelector('.ol-mv-hdr.today');
+      if (todayEl) todayEl.scrollIntoView({ block: 'center' });
+    }
+
+    /** マルチデイビューのキーボードナビゲーション */
+    function _mvKeyDown(ev, el) {
+      const list   = $('ol-mv-list');
+      if (!list) return;
+      const all    = Array.from(list.querySelectorAll('[tabindex="0"]'));
+      const idx    = all.indexOf(el);
+
+      if (ev.key === 'ArrowDown' && !ev.shiftKey) {
+        ev.preventDefault();
+        if (idx < all.length - 1) all[idx + 1].focus();
+      } else if (ev.key === 'ArrowUp' && !ev.shiftKey) {
+        ev.preventDefault();
+        if (idx > 0) all[idx - 1].focus();
+      } else if (ev.key === 'Enter') {
+        ev.preventDefault();
+        const date = el.dataset.date;
+        const id   = el.dataset.id;
+        olMvOpenNode(date, id || null);
+      } else if (ev.ctrlKey && ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        // 現在の日セクションを折りたたむ
+        const day = el.closest('.ol-mv-day');
+        if (day) _mvCollapseDay(day, true);
+      } else if (ev.ctrlKey && ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        const day = el.closest('.ol-mv-day');
+        if (day) _mvCollapseDay(day, false);
+      } else if (ev.altKey && (ev.key === 'ArrowUp') && !ev.ctrlKey) {
+        ev.preventDefault();
+        olZoomOut(); // 月→年ビューへ
+      }
+    }
+
+    /** 日セクションを折りたたみ/展開 */
+    function _mvCollapseDay(dayEl, collapse) {
+      const body  = dayEl.querySelector('.ol-mv-body');
+      const arrow = dayEl.querySelector('.ol-mv-arrow');
+      const hdr   = dayEl.querySelector('.ol-mv-hdr');
+      if (!body) return;
+      if (collapse) {
+        body.style.display  = 'none';
+        if (arrow) arrow.textContent = '▶';
+        // フォーカスをヘッダに移動
+        if (hdr) hdr.focus();
+      } else {
+        body.style.display  = '';
+        if (arrow) arrow.textContent = '▼';
+        // 最初のノードにフォーカス
+        const first = body.querySelector('[tabindex="0"]');
+        if (first) first.focus();
+      }
+    }
+
+    /** マルチデイビューからノードを開く */
+    function olMvOpenNode(dateKey, nodeId) {
+      olZoomToDate(dateKey);
+      if (nodeId) {
+        // ノードにフォーカス
+        setTimeout(() => {
+          _olFocusId = nodeId;
+          olRender('ol-container', dateKey);
+        }, 50);
+      }
     }
 
     /** 年ビュー描画 */
@@ -4480,10 +4572,11 @@
       let html = `<div class="tree-zoom-hdr">
         <button class="tree-zoom-back" onclick="olZoomOut()" title="全体ビューへ">◀ 全体</button>
         <span>${year}年</span>
-      </div>`;
+        <span style="font-size:10px;color:var(--tx3);margin-left:8px">↑↓:月選択 / Enter:月を開く</span>
+      </div>
+      <div class="ol-mv-list" id="ol-mv-list">`;
 
       for (let m = 1; m <= 12; m++) {
-        // その月のノード数を集計
         let total = 0, tasks = 0;
         if (S.dailyOutline) {
           for (const date in S.dailyOutline) {
@@ -4495,21 +4588,40 @@
             }
           }
         }
-        const isCurrentMonth = year === currentYear && m === currentMonth;
+        const isCurrent = year === currentYear && m === currentMonth;
         const cntCls = tasks > 0 ? 'has-tasks' : '';
         const cntTxt = total > 0 ? (tasks > 0 ? `☐${tasks}` : `${total}件`) : '';
 
-        html += `<div class="tree-date-entry${isCurrentMonth ? ' today' : ''}"
-          onclick="olZoomIn(${m})">
-          <div class="tree-date-hdr">
-            <span class="tree-date-label">${m}月${isCurrentMonth ? ' ★今月' : ''}</span>
-            ${cntTxt ? `<span class="tree-date-cnt ${cntCls}">${cntTxt}</span>` : ''}
-          </div>
+        html += `<div class="ol-mv-hdr${isCurrent ? ' today' : ''}" tabindex="0"
+          data-mv-type="month" data-month="${m}"
+          onkeydown="_yrKeyDown(event,this)"
+          ondblclick="olZoomIn(${m})">
+          <span class="ol-mv-arrow" style="visibility:hidden">▶</span>
+          <span class="ol-mv-label">${m}月${isCurrent ? ' ★今月' : ''}</span>
+          ${cntTxt ? `<span class="tree-date-cnt ${cntCls}">${cntTxt}</span>` : ''}
         </div>`;
       }
 
+      html += `</div>`;
       container.innerHTML = html;
+
+      // 今月にフォーカス
+      const cur = container.querySelector('.ol-mv-hdr.today');
+      if (cur) { cur.scrollIntoView({ block: 'center' }); cur.focus(); }
     }
+
+    /** 年ビューのキーボードナビゲーション */
+    function _yrKeyDown(ev, el) {
+      const list = $('ol-mv-list');
+      if (!list) return;
+      const all = Array.from(list.querySelectorAll('[tabindex="0"]'));
+      const idx = all.indexOf(el);
+      if (ev.key === 'ArrowDown') { ev.preventDefault(); if (idx < all.length-1) all[idx+1].focus(); }
+      else if (ev.key === 'ArrowUp') { ev.preventDefault(); if (idx > 0) all[idx-1].focus(); }
+      else if (ev.key === 'Enter') { ev.preventDefault(); olZoomIn(parseInt(el.dataset.month)); }
+      else if (ev.altKey && ev.key === 'ArrowUp') { ev.preventDefault(); olZoomOut(); }
+    }
+
 
     let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
