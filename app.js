@@ -1,4 +1,16 @@
 
+    /* ── 起動エラーキャッチャー（デバッグ用） ── */
+    window.onerror = function(msg, src, line, col, err) {
+      const d = document.createElement('div');
+      d.style = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#fee2e2;color:#7f1d1d;padding:8px 12px;font-size:11px;font-family:monospace;border-bottom:2px solid #b91c1c';
+      d.textContent = '🚨 JS Error: ' + msg + ' (line ' + line + ')';
+      document.body && document.body.prepend(d);
+      console.error('[STARTUP ERROR]', msg, 'at', src, line, err);
+    };
+    window.addEventListener('unhandledrejection', e => {
+      console.error('[UNHANDLED PROMISE]', e.reason);
+    });
+
     /* ================================================================
        週次プロジェクト管理ツール — 仕様・実装メモ
        (別チャットの Claude がこのファイルを読んで判断できるよう記載)
@@ -7496,11 +7508,17 @@
       }
     }
 
+    console.log('[startup] loadState...');
     loadState();
+    console.log('[startup] loadState done. projects:', S.projects ? S.projects.length : 'null', 'wOff:', S.wOff);
     ensureEntryIds();
+    console.log('[startup] ensureEntryIds done');
     ensureNodeDates(); // Phase 2: 全ノードに date プロパティ付与
+    console.log('[startup] ensureNodeDates done');
     if (!S.projects || !S.projects.length) initSample();
+    console.log('[startup] calling render()...');
     render();
+    console.log('[startup] render() done');
     doRollover();
     initColumnWidths();
     updateSaveTimeDisplay();
