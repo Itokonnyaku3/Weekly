@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04240011';
+    const APP_VERSION = 'v0.9.9-04240444';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4154,238 +4154,132 @@
 
     /** ツリービューのレンダリング */
     function olRenderTree() {
-      const container = $('ol-tree-container');
-      if (!container) return;
+      // 全ノートビューも olRender で統一（キーボード操作を統一するため）
+      _olZoomLevel  = 'all';
+      _olTreeMode   = false;   // ol-container を使う
+      _applyTreeModeUI();
 
+      olBuildFullView();       // S.dailyOutline['_mv'] にバーチャル配列を構築
+
+      _olCurrentDate = '_mv';
+      olRender('ol-container', '_mv');
+
+      // ナビバーのラベルを「全ノート」に
+      const disp = $('ol-date-disp');
+      if (disp) disp.textContent = '🌳 全ノート';
+      const olNav = $('ol-nav');
+      if (olNav) olNav.style.display = 'flex';
+      const todayHd = $('today-ol-hd');
+      if (todayHd) todayHd.style.display = 'none';
+    }
+
+    /** 全ノートビュー用バーチャルノード配列を S.dailyOutline['_mv'] に構築 */
+    function olBuildFullView() {
+      const nodes  = [];
       const todayStr = todayDateStr();
 
-      // dailyOutline の日付キーを収集（proj:N は除外）
-      const dateMeta = [];
-      for (const dateKey in S.dailyOutline) {
-        if (dateKey.startsWith('proj:')) continue;
-        const nodes = S.dailyOutline[dateKey];
-        if (!Array.isArray(nodes)) continue;
-        // 空の初期プレースホルダー（text が空の1件のみ）はスキップ
-        const nonEmpty = nodes.filter(n => n.text && n.text.trim());
-        if (nonEmpty.length === 0) continue;
-        const info = _parseDateKey(dateKey);
-        dateMeta.push({ dateKey, nodes, nonEmpty, ...info });
+      // ── デイリーノート（年>月>日 の階層）──
+      // dailyOutline のキーから年・月を集計
+      const byYear = new Map(); // year -> Map(month -> [dateKey])
+      if (S.dailyOutline) {
+        for (const dateKey in S.dailyOutline) {
+          if (dateKey.startsWith('proj:') || dateKey.startsWith('_')) continue;
+          const parts = dateKey.split('-');
+          if (parts.length < 3) continue;
+          const y = parseInt(parts[0]), m = parseInt(parts[1]);
+          const dayNodes = S.dailyOutline[dateKey] || [];
+          const hasContent = dayNodes.some(n => n.text && n.text.trim());
+          if (!hasContent) continue;
+          if (!byYear.has(y)) byYear.set(y, new Map());
+          if (!byYear.get(y).has(m)) byYear.get(y).set(m, []);
+          byYear.get(y).get(m).push(dateKey);
+        }
       }
 
-      // 新しい日付順にソート
-      dateMeta.sort((a, b) => b.dt - a.dt);
+      // 新しい年から並べる
+      const years = [...byYear.keys()].sort((a,b) => b - a);
+      years.forEach(year => {
+        const yKey = `_yr_${year}`;
+        const yColl = _mvCollapsed.has(yKey);
+        nodes.push({
+          id: yKey, text: `${year}年`, type: '_date_header', _dateKey: yKey,
+          indent: 0, collapsed: yColl,
+          bold: year === new Date().getFullYear(),
+          isTodo: false, checked: false, url: '', note: '', images: [],
+          priority: '', tags: [], color: '', projTag: ''
+        });
+        if (yColl) return;
 
-      if (dateMeta.length === 0) {
-        container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--tx3);font-size:12px">
-          ノートがまだありません。<br>日付ビューからノードを追加してください。
-        </div>`;
-        return;
-      }
+        const months = [...byYear.get(year).keys()].sort((a,b) => b - a);
+        months.forEach(month => {
+          const mKey = `_mo_${year}_${month}`;
+          const mColl = _mvCollapsed.has(mKey);
+          nodes.push({
+            id: mKey, text: `${month}月`, type: '_date_header', _dateKey: mKey,
+            indent: 1, collapsed: mColl,
+            bold: year === new Date().getFullYear() && month === new Date().getMonth()+1,
+            isTodo: false, checked: false, url: '', note: '', images: [],
+            priority: '', tags: [], color: '', projTag: ''
+          });
+          if (mColl) return;
 
-      // 年 > 月 でグルーピング
-      const byYear = new Map();
-      for (const dm of dateMeta) {
-        if (!byYear.has(dm.year)) byYear.set(dm.year, new Map());
-        const byMonth = byYear.get(dm.year);
-        if (!byMonth.has(dm.month)) byMonth.set(dm.month, []);
-        byMonth.get(dm.month).push(dm);
-      }
-
-      let html = '';
-
-      for (const [year, byMonth] of byYear) {
-        const yearId = `tree-yr-${year}`;
-        html += `<div class="tree-year">
-          <div class="tree-year-hdr" onclick="_treeToggle('${yearId}')">
-            <span class="tree-arrow">▼</span>
-            ${year}年
-          </div>
-          <div id="${yearId}" class="tree-year-body">`;
-
-        for (const [month, days] of byMonth) {
-          const monthId = `tree-mo-${year}-${month}`;
-          html += `<div class="tree-month">
-            <div class="tree-month-hdr" onclick="_treeToggle('${monthId}')">
-              <span class="tree-arrow">▼</span>
-              ${month}月
-            </div>
-            <div id="${monthId}" class="tree-month-body">`;
-
-          for (const dm of days) {
-            const isToday = dm.dateKey === todayStr;
-            const taskCnt = dm.nonEmpty.filter(n => n.isTodo && !n.checked).length;
-            const cntCls  = taskCnt > 0 ? 'has-tasks' : '';
-            const cntTxt  = taskCnt > 0 ? `☐${taskCnt}` : `${dm.nonEmpty.length}件`;
-
-            // ノードのプレビュー（最大3件）
-            const PREVIEW_MAX = 3;
-            let previews = '';
-            dm.nonEmpty.slice(0, PREVIEW_MAX).forEach(n => {
-              const isDone = n.isTodo && n.checked;
-              const icon   = n.isTodo ? (n.checked ? '☑' : '☐') : '•';
-              const txt    = esc(n.text.slice(0, 60));
-              previews += `<div class="tree-node-preview${isDone ? ' done' : ''}">
-                <span class="todo-icon">${icon}</span>${txt}
-              </div>`;
+          const days = byYear.get(year).get(month).sort().reverse();
+          days.forEach(dateKey => {
+            const parts = dateKey.split('-');
+            const d = parseInt(parts[2]);
+            const dow = _DOW_JA[new Date(year, month-1, d).getDay()];
+            const isToday = dateKey === todayStr;
+            const dColl = _mvCollapsed.has(dateKey);
+            nodes.push({
+              id: `_dh_${dateKey}`, text: `${month}/${d}（${dow}）${isToday ? ' ★今日' : ''}`,
+              type: '_date_header', _dateKey: dateKey,
+              indent: 2, collapsed: dColl,
+              bold: isToday,
+              isTodo: false, checked: false, url: '', note: '', images: [],
+              priority: '', tags: [], color: '', projTag: ''
             });
-            if (dm.nonEmpty.length > PREVIEW_MAX) {
-              previews += `<div class="tree-more-hint">…他 ${dm.nonEmpty.length - PREVIEW_MAX} 件</div>`;
-            }
-
-            html += `<div class="tree-date-entry${isToday ? ' today' : ''}"
-              onclick="olZoomToDate('${dm.dateKey}')">
-              <div class="tree-date-hdr">
-                <span class="tree-date-label">${dm.label}</span>
-                <span class="tree-date-cnt ${cntCls}">${cntTxt}</span>
-              </div>
-              ${previews}
-            </div>`;
-          }
-
-          html += `</div></div>`; // tree-month-body / tree-month
-        }
-        html += `</div></div>`; // tree-year-body / tree-year
-      }
-
-      // ── プロジェクトノートセクション ──
-      html += `<div class="tree-proj-section">
-        <div class="tree-proj-hdr">📋 プロジェクトノート</div>`;
-      S.projects.forEach((proj, pi) => {
-        const projNodes = (S.dailyOutline && S.dailyOutline['proj:' + pi]) || [];
-        const nonEmpty  = projNodes.filter(n => n.text && n.text.trim());
-        if (nonEmpty.length === 0) return;
-        const cntCls = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0 ? 'has-tasks' : '';
-        const cntTxt = nonEmpty.filter(n=>n.isTodo&&!n.checked).length > 0
-          ? `☐${nonEmpty.filter(n=>n.isTodo&&!n.checked).length}`
-          : `${nonEmpty.length}件`;
-        html += `<div class="tree-date-entry"
-          onclick="olZoomToDate('proj:${pi}')">
-          <div class="tree-date-hdr">
-            <span class="tree-date-label">📂 ${esc(proj.name)}</span>
-            <span class="tree-date-cnt ${cntCls}">${cntTxt}</span>
-          </div>
-        </div>`;
+            if (dColl) return;
+            // 実ノード
+            (S.dailyOutline[dateKey] || []).forEach(n => {
+              nodes.push({ ...n, indent: (n.indent||0)+3, _realDate: dateKey });
+            });
+          });
+        });
       });
-      html += `</div>`;
 
-      container.innerHTML = html;
-    }
-
-    /** ツリーの年/月ヘッダのトグル */
-    function _treeToggle(id) {
-      const body = $(id);
-      const hdr  = body && body.previousElementSibling;
-      if (!body) return;
-      const isCollapsed = body.style.display === 'none';
-      body.style.display = isCollapsed ? '' : 'none';
-      if (hdr) hdr.classList.toggle('collapsed', !isCollapsed);
-    }
-
-    function olGoDate(dateStr) {
-      if (!dateStr) return;
-      // input[type=date] の値は YYYY-MM-DD 形式なので変換
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        _olCurrentDate = parseInt(parts[0]) + '-' + parseInt(parts[1]) + '-' + parseInt(parts[2]);
-      } else {
-        _olCurrentDate = dateStr;
-      }
-      _olFocusId = null;
-      olNavFinish();
-    }
-
-    function updateOlNav() {
-      try {
-        const disp = $('ol-date-disp');
-        if (!_olCurrentDate) return;
-
-        // 【最優先】表示テキストの更新
-        if (_olCurrentDate.toString().startsWith('proj:')) {
-          const pi = parseInt(_olCurrentDate.split(':')[1]);
-          const pName = (S.projects[pi] && S.projects[pi].name) ? S.projects[pi].name : '不明なプロジェクト';
-          if (disp) disp.textContent = '📂 プロジェクトノート: ' + pName;
-          
-          const els = document.getElementsByClassName('ol-nav-date-only');
-          for (let i = 0; i < els.length; i++) els[i].style.display = 'none';
-          return;
-        }
-
-        const parts = _olCurrentDate.toString().split('-').map(Number);
-        if (parts.length === 3) {
-          const d = new Date(parts[0], parts[1] - 1, parts[2]);
-          const days = ['日', '月', '火', '水', '木', '金', '土'];
-          const today = todayDateStr();
-          const isToday = (_olCurrentDate === today);
-          const dateText = parts[0] + '年' + parts[1] + '月' + parts[2] + '日（' + days[d.getDay()] + '）' + (isToday ? ' ★今日' : '');
-          if (disp) disp.textContent = dateText;
-
-          // カレンダーのセット (YYYY-MM-DD)
-          const picker = $('ol-date-picker');
-          if (picker) {
-            const mm = ('0' + parts[1]).slice(-2);
-            const dd = ('0' + parts[2]).slice(-2);
-            picker.value = parts[0] + '-' + mm + '-' + dd;
+      // ── プロジェクトノート ──
+      const projKey = '_proj_section';
+      const projColl = _mvCollapsed.has(projKey);
+      nodes.push({
+        id: projKey, text: '📋 プロジェクトノート', type: '_date_header', _dateKey: projKey,
+        indent: 0, collapsed: projColl,
+        bold: false, isTodo: false, checked: false,
+        url: '', note: '', images: [], priority: '', tags: [], color: '', projTag: ''
+      });
+      if (!projColl) {
+        S.projects.forEach((proj, pi) => {
+          const pNodes = (S.dailyOutline && S.dailyOutline['proj:'+pi]) || [];
+          const nonEmpty = pNodes.filter(n => n.text && n.text.trim());
+          const pKey = `_proj_${pi}`;
+          const pColl = _mvCollapsed.has(pKey);
+          nodes.push({
+            id: pKey, text: proj.name, type: '_date_header', _dateKey: 'proj:'+pi,
+            indent: 1, collapsed: pColl,
+            bold: false, isTodo: false, checked: false,
+            url: '', note: '', images: [], priority: '', tags: [], color: '', projTag: ''
+          });
+          if (!pColl) {
+            nonEmpty.forEach(n => {
+              nodes.push({ ...n, indent: (n.indent||0)+2, _realDate: 'proj:'+pi });
+            });
           }
-        }
-
-        // ナビ表示の復元
-        const els = document.getElementsByClassName('ol-nav-date-only');
-        for (let i = 0; i < els.length; i++) els[i].style.display = 'inline-flex';
-
-      } catch (err) {
-        console.error('updateOlNav Error:', err);
+        });
       }
+
+      S.dailyOutline['_mv'] = nodes;
     }
 
 
-    /* ================================================================
-       OUTLINE EDITOR (Workflowy風)
-       S.dailyOutline = { "YYYY-M-D": [OlNode] }
-       OlNode = { id, text, indent, bold, color, collapsed }
-       ・Enter     → 同レベルに新規ノード追加（カーソル位置でテキスト分割）
-       ・Tab       → インデント増（前ノードが親になる）
-       ・Shift+Tab → インデント減
-       ・Backspace → 空の場合は削除してひとつ上にフォーカス
-       ・↑/↓      → 前後の可視ノードへ移動
-       ・Ctrl+B    → 太字トグル
-       ・折りたたみ → 子ノードを持つノードの ▼/▶ をクリック
-    ================================================================ */
-    let _olFocusId = null;   // 現在フォーカス中のノードID
-    let _olFocusAtStart = false; // true=先頭 false=末尾にカーソルを置く
-    let _olSaveTimer = null;
-    let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
-
-    /* ================================================================
-       WorkFlowy ズームナビゲーション (Phase 3 拡張)
-       ズームレベル: 'day' → 'month' → 'year' → 'all'
-       Alt+↑ でズームアウト、Alt+↓ でズームイン
-       プロジェクトノートはツリービューの別セクションに表示
-    ================================================================ */
-
-    let _olZoomLevel = 'day';   // 'day' | 'month' | 'year' | 'all'
-    let _olZoomYear  = null;    // 年ビュー表示中の年
-    let _olZoomMonth = null;    // 月ビュー表示中の月
-
-    /** ズームレベルのブレッドクラムを生成 */
-    function _updateZoomBreadcrumb() {
-      const disp = $('ol-date-disp');
-      if (!disp) return;
-      if (_olZoomLevel === 'all') {
-        disp.textContent = '🌳 全ノート';
-      } else if (_olZoomLevel === 'year') {
-        disp.textContent = `📅 ${_olZoomYear}年`;
-      } else if (_olZoomLevel === 'month') {
-        disp.textContent = `📅 ${_olZoomYear}年 ${_olZoomMonth}月`;
-      }
-    }
-
-    /** ズームアウト（Alt+↑）*/
-
-    /* ── マルチデイビュー（月ビューをolRenderで描画）── */
-
-    let _mvCollapsed = new Set(); // 折りたたみ済み日付キーのセット
-
-    /** 月ビュー用バーチャルノード配列を構築して S.dailyOutline['_mv'] に格納 */
     function olBuildMvView(year, month) {
       const daysInMonth = new Date(year, month, 0).getDate();
       const todayStr    = todayDateStr();
@@ -6461,7 +6355,10 @@
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
           _olFocusId = vis[vi - 1].id;
-          if (date === '_mv') olBuildMvView(_olZoomYear, _olZoomMonth);
+          if (date === '_mv') {
+            if (_olZoomLevel === 'all') olBuildFullView();
+            else olBuildMvView(_olZoomYear, _olZoomMonth);
+          }
           olRender('ol-container', date);
         } else if (vi === 0 && _olFocusMode && _olFocusMode.date === date) {
           // フォーカスモードの最初の子から↑ → パンくずタイトルへ戻る
@@ -6494,7 +6391,10 @@
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
           _olFocusId = vis[vi + 1].id;
-          if (date === '_mv') olBuildMvView(_olZoomYear, _olZoomMonth);
+          if (date === '_mv') {
+            if (_olZoomLevel === 'all') olBuildFullView();
+            else olBuildMvView(_olZoomYear, _olZoomMonth);
+          }
           olRender('ol-container', date);
         }
         return;
@@ -6680,18 +6580,26 @@
 
     // 折りたたみトグル
     function olToggle(date, id) {
-      // _mv ビューの日付ヘッダーノードの折りたたみ
-      if (date === '_mv' && id && id.startsWith('_dh_')) {
-        const dateKey = id.replace('_dh_', '');
-        if (_mvCollapsed.has(dateKey)) _mvCollapsed.delete(dateKey);
-        else _mvCollapsed.add(dateKey);
-        olBuildMvView(_olZoomYear, _olZoomMonth);
-        olRender('ol-container', '_mv');
-        requestAnimationFrame(() => {
-          const el = document.querySelector(`[data-nid="${id}"]`);
-          if (el) el.focus();
-        });
-        return;
+      // _mv ビューのバーチャルヘッダーノードの折りたたみ
+      if (date === '_mv' && id) {
+        // _dh_, _yr_, _mo_, _proj_ 系のヘッダーキー
+        let colKey = null;
+        if (id.startsWith('_dh_'))   colKey = id.replace('_dh_', '');
+        else if (id.startsWith('_yr_') || id.startsWith('_mo_') ||
+                 id === '_proj_section' || id.startsWith('_proj_')) colKey = id;
+        if (colKey !== null) {
+          if (_mvCollapsed.has(colKey)) _mvCollapsed.delete(colKey);
+          else _mvCollapsed.add(colKey);
+          // ズームレベルに応じてビルド関数を選択
+          if (_olZoomLevel === 'all')  olBuildFullView();
+          else olBuildMvView(_olZoomYear, _olZoomMonth);
+          olRender('ol-container', '_mv');
+          requestAnimationFrame(() => {
+            const el = document.querySelector(`[data-nid="${id}"]`);
+            if (el) el.focus();
+          });
+          return;
+        }
       }
       const nodes = olGetNodes(date);
       const node = nodes.find(n => n.id === id);
