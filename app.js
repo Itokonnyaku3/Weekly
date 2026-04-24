@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04232353';
+    const APP_VERSION = 'v0.9.9-04240011';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4432,12 +4432,22 @@
 
       olBuildMvView(year, month);
 
-      // 今日へのフォーカス準備
-      const todayStr = todayDateStr();
-      _olFocusId = `_dh_${todayStr}`;
+      // ズームアウト元の日付をフォーカス
+      const _mvFocusDate = (year === parseInt((_olCurrentDate||'').split('-')[0]) &&
+                             month === parseInt((_olCurrentDate||'').split('-')[1]) &&
+                             _olCurrentDate && !_olCurrentDate.startsWith('_'))
+                           ? _olCurrentDate : todayDateStr();
+      _olFocusId = `_dh_${_mvFocusDate}`;
 
       _olCurrentDate = '_mv';
       olRender('ol-container', '_mv');
+
+      // フォーカス確定 + スクロール
+      requestAnimationFrame(() => {
+        const el = document.querySelector(`[data-nid="_dh_${_mvFocusDate}"]`) ||
+                   document.querySelector('[data-nid^="_dh_"]');
+        if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); }
+      });
 
       // ナビバーのラベルを「YYYY年 M月」に
       const disp = $('ol-date-disp');
@@ -4459,7 +4469,11 @@
         olShowMonthView(_olZoomYear, _olZoomMonth);
       } else if (_olZoomLevel === 'month') {
         // 月 → 年ビュー
+        // _mv バーチャルデータを解放
+        if (S.dailyOutline && S.dailyOutline['_mv']) delete S.dailyOutline['_mv'];
+        _olCurrentDate = null;
         _olZoomLevel = 'year';
+        _olTreeMode  = true; // 年ビューは ol-tree-container を使う
         _applyTreeModeUI();
         olRenderYearView(_olZoomYear);
       } else if (_olZoomLevel === 'year') {
@@ -5833,18 +5847,6 @@
             const collapse = ev.key === 'ArrowUp';
             olToggle('_mv', hdrId);
           }
-          return;
-        }
-
-        // ↑/↓ で前後のフォーカス可能行へ
-        if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
-          ev.preventDefault();
-          const container = $('ol-container');
-          const rows = container ? Array.from(container.querySelectorAll('.olrow[tabindex="0"], .olrow[data-nid]')) : [];
-          const curEl = document.activeElement;
-          const ci = rows.indexOf(curEl.closest ? curEl.closest('.olrow') || curEl : curEl);
-          const next = ev.key === 'ArrowDown' ? rows[ci + 1] : rows[ci - 1];
-          if (next) next.focus();
           return;
         }
 
