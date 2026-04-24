@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.0-04240731';
+    const APP_VERSION = 'v1.0.0-04240754';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4199,6 +4199,8 @@
     }
 
     /** 全ノートビュー用バーチャルノード配列を S.dailyOutline['_mv'] に構築 */
+    let _mvCollapsed = new Set(); // 折りたたみ済み日付キーのセット（月/年/全体ビュー共通）
+
     function olBuildFullView() {
       const nodes  = [];
       const todayStr = todayDateStr();
