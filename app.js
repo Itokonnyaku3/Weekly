@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04232323';
+    const APP_VERSION = 'v0.9.9-04232353';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4138,10 +4138,17 @@
 
     /** 日付にズームイン（ツリーモードを終了して指定日へ） */
     function olZoomToDate(dateKey) {
-      _olTreeMode = false;
-      _olZoomLevel = 'day'; // ズームレベルをリセット
+      // _mv ビューを終了して日次ビューへ
+      if (_olCurrentDate === '_mv') {
+        delete S.dailyOutline['_mv']; // バーチャルデータを削除
+      }
+      _olTreeMode  = false;
+      _olZoomLevel = 'day';
       olGoDate(dateKey);
       _applyTreeModeUI();
+      // ナビバーをリセット
+      const todayHd = $('today-ol-hd');
+      if (todayHd) todayHd.style.display = '';
       if (!_notePanelOpen) focusNotePanel();
     }
 
@@ -4373,22 +4380,83 @@
     }
 
     /** ズームアウト（Alt+↑）*/
+
+    /* ── マルチデイビュー（月ビューをolRenderで描画）── */
+
+    let _mvCollapsed = new Set(); // 折りたたみ済み日付キーのセット
+
+    /** 月ビュー用バーチャルノード配列を構築して S.dailyOutline['_mv'] に格納 */
+    function olBuildMvView(year, month) {
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const todayStr    = todayDateStr();
+      const nodes       = [];
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateKey   = `${year}-${month}-${d}`;
+        const dt        = new Date(year, month - 1, d);
+        const dow       = _DOW_JA[dt.getDay()];
+        const isToday   = dateKey === todayStr;
+        const collapsed = _mvCollapsed.has(dateKey);
+
+        // 日付ヘッダーノード
+        nodes.push({
+          id        : `_dh_${dateKey}`,
+          text      : `${month}/${d}（${dow}）${isToday ? ' ★今日' : ''}`,
+          type      : '_date_header',
+          _dateKey  : dateKey,
+          indent    : 0,
+          collapsed,
+          bold      : isToday,
+          isTodo: false, checked: false,
+          url: '', note: '', images: [], priority: '', tags: [], color: '', projTag: ''
+        });
+
+        // その日の実ノード（indent を +1 してネスト表現）
+        if (!collapsed) {
+          const realNodes = S.dailyOutline[dateKey] || [];
+          realNodes.forEach(n => {
+            nodes.push({ ...n, indent: (n.indent || 0) + 1, _realDate: dateKey });
+          });
+        }
+      }
+      S.dailyOutline['_mv'] = nodes;
+    }
+
+    /** 月ビューを表示 */
+    function olShowMonthView(year, month) {
+      _olZoomYear   = year;
+      _olZoomMonth  = month;
+      _olZoomLevel  = 'month';
+      _olTreeMode   = false;  // ol-container を使う
+      _applyTreeModeUI();     // ツリーコンテナを隠し ol-container を表示
+
+      olBuildMvView(year, month);
+
+      // 今日へのフォーカス準備
+      const todayStr = todayDateStr();
+      _olFocusId = `_dh_${todayStr}`;
+
+      _olCurrentDate = '_mv';
+      olRender('ol-container', '_mv');
+
+      // ナビバーのラベルを「YYYY年 M月」に
+      const disp = $('ol-date-disp');
+      if (disp) disp.textContent = `${year}年 ${month}月`;
+      const olNav = $('ol-nav');
+      if (olNav) olNav.style.display = 'flex';
+      const todayHd = $('today-ol-hd');
+      if (todayHd) todayHd.style.display = 'none';
+    }
+
     function olZoomOut() {
       if (_olZoomLevel === 'day') {
-        // 日 → 月ビュー
-        if (_olCurrentDate && !_olCurrentDate.startsWith('proj:')) {
-          const parts = _olCurrentDate.split('-');
-          _olZoomYear  = parseInt(parts[0]);
-          _olZoomMonth = parseInt(parts[1]);
-        } else {
-          const now = new Date();
-          _olZoomYear  = now.getFullYear();
-          _olZoomMonth = now.getMonth() + 1;
-        }
-        _olZoomLevel = 'month';
-        _olTreeMode  = true;
-        _applyTreeModeUI();
-        olRenderMonthView(_olZoomYear, _olZoomMonth);
+        // 日 → 月ビュー（olRender を使う統合実装）
+        const curDate = (_olCurrentDate && !_olCurrentDate.startsWith('_') && !_olCurrentDate.startsWith('proj:'))
+          ? _olCurrentDate : todayDateStr();
+        const parts = curDate.split('-');
+        _olZoomYear  = parseInt(parts[0]);
+        _olZoomMonth = parseInt(parts[1]);
+        olShowMonthView(_olZoomYear, _olZoomMonth);
       } else if (_olZoomLevel === 'month') {
         // 月 → 年ビュー
         _olZoomLevel = 'year';
@@ -4419,12 +4487,9 @@
           _updateZoomBreadcrumb();
         }
       } else if (_olZoomLevel === 'year') {
-        // 年 → 月
+        // 年 → 月（olRender統合版）
         const month = key ? parseInt(key) : _olZoomMonth || new Date().getMonth() + 1;
-        _olZoomMonth = month;
-        _olZoomLevel = 'month';
-        olRenderMonthView(_olZoomYear, month);
-        _updateZoomBreadcrumb();
+        olShowMonthView(_olZoomYear, month);
       } else if (_olZoomLevel === 'month') {
         // 月 → 日
         if (key) olZoomToDate(key);
@@ -5191,6 +5256,28 @@
       });
 
       visible.forEach(n => {
+        // ── 日付ヘッダーノード（マルチデイビュー専用） ──
+        if (n.type === '_date_header') {
+          const _dhPl = (n.indent * 22) + 12;
+          const _dhToday = n._dateKey === todayDateStr();
+          html += `<div class="olrow ol-date-sep${_dhToday ? ' ol-date-sep-today' : ''}"
+            style="padding-left:${_dhPl}px"
+            data-date="${date}" data-nid="${n.id}" tabindex="0"
+            onkeydown="olKeyDown(event,'${date}','${n.id}')"
+            onfocus="_olFocusId='${n.id}';_olCurrentDate='${date}'">
+            <span class="ol-date-sep-arrow"
+              onmousedown="event.preventDefault()"
+              onclick="event.stopPropagation();olToggle('${date}','${n.id}')"
+              title="折りたたみ/展開 (Ctrl+↑/↓)">${n.collapsed ? '▶' : '▼'}</span>
+            <span class="ol-date-sep-label"
+              onmousedown="event.preventDefault()"
+              onclick="event.stopPropagation();olMvOpenNode('${n._dateKey}',null)"
+              ondblclick="olMvOpenNode('${n._dateKey}',null)"
+              title="クリックでこの日を開く">${esc(n.text)}</span>
+          </div>`;
+          return;
+        }
+
         const isParent = olHasChildren(nodes, n._idx);
         // 三角ボタン削除に伴い、インデント位置を調整（少し右に寄せて余白を確保）
         const pl = (n.indent * 22) + 12;
@@ -5724,6 +5811,64 @@
 
     // キーボード操作
     function olKeyDown(ev, date, id) {
+      // ── _mv モード（月ビュー）特殊処理 ──
+      if (date === '_mv') {
+        const nodes = olGetNodes('_mv');
+        const node = nodes.find(n => n.id === id);
+        if (!node) return;
+
+        // Alt+↑ でズームアウト
+        if (ev.altKey && ev.key === 'ArrowUp') { ev.preventDefault(); olZoomOut(); return; }
+
+        // Ctrl+↑/↓ で折りたたみ/展開（日付ヘッダーを探して toggle）
+        if (ev.ctrlKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+          ev.preventDefault();
+          // 現在ノードが属する日付ヘッダーを探す
+          const idx2 = nodes.findIndex(n => n.id === id);
+          let hdrId = null;
+          for (let i = idx2; i >= 0; i--) {
+            if (nodes[i].type === '_date_header') { hdrId = nodes[i].id; break; }
+          }
+          if (hdrId) {
+            const collapse = ev.key === 'ArrowUp';
+            olToggle('_mv', hdrId);
+          }
+          return;
+        }
+
+        // ↑/↓ で前後のフォーカス可能行へ
+        if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+          ev.preventDefault();
+          const container = $('ol-container');
+          const rows = container ? Array.from(container.querySelectorAll('.olrow[tabindex="0"], .olrow[data-nid]')) : [];
+          const curEl = document.activeElement;
+          const ci = rows.indexOf(curEl.closest ? curEl.closest('.olrow') || curEl : curEl);
+          const next = ev.key === 'ArrowDown' ? rows[ci + 1] : rows[ci - 1];
+          if (next) next.focus();
+          return;
+        }
+
+        // Enter / ダブルクリック相当でその日を開く
+        if (ev.key === 'Enter' && !ev.shiftKey) {
+          ev.preventDefault();
+          const dateKey = node._dateKey || node._realDate;
+          if (dateKey) olMvOpenNode(dateKey, node.type === '_date_header' ? null : id);
+          return;
+        }
+
+        // Escape でズームアウト
+        if (ev.key === 'Escape') { ev.preventDefault(); olZoomOut(); return; }
+
+        // その他のキーは無視（読み取り専用）
+        if (!ev.ctrlKey && !ev.metaKey && !ev.altKey && ev.key.length === 1) {
+          // 文字キーを押したらその日を編集モードで開く
+          const dateKey = node._realDate;
+          if (dateKey) { ev.preventDefault(); olMvOpenNode(dateKey, node.type !== '_date_header' ? id : null); }
+          return;
+        }
+        return;
+      }
+
       const nodes = olGetNodes(date);
       const idx = nodes.findIndex(n => n.id === id);
       if (idx === -1) return;
@@ -6528,6 +6673,19 @@
 
     // 折りたたみトグル
     function olToggle(date, id) {
+      // _mv ビューの日付ヘッダーノードの折りたたみ
+      if (date === '_mv' && id && id.startsWith('_dh_')) {
+        const dateKey = id.replace('_dh_', '');
+        if (_mvCollapsed.has(dateKey)) _mvCollapsed.delete(dateKey);
+        else _mvCollapsed.add(dateKey);
+        olBuildMvView(_olZoomYear, _olZoomMonth);
+        olRender('ol-container', '_mv');
+        requestAnimationFrame(() => {
+          const el = document.querySelector(`[data-nid="${id}"]`);
+          if (el) el.focus();
+        });
+        return;
+      }
       const nodes = olGetNodes(date);
       const node = nodes.find(n => n.id === id);
       if (node) { node.collapsed = !node.collapsed; saveState(); olRender('ol-container', date); }

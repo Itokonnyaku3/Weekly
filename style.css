@@ -3711,3 +3711,27 @@ td.has-span-lane.span-last {
   cursor: pointer;
 }
 .ol-mv-empty:hover { color: var(--tx2); }
+
+/* ── 日付ヘッダーノード（olRender統合版） ── */
+.ol-date-sep {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 5px;
+  border-bottom: 1px solid var(--bd);
+  border-top: 1px solid var(--bd);
+  margin-top: 2px;
+  background: var(--bg2);
+  outline: none;
+}
+.ol-date-sep:focus { box-shadow: inset 3px 0 0 var(--accent); background: var(--bg-cur); }
+.ol-date-sep-today { color: var(--accent); background: var(--accent-soft) !important; }
+.ol-date-sep-today:focus { background: var(--bg-cur) !important; }
+.ol-date-sep-arrow {
+  font-size: 9px; color: var(--tx3); cursor: pointer; width: 12px; flex-shrink: 0;
+}
+.ol-date-sep-label {
+  font-size: 12px; font-weight: 700; flex: 1;
+  cursor: pointer; color: var(--tx2);
+}
+.ol-date-sep-label:hover { color: var(--tx); }
