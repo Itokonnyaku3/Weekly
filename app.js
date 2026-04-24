@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04240535';
+    const APP_VERSION = 'v0.9.9-04240547';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4596,6 +4596,87 @@
     }
 
 
+    function _treeToggle(id) {
+      const body = $(id);
+      const hdr  = body && body.previousElementSibling;
+      if (!body) return;
+      const isCollapsed = body.style.display === 'none';
+      body.style.display = isCollapsed ? '' : 'none';
+      if (hdr) hdr.classList.toggle('collapsed', !isCollapsed);
+    }
+
+    function olGoDate(dateStr) {
+      if (!dateStr) return;
+      // input[type=date] の値は YYYY-MM-DD 形式なので変換
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        _olCurrentDate = parseInt(parts[0]) + '-' + parseInt(parts[1]) + '-' + parseInt(parts[2]);
+      } else {
+        _olCurrentDate = dateStr;
+      }
+      _olFocusId = null;
+      olNavFinish();
+    }
+
+    function updateOlNav() {
+      try {
+        const disp = $('ol-date-disp');
+        if (!_olCurrentDate) return;
+
+        // 【最優先】表示テキストの更新
+        if (_olCurrentDate.toString().startsWith('proj:')) {
+          const pi = parseInt(_olCurrentDate.split(':')[1]);
+          const pName = (S.projects[pi] && S.projects[pi].name) ? S.projects[pi].name : '不明なプロジェクト';
+          if (disp) disp.textContent = '📂 プロジェクトノート: ' + pName;
+          
+          const els = document.getElementsByClassName('ol-nav-date-only');
+          for (let i = 0; i < els.length; i++) els[i].style.display = 'none';
+          return;
+        }
+
+        const parts = _olCurrentDate.toString().split('-').map(Number);
+        if (parts.length === 3) {
+          const d = new Date(parts[0], parts[1] - 1, parts[2]);
+          const days = ['日', '月', '火', '水', '木', '金', '土'];
+          const today = todayDateStr();
+          const isToday = (_olCurrentDate === today);
+          const dateText = parts[0] + '年' + parts[1] + '月' + parts[2] + '日（' + days[d.getDay()] + '）' + (isToday ? ' ★今日' : '');
+          if (disp) disp.textContent = dateText;
+
+          // カレンダーのセット (YYYY-MM-DD)
+          const picker = $('ol-date-picker');
+          if (picker) {
+            const mm = ('0' + parts[1]).slice(-2);
+            const dd = ('0' + parts[2]).slice(-2);
+            picker.value = parts[0] + '-' + mm + '-' + dd;
+          }
+        }
+
+        // ナビ表示の復元
+        const els = document.getElementsByClassName('ol-nav-date-only');
+        for (let i = 0; i < els.length; i++) els[i].style.display = 'inline-flex';
+
+      } catch (err) {
+        console.error('updateOlNav Error:', err);
+      }
+    }
+
+
+    /* ================================================================
+       OUTLINE EDITOR (Workflowy風)
+       S.dailyOutline = { "YYYY-M-D": [OlNode] }
+       OlNode = { id, text, indent, bold, color, collapsed }
+       ・Enter     → 同レベルに新規ノード追加（カーソル位置でテキスト分割）
+       ・Tab       → インデント増（前ノードが親になる）
+       ・Shift+Tab → インデント減
+       ・Backspace → 空の場合は削除してひとつ上にフォーカス
+       ・↑/↓      → 前後の可視ノードへ移動
+       ・Ctrl+B    → 太字トグル
+       ・折りたたみ → 子ノードを持つノードの ▼/▶ をクリック
+    ================================================================ */
+    let _olFocusId = null;   // 現在フォーカス中のノードID
+    let _olFocusAtStart = false; // true=先頭 false=末尾にカーソルを置く
+    let _olSaveTimer = null;
     let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
     let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
