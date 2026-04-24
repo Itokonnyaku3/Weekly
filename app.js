@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.0-04240627';
+    const APP_VERSION = 'v1.0.0-04240731';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4377,6 +4377,15 @@
       if (todayHd) todayHd.style.display = 'none';
     }
 
+
+    function _updateZoomBreadcrumb() {
+      const disp = $('ol-date-disp');
+      if (!disp) return;
+      if (_olZoomLevel === 'all')   { disp.textContent = '🌳 全ノート'; }
+      else if (_olZoomLevel === 'year')  { disp.textContent = `📅 ${_olZoomYear}年`; }
+      else if (_olZoomLevel === 'month') { disp.textContent = `📅 ${_olZoomYear}年 ${_olZoomMonth}月`; }
+    }
+
     function olZoomOut() {
       if (_olZoomLevel === 'day') {
         // 日 → 月ビュー（olRender を使う統合実装）
@@ -4703,6 +4712,9 @@
     let _olFocusAtStart = false; // true=先頭 false=末尾にカーソルを置く
     let _olSaveTimer = null;
     let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
+    let _olZoomLevel = 'day';   // 'day' | 'month' | 'year' | 'all'
+    let _olZoomYear  = null;    // 年ビュー表示中の年
+    let _olZoomMonth = null;    // 月ビュー表示中の月
     let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
     // Undo/Redo履歴（日付ごとに独立したスタック）
