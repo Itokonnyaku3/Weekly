@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.0-04241206';
+    const APP_VERSION = 'v1.0.0-04241514';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -862,25 +862,6 @@
 
     // ResizeObserver でグリッドサイズ変更時に再描画
     let _spanRo = null;
-
-    /** 特定プロジェクトの表示範囲内でアクティブなスパンノードを返す */
-    function getActiveSpans(pi, firstWk, lastWk) {
-      const proj = S.projects[pi];
-      if (!proj) return [];
-      const projTag = proj.name.replace(/\s+/g, '_');
-      const spans = [];
-      getAllNodes().forEach(({ node }) => {
-        if (node.projTag !== projTag) return;
-        if (!node.startDate || !node.endDate) return;
-        try {
-          const sWk = wkey(new Date(node.startDate.replace(/-/g, '/')));
-          const eWk = wkey(new Date(node.endDate.replace(/-/g, '/')));
-          if (eWk >= firstWk && sWk <= lastWk) spans.push(node);
-        } catch(e) {}
-      });
-      return spans;
-    }
-
     function initSpanObserver() {
       const gridWrap = $('grid-wrap');
       if (!gridWrap) return;
@@ -946,7 +927,6 @@
       if (typeof applyWeekColWidths === 'function') applyWeekColWidths();
 
       let rows = '';
-      // スパンバー用の表示範囲とカラーパレット
       const firstWk = wkey(weeks[0]);
       const lastWk  = wkey(weeks[weeks.length - 1]);
       const SPAN_COLORS = ['#3b82f6','#8b5cf6','#059669','#f59e0b','#ef4444','#06b6d4','#ec4899','#10b981'];
@@ -995,142 +975,119 @@
         // 圧縮モードで折りたたみ中ならヘッダ行のみで終了
         if (isCompactRow) return;
 
-        // ── スパンレーン判定 ──
-        const activeSpans = getActiveSpans(pi, firstWk, lastWk);
-        const laneCount   = Math.max(1, activeSpans.length);
+        rows += `<tr class="${proj.isPrivate ? 'is-private' : ''}">`;
+        // ── project column ──
+        rows += `<td class="col-proj" data-pi="${pi}" data-wk="proj" ondragover="pDragOver(event,${pi})" ondrop="pDrop(event,${pi})">`;
+        rows += `<div class="pcell">`;
 
-        // ── プロジェクト列 HTML（rowspan で全レーンに跨がる）──
+        rows += `<div class="pname">`;
+        rows += `<span class="drag-handle" draggable="true" ondragstart="pDragStart(event,${pi})">⠿</span>`;
         const modeIcon = proj.isPrivate ? '🏠' : '💼';
-        const projItems = getProjItems(pi);
-        let projColHtml = `<div class="pcell">`;
-        projColHtml += `<div class="pname">`;
-        projColHtml += `<span class="drag-handle" draggable="true" ondragstart="pDragStart(event,${pi})">⠿</span>`;
-        projColHtml += `<span class="proj-mode-toggle" onclick="toggleProjPrivate(${pi})" title="${proj.isPrivate ? 'プライベート' : 'お仕事用'}">${modeIcon}</span>`;
-        projColHtml += `<span class="nm" ondblclick="startRename(${pi},this)">${esc(proj.name)}</span>`;
-        projColHtml += `<span class="note-btn" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートを開く">📄</span>`;
-        if (_compactMode) projColHtml += `<span style="font-size:10px;cursor:pointer;color:var(--tx-info);padding:0 4px" onclick="compactToggleRow(${pi})" title="折りたたむ">▲</span>`;
-        projColHtml += `<span style="font-size:10px;cursor:pointer;color:var(--tx3);padding:0 2px" onclick="deleteProj(${pi})" title="削除">✕</span>`;
-        projColHtml += `</div>`;
-        if (activeSpans.length > 0) {
-          projColHtml += `<div class="span-lane-list">`;
-          activeSpans.forEach((span, li) => {
-            const col = SPAN_COLORS[(pi + li) % SPAN_COLORS.length];
-            projColHtml += `<div class="span-lane-item" style="border-left:3px solid ${col}">${esc(span.text)}</div>`;
-          });
-          projColHtml += `</div>`;
+        rows += `<span class="proj-mode-toggle" onclick="toggleProjPrivate(${pi})" title="${proj.isPrivate ? 'プライベート（クリックでお仕事用に変更）' : 'お仕事用（クリックでプライベートに変更）'}">${modeIcon}</span>`;
+        rows += `<span class="nm" ondblclick="startRename(${pi},this)">${esc(proj.name)}</span>`;
+        rows += `<span class="note-btn" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートを開く">📄</span>`;
+        if (_compactMode) {
+          // 展開中の場合、閉じるボタンを表示
+          rows += `<span style="font-size:10px;cursor:pointer;color:var(--tx-info);padding:0 4px" onclick="compactToggleRow(${pi})" title="折りたたむ">▲</span>`;
         }
-        projColHtml += `<div class="proj-entries-toggle" onclick="toggleProjEntries(${pi})">`;
-        projColHtml += `<span>${(proj.projEntriesOpen ? '▼' : '▶')}</span>`;
-        projColHtml += `<span style="flex:1">${projItems.length ? projItems.length + '件' : 'メモ・タスク'}</span>`;
-        projColHtml += `<span onclick="event.stopPropagation();openPanel(${pi},'proj',null)" style="color:var(--tx-info);font-size:11px;padding:0 3px">＋</span>`;
-        projColHtml += `</div>`;
-        projColHtml += `<div class="proj-entries-body${proj.projEntriesOpen ? ' open' : ''} elist" id="pe-${pi}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'proj')">`;
+        rows += `<span style="font-size:10px;cursor:pointer;color:var(--tx3);padding:0 2px" onclick="deleteProj(${pi})" title="削除">✕</span>`;
+        rows += `</div>`;
+
+        // project-level entries (collapsible, from nodes in dailyOutline)
+        const projItems = getProjItems(pi);
+        rows += `<div class="proj-entries-toggle" onclick="toggleProjEntries(${pi})">`;
+        rows += `<span>${(proj.projEntriesOpen ? '▼' : '▶')}</span>`;
+        rows += `<span style="flex:1">${projItems.length ? projItems.length + '件' : 'メモ・タスク'}</span>`;
+        rows += `<span onclick="event.stopPropagation();openPanel(${pi},'proj',null)" style="color:var(--tx-info);font-size:11px;padding:0 3px">＋</span>`;
+        rows += `</div>`;
+        rows += `<div class="proj-entries-body${proj.projEntriesOpen ? ' open' : ''} elist" id="pe-${pi}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'proj')">`;
         projItems.forEach(item => {
-          projColHtml += renderEntry(item.node, pi, 'proj', item.node.id, { date: item.date, idx: item.idx });
+          rows += renderEntry(item.node, pi, 'proj', item.node.id, { date: item.date, idx: item.idx });
         });
-        projColHtml += `</div>`;
+        rows += `</div>`;
+
+        // links (only shown when present, no add button)
         if ((proj.links || []).length) {
-          projColHtml += `<div class="plinks">`;
+          rows += `<div class="plinks">`;
           proj.links.forEach(lk => {
             const isWF = (lk.url || '').includes('workflowy.com');
-            projColHtml += `<a class="plink" href="${escA(lk.url)}" target="${isWF ? 'workflowy-pane' : '_blank'}">🔗 ${esc(lk.label)}</a>`;
+            const tgt = isWF ? 'workflowy-pane' : '_blank';
+            rows += `<a class="plink" href="${escA(lk.url)}" target="${tgt}">🔗 ${esc(lk.label)}</a>`;
           });
-          projColHtml += `</div>`;
+          rows += `</div>`;
         }
-        projColHtml += `</div>`;
+        rows += `</div></td>`;
 
-        // ── レーンごとに行を生成 ──
-        for (let laneIdx = 0; laneIdx < laneCount; laneIdx++) {
-          const span      = activeSpans[laneIdx] || null;
-          const isFirst   = laneIdx === 0;
-          const isLast    = laneIdx === laneCount - 1;
-          const spanColor = span ? SPAN_COLORS[(pi + laneIdx) % SPAN_COLORS.length] : null;
-          const spanStartWk = span ? wkey(new Date(span.startDate.replace(/-/g, '/'))) : null;
-          const spanEndWk   = span ? wkey(new Date(span.endDate.replace(/-/g, '/')))   : null;
-
-          rows += `<tr class="${proj.isPrivate ? 'is-private' : ''}${isLast ? '' : ' span-mid-row'}">`;
-
-          if (isFirst) {
-            rows += `<td class="col-proj" rowspan="${laneCount}" data-pi="${pi}" data-wk="proj"
-              ondragover="pDragOver(event,${pi})" ondrop="pDrop(event,${pi})">${projColHtml}</td>`;
-          }
-
-          weeks.forEach(w => {
-            const k      = wkey(w);
-            const isCur  = k === cw;
-            const inSpan = span && spanStartWk <= k && k <= spanEndWk;
-            const clL    = span && spanStartWk < firstWk;
-            const clR    = span && spanEndWk   > lastWk;
-
-            rows += `<td class="col-week${isCur ? ' cur-week' : ''}${isLast ? '' : ' span-lane-cell'}" data-pi="${pi}" data-wk="${k}">`;
-            rows += `<div class="wcell${isCur ? ' cur' : ''}" onclick="wcellClick(event,${pi},'${k}')">`;
-
-            if (inSpan) {
-              rows += `<div class="span-inline-bar${clL ? ' clip-left' : ''}${clR ? ' clip-right' : ''}"
-                style="background:${spanColor}" onclick="event.stopPropagation()"
-                title="${esc(span.text)}\n${span.startDate} 〜 ${span.endDate}">`;
-              if (!clL || k === firstWk) rows += esc(span.text);
-              rows += `</div>`;
-            }
-
-            if (!proj.collapsed) {
-              const allItems = getTreeOrderedItems(pi, k);
-              let laneItems;
-              if (!span) {
-                laneItems = allItems;
-              } else if (inSpan) {
-                laneItems = allItems.filter(item =>
-                  item.date >= span.startDate && item.date <= span.endDate
-                );
-              } else {
-                laneItems = [];
-              }
-
-              rows += `<div class="elist" id="el-${pi}-${k}-${laneIdx}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'${k}')">`;
-              laneItems.forEach(item => {
-                rows += renderEntry(item.node, pi, k, item.node.id, {
-                  date: item.date, idx: item.idx,
-                  isParent: item.isParent, isChild: item.isChild,
-                  childCount: item.children.length
-                });
-              });
-              if (isCur && isLast && !span) {
-                const mirrorItems = getMirrorItems(pi, k);
-                if (mirrorItems.length > 0) {
-                  rows += `<div class="mirror-divider">↩ 継続中（前週より）</div>`;
-                  mirrorItems.forEach(item => {
-                    rows += renderEntry(item.node, pi, k, item.node.id, {
-                      date: item.date, idx: item.idx,
-                      isParent: item.isParent, isChild: item.isChild,
-                      childCount: (item.children || []).length,
-                      isMirror: item.isMirror !== false,
-                      originWk: item.isMirror !== false ? item.originWk : undefined
-                    });
-                  });
-                }
-              }
-              rows += `</div>`;
-              if (isLast || !span) {
-                rows += `<div class="qarow">`;
-                rows += `<input class="qainp" type="text" tabindex="-1" placeholder="追加…(Enter)" data-pi="${pi}" data-wk="${k}" onkeydown="qainpKeyDown(event,this)" autocomplete="off">`;
-                rows += `<button class="qabtn" tabindex="-1" onclick="openPanel(${pi},'${k}',null);refocusAfterBtn()">＋</button>`;
+        // ── week columns ──
+        weeks.forEach(w => {
+          const k = wkey(w);
+          const items = getGridItems(pi, k);
+          const isCur = k === cw;
+          rows += `<td class="col-week${isCur ? ' cur-week' : ''}" data-pi="${pi}" data-wk="${k}">`;
+          rows += `<div class="wcell${isCur ? ' cur' : ''}" onclick="wcellClick(event,${pi},'${k}')">`;
+          if (!proj.collapsed) {
+            rows += `<div class="elist" id="el-${pi}-${k}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'${k}')">`;
+            // ── スパンバー（startDate/endDate を持つノードを上部にバー表示）──
+            const projTag4span = proj.name.replace(/\s+/g, '_');
+            getAllNodes().forEach(({ node: sn }) => {
+              if (sn.projTag !== projTag4span || !sn.startDate || !sn.endDate) return;
+              try {
+                const sWk = wkey(new Date(sn.startDate.replace(/-/g, '/')));
+                const eWk = wkey(new Date(sn.endDate.replace(/-/g, '/')));
+                if (k < sWk || k > eWk) return;
+                const sIdx = getAllNodes().filter(({node:n}) => n.projTag === projTag4span && n.startDate && n.endDate && wkey(new Date(n.startDate.replace(/-/g,'/'))) <= wkey(new Date(n.endDate.replace(/-/g,'/'))) ).findIndex(({node:n}) => n.id === sn.id);
+                const spanColor = SPAN_COLORS[(pi + Math.max(0, sIdx)) % SPAN_COLORS.length];
+                const clL = sWk < firstWk;
+                const clR = eWk > lastWk;
+                rows += `<div class="span-inline-bar${clL?' clip-left':''}${clR?' clip-right':''}"
+                  style="background:${spanColor}"
+                  title="${esc(sn.text)}\n${sn.startDate} 〜 ${sn.endDate}">`;
+                if (!clL || k === firstWk) rows += esc(sn.text);
                 rows += `</div>`;
-              }
-            } else {
-              if (isLast) {
-                const items = getGridItems(pi, k);
-                const undone = items.filter(item => getNodeType(item.node) === 'todo' && !item.node.checked).length;
-                if (items.length) {
-                  rows += `<span style="font-size:11px;color:var(--tx2)">${items.length}件`;
-                  if (undone) rows += ` <span style="color:var(--tx-warn);font-weight:600">☐${undone}</span>`;
-                  rows += `</span>`;
-                }
+              } catch(e) {}
+            });
+            const treeItems = getTreeOrderedItems(pi, k);
+            treeItems.forEach(item => {
+              rows += renderEntry(item.node, pi, k, item.node.id, {
+                date: item.date, idx: item.idx,
+                isParent: item.isParent, isChild: item.isChild,
+                childCount: item.children.length
+              });
+            });
+            // ── 今週のみ: 前週以前の未完了アイテムをミラー表示 ──
+            if (isCur) {
+              const mirrorItems = getMirrorItems(pi, k);
+              if (mirrorItems.length > 0) {
+                rows += `<div class="mirror-divider" title="前週以前から継続中のアイテム。直接編集できます（元の週に保存されます）">↩ 継続中（前週より）</div>`;
+                mirrorItems.forEach(item => {
+                  // isMirror: item.isMirror（現在週の子はfalse）
+                  // originWk: ミラーは元週、現在週の子は設定しない（通常アイテムとして扱う）
+                  rows += renderEntry(item.node, pi, k, item.node.id, {
+                    date: item.date, idx: item.idx,
+                    isParent: item.isParent, isChild: item.isChild,
+                    childCount: (item.children || []).length,
+                    isMirror: item.isMirror !== false, // デフォルトtrue（後方互換）
+                    originWk: item.isMirror !== false ? item.originWk : undefined
+                  });
+                });
               }
             }
-            rows += `</div></td>`;
-          });
-          rows += `</tr>`;
-        }
+            rows += `</div>`;
+            rows += `<div class="qarow">`;
+            rows += `<input class="qainp" type="text" tabindex="-1" placeholder="追加…(Enter)" data-pi="${pi}" data-wk="${k}" onkeydown="qainpKeyDown(event,this)" autocomplete="off">`;
+            rows += `<button class="qabtn" tabindex="-1" onclick="openPanel(${pi},'${k}',null);refocusAfterBtn()">＋</button>`;
+            rows += `</div>`;
+          } else {
+            const undone = items.filter(item => getNodeType(item.node) === 'todo' && !item.node.checked).length;
+            if (items.length) {
+              rows += `<span style="font-size:11px;color:var(--tx2)">${items.length}件`;
+              if (undone) rows += ` <span style="color:var(--tx-warn);font-weight:600">☐${undone}</span>`;
+              rows += `</span>`;
+            }
+          }
+          rows += `</div></td>`;
+        });
+        rows += '</tr>';
       });
       rows += `<tr><td colspan="${WEEKS + 1}"><div class="parow"><input id="painp" class="painp" type="text" placeholder="新しいプロジェクト名を入力してEnter" onkeydown="if(event.key==='Enter')addProjFromInput(this)" autocomplete="off"><button class="qabtn" onclick="addProjFromInput($('painp'))">追加</button></div></td></tr>`;
       $('gb').innerHTML = rows;
@@ -1142,7 +1099,8 @@
       const noteHasFocus = _notePanelOpen || (ae && (ae.closest('#ol-container') || ae.closest('#note-panel') || ae.closest('#ol-slash-menu') || ae.closest('#ol-proj-menu')));
       if (focusKey && !noteHasFocus) requestAnimationFrame(() => requestAnimationFrame(() => applyFocusKey(focusKey)));
       if (todoOpen) renderTodo();
-      // スパンバーはレーン方式（rowspan）で描画済み - CSS overlay は不要
+      // スパンバー描画（startDate/endDateを持つノード）
+      requestAnimationFrame(renderSpanBars);
     }
 
 
