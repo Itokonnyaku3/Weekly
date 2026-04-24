@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04240444';
+    const APP_VERSION = 'v0.9.9-04240535';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4596,6 +4596,7 @@
     }
 
 
+    let _olCurrentDate = null;  // アウトラインエディタで表示中の日付 (YYYY-M-D)
     let _olTreeMode = false;       // Phase 2: WorkFlowy ツリービューモード
     let _olSuppressFocus = false; // trueのとき olRender はフォーカスを奪わず scrollIntoView のみ実行
     // Undo/Redo履歴（日付ごとに独立したスタック）
