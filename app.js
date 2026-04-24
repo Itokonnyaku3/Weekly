@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v0.9.9-04240547';
+    const APP_VERSION = 'v1.0.0-04240623';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -2008,6 +2008,27 @@
       h += `  </div>`;
       h += `</div>`;
 
+      // ── スパン期間（複数週またぎ表示）──
+      h += `<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--radius);padding:8px 10px;margin-bottom:10px">`;
+      h += `  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">`;
+      h += `    <span style="font-size:11px;font-weight:700;color:var(--tx2)">📊 スパン表示（複数週またぎ）</span>`;
+      h += `    <span style="font-size:10px;color:var(--tx3)">グリッドにバーとして表示されます</span>`;
+      h += `  </div>`;
+      h += `  <div style="display:flex;gap:10px">`;
+      h += `    <div style="flex:1">`;
+      h += `      <label class="fl">スパン開始</label>`;
+      h += `      <input class="fi" id="pf-startDate" type="date" value="${n.startDate || ''}" oninput="markDirty()" placeholder="YYYY-MM-DD">`;
+      h += `    </div>`;
+      h += `    <div style="flex:1">`;
+      h += `      <label class="fl">スパン終了</label>`;
+      h += `      <input class="fi" id="pf-endDate" type="date" value="${n.endDate || ''}" oninput="markDirty()" placeholder="YYYY-MM-DD">`;
+      h += `    </div>`;
+      h += `    <div style="display:flex;align-items:flex-end;padding-bottom:2px">`;
+      h += `      <button class="btn" onclick="pfClearSpan()" title="スパン設定をクリア" style="font-size:11px;padding:4px 8px">✕ クリア</button>`;
+      h += `    </div>`;
+      h += `  </div>`;
+      h += `</div>`;
+
       h += `<div id="img-list">`;
       if (!isNew) {
         (n.images || []).forEach((img, ii) => {
@@ -2121,6 +2142,14 @@
     }
 
     // ノートへリンク（ノートペインを開いてリンクモードを開始）
+
+    function pfClearSpan() {
+      const s = $('pf-startDate'), e = $('pf-endDate');
+      if (s) s.value = '';
+      if (e) e.value = '';
+      markDirty();
+    }
+
     function savePanel() {
       const { pi, wk, ei, proj } = pCtx;
       const type = $('pf-type').value;
@@ -2131,8 +2160,10 @@
 
       const priority = $('pf-priority') ? ($('pf-priority').value === 'none' ? '' : $('pf-priority').value) : '';
       const tagChips = $('pf-tag-wrap') ? [...$('pf-tag-wrap').querySelectorAll('.tag-chip-del')].map(el => el.dataset.tag) : [];
-      const start = $('pf-start') ? ($('pf-start').value || '') : '';
-      const due = $('pf-due') ? ($('pf-due').value || '') : '';
+      const start     = $('pf-start')     ? ($('pf-start').value     || '') : '';
+      const due       = $('pf-due')       ? ($('pf-due').value       || '') : '';
+      const startDate = $('pf-startDate') ? ($('pf-startDate').value || '') : '';
+      const endDate   = $('pf-endDate')   ? ($('pf-endDate').value   || '') : '';
 
       const projTag = S.projects[pi].name.replace(/\s+/g, '_');
 
@@ -2150,14 +2181,14 @@
         const nodes = olGetNodes(targetDate);
         nodes.push({
           id: olNewId(), text, type, isTodo: type === 'todo', checked: false,
-          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due, startDate: '', endDate: ''
+          indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due, startDate, endDate
         });
       } else {
         // Edit existing node
         const found = findNodeById(ei);
         if (found) {
           const n = found.node;
-          Object.assign(n, { type, text, url, note, isTodo: type === 'todo', priority, tags: tagChips, start, due });
+          Object.assign(n, { type, text, url, note, isTodo: type === 'todo', priority, tags: tagChips, start, due, startDate, endDate });
           // Update html to match text
           n.html = esc(text);
           // Refresh note panel if open
