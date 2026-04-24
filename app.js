@@ -5623,6 +5623,8 @@
 
     // ノードのテキスト＋HTMLを両方保存するヘルパー（keydown等で利用）
     function olSaveTxt(nodes, idx, el) {
+      // _mv モード（月ビュー）では書き込みをスキップ
+      if (_olCurrentDate === '_mv') return;
       nodes[idx].text = el.textContent;
       let h = el.innerHTML;
       _imgBlobCache.forEach((ent, stableKey) => {
@@ -5861,14 +5863,15 @@
         // Escape でズームアウト
         if (ev.key === 'Escape') { ev.preventDefault(); olZoomOut(); return; }
 
-        // その他のキーは無視（読み取り専用）
+        // 文字キーを押したらその日を編集モードで開く
         if (!ev.ctrlKey && !ev.metaKey && !ev.altKey && ev.key.length === 1) {
-          // 文字キーを押したらその日を編集モードで開く
           const dateKey = node._realDate;
           if (dateKey) { ev.preventDefault(); olMvOpenNode(dateKey, node.type !== '_date_header' ? id : null); }
           return;
         }
-        return;
+
+        // ↑/↓ は通常の olKeyDown ナビゲーションに委ねる（ここで return しない）
+        // → 以降の通常コードで処理される
       }
 
       const nodes = olGetNodes(date);
@@ -6458,6 +6461,7 @@
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
           _olFocusId = vis[vi - 1].id;
+          if (date === '_mv') olBuildMvView(_olZoomYear, _olZoomMonth);
           olRender('ol-container', date);
         } else if (vi === 0 && _olFocusMode && _olFocusMode.date === date) {
           // フォーカスモードの最初の子から↑ → パンくずタイトルへ戻る
@@ -6490,6 +6494,7 @@
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
           _olFocusId = vis[vi + 1].id;
+          if (date === '_mv') olBuildMvView(_olZoomYear, _olZoomMonth);
           olRender('ol-container', date);
         }
         return;
