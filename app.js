@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.0-04240623';
+    const APP_VERSION = 'v1.0.0-04240627';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -777,7 +777,6 @@
      * スパンバーを描画する（render() の末尾から呼ぶ）
      */
     function renderSpanBars() {
-      // 既存のスパンレイヤーを削除
       document.querySelectorAll('.span-overlay-layer').forEach(el => el.remove());
 
       const spanNodes = getSpanNodes();
@@ -790,73 +789,68 @@
       const weeks = getWeeks();
       const firstWk = wkey(weeks[0]);
       const lastWk  = wkey(weeks[weeks.length - 1]);
+      const BAR_H   = 20;
+      const BAR_GAP = 3;
 
-      // スパンレイヤー作成
       const layer = document.createElement('div');
       layer.className = 'span-overlay-layer';
       layer.id = 'span-layer';
       gridWrap.appendChild(layer);
 
       const wrapRect = gridWrap.getBoundingClientRect();
+      const scrollTop  = gridWrap.scrollTop  || 0;
+      const scrollLeft = gridWrap.scrollLeft || 0;
 
-      // プロジェクト × 重複スパンでレーン管理
-      // pi → [{ node, startWk, endWk }] でレーン番号を決める
-      const piLanes = {}; // pi -> [ {spanId, laneIdx} ]
+      // pi → 何本目のバーか（レーン管理）
+      const piLaneCount = {};
 
       spanNodes.forEach(({ node, pi }) => {
         const startWk = wkey(new Date(node.startDate.replace(/-/g, '/')));
         const endWk   = wkey(new Date(node.endDate.replace(/-/g, '/')));
 
-        // 表示範囲外なら完全スキップ
         if (endWk < firstWk || startWk > lastWk) return;
 
         const visStartWk = startWk < firstWk ? firstWk : startWk;
         const visEndWk   = endWk   > lastWk  ? lastWk  : endWk;
 
-        // 対応するセル要素を探す（proj-hdr-row の col-week セル）
-        // グリッドの thead thk-{wk} で週位置を特定
-        const startTh = $('thk-' + visStartWk);
-        const endTh   = $('thk-' + visEndWk);
-        if (!startTh || !endTh) return;
-
-        // プロジェクトヘッダ行の位置
-        const projRows = document.querySelectorAll(
-          `tr.proj-hdr-row td.col-proj[data-pi="${pi}"]`
+        // tbody の detail セルを参照（proj-hdr-row ではなく detail row）
+        // selector: td.col-week[data-pi][data-wk] で detail row のセルを取得
+        const startCell = document.querySelector(
+          `td.col-week[data-pi="${pi}"][data-wk="${visStartWk}"]`
         );
-        if (!projRows.length) return;
-        const projTd = projRows[0];
-        const rowRect = projTd.closest('tr').getBoundingClientRect();
+        const endCell = document.querySelector(
+          `td.col-week[data-pi="${pi}"][data-wk="${visEndWk}"]`
+        );
+        if (!startCell || !endCell) return;
 
-        const startRect = startTh.getBoundingClientRect();
-        const endRect   = endTh.getBoundingClientRect();
+        const sr = startCell.getBoundingClientRect();
+        const er = endCell.getBoundingClientRect();
 
-        const left   = startRect.left - wrapRect.left + gridWrap.scrollLeft;
-        const width  = endRect.right  - startRect.left;
-        const top    = rowRect.top    - wrapRect.top + 4;
-        const height = 18;
+        const left  = sr.left  - wrapRect.left  + scrollLeft + 2;
+        const width = er.right - sr.left  - 4;
 
-        // レーン番号（同じプロジェクト内の複数スパン対応）
-        if (!piLanes[pi]) piLanes[pi] = [];
-        const laneIdx = piLanes[pi].length;
-        piLanes[pi].push({ nodeId: node.id });
-        const barTop = top + laneIdx * (height + 3);
+        // 行の top（detail row のセルを基準）
+        const rowTop = sr.top - wrapRect.top + scrollTop;
 
-        // バー色：projTag のハッシュから決定
+        // レーン番号
+        if (!piLaneCount[pi]) piLaneCount[pi] = 0;
+        const laneIdx = piLaneCount[pi]++;
+        const barTop  = rowTop + 3 + laneIdx * (BAR_H + BAR_GAP);
+
+        // バー色
         const colors = ['#3b82f6','#8b5cf6','#059669','#f59e0b','#ef4444','#06b6d4','#ec4899','#10b981'];
-        const colorIdx = (pi + laneIdx) % colors.length;
-        const color = colors[colorIdx];
+        const color = colors[(pi + laneIdx) % colors.length];
 
         const bar = document.createElement('div');
         bar.className = 'span-bar';
         if (startWk < firstWk) bar.classList.add('clip-left');
-        if (endWk   > lastWk)  bar.classList.add('clip-right');
+        if (endWk > lastWk)    bar.classList.add('clip-right');
 
-        bar.style.cssText = `left:${Math.max(0, left)}px;top:${barTop}px;` +
-          `width:${Math.max(20, width)}px;height:${height}px;background:${color}`;
+        bar.style.cssText = `left:${Math.max(0,left)}px;top:${barTop}px;` +
+          `width:${Math.max(20,width)}px;height:${BAR_H}px;background:${color}`;
         bar.title = `${node.text}\n${node.startDate} 〜 ${node.endDate}`;
         bar.textContent = node.text || '（無題）';
 
-        // クリックでノート編集
         bar.addEventListener('click', () => {
           const found = findNodeById(node.id);
           if (found) openNotePanelToDate(found.date, node.id);
