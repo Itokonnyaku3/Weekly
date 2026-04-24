@@ -3735,3 +3735,51 @@ td.has-span-lane.span-last {
   cursor: pointer; color: var(--tx2);
 }
 .ol-date-sep-label:hover { color: var(--tx); }
+
+/* ── スパンレーン（rowspan方式）(Phase 4) ── */
+
+/* レーン中間行：下罫線を消して統合して見せる */
+tr.span-mid-row td {
+  border-bottom: none !important;
+}
+tr.span-mid-row td.span-lane-cell {
+  border-bottom: 1px dashed var(--bd) !important;
+}
+
+/* プロジェクト列のスパン一覧 */
+.span-lane-list {
+  margin: 4px 0 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.span-lane-item {
+  font-size: 10px;
+  color: var(--tx2);
+  padding: 1px 6px;
+  border-radius: 0 3px 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--bg2);
+}
+
+/* インラインスパンバー（セル内） */
+.span-inline-bar {
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  margin: 2px 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+}
+.span-inline-bar.clip-left  { border-radius: 0 4px 4px 0; }
+.span-inline-bar.clip-right { border-radius: 4px 0 0 4px; }
+.span-inline-bar.clip-left.clip-right { border-radius: 0; }
