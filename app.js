@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.0-04241514';
+    const APP_VERSION = 'v1.0.1-04251059';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -774,6 +774,42 @@
     }
 
     /**
+     * 案A: プロジェクト pi 内のスパンを「テキスト単位」でレーンに束ねる。
+     * 同名スパンは同じレーンに配置される → 週ごとに登場順が変わってもズレない。
+     * 戻り値: { laneMap: Map<key, laneIdx>, maxLane }
+     *   key = node.text を trim したもの（空なら id ベースのフォールバック）
+     */
+    function spanKeyOf(node) {
+      const t = (node && node.text || '').trim();
+      return t || ('__id_' + (node && node.id));
+    }
+    function computeSpanLanesForProject(pi) {
+      const proj = S.projects[pi];
+      if (!proj) return { laneMap: new Map(), maxLane: -1 };
+      const projTag = proj.name.replace(/\s+/g, '_');
+
+      // このプロジェクトの全スパンを集める
+      const spans = [];
+      getAllNodes().forEach(({ node }) => {
+        if (node.projTag !== projTag) return;
+        if (!node.startDate || !node.endDate) return;
+        spans.push(node);
+      });
+      // startDate 昇順 → text 昇順 で安定ソート（レーン番号の決定論性確保）
+      spans.sort((a, b) => {
+        if (a.startDate !== b.startDate) return a.startDate < b.startDate ? -1 : 1;
+        return (a.text || '').localeCompare(b.text || '');
+      });
+      const laneMap = new Map();
+      let nextLane = 0;
+      spans.forEach(n => {
+        const k = spanKeyOf(n);
+        if (!laneMap.has(k)) laneMap.set(k, nextLane++);
+      });
+      return { laneMap, maxLane: nextLane - 1 };
+    }
+
+    /**
      * スパンバーを描画する（render() の末尾から呼ぶ）
      */
     function renderSpanBars() {
@@ -801,8 +837,8 @@
       const scrollTop  = gridWrap.scrollTop  || 0;
       const scrollLeft = gridWrap.scrollLeft || 0;
 
-      // pi → 何本目のバーか（レーン管理）
-      const piLaneCount = {};
+      // 案A: pi ごとにレーン割当をキャッシュ（同名スパンは同レーン）
+      const piLaneCache = {};
 
       spanNodes.forEach(({ node, pi }) => {
         const startWk = wkey(new Date(node.startDate.replace(/-/g, '/')));
@@ -832,14 +868,14 @@
         // 行の top（detail row のセルを基準）
         const rowTop = sr.top - wrapRect.top + scrollTop;
 
-        // レーン番号
-        if (!piLaneCount[pi]) piLaneCount[pi] = 0;
-        const laneIdx = piLaneCount[pi]++;
+        // 案A: テキスト単位でレーン割当
+        if (!piLaneCache[pi]) piLaneCache[pi] = computeSpanLanesForProject(pi);
+        const laneIdx = piLaneCache[pi].laneMap.get(spanKeyOf(node)) ?? 0;
         const barTop  = rowTop + 3 + laneIdx * (BAR_H + BAR_GAP);
 
-        // バー色
+        // バー色（laneIdx ベースで安定）
         const colors = ['#3b82f6','#8b5cf6','#059669','#f59e0b','#ef4444','#06b6d4','#ec4899','#10b981'];
-        const color = colors[(pi + laneIdx) % colors.length];
+        const color = colors[laneIdx % colors.length];
 
         const bar = document.createElement('div');
         bar.className = 'span-bar';
@@ -1018,6 +1054,9 @@
         }
         rows += `</div></td>`;
 
+        // ── 案A: プロジェクト全体のスパンレーン割当を事前計算（同名スパン = 同レーン）──
+        const spanLanes = computeSpanLanesForProject(pi);
+
         // ── week columns ──
         weeks.forEach(w => {
           const k = wkey(w);
@@ -1027,26 +1066,73 @@
           rows += `<div class="wcell${isCur ? ' cur' : ''}" onclick="wcellClick(event,${pi},'${k}')">`;
           if (!proj.collapsed) {
             rows += `<div class="elist" id="el-${pi}-${k}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'${k}')">`;
-            // ── スパンバー（startDate/endDate を持つノードを上部にバー表示）──
+            // ── スパンバー + 配下タスク（startDate/endDate を持つノードと子タスクをグループ表示）──
             const projTag4span = proj.name.replace(/\s+/g, '_');
+            // この週をカバーするスパンノードを収集
+            const weekSpans = [];
             getAllNodes().forEach(({ node: sn }) => {
               if (sn.projTag !== projTag4span || !sn.startDate || !sn.endDate) return;
               try {
                 const sWk = wkey(new Date(sn.startDate.replace(/-/g, '/')));
                 const eWk = wkey(new Date(sn.endDate.replace(/-/g, '/')));
-                if (k < sWk || k > eWk) return;
-                const sIdx = getAllNodes().filter(({node:n}) => n.projTag === projTag4span && n.startDate && n.endDate && wkey(new Date(n.startDate.replace(/-/g,'/'))) <= wkey(new Date(n.endDate.replace(/-/g,'/'))) ).findIndex(({node:n}) => n.id === sn.id);
-                const spanColor = SPAN_COLORS[(pi + Math.max(0, sIdx)) % SPAN_COLORS.length];
-                const clL = sWk < firstWk;
-                const clR = eWk > lastWk;
-                rows += `<div class="span-inline-bar${clL?' clip-left':''}${clR?' clip-right':''}"
-                  style="background:${spanColor}"
-                  title="${esc(sn.text)}\n${sn.startDate} 〜 ${sn.endDate}">`;
-                if (!clL || k === firstWk) rows += esc(sn.text);
-                rows += `</div>`;
+                if (k >= sWk && k <= eWk) weekSpans.push({ node: sn, sWk, eWk });
               } catch(e) {}
             });
-            const treeItems = getTreeOrderedItems(pi, k);
+
+            // この週の全タスクアイテムを取得
+            const allTreeItems = getTreeOrderedItems(pi, k);
+            // スパンの子として登録済みのIDセット
+            const claimedIds = new Set();
+
+            // 案A: 週内のスパンを laneIdx でindex化（同レーン重複時は startDate が早い方を優先）
+            const lanedSpans = new Map(); // laneIdx -> { node, sWk, eWk }
+            weekSpans.forEach(ws => {
+              const li = spanLanes.laneMap.get(spanKeyOf(ws.node));
+              if (li === undefined) return;
+              const cur = lanedSpans.get(li);
+              if (!cur || ws.node.startDate < cur.node.startDate) lanedSpans.set(li, ws);
+            });
+
+            // レーン順に出力（欠けレーンは透明プレースホルダで詰めて、バーの縦位置を全列で揃える）
+            for (let li = 0; li <= spanLanes.maxLane; li++) {
+              const cur = lanedSpans.get(li);
+              if (!cur) {
+                rows += `<div class="span-inline-bar" style="visibility:hidden;pointer-events:none" aria-hidden="true"></div>`;
+                continue;
+              }
+              const sn = cur.node, sWk = cur.sWk, eWk = cur.eWk;
+              const spanColor = SPAN_COLORS[li % SPAN_COLORS.length]; // レーン番号で安定した色
+              const clL = sWk < firstWk;
+              const clR = eWk > lastWk;
+
+              rows += `<div class="span-inline-bar${clL?' clip-left':''}${clR?' clip-right':''}"
+                style="background:${spanColor}"
+                onclick="event.stopPropagation()"
+                title="${esc(sn.text)}\n${sn.startDate} 〜 ${sn.endDate}">`;
+              if (!clL || k === firstWk) rows += esc(sn.text);
+              rows += `</div>`;
+            }
+
+            // 子タスク（parentId が一致するもの）はレーン順にまとめて出力
+            // ※ バーの直後ではなく、全バーが揃ってから出すことでレーン位置のズレを防ぐ
+            for (let li = 0; li <= spanLanes.maxLane; li++) {
+              const cur = lanedSpans.get(li);
+              if (!cur) continue;
+              const sn = cur.node;
+              allTreeItems.forEach(item => {
+                if (item.node.parentId === sn.id) {
+                  claimedIds.add(item.node.id);
+                  rows += renderEntry(item.node, pi, k, item.node.id, {
+                    date: item.date, idx: item.idx,
+                    isParent: item.isParent, isChild: true,
+                    childCount: item.children.length
+                  });
+                }
+              });
+            }
+
+            // スパンに属さない残りのタスク
+            const treeItems = allTreeItems.filter(item => !claimedIds.has(item.node.id));
             treeItems.forEach(item => {
               rows += renderEntry(item.node, pi, k, item.node.id, {
                 date: item.date, idx: item.idx,
