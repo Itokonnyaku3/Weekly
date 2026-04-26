@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.1-04251059';
+    const APP_VERSION = 'v1.0.2-04251135';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -811,10 +811,15 @@
 
     /**
      * スパンバーを描画する（render() の末尾から呼ぶ）
+     * v1.0.2: オーバーレイは廃止。インライン描画(_renderImpl)に一本化。
+     * 過去描画されていた .span-overlay-layer が残っていれば除去のみ実施し、即 return。
      */
     function renderSpanBars() {
+      // 既存オーバーレイの掃除のみ（再生成しない）
       document.querySelectorAll('.span-overlay-layer').forEach(el => el.remove());
-
+      return;
+      // ── 以下、旧オーバーレイ描画コード（無効化）──
+      // eslint-disable-next-line no-unreachable
       const spanNodes = getSpanNodes();
       if (!spanNodes.length) return;
 
@@ -8332,6 +8337,7 @@
     });
 
 
+    // --- テーマの初期適用 ---
     // --- テーマの初期適用 ---
     applyTheme(localStorage.getItem('pwt_theme') || 'auto');
 
