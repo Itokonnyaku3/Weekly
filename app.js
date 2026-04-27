@@ -6751,6 +6751,21 @@
     // - 完全な空白エリアクリック: Y座標に最も近い行へカーソルを移動
     function olContainerClick(ev) {
       if (!_olCurrentDate) return;
+
+      // ── ノートエディタ内リンクのクリック処理 ──
+      // contenteditable 内の <a> タグはブラウザがカーソル移動に使うため
+      // 明示的にインターセプトしてリンクを開く
+      const anchor = ev.target.closest('a[href]');
+      if (anchor && anchor.closest('.ol-text')) {
+        ev.preventDefault();
+        const href = anchor.getAttribute('href');
+        if (href && href !== '#') {
+          const isWF = href.includes('workflowy.com');
+          window.open(href, isWF ? 'workflowy-pane' : '_blank', 'noopener');
+        }
+        return;
+      }
+
       // ol-text 上のクリックはブラウザのカーソル配置に完全に任せる
       if (ev.target.classList.contains('ol-text')) return;
       // トグルボタン・チップ等は無視
@@ -7114,6 +7129,11 @@
       const popup = $('ol-url-popup');
       if (popup && popup.style.display !== 'none' && !popup.contains(ev.target)) {
         _closeOlUrlPopup();
+      }
+      // リンク編集ポップアップ外クリックで閉じる
+      const lep = $('ol-link-edit-popup');
+      if (lep && lep.style.display !== 'none' && !lep.contains(ev.target)) {
+        _olLinkEditClose();
       }
     });
 
@@ -7623,20 +7643,125 @@
     function olInsertLink() {
       const sel = window.getSelection();
       const selText = sel && sel.rangeCount ? sel.toString() : '';
-      const url = prompt('URLを入力してください:', 'https://');
-      if (!url || url === 'https://') return;
-      const label = selText.trim() || url;
-      // execCommand で挿入
-      if (selText) {
-        document.execCommand('createLink', false, url);
-        // 挿入されたリンクに target=_blank を付与
-        const a = document.activeElement && document.activeElement.querySelector('a[href="' + CSS.escape(url) + '"]');
-        if (a) { a.target = '_blank'; a.rel = 'noopener'; }
+      // 選択範囲を保存しておく（ポップアップ表示後にフォーカスが移るため）
+      let savedRange = null;
+      if (sel && sel.rangeCount) savedRange = sel.getRangeAt(0).cloneRange();
+      // リンク編集ポップアップを表示（URL + 表示名）
+      _olLinkEditOpen(null, null, null, selText, savedRange);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       リンク編集ポップアップ: ノートエディタ内の <a> タグを挿入・編集
+    ───────────────────────────────────────────────────────────── */
+    let _olLinkEditAnchor = null;   // 編集中の <a> 要素（新規挿入時は null）
+    let _olLinkEditRange  = null;   // カーソル位置保存（新規挿入時に使用）
+    let _olLinkEditSelText = '';    // 新規挿入時の選択テキスト
+
+    function _olLinkEditOpen(anchor, x, y, selText, savedRange) {
+      const popup  = $('ol-link-edit-popup');
+      const lblInp = $('ol-link-edit-label');
+      const urlInp = $('ol-link-edit-url');
+      if (!popup || !lblInp || !urlInp) return;
+
+      _olLinkEditAnchor  = anchor || null;
+      _olLinkEditRange   = savedRange || null;
+      _olLinkEditSelText = selText || '';
+
+      // 既存リンクの場合は現在値をセット
+      if (anchor) {
+        lblInp.value = anchor.textContent.trim();
+        urlInp.value = anchor.getAttribute('href') || '';
       } else {
-        const html = `<a href="${url.replace(/"/g, '&quot;')}" target="_blank" rel="noopener">${url.replace(/</g, '&lt;')}</a>`;
-        document.execCommand('insertHTML', false, html);
+        lblInp.value = selText || '';
+        urlInp.value = '';
+      }
+
+      // 表示位置: 渡された座標 or 画面中央寄り
+      if (x != null && y != null) {
+        const pw = 316;
+        const left = Math.min(Math.max(x, 8), window.innerWidth - pw - 8);
+        const top  = Math.min(y + 6, window.innerHeight - 200);
+        popup.style.left = left + 'px';
+        popup.style.top  = top  + 'px';
+      } else {
+        popup.style.left = '50%';
+        popup.style.top  = '30%';
+        popup.style.transform = 'translateX(-50%)';
+      }
+      popup.style.display = 'block';
+      // URL が空なら URL 欄へ、そうでなければ表示名欄へフォーカス
+      setTimeout(() => {
+        if (!urlInp.value) urlInp.focus();
+        else { lblInp.focus(); lblInp.select(); }
+      }, 30);
+    }
+
+    function _olLinkEditClose() {
+      const popup = $('ol-link-edit-popup');
+      if (popup) { popup.style.display = 'none'; popup.style.transform = ''; }
+      _olLinkEditAnchor  = null;
+      _olLinkEditRange   = null;
+      _olLinkEditSelText = '';
+    }
+
+    function _olLinkEditApply() {
+      const lblInp = $('ol-link-edit-label');
+      const urlInp = $('ol-link-edit-url');
+      if (!lblInp || !urlInp) return;
+
+      let url   = urlInp.value.trim();
+      let label = lblInp.value.trim();
+      if (!url) { urlInp.focus(); return; }
+      // プロトコル補完
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      if (!label) label = url;
+
+      _olLinkEditClose();
+
+      if (_olLinkEditAnchor) {
+        // ── 既存リンクの編集 ──
+        _olLinkEditAnchor.setAttribute('href', url);
+        _olLinkEditAnchor.target = '_blank';
+        _olLinkEditAnchor.rel = 'noopener';
+        _olLinkEditAnchor.textContent = label;
+      } else {
+        // ── 新規挿入 ──
+        // 保存したカーソル位置を復元
+        if (_olLinkEditRange) {
+          try {
+            const sel2 = window.getSelection();
+            sel2.removeAllRanges();
+            sel2.addRange(_olLinkEditRange);
+          } catch(e) {}
+        }
+        const html = `<a href="${url.replace(/"/g, '&quot;')}" target="_blank" rel="noopener">${label.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</a>`;
+        if (_olLinkEditRange && _olLinkEditSelText) {
+          // 選択テキストがあった場合は createLink で包む
+          document.execCommand('createLink', false, url);
+          // 新しく作られた <a> に target と label を付与
+          const container = document.activeElement;
+          if (container) {
+            const newA = container.querySelector(`a[href="${CSS.escape(url)}"]`);
+            if (newA) { newA.target = '_blank'; newA.rel = 'noopener'; newA.textContent = label; }
+          }
+        } else {
+          document.execCommand('insertHTML', false, html);
+        }
       }
       olRichSave();
+    }
+
+    function _olLinkEditKey(ev) {
+      if (ev.key === 'Enter') { ev.preventDefault(); _olLinkEditApply(); }
+      if (ev.key === 'Escape') { ev.preventDefault(); _olLinkEditClose(); }
+      // Tab で URL ↔ 表示名を切替
+      if (ev.key === 'Tab') {
+        ev.preventDefault();
+        const lblInp = $('ol-link-edit-label');
+        const urlInp = $('ol-link-edit-url');
+        if (document.activeElement === urlInp) lblInp.focus();
+        else urlInp.focus();
+      }
     }
 
     // 表を挿入
@@ -7911,6 +8036,13 @@
 
     // 右クリック: 表セルでコンテキストメニュー
     document.addEventListener('contextmenu', ev => {
+      // ノートエディタ内の <a> タグ右クリック → リンク編集ポップアップ
+      const anchor = ev.target.closest && ev.target.closest('a[href]');
+      if (anchor && anchor.closest('.ol-text')) {
+        ev.preventDefault();
+        _olLinkEditOpen(anchor, ev.clientX, ev.clientY, null, null);
+        return;
+      }
       const cell = ev.target.closest && ev.target.closest('.ol-text td, .ol-text th');
       if (cell) { tblCtxOpen(ev, cell); return; }
       tblCtxClose();
@@ -8204,7 +8336,6 @@
     // 現在の検索条件で searchsummary ノードを生成
     function _searchSave() {
       const q1 = ($('search-input').value || '').trim();
-      const q2 = ($('search-input2').value || '').trim();
       const tags = [..._searchSelectedTags];
 
       // 挿入先: 現在開いているノート（なければ今日のデイリーノートへ）

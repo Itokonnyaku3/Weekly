@@ -355,6 +355,28 @@
     <div style="font-size:10px;color:var(--tx3);margin-top:5px;">Esc: キャンセル</div>
   </div>
 
+  <!-- リンク編集ポップアップ (ノートエディタ内 <a> タグの挿入・編集) -->
+  <div id="ol-link-edit-popup" style="display:none;position:fixed;z-index:600;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--radius);box-shadow:0 6px 24px rgba(0,0,0,.22);padding:12px 14px;min-width:300px;">
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--tx);">🔗 リンクを編集</div>
+    <div style="margin-bottom:6px;">
+      <label style="font-size:11px;color:var(--tx3);display:block;margin-bottom:3px;">表示名</label>
+      <input id="ol-link-edit-label" type="text" placeholder="例: 議事録、Workflowy..."
+        style="width:100%;padding:5px 8px;border:1px solid var(--bd2);border-radius:var(--radius);font-size:12px;background:var(--bg2);color:var(--tx);box-sizing:border-box;outline:none;"
+        onkeydown="_olLinkEditKey(event)">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label style="font-size:11px;color:var(--tx3);display:block;margin-bottom:3px;">URL</label>
+      <input id="ol-link-edit-url" type="url" placeholder="https://"
+        style="width:100%;padding:5px 8px;border:1px solid var(--bd2);border-radius:var(--radius);font-size:12px;background:var(--bg2);color:var(--tx);box-sizing:border-box;outline:none;"
+        onkeydown="_olLinkEditKey(event)">
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;">
+      <button onclick="_olLinkEditApply()" style="padding:5px 14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:12px;cursor:pointer;">保存</button>
+      <button onclick="_olLinkEditClose()" style="padding:5px 10px;background:var(--bg2);color:var(--tx2);border:1px solid var(--bd2);border-radius:var(--radius);font-size:12px;cursor:pointer;">キャンセル</button>
+    </div>
+    <div style="font-size:10px;color:var(--tx3);margin-top:6px;">Enter: 保存 / Esc: キャンセル / Ctrl+クリックでリンクを開く</div>
+  </div>
+
   <div id="ol-proj-menu"
     style="display:none;position:absolute;z-index:400;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--radius);box-shadow:0 8px 24px rgba(0,0,0,.15);padding:4px;min-width:180px;max-height:240px;overflow-y:auto;font-size:12px;">
   </div>
@@ -439,53 +461,4 @@
         <h4>🤖 表示設定</h4>
         <div style="padding-top:4px">
           <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px">テーマ設定</label>
-          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;width:100%;cursor:pointer">
-            <option value="auto">🌗 システム設定に従う (Auto)</option>
-            <option value="light">☀️ ライトモード (Light)</option>
-            <option value="dark">🌙 ダークモード (Dark)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="settings-section" style="border-bottom:none;padding-bottom:0">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div id="app-ver-disp" style="font-size:11px;color:var(--tx3)">Version ---</div>
-          <button class="btn btn-accent" onclick="saveSettingsAndClose()" style="padding:6px 20px">設定を保存して閉じる</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="search-modal" onclick="if(event.target===this)closeSearch()">
-    <div id="search-box">
-      <div id="search-header">
-        <span style="font-size:18px">🔍</span>
-        <input type="text" id="search-input" class="search-inp"
-          placeholder="キーワード1で検索..."
-          oninput="_searchRun()"
-          onkeydown="_searchKeyDown(event)">
-        <button class="btn" onclick="closeSearch()" style="padding:4px 12px;flex-shrink:0">✕</button>
-      </div>
-      <div id="search-row2">
-        <span id="search-row2-label">絞り込み▼</span>
-        <input type="text" id="search-input2" class="search-inp"
-          placeholder="キーワード2でさらに絞り込み..."
-          oninput="_searchRun()"
-          onkeydown="_searchKeyDown(event)">
-      </div>
-      <div id="search-row3" style="display:none">
-        <span id="search-row3-label">🏷 タグ▼</span>
-      </div>
-      <div id="search-results"></div>
-      <div id="search-footer">
-        <span class="search-save-hint">現在の検索条件でノードを生成</span>
-        <button class="search-save-btn" onclick="_searchSave()">💾 検索を保存</button>
-      </div>
-    </div>
-  </div>
-
-
-  <script src="app.js"></script>
-</body>
-
-</html>
+          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;wi
