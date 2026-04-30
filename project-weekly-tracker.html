@@ -460,5 +460,53 @@
       <div class="settings-section">
         <h4>🤖 表示設定</h4>
         <div style="padding-top:4px">
-          <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px">テーマ設定</label>
-          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;wi
+          <select id="theme-s" style="font-size:12px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-family:inherit;width:100%;cursor:pointer">
+            <option value="auto">🌗 システム設定に従う (Auto)</option>
+            <option value="light">☀️ ライトモード (Light)</option>
+            <option value="dark">🌙 ダークモード (Dark)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-section" style="border-bottom:none;padding-bottom:0">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div id="app-ver-disp" style="font-size:11px;color:var(--tx3)">Version ---</div>
+          <button class="btn btn-accent" onclick="saveSettingsAndClose()" style="padding:6px 20px">設定を保存して閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="search-modal" onclick="if(event.target===this)closeSearch()">
+    <div id="search-box">
+      <div id="search-header">
+        <span style="font-size:18px">🔍</span>
+        <input type="text" id="search-input" class="search-inp"
+          placeholder="キーワード1で検索..."
+          oninput="_searchRun()"
+          onkeydown="_searchKeyDown(event)">
+        <button class="btn" onclick="closeSearch()" style="padding:4px 12px;flex-shrink:0">✕</button>
+      </div>
+      <div id="search-row2">
+        <span id="search-row2-label">絞り込み▼</span>
+        <input type="text" id="search-input2" class="search-inp"
+          placeholder="キーワード2でさらに絞り込み..."
+          oninput="_searchRun()"
+          onkeydown="_searchKeyDown(event)">
+      </div>
+      <div id="search-row3" style="display:none">
+        <span id="search-row3-label">🏷 タグ▼</span>
+      </div>
+      <div id="search-results"></div>
+      <div id="search-footer">
+        <span class="search-save-hint">現在の検索条件でノードを生成</span>
+        <button class="search-save-btn" onclick="_searchSave()">💾 検索を保存</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+
+</html>

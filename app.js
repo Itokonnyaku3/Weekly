@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.2-04251135';
+    const APP_VERSION = 'v1.0.3-04300047';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1110,11 +1110,22 @@
               const clL = sWk < firstWk;
               const clR = eWk > lastWk;
 
+              // 案②: バーに編集アイコンを追加。アイコンクリックで openPanel を呼ぶ。
+              // origin週は sn.date（無ければ sn.startDate）を wkey() した値。
+              let originWk = '';
+              try {
+                const dStr = (sn.date || sn.startDate || '').replace(/-/g, '/');
+                if (dStr) originWk = wkey(new Date(dStr));
+              } catch(e) {}
               rows += `<div class="span-inline-bar${clL?' clip-left':''}${clR?' clip-right':''}"
                 style="background:${spanColor}"
                 onclick="event.stopPropagation()"
                 title="${esc(sn.text)}\n${sn.startDate} 〜 ${sn.endDate}">`;
-              if (!clL || k === firstWk) rows += esc(sn.text);
+              if (!clL || k === firstWk) rows += `<span class="span-bar-text">${esc(sn.text)}</span>`;
+              else rows += `<span class="span-bar-text"></span>`;
+              // 編集アイコン（バー右端）
+              rows += `<span class="span-bar-edit" title="このスパンを編集"
+                onclick="event.stopPropagation();openPanel(${pi},'${originWk || k}','${sn.id}')">✏</span>`;
               rows += `</div>`;
             }
 

@@ -3783,3 +3783,53 @@ tr.span-mid-row td.span-lane-cell {
 .span-inline-bar.clip-left  { border-radius: 0 4px 4px 0; }
 .span-inline-bar.clip-right { border-radius: 4px 0 0 4px; }
 .span-inline-bar.clip-left.clip-right { border-radius: 0; }
+
+/* 案②: スパンバー内のテキストと編集アイコン */
+.span-inline-bar .span-bar-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.span-inline-bar .span-bar-edit {
+  flex: 0 0 auto;
+  margin-left: 6px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: #fff;
+  opacity: 0.55;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: opacity .12s, background .12s;
+  user-select: none;
+}
+.span-inline-bar .span-bar-edit:hover {
+  opacity: 1;
+  background: rgba(255,255,255,.18);
+}
+
+/* 案②: スパンバー内のテキストと編集アイコン */
+.span-inline-bar .span-bar-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.span-inline-bar .span-bar-edit {
+  flex: 0 0 auto;
+  margin-left: 6px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: #fff;
+  opacity: 0.55;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: opacity .12s, background .12s;
+  user-select: none;
+}
+.span-inline-bar .span-bar-edit:hover {
+  opacity: 1;
+  background: rgba(255,255,255,.18);
+}
