@@ -3775,7 +3775,8 @@ tr.span-mid-row td.span-lane-cell {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: default;
+  cursor: pointer;
+  transition: filter .12s;
   min-height: 20px;
   display: flex;
   align-items: center;
@@ -3833,3 +3834,6 @@ tr.span-mid-row td.span-lane-cell {
   opacity: 1;
   background: rgba(255,255,255,.18);
 }
+
+/* v1.0.4: スパンバー全体クリック可能（hover で明るくする） */
+.span-inline-bar:hover { filter: brightness(1.1); }

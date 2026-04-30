@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.3-04300047';
+    const APP_VERSION = 'v1.0.4-04300103';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1110,22 +1110,25 @@
               const clL = sWk < firstWk;
               const clR = eWk > lastWk;
 
-              // 案②: バーに編集アイコンを追加。アイコンクリックで openPanel を呼ぶ。
+              // 案②拡張: バー本体クリックで元ノード（ノートパネル）へジャンプ、✏で詳細パネル
               // origin週は sn.date（無ければ sn.startDate）を wkey() した値。
               let originWk = '';
+              const originDate = (sn.date || sn.startDate || '');
               try {
-                const dStr = (sn.date || sn.startDate || '').replace(/-/g, '/');
+                const dStr = originDate.replace(/-/g, '/');
                 if (dStr) originWk = wkey(new Date(dStr));
               } catch(e) {}
+              const safeId = String(sn.id).replace(/'/g, "\\'");
+              const safeDate = originDate.replace(/'/g, "\\'");
               rows += `<div class="span-inline-bar${clL?' clip-left':''}${clR?' clip-right':''}"
                 style="background:${spanColor}"
-                onclick="event.stopPropagation()"
-                title="${esc(sn.text)}\n${sn.startDate} 〜 ${sn.endDate}">`;
+                onclick="event.stopPropagation();openNotePanelToDate('${safeDate}','${safeId}')"
+                title="${esc(sn.text)}\nクリック: 元ノードへ移動 ／ ✏: 詳細パネル\n${sn.startDate} 〜 ${sn.endDate}">`;
               if (!clL || k === firstWk) rows += `<span class="span-bar-text">${esc(sn.text)}</span>`;
               else rows += `<span class="span-bar-text"></span>`;
               // 編集アイコン（バー右端）
-              rows += `<span class="span-bar-edit" title="このスパンを編集"
-                onclick="event.stopPropagation();openPanel(${pi},'${originWk || k}','${sn.id}')">✏</span>`;
+              rows += `<span class="span-bar-edit" title="このスパンの詳細パネルを開く"
+                onclick="event.stopPropagation();openPanel(${pi},'${originWk || k}','${safeId}')">✏</span>`;
               rows += `</div>`;
             }
 
