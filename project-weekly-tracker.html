@@ -114,10 +114,10 @@
           <button class="ol-tbtn" id="ol-private-btn" onclick="olToggleNodePrivate()" title="プライベート設定">🔓 非公開設定</button>
         </div>
         <div style="font-size:10px;color:var(--tx3);line-height:1.2;opacity:0.8">
-          Alt+Shift+↑↓:移動 / Tab:段下げ / Ctrl+L:リンク / Ctrl+.:拡張メニュー
+          Alt+Shift+↑↓:移動 / Tab:段下げ / Ctrl+L:リンク / Ctrl+.:拡張メニュー / Shift+Click・Shift+↑↓:複数選択
         </div>
       </div>
-      <div id="ol-container" onclick="olContainerClick(event)"></div>
+      <div id="ol-container" onclick="olContainerClick(event)" onmousedown="olContainerMouseDown(event)"></div>
       <div id="ol-tree-container"></div>
     </div>
 

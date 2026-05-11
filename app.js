@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.0.4-04300103';
+    const APP_VERSION = 'v1.1.0-05110026';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4854,6 +4854,11 @@
     // 選択ノードID（マルチセレクト）
     let _olSelected = new Set();
     let _olShiftSelecting = false; // Shift+↑↓ 操作中フラグ（フォーカス変更時の選択クリアを抑制）
+    let _olMouseShift = false;     // Shift+クリック 操作中フラグ（onfocus での選択クリア抑制用）
+    // マルチセレクト構造クリップボード: { nodes: [...深いコピー...], text: 'プレーンテキスト', ts: timestamp }
+    // Ctrl+C / Ctrl+X 時に保存し、Ctrl+Shift+V で構造ペースト
+    let _olMultiClipboard = null;
+    let _olSlashMulti = null;      // Ctrl+. 起動時に選択ノード群を保持 (Set<id> または null)
     let _olFocusMode = null;    // フォーカスモード {date, nodeId} or null
     let _olRefRowsExpanded = false; // フォーカス中ノードのサブタスク参照行を展開中か
     let _imgResizeObs = null;   // ResizeObserver for ol-img-wrap size persistence
@@ -5519,7 +5524,7 @@
           + ` style="${tStyle}"`
           + ` oninput="olInput('${date}','${n.id}',this)"`
           + ` onkeydown="olKeyDown(event,'${date}','${n.id}')"`
-          + ` onfocus="_olRefRowsExpanded=false;_olFocusId='${n.id}';if(!_olShiftSelecting)_olSelected.clear();updateOlFmt('${date}')"`
+          + ` onfocus="_olRefRowsExpanded=false;_olFocusId='${n.id}';if(!_olShiftSelecting&&!_olMouseShift)_olSelected.clear();updateOlFmt('${date}')"`
           + `></div>`
           + urlSubLine
           + nodeLinkRef
@@ -5601,7 +5606,8 @@
       // 現在の構造（ノードID・インデント・状態・内容）のハッシュを生成
       // _ssResultsMap も含めて searchsummary の結果変化を検出する
       const _ssKey = _ssResultsMap.size ? '|ss:' + [..._ssResultsMap.entries()].map(([id, res]) => id + '=' + res.length + ':' + res.slice(0,3).map(r => r.id || r.text || '').join('|')).join(',') : '';
-      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.text}:${n.html}`).join(',');
+      const _selKey = _olSelected.size ? '|sel:' + [..._olSelected].sort().join(',') : '';
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + _selKey + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.text}:${n.html}`).join(',');
 
       if (_olLastRenderKey === renderKey) {
         ghAuthInContainer(container);
@@ -6233,6 +6239,31 @@
         return;
       }
 
+      // Delete（修飾なし）+ 複数選択中: 一括削除（選択ノードと各サブツリー）
+      // 1件のみ選択 / 未選択時は通常のテキスト削除を妨げないため発火しない
+      if (ev.key === 'Delete' && !ev.ctrlKey && !ev.metaKey && !ev.shiftKey && !ev.altKey && _olSelected.size >= 2) {
+        ev.preventDefault();
+        olPushHistory(date);
+        olSaveTxt(nodes, idx, ev.target);
+        const toDelete = new Set();
+        nodes.forEach((n, i) => {
+          if (_olSelected.has(n.id)) {
+            const sub = olGetSubtree(nodes, i);
+            for (let j = i; j < i + sub; j++) toDelete.add(j);
+          }
+        });
+        const deletedCount = toDelete.size;
+        for (let i = nodes.length - 1; i >= 0; i--) if (toDelete.has(i)) nodes.splice(i, 1);
+        if (nodes.length === 0) nodes.push({ id: olNewId(), text: '', indent: 0, bold: false, color: '', collapsed: false });
+        _olSelected.clear();
+        _olFocusId = nodes[Math.max(0, Math.min(idx, nodes.length - 1))].id;
+        _olFocusAtStart = false;
+        showToast('🗑️ ' + deletedCount + ' 件を削除しました');
+        saveState(); olRender('ol-container', date);
+        setTimeout(() => { if (typeof render === 'function') render(); }, 10);
+        return;
+      }
+
       // Ctrl+Shift+Delete: 選択中ノード（複数可）or そのノードと配下をすべて削除
       if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && ev.key === 'Delete') {
         ev.preventDefault();
@@ -6649,26 +6680,97 @@
         return;
       }
 
-      // Ctrl+C: マルチセレクト中（Shift+↑↓で選択）はその行テキストをクリップボードへコピー
+      // Ctrl+C: マルチセレクト中（Shift+↑↓ / Shift+クリックで選択）は
+      //   ・テキスト: 行テキストをシステムクリップボードへ書き込み
+      //   ・構造: トップレベル選択ノード（サブツリーを含む）の深いコピーを _olMultiClipboard に保存
+      //          ※ Ctrl+Shift+V で構造ペーストできるようにする
       // ※ 未選択時はブラウザのネイティブコピー動作に委ねる
-      if ((ev.ctrlKey || ev.metaKey) && ev.key === 'c' && _olSelected.size > 0) {
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && ev.key === 'c' && _olSelected.size > 0) {
         ev.preventDefault();
         const vis = olGetVisibleForDate(nodes, date).visible;
         const lines = vis
           .filter(n => _olSelected.has(n.id))
           .map(n => ('  '.repeat(n.indent)) + (n.text || ''));
         const text = lines.join('\n');
+        // 構造クリップボード（トップレベル選択ノード＋サブツリーを保存）
+        const blocks = olCollectSelectionBlocks(nodes);
+        const flatNodes = [];
+        blocks.forEach(b => {
+          for (let j = b.idx; j < b.idx + b.sub; j++) {
+            flatNodes.push(JSON.parse(JSON.stringify(nodes[j])));
+          }
+        });
+        _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
         navigator.clipboard.writeText(text)
-          .then(() => showToast('📋 ' + _olSelected.size + '行をコピーしました'))
+          .then(() => showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+Shift+Vで構造ペースト）'))
           .catch(() => {
             const ta = document.createElement('textarea');
             ta.value = text; document.body.appendChild(ta); ta.select();
             document.execCommand('copy'); document.body.removeChild(ta);
-            showToast('📋 ' + _olSelected.size + '行をコピーしました');
+            showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+Shift+Vで構造ペースト）');
           });
         return;
       }
 
+      // Ctrl+X: マルチセレクト中はコピー＋削除（カット）
+      // ※ 単一選択時はブラウザのネイティブ動作に任せる
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && ev.key === 'x' && _olSelected.size >= 2) {
+        ev.preventDefault();
+        olPushHistory(date);
+        olSaveTxt(nodes, idx, ev.target);
+        const vis = olGetVisibleForDate(nodes, date).visible;
+        const lines = vis
+          .filter(n => _olSelected.has(n.id))
+          .map(n => ('  '.repeat(n.indent)) + (n.text || ''));
+        const text = lines.join('\n');
+        // 構造クリップボードへ深いコピー
+        const blocks = olCollectSelectionBlocks(nodes);
+        const flatNodes = [];
+        blocks.forEach(b => {
+          for (let j = b.idx; j < b.idx + b.sub; j++) {
+            flatNodes.push(JSON.parse(JSON.stringify(nodes[j])));
+          }
+        });
+        _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
+        // システムクリップボードにもテキスト書き込み
+        navigator.clipboard.writeText(text).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+        });
+        // ノードを削除（トップレベルブロックを下から削除）
+        const cutCount = flatNodes.length;
+        for (let k = blocks.length - 1; k >= 0; k--) {
+          nodes.splice(blocks[k].idx, blocks[k].sub);
+        }
+        if (nodes.length === 0) nodes.push({ id: olNewId(), text: '', indent: 0, bold: false, color: '', collapsed: false });
+        _olSelected.clear();
+        _olFocusId = nodes[Math.max(0, Math.min(idx, nodes.length - 1))].id;
+        _olFocusAtStart = false;
+        showToast('✂️ ' + cutCount + ' 件を切り取りました（Ctrl+Shift+Vでペースト）');
+        saveState(); olRender('ol-container', date);
+        setTimeout(() => { if (typeof render === 'function') render(); }, 10);
+        return;
+      }
+
+      // Ctrl+Shift+V: 構造ペースト（_olMultiClipboard があれば現在ノード後に挿入）
+      if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && (ev.key === 'v' || ev.key === 'V')) {
+        if (_olMultiClipboard && _olMultiClipboard.nodes && _olMultiClipboard.nodes.length > 0) {
+          ev.preventDefault();
+          olSaveTxt(nodes, idx, ev.target);
+          olPasteMultiClipboard(date, id);
+          return;
+        }
+        // クリップボード未設定時はネイティブ動作（プレーンテキスト）に委ねる
+      }
+
+      // Escape: 選択解除 → フォーカスモード終了 の順に処理
+      if (ev.key === 'Escape' && _olSelected.size > 0) {
+        ev.preventDefault();
+        _olSelected.clear();
+        olRender('ol-container', date);
+        return;
+      }
       // Escape: フォーカスモードを終了
       if (ev.key === 'Escape' && _olFocusMode && _olFocusMode.date === date) {
         ev.preventDefault();
@@ -6700,10 +6802,32 @@
       }
 
       // Alt+Shift+↑: ノードをひとつ上の「同じ階層のノード」の前に移動
+      //   複数選択中（連続範囲）はブロックとして移動。非連続なら警告。
       if (ev.altKey && ev.shiftKey && ev.key === 'ArrowUp') {
         ev.preventDefault();
         olPushHistory(date);
         olSaveTxt(nodes, idx, ev.target);
+        // ── マルチセレクト分岐 ──
+        if (_olSelected.size >= 2) {
+          const range = olGetContiguousSelectionRange(nodes);
+          if (!range || !range.contiguous) {
+            showToast('⚠️ 選択範囲が連続していないため移動できません', true);
+            return;
+          }
+          let prevSameIdx = -1;
+          for (let i = range.startIdx - 1; i >= 0; i--) {
+            if (nodes[i].indent === range.baseIndent) { prevSameIdx = i; break; }
+            if (nodes[i].indent < range.baseIndent) break;
+          }
+          if (prevSameIdx >= 0) {
+            const removed = nodes.splice(range.startIdx, range.count);
+            nodes.splice(prevSameIdx, 0, ...removed);
+            // フォーカスは元のフォーカスIDを維持
+            saveState(); olRender('ol-container', date);
+          }
+          return;
+        }
+        // ── 単一ノード ──
         const myIndent = nodes[idx].indent;
         const subtree = olGetSubtree(nodes, idx);
         // 同じインデントの直前ノードを探す（それより深いノードはスキップ、親より浅ければ停止）
@@ -6722,10 +6846,33 @@
       }
 
       // Alt+Shift+↓: ノードをひとつ下の「同じ階層のノード」の後ろに移動
+      //   複数選択中（連続範囲）はブロックとして移動。非連続なら警告。
       if (ev.altKey && ev.shiftKey && ev.key === 'ArrowDown') {
         ev.preventDefault();
         olPushHistory(date);
         olSaveTxt(nodes, idx, ev.target);
+        // ── マルチセレクト分岐 ──
+        if (_olSelected.size >= 2) {
+          const range = olGetContiguousSelectionRange(nodes);
+          if (!range || !range.contiguous) {
+            showToast('⚠️ 選択範囲が連続していないため移動できません', true);
+            return;
+          }
+          let nextSameIdx = -1;
+          for (let i = range.endIdx + 1; i < nodes.length; i++) {
+            if (nodes[i].indent === range.baseIndent) { nextSameIdx = i; break; }
+            if (nodes[i].indent < range.baseIndent) break;
+          }
+          if (nextSameIdx >= 0) {
+            const nextSubtree = olGetSubtree(nodes, nextSameIdx);
+            const removed = nodes.splice(range.startIdx, range.count);
+            const insertAt = (nextSameIdx - range.count) + nextSubtree;
+            nodes.splice(insertAt, 0, ...removed);
+            saveState(); olRender('ol-container', date);
+          }
+          return;
+        }
+        // ── 単一ノード ──
         const myIndent = nodes[idx].indent;
         const subtree = olGetSubtree(nodes, idx);
         const endIdx = idx + subtree;
@@ -6757,6 +6904,189 @@
         else break;
       }
       return count;
+    }
+
+    // ── マルチセレクト共通ヘルパー ─────────────────────────────────────
+    // _olSelected を「トップレベル」選択（先祖が選択されていないノード）の
+    // インデックスとサブツリーサイズに整理して返す。連続性チェックにも使う。
+    function olCollectSelectionBlocks(nodes) {
+      if (!nodes || _olSelected.size === 0) return [];
+      const selIdxs = [];
+      nodes.forEach((n, i) => { if (_olSelected.has(n.id)) selIdxs.push(i); });
+      if (selIdxs.length === 0) return [];
+      selIdxs.sort((a, b) => a - b);
+      const blocks = [];
+      let lastEnd = -1;
+      for (const i of selIdxs) {
+        if (i < lastEnd) continue; // 既に上位ブロックに含まれる子孫
+        const sub = olGetSubtree(nodes, i);
+        blocks.push({ idx: i, sub });
+        lastEnd = i + sub;
+      }
+      return blocks;
+    }
+
+    // 選択ブロック群が「連続範囲」を形成しているか判定し、その範囲を返す。
+    // 戻り値: { contiguous, startIdx, endIdx, baseIndent, count } または null
+    function olGetContiguousSelectionRange(nodes) {
+      const blocks = olCollectSelectionBlocks(nodes);
+      if (blocks.length === 0) return null;
+      // 連続判定: 直前ブロックの末尾 == 次ブロックの開始
+      for (let i = 1; i < blocks.length; i++) {
+        if (blocks[i].idx !== blocks[i - 1].idx + blocks[i - 1].sub) {
+          return { contiguous: false };
+        }
+      }
+      const startIdx = blocks[0].idx;
+      const last = blocks[blocks.length - 1];
+      const endIdx = last.idx + last.sub - 1;
+      const baseIndent = Math.min(...blocks.map(b => nodes[b.idx].indent));
+      return {
+        contiguous: true,
+        startIdx, endIdx,
+        baseIndent,
+        count: endIdx - startIdx + 1
+      };
+    }
+
+    // ── マルチセレクト: 選択ノード群を別の日へ移動 ────────────────────────
+    // 選択中のトップレベルノード（とサブツリー）を fromDate から toDate へ移動。
+    // 元の順序を保ち、移動先末尾に追加する。
+    function olMoveSelectedToDate(fromDate, toDate) {
+      if (_olSelected.size === 0) return;
+      if (!fromDate || !toDate) return;
+      if (fromDate === toDate) { showToast('同じ日です'); return; }
+      const fromNodes = S.dailyOutline[fromDate];
+      if (!fromNodes) return;
+      olPushHistory(fromDate);
+      const blocks = olCollectSelectionBlocks(fromNodes);
+      if (blocks.length === 0) return;
+      // 元の順序を保ったままノードを切り出す
+      const flat = [];
+      blocks.forEach(b => { for (let j = b.idx; j < b.idx + b.sub; j++) flat.push(fromNodes[j]); });
+      // 高い idx から削除（下から）
+      for (let k = blocks.length - 1; k >= 0; k--) {
+        fromNodes.splice(blocks[k].idx, blocks[k].sub);
+      }
+      if (fromNodes.length === 0) {
+        fromNodes.push({ id: olNewId(), text: '', indent: 0, bold: false, color: '', collapsed: false });
+      }
+      const toNodes = olGetNodes(toDate);
+      const lastIsEmpty = toNodes.length > 0 && toNodes[toNodes.length - 1].text === '' && toNodes[toNodes.length - 1].indent === 0;
+      const insertAt = lastIsEmpty ? toNodes.length - 1 : toNodes.length;
+      toNodes.splice(insertAt, 0, ...flat);
+      // フォーカスを移動先の先頭選択ノードに合わせる
+      const firstId = flat.length > 0 ? flat[0].id : null;
+      _olSelected.clear();
+      // 移動先ノートに切り替え、グリッド週も追従
+      saveState();
+      if (!toDate.startsWith('proj:')) {
+        const p = toDate.split('-').map(Number);
+        const td = new Date(p[0], p[1] - 1, p[2]);
+        const targetMonday = getMonday(td);
+        const currentWeeks = getWeeks().map(w => wkey(w));
+        const targetWk = wkey(td);
+        if (!currentWeeks.includes(targetWk)) {
+          const baseMonday = getMonday(new Date());
+          const diffMs = targetMonday.getTime() - baseMonday.getTime();
+          const diffWeeks = Math.round(diffMs / (7 * 24 * 3600 * 1000));
+          S.wOff = diffWeeks;
+        }
+        // ラベル
+        const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+        const toLabel = p[1] + '月' + p[2] + '日（' + dayNames[td.getDay()] + '）';
+        showToast('📅 ' + toLabel + ' に ' + flat.length + ' 件を移動しました');
+      } else {
+        showToast('📅 プロジェクトノートに ' + flat.length + ' 件を移動しました');
+      }
+      render();
+      _olCurrentDate = toDate;
+      if (firstId) _olFocusId = firstId;
+      updateOlNav();
+      olRender('ol-container', toDate);
+      setTimeout(() => {
+        if (firstId) {
+          const el = document.getElementById('olt-' + firstId);
+          if (el) {
+            el.focus();
+            try {
+              const sel = window.getSelection();
+              const range = document.createRange();
+              range.selectNodeContents(el);
+              range.collapse(false);
+              sel.removeAllRanges();
+              sel.addRange(range);
+            } catch (e) { }
+          }
+        }
+      }, 60);
+    }
+
+    // ── マルチセレクト: 構造ペースト ────────────────────────────────
+    // _olMultiClipboard.nodes を現在ノードの直後に挿入する。
+    // インデントは「貼り付け先ノードの indent ＋ 元クリップボードの最小 indent との相対値」で正規化。
+    function olPasteMultiClipboard(date, focusedId) {
+      if (!_olMultiClipboard || !_olMultiClipboard.nodes || _olMultiClipboard.nodes.length === 0) return false;
+      const nodes = olGetNodes(date);
+      const idx = nodes.findIndex(n => n.id === focusedId);
+      if (idx < 0) return false;
+      olPushHistory(date);
+      // 深いコピー＋新ID付与
+      const baseIndent = nodes[idx].indent;
+      const minClipIndent = Math.min(..._olMultiClipboard.nodes.map(n => n.indent || 0));
+      const newNodes = _olMultiClipboard.nodes.map(n => {
+        const copy = JSON.parse(JSON.stringify(n));
+        copy.id = olNewId();
+        copy.indent = baseIndent + ((n.indent || 0) - minClipIndent);
+        // parentId は他ノードを指す可能性があるので一旦クリア
+        delete copy.parentId;
+        return copy;
+      });
+      // 挿入位置: フォーカスノードのサブツリー直後
+      const sub = olGetSubtree(nodes, idx);
+      const insertAt = idx + sub;
+      nodes.splice(insertAt, 0, ...newNodes);
+      _olSelected.clear();
+      newNodes.forEach(n => _olSelected.add(n.id));
+      _olFocusId = newNodes[newNodes.length - 1].id;
+      _olFocusAtStart = false;
+      saveState();
+      olRender('ol-container', date);
+      showToast('📋 ' + newNodes.length + ' 件をペーストしました');
+      return true;
+    }
+
+    // ノートコンテナのマウスダウン処理（Shift+クリックによる範囲選択）
+    function olContainerMouseDown(ev) {
+      if (!_olCurrentDate) return;
+      if (!ev.shiftKey || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      // ボタン・トグル等は無視
+      if (ev.target.closest('.ol-toggle,.ol-todo-cb,.ol-bullet,.ol-cb-area,.ol-nodelink-bullet,.ol-ss-bullet,.ol-collapsed-mark,.ol-subtask-count,.ol-tag-del,.ol-note-tag-chip,.ol-tag-proj,.ol-backlink-chip')) return;
+      const row = ev.target.closest('.ol-row');
+      if (!row) return;
+      const targetId = row.getAttribute('data-id');
+      if (!targetId) return;
+      // contenteditable へのキャレット配置を抑止（選択状態を可視化するため）
+      ev.preventDefault();
+      const nodes = olGetNodes(_olCurrentDate);
+      const vis = olGetVisibleForDate(nodes, _olCurrentDate).visible;
+      let anchorIdx = vis.findIndex(n => n.id === _olFocusId);
+      const targetIdx = vis.findIndex(n => n.id === targetId);
+      if (targetIdx < 0) return;
+      if (anchorIdx < 0) anchorIdx = targetIdx;
+      const start = Math.min(anchorIdx, targetIdx);
+      const end = Math.max(anchorIdx, targetIdx);
+      _olSelected.clear();
+      if (end > start) {
+        for (let i = start; i <= end; i++) _olSelected.add(vis[i].id);
+      }
+      // 選択クリアを onfocus に邪魔されないようフラグを立てる
+      _olMouseShift = true;
+      _olFocusId = targetId;
+      _olFocusAtStart = false;
+      olRender('ol-container', _olCurrentDate);
+      // 次フレームで解除（onfocus 反映後）
+      setTimeout(() => { _olMouseShift = false; }, 0);
     }
 
     // ノートコンテナのクリック処理
@@ -6989,6 +7319,8 @@
       _olSlashNodeId = _olFocusId;
       _olSlashDate = _olCurrentDate;
       _olSlashTrigger = '';
+      // マルチセレクト中ならスナップショットを保持（applyOlSlashCommand で参照）
+      _olSlashMulti = (_olSelected.size >= 2) ? new Set(_olSelected) : null;
 
       const rect = btnEl.getBoundingClientRect();
       showOlSlashMenuAt(rect.left, rect.bottom + 4, rect.top);
@@ -7004,6 +7336,8 @@
       _olSlashNodeId = id;
       _olSlashDate = date;
       _olSlashTrigger = '';
+      // マルチセレクト中ならスナップショットを保持（applyOlSlashCommand で参照）
+      _olSlashMulti = (_olSelected.size >= 2) ? new Set(_olSelected) : null;
 
       // カーソル位置を取得。空ノードだとゼロ矩形になるので elRect にフォールバック
       const sel = window.getSelection();
@@ -7311,8 +7645,17 @@
           }
         }
         hideOlSlashMenu();
-        olMoveNodeToDate(_olSlashNodeId, _olSlashDate, targetDateStr);
-        return; // olMoveNodeToDate 内で saveState/render 済み
+        // マルチセレクトモード時は選択ノード群をまとめて移動
+        if (_olSlashMulti && _olSlashMulti.size >= 2) {
+          // _olSelected を一時的にスナップショットへ戻す（ユーザーが間に解除した場合に備える）
+          _olSelected = new Set(_olSlashMulti);
+          _olSlashMulti = null;
+          olMoveSelectedToDate(_olSlashDate, targetDateStr);
+        } else {
+          _olSlashMulti = null;
+          olMoveNodeToDate(_olSlashNodeId, _olSlashDate, targetDateStr);
+        }
+        return; // olMove*ToDate 内で saveState/render 済み
       }
 
       // 文字列からトリガー (/, ・, ／) を除去

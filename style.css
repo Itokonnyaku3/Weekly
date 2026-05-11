@@ -2881,6 +2881,11 @@
     .ol-row.ol-selected {
       background: var(--bg-info);
       border-radius: var(--radius-sm);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+    /* マルチセレクト中のオンフォーカス行はキャレット非表示で「選択中」を明示 */
+    .ol-row.ol-selected .ol-text {
+      caret-color: transparent;
     }
 
     .ol-row:hover>.ol-toggle-ph {
