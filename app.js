@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.1.0-05110026';
+    const APP_VERSION = 'v1.1.1-05110130';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6702,12 +6702,12 @@
         });
         _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
         navigator.clipboard.writeText(text)
-          .then(() => showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+Shift+Vで構造ペースト）'))
+          .then(() => showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+V でそのまま貼り付けられます）'))
           .catch(() => {
             const ta = document.createElement('textarea');
             ta.value = text; document.body.appendChild(ta); ta.select();
             document.execCommand('copy'); document.body.removeChild(ta);
-            showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+Shift+Vで構造ペースト）');
+            showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+V でそのまま貼り付けられます）');
           });
         return;
       }
@@ -6747,7 +6747,7 @@
         _olSelected.clear();
         _olFocusId = nodes[Math.max(0, Math.min(idx, nodes.length - 1))].id;
         _olFocusAtStart = false;
-        showToast('✂️ ' + cutCount + ' 件を切り取りました（Ctrl+Shift+Vでペースト）');
+        showToast('✂️ ' + cutCount + ' 件を切り取りました（Ctrl+V で貼り付け）');
         saveState(); olRender('ol-container', date);
         setTimeout(() => { if (typeof render === 'function') render(); }, 10);
         return;
@@ -7054,6 +7054,94 @@
       olRender('ol-container', date);
       showToast('📋 ' + newNodes.length + ' 件をペーストしました');
       return true;
+    }
+
+    // ノートコンテナのペースト処理
+    //   - システムクリップボードのテキストが `_olMultiClipboard.text` と一致 → 構造ペースト
+    //   - 一致しない（外部からのペースト等）→ ネイティブ動作のまま
+    //   - 外部から来た多行テキスト（先頭スペース等でインデントが表現されているもの）も
+    //     2スペース＝1インデントで解釈して新規ノード群を作る
+    function olContainerPaste(ev) {
+      if (!_olCurrentDate) return;
+      // ペースト対象が ol-text 内かを確認
+      const target = ev.target;
+      const olText = target && target.closest && target.closest('.ol-text');
+      if (!olText) return;
+      const id = olText.id ? olText.id.replace('olt-', '') : null;
+      if (!id) return;
+      const date = olText.getAttribute('data-date') || _olCurrentDate;
+      const cd = ev.clipboardData || window.clipboardData;
+      if (!cd) return;
+      const clipText = cd.getData ? cd.getData('text/plain') : '';
+      if (!clipText) return;
+
+      // ① 内部マルチクリップボードと一致 → 構造ペースト
+      if (_olMultiClipboard && _olMultiClipboard.nodes
+          && _olMultiClipboard.nodes.length > 0
+          && clipText === _olMultiClipboard.text) {
+        ev.preventDefault();
+        const nodes = olGetNodes(date);
+        const idx = nodes.findIndex(n => n.id === id);
+        if (idx >= 0) olSaveTxt(nodes, idx, olText);
+        olPasteMultiClipboard(date, id);
+        return;
+      }
+
+      // ② 外部からの多行テキスト → 2スペース＝1インデントでパースして複数ノード化
+      //   - 単一行の場合はネイティブ動作（普通のテキストペースト）に任せる
+      //   - 改行を含む場合のみインターセプト
+      if (clipText.indexOf('\n') >= 0) {
+        ev.preventDefault();
+        olPushHistory(date);
+        const nodes = olGetNodes(date);
+        const idx = nodes.findIndex(n => n.id === id);
+        if (idx < 0) return;
+        olSaveTxt(nodes, idx, olText);
+        const lines = clipText.split(/\r?\n/);
+        // 先頭/末尾の完全空行をトリム（ただし中間の空行はノードとして残す）
+        while (lines.length && lines[0].length === 0) lines.shift();
+        while (lines.length && lines[lines.length - 1].length === 0) lines.pop();
+        if (lines.length === 0) return;
+        // インデント: 行頭スペース/タブ数から推定。タブは4スペース換算。
+        const indents = lines.map(l => {
+          const m = l.match(/^[ \t]*/);
+          const w = m ? m[0].replace(/\t/g, '    ').length : 0;
+          return Math.floor(w / 2);
+        });
+        const minClipIndent = Math.min(...indents);
+        const baseIndent = nodes[idx].indent;
+        const newNodes = lines.map((l, i) => ({
+          id: olNewId(),
+          text: l.replace(/^[ \t]+/, ''),
+          html: '',
+          indent: baseIndent + (indents[i] - minClipIndent),
+          bold: false,
+          color: '',
+          collapsed: false,
+          isTodo: false,
+          checked: false,
+          tags: [],
+          isPrivate: false,
+        }));
+        const sub = olGetSubtree(nodes, idx);
+        const insertAt = idx + sub;
+        // 貼付先ノードが空（テキスト無し）なら最初のノードに置き換える方が自然
+        if ((nodes[idx].text || '').trim() === '' && !nodes[idx].isTodo && !nodes[idx].html) {
+          nodes[idx].text = newNodes[0].text;
+          nodes[idx].indent = newNodes[0].indent;
+          nodes.splice(insertAt, 0, ...newNodes.slice(1));
+        } else {
+          nodes.splice(insertAt, 0, ...newNodes);
+        }
+        _olSelected.clear();
+        _olFocusId = newNodes[newNodes.length - 1].id;
+        _olFocusAtStart = false;
+        saveState();
+        olRender('ol-container', date);
+        showToast('📋 ' + newNodes.length + ' 行をペーストしました');
+        return;
+      }
+      // 単一行は通常のテキストペースト（preventDefault しない）
     }
 
     // ノートコンテナのマウスダウン処理（Shift+クリックによる範囲選択）
