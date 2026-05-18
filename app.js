@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.2.2-05170720-remove-old-pj-entries';
+    const APP_VERSION = 'v1.2.3-05170800-phase-link-preamble';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1077,7 +1077,7 @@
         rows += `<span class="drag-handle" draggable="true" ondragstart="pDragStart(event,${pi})">⠿</span>`;
         const modeIcon = proj.isPrivate ? '🏠' : '💼';
         rows += `<span class="proj-mode-toggle" onclick="toggleProjPrivate(${pi})" title="${proj.isPrivate ? 'プライベート（クリックでお仕事用に変更）' : 'お仕事用（クリックでプライベートに変更）'}">${modeIcon}</span>`;
-        rows += `<span class="nm" ondblclick="startRename(${pi},this)">${esc(proj.name)}</span>`;
+        rows += `<span class="nm" onclick="projNameClick(${pi})" ondblclick="projNameDblClick(${pi},this)" style="cursor:pointer" title="クリック: ノートを開く / ダブルクリック: 名前変更">${esc(proj.name)}</span>`;
         rows += `<span class="note-btn" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートを開く">📄</span>`;
         if (_compactMode) {
           // 展開中の場合、閉じるボタンを表示
@@ -3044,6 +3044,21 @@
       inp.onblur = done; inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); if (e.key === 'Escape') { saveState(); render() } };
     }
 
+    // v1.2.3: プロジェクト名のシングルクリック→ノート、ダブルクリック→リネーム
+    // 200ms 待って click を遅延発火させ、その間に dblclick が来れば click をキャンセル
+    let _projNameClickTimer = null;
+    function projNameClick(pi) {
+      if (_projNameClickTimer) { clearTimeout(_projNameClickTimer); }
+      _projNameClickTimer = setTimeout(() => {
+        _projNameClickTimer = null;
+        toggleNotePanel('proj:' + pi);
+      }, 200);
+    }
+    function projNameDblClick(pi, el) {
+      if (_projNameClickTimer) { clearTimeout(_projNameClickTimer); _projNameClickTimer = null; }
+      startRename(pi, el);
+    }
+
     function toggleProjPrivate(pi) {
       S.projects[pi].isPrivate = !S.projects[pi].isPrivate;
       saveState(); render();
@@ -4236,6 +4251,80 @@
       }
     }
 
+    /* ================================================================
+       Step 5: プロジェクトノートの予約セクション（Phase / Link）
+       proj:{pi} ノートに以下の構造を保証する:
+           Phase (indent=0, type='phase-root')
+             フェーズ1 (indent=1, type='phase' を自動付与)
+             ...
+           Link  (indent=0, type='link-root')
+             各リンク (indent=1, type='link' を自動付与)
+       ※既存の indent=0 type='link' などのノードは破壊せずに残す。
+       ================================================================ */
+    function ensureProjNotePreambles(pi) {
+      if (typeof pi !== 'number' || !S.projects[pi]) return;
+      const key = 'proj:' + pi;
+      if (!S.dailyOutline) S.dailyOutline = {};
+      let nodes = S.dailyOutline[key];
+      if (!nodes) { S.dailyOutline[key] = nodes = []; }
+
+      const hasPhaseRoot = nodes.some(n => n && n.type === 'phase-root');
+      const hasLinkRoot  = nodes.some(n => n && n.type === 'link-root');
+
+      // 「Phase」見出しが無ければ先頭に挿入
+      if (!hasPhaseRoot) {
+        const phaseNode = {
+          id: olNewId(), text: 'Phase', indent: 0,
+          type: 'phase-root', isTodo: false, checked: false,
+          bold: true, color: '', collapsed: false, tags: [], images: []
+        };
+        nodes.unshift(phaseNode);
+      }
+      // 「Link」見出しが無ければ Phase の直後（先頭から2番目）に挿入
+      if (!hasLinkRoot) {
+        const linkNode = {
+          id: olNewId(), text: 'Link', indent: 0,
+          type: 'link-root', isTodo: false, checked: false,
+          bold: true, color: '', collapsed: false, tags: [], images: []
+        };
+        // Phase 見出しの直後を探す
+        const phaseIdx = nodes.findIndex(n => n && n.type === 'phase-root');
+        const insertAt = phaseIdx >= 0 ? phaseIdx + 1 : 0;
+        // ただし Phase の indent=1 子ノードがあれば、その後ろに置く
+        let after = insertAt;
+        while (after < nodes.length && nodes[after] && nodes[after].indent >= 1
+               && nodes[after].type !== 'link-root') {
+          after++;
+        }
+        nodes.splice(after, 0, linkNode);
+      }
+    }
+
+    /**
+     * proj:{pi} ノートで、Phase見出し直下（indent>=1）のノードに type='phase' を、
+     * Link見出し直下（indent>=1）のノードに type='link' を自動付与する。
+     * 見出し自身（phase-root / link-root）は触らない。
+     * 既存の type が空・'phase'・'link' の場合のみ書き換え、'todo' 等は維持。
+     */
+    function applyProjAutoTypes(pi) {
+      if (typeof pi !== 'number' || !S.projects[pi]) return;
+      const key = 'proj:' + pi;
+      const nodes = (S.dailyOutline && S.dailyOutline[key]) || [];
+      let currentSection = null; // 'phase' | 'link' | null
+      for (const n of nodes) {
+        if (!n) continue;
+        if (n.type === 'phase-root') { currentSection = 'phase'; continue; }
+        if (n.type === 'link-root')  { currentSection = 'link';  continue; }
+        if (n.indent === 0) { currentSection = null; continue; }
+        // indent>=1 の子ノード
+        if (currentSection === 'phase' && (!n.type || n.type === 'phase' || n.type === 'link')) {
+          n.type = 'phase';
+        } else if (currentSection === 'link' && (!n.type || n.type === 'phase' || n.type === 'link')) {
+          n.type = 'link';
+        }
+      }
+    }
+
     function toggleNotePanel(date) {
       if (date && typeof date === 'string') {
         if (!_olCurrentDate || _olCurrentDate !== date) { _olCurrentDate = date; }
@@ -4249,6 +4338,11 @@
         rzn && rzn.classList.add('visible');
         const saved = localStorage.getItem('pwt_np_w');
         if (saved) np.style.width = saved + 'px';
+        // Step 5: proj:N を開くときは予約セクション（Phase / Link 見出し）を保証
+        if (typeof _olCurrentDate === 'string' && _olCurrentDate.startsWith('proj:')) {
+          const _pi = parseInt(_olCurrentDate.slice(5), 10);
+          if (!isNaN(_pi)) { ensureProjNotePreambles(_pi); applyProjAutoTypes(_pi); saveState(); }
+        }
         updateOlNav();
         olRender('ol-container', _olCurrentDate);
         olSetupPasteHandler();
@@ -5431,6 +5525,14 @@
     function olRender(containerId, date) {
       const container = document.getElementById(containerId);
       if (!container) return;
+      // Step 5: proj:N の場合、描画前に予約セクション保証＋自動type付与
+      if (typeof date === 'string' && date.startsWith('proj:')) {
+        const _pi = parseInt(date.slice(5), 10);
+        if (!isNaN(_pi)) {
+          if (typeof ensureProjNotePreambles === 'function') ensureProjNotePreambles(_pi);
+          if (typeof applyProjAutoTypes === 'function') applyProjAutoTypes(_pi);
+        }
+      }
       const nodes = olGetNodes(date);
       let { visible, focusNodeText } = olGetVisibleForDate(nodes, date);
 
