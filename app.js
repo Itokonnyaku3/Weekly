@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.1.1-05110130';
+    const APP_VERSION = 'v1.2.2-05170720-remove-old-pj-entries';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -439,6 +439,8 @@
     }
 
     let _projColWidth = parseInt(localStorage.getItem('pwt_proj_col_w')) || 240;
+    let _phaseColWidth = parseInt(localStorage.getItem('pwt_phase_col_w')) || 140;
+    let _linkColWidth  = parseInt(localStorage.getItem('pwt_link_col_w'))  || 160;
     let _weekColWidth = parseInt(localStorage.getItem('pwt_week_col_w')) || 336;
     let _weekColWidthMap = {};
     try {
@@ -447,9 +449,11 @@
     } catch (e) { }
 
     function applyWeekColWidths() {
-      let total = _projColWidth;
+      let total = _projColWidth + _phaseColWidth + _linkColWidth;
       const colP = $('gc-proj');
       if (colP) colP.style.width = _projColWidth + 'px';
+      const colPh = $('gc-phase'); if (colPh) colPh.style.width = _phaseColWidth + 'px';
+      const colLk = $('gc-link');  if (colLk) colLk.style.width = _linkColWidth + 'px';
       document.querySelectorAll('col[id^="gc-wk-"]').forEach(col => {
         const k = col.id.replace('gc-wk-', '');
         const w = (_weekColWidthMap[k] || _weekColWidth);
@@ -461,21 +465,39 @@
     }
 
     function initColumnWidths() {
-      document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
+      document.documentElement.style.setProperty('--proj-col-w',  _projColWidth  + 'px');
+      document.documentElement.style.setProperty('--phase-col-w', _phaseColWidth + 'px');
+      document.documentElement.style.setProperty('--link-col-w',  _linkColWidth  + 'px');
       applyWeekColWidths();
     }
 
     function startColResize(e, type, colKey) {
       e.preventDefault();
       const startX = e.clientX;
-      const startW = (type === 'proj') ? _projColWidth : (_weekColWidthMap[colKey] || _weekColWidth);
+      // 開始幅を type 別に決定
+      let startW;
+      if      (type === 'proj')  startW = _projColWidth;
+      else if (type === 'phase') startW = _phaseColWidth;
+      else if (type === 'link')  startW = _linkColWidth;
+      else                       startW = (_weekColWidthMap[colKey] || _weekColWidth);
+      // 最小幅
+      const minW = (type === 'proj') ? 80 : (type === 'phase' || type === 'link') ? 60 : 100;
+
       const onMouseMove = ev => {
         const delta = ev.clientX - startX;
-        const newW = Math.max(type === 'proj' ? 80 : 100, startW + delta);
+        const newW = Math.max(minW, startW + delta);
         if (type === 'proj') {
           _projColWidth = newW;
           document.documentElement.style.setProperty('--proj-col-w', _projColWidth + 'px');
           const cp = $('gc-proj'); if (cp) cp.style.width = _projColWidth + 'px';
+        } else if (type === 'phase') {
+          _phaseColWidth = newW;
+          document.documentElement.style.setProperty('--phase-col-w', _phaseColWidth + 'px');
+          const cp = $('gc-phase'); if (cp) cp.style.width = _phaseColWidth + 'px';
+        } else if (type === 'link') {
+          _linkColWidth = newW;
+          document.documentElement.style.setProperty('--link-col-w', _linkColWidth + 'px');
+          const cp = $('gc-link'); if (cp) cp.style.width = _linkColWidth + 'px';
         } else {
           _weekColWidthMap[colKey] = newW;
           const cwk = $('gc-wk-' + colKey); if (cwk) cwk.style.width = newW + 'px';
@@ -486,6 +508,8 @@
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
         localStorage.setItem('pwt_proj_col_w', _projColWidth);
+        localStorage.setItem('pwt_phase_col_w', _phaseColWidth);
+        localStorage.setItem('pwt_link_col_w',  _linkColWidth);
         localStorage.setItem('pwt_week_col_w_map', JSON.stringify(_weekColWidthMap));
       };
       window.addEventListener('mousemove', onMouseMove);
@@ -751,6 +775,22 @@
     /* ── RENDER ── */
 
     /* ================================================================
+       Step 2: プロジェクトの Phase / リンク 集約ノード取得ヘルパー
+       proj:{pi} ノートから type='phase' / type='link' ノードを抽出する。
+       indent や子ノードはそのまま保ったままで返す。
+       ================================================================ */
+    function getProjPhaseNodes(pi) {
+      const key = 'proj:' + pi;
+      const nodes = (S.dailyOutline && S.dailyOutline[key]) || [];
+      return nodes.filter(n => n && n.type === 'phase');
+    }
+    function getProjLinkNodes(pi) {
+      const key = 'proj:' + pi;
+      const nodes = (S.dailyOutline && S.dailyOutline[key]) || [];
+      return nodes.filter(n => n && n.type === 'link');
+    }
+
+    /* ================================================================
        週マタギ スパンバー機能 (Phase 3)
        startDate / endDate を持つノードをグリッド上に
        position:absolute のバーとして描画する。
@@ -956,8 +996,13 @@
       $('wlabel').textContent = fmt(weeks[0]) + '〜' + fmt(addDays(weeks[WEEKS - 1], 6));
 
       // リサイズハンドルの追加
+      // Step 2: PJ列の右に Phase列・リンク列を追加（colgroup と thead 両方）
       let ghtml = '<col id="gc-proj" class="col-proj">';
+      ghtml += '<col id="gc-phase" class="col-phase">';
+      ghtml += '<col id="gc-link" class="col-link">';
       let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト<div class="col-resizer" onmousedown="startColResize(event, 'proj')"></div></th>`;
+      hr += `<th class="col-phase" style="text-align:left">Phase<div class="col-resizer" onmousedown="startColResize(event, 'phase')"></div></th>`;
+      hr += `<th class="col-link"  style="text-align:left">リンク<div class="col-resizer" onmousedown="startColResize(event, 'link')"></div></th>`;
       weeks.forEach(w => {
         const k = wkey(w);
         ghtml += `<col id="gc-wk-${k}" class="col-week">`;
@@ -996,6 +1041,13 @@
           rows += `</div>`;
         }
         rows += `</div></td>`;
+        // Step 2: proj-hdr-row でも Phase列・リンク列を出す（簡易：件数のみ）
+        {
+          const phaseN = getProjPhaseNodes(pi).length;
+          const linkN  = getProjLinkNodes(pi).length;
+          rows += `<td class="col-phase">${phaseN ? `<span class="proj-hdr-cnt">${phaseN}件</span>` : ''}</td>`;
+          rows += `<td class="col-link">${linkN ? `<span class="proj-hdr-cnt">${linkN}件</span>` : ''}</td>`;
+        }
         weeks.forEach(w => {
           const k = wkey(w);
           const items = getGridItems(pi, k);
@@ -1034,30 +1086,57 @@
         rows += `<span style="font-size:10px;cursor:pointer;color:var(--tx3);padding:0 2px" onclick="deleteProj(${pi})" title="削除">✕</span>`;
         rows += `</div>`;
 
-        // project-level entries (collapsible, from nodes in dailyOutline)
-        const projItems = getProjItems(pi);
-        rows += `<div class="proj-entries-toggle" onclick="toggleProjEntries(${pi})">`;
-        rows += `<span>${(proj.projEntriesOpen ? '▼' : '▶')}</span>`;
-        rows += `<span style="flex:1">${projItems.length ? projItems.length + '件' : 'メモ・タスク'}</span>`;
-        rows += `<span onclick="event.stopPropagation();openPanel(${pi},'proj',null)" style="color:var(--tx-info);font-size:11px;padding:0 3px">＋</span>`;
-        rows += `</div>`;
-        rows += `<div class="proj-entries-body${proj.projEntriesOpen ? ' open' : ''} elist" id="pe-${pi}" ondragover="eDragOver(event)" ondrop="eDrop(event,${pi},'proj')">`;
-        projItems.forEach(item => {
-          rows += renderEntry(item.node, pi, 'proj', item.node.id, { date: item.date, idx: item.idx });
-        });
-        rows += `</div>`;
-
-        // links (only shown when present, no add button)
-        if ((proj.links || []).length) {
-          rows += `<div class="plinks">`;
-          proj.links.forEach(lk => {
-            const isWF = (lk.url || '').includes('workflowy.com');
-            const tgt = isWF ? 'workflowy-pane' : '_blank';
-            rows += `<a class="plink" href="${escA(lk.url)}" target="${tgt}">🔗 ${esc(lk.label)}</a>`;
-          });
-          rows += `</div>`;
-        }
+        // v1.2.2: PJ列直下の旧表示エリアを削除（リンク列に統合済み）。
+        // - 旧 proj-entries-toggle / proj-entries-body / ＋追加ボタンは削除
+        // - 旧 proj.links (.plinks/.plink) ハードコード版も削除
+        // 関連関数 toggleProjEntries() / getProjItems() / CSSルールはデッドコードとして残置（次の掃除で除去予定）。
         rows += `</div></td>`;
+
+        // ── Step 2: Phase列・リンク列（詳細行）──
+        // proj:{pi} ノートの type='phase' / 'link' ノードを集約して縦に列挙する。
+        // クリックでノートパネルを開いて該当ノードへフォーカス。
+        {
+          const phaseNodes = getProjPhaseNodes(pi);
+          rows += `<td class="col-phase" data-pi="${pi}" data-wk="phase">`;
+          if (phaseNodes.length) {
+            phaseNodes.forEach(pn => {
+              const txt = (pn.text || '').trim();
+              const done = !!pn.checked;
+              const ind = pn.indent || 0;
+              const padL = ind * 8;
+              const bullet = done ? '✔' : (pn.isTodo ? '□' : '・');
+              rows += `<span class="phase-cell-item${done ? ' is-done' : ''}" `
+                    + `style="padding-left:${padL}px" `
+                    + `onclick="openNotePanelToDate('proj:${pi}','${pn.id}')" `
+                    + `title="${escA(txt)}">`
+                    + `<span class="phase-bullet">${bullet}</span>${esc(txt)}</span>`;
+            });
+          } else {
+            rows += `<span class="phase-cell-empty" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートでPhaseを追加">＋Phaseを追加</span>`;
+          }
+          rows += `</td>`;
+
+          const linkNodes = getProjLinkNodes(pi);
+          rows += `<td class="col-link" data-pi="${pi}" data-wk="link">`;
+          if (linkNodes.length) {
+            linkNodes.forEach(ln => {
+              const txt = (ln.text || '').trim();
+              const url = (ln.url || '').trim();
+              if (url) {
+                const isWF = url.includes('workflowy.com');
+                const tgt = isWF ? 'workflowy-pane' : '_blank';
+                rows += `<a class="link-cell-item" href="${escA(url)}" target="${tgt}" title="${escA(url)}">`
+                      + `<span class="link-bullet">・</span>${esc(txt || url)}</a>`;
+              } else {
+                rows += `<span class="link-cell-item" onclick="openNotePanelToDate('proj:${pi}','${ln.id}')" title="${escA(txt)}">`
+                      + `<span class="link-bullet">・</span>${esc(txt)}</span>`;
+              }
+            });
+          } else {
+            rows += `<span class="link-cell-empty" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートでリンクを追加">＋リンクを追加</span>`;
+          }
+          rows += `</td>`;
+        }
 
         // ── 案A: プロジェクト全体のスパンレーン割当を事前計算（同名スパン = 同レーン）──
         const spanLanes = computeSpanLanesForProject(pi);
@@ -1194,7 +1273,8 @@
         });
         rows += '</tr>';
       });
-      rows += `<tr><td colspan="${WEEKS + 1}"><div class="parow"><input id="painp" class="painp" type="text" placeholder="新しいプロジェクト名を入力してEnter" onkeydown="if(event.key==='Enter')addProjFromInput(this)" autocomplete="off"><button class="qabtn" onclick="addProjFromInput($('painp'))">追加</button></div></td></tr>`;
+      // Step 2: 列数 = プロジェクト + Phase + リンク + 週(WEEKS) = WEEKS + 3
+      rows += `<tr><td colspan="${WEEKS + 3}"><div class="parow"><input id="painp" class="painp" type="text" placeholder="新しいプロジェクト名を入力してEnter" onkeydown="if(event.key==='Enter')addProjFromInput(this)" autocomplete="off"><button class="qabtn" onclick="addProjFromInput($('painp'))">追加</button></div></td></tr>`;
       $('gb').innerHTML = rows;
 
       // ノートエディタがフォーカス中の場合はグリッド側にフォーカスを移さない
@@ -6286,7 +6366,10 @@
         }
         if (nodes.length === 0) nodes.push({ id: olNewId(), text: '', indent: 0, bold: false, color: '', collapsed: false });
         _olFocusId = nodes[Math.max(0, idx - 1)].id; _olFocusAtStart = false;
-        saveState(); olRender('ol-container', date); return;
+        saveState(); olRender('ol-container', date);
+        // Step 2 関連バグ修正: グリッドの Phase列・リンク列を即時同期
+        setTimeout(() => { if (typeof render === 'function') render(); }, 10);
+        return;
       }
 
       // Ctrl+B: 太字トグル
