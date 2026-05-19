@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.2.3-05170800-phase-link-preamble';
+    const APP_VERSION = 'v1.3.0-05170830-tag-phase-normalize';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -964,6 +964,13 @@
       }
     }
     function _renderImpl() {
+      // Step 3: 描画前に全 projTag 持ちノードの phase をタグから自動正規化
+      if (typeof normalizeNodePhase === 'function' && S.dailyOutline) {
+        for (const dk in S.dailyOutline) {
+          const ns = S.dailyOutline[dk]; if (!Array.isArray(ns)) continue;
+          for (const n of ns) { if (n && n.projTag) normalizeNodePhase(n); }
+        }
+      }
       const weeks = getWeeks();
       const cw = wkey(new Date());
 
@@ -4321,6 +4328,46 @@
           n.type = 'phase';
         } else if (currentSection === 'link' && (!n.type || n.type === 'phase' || n.type === 'link')) {
           n.type = 'link';
+        }
+      }
+    }
+
+    /**
+     * Step 3: タグ→phase の自動正規化（両対応）
+     * node.projTag からプロジェクトを特定し、そのプロジェクトの Phase 見出し直下のノード名と
+     * node.tags 内の要素が一致すれば node.phase に格納する。
+     * 一致するタグがなければ node.phase は変更しない（既存値を尊重）。
+     */
+    function getProjPhaseChildrenNames(pi) {
+      const key = 'proj:' + pi;
+      const nodes = (S.dailyOutline && S.dailyOutline[key]) || [];
+      const names = [];
+      let inPhase = false;
+      for (const n of nodes) {
+        if (!n) continue;
+        if (n.type === 'phase-root') { inPhase = true; continue; }
+        if (n.type === 'link-root')  { inPhase = false; continue; }
+        if (n.indent === 0) { inPhase = false; continue; }
+        if (inPhase && n.indent >= 1) {
+          const t = (n.text || '').trim();
+          if (t) names.push(t);
+        }
+      }
+      return names;
+    }
+    function normalizeNodePhase(node) {
+      if (!node || !node.projTag) return;
+      if (!Array.isArray(node.tags) || !node.tags.length) return;
+      // projTag からプロジェクト index を特定
+      const pi = S.projects.findIndex(p => p.name.replace(/\s+/g, '_') === node.projTag);
+      if (pi < 0) return;
+      const phaseNames = getProjPhaseChildrenNames(pi);
+      if (!phaseNames.length) return;
+      // tags の中で phase 名と一致するものを探す
+      for (const tag of node.tags) {
+        if (phaseNames.includes(tag)) {
+          node.phase = tag;
+          return;
         }
       }
     }
