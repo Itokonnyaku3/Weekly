@@ -428,9 +428,16 @@
     /* ヘッダの sticky bg */
     thead th.col-phase { position: sticky; top: 0; left: var(--proj-col-w); z-index: 49; background: var(--bg2) !important; }
     thead th.col-link  { position: sticky; top: 0; left: calc(var(--proj-col-w) + var(--phase-col-w)); z-index: 48; background: var(--bg2) !important; }
-    /* プロジェクトヘッダ行（折りたたみ集計）でも sticky を維持 */
+    /* プロジェクトヘッダ行（折りたたみ集計）の Phase/リンク セルは PJ列と同じ紺背景・白文字を継承 */
     tbody tr.proj-hdr-row td.col-phase,
-    tbody tr.proj-hdr-row td.col-link { background: var(--bg2); }
+    tbody tr.proj-hdr-row td.col-link {
+      background: #3b4468;
+      color: #f0f2fa;
+    }
+    @media (prefers-color-scheme: dark) {
+      tbody tr.proj-hdr-row td.col-phase,
+      tbody tr.proj-hdr-row td.col-link { background: #2a3050; }
+    }
     /* Phase列・リンク列内の各項目 */
     .phase-cell-item,
     .link-cell-item {

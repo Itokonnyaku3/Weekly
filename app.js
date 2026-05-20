@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.3.0-05170830-tag-phase-normalize';
+    const APP_VERSION = 'v1.3.1-05170900-phase-ui-fixes';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -782,7 +782,9 @@
     function getProjPhaseNodes(pi) {
       const key = 'proj:' + pi;
       const nodes = (S.dailyOutline && S.dailyOutline[key]) || [];
-      return nodes.filter(n => n && n.type === 'phase');
+      // v1.3.1: Phase 列は「Phase 見出しの直下（indent=1）」のみ表示。
+      // indent>=2 のサブフェーズはグリッドに出さない（ノート内では表示）。
+      return nodes.filter(n => n && n.type === 'phase' && n.indent === 1);
     }
     function getProjLinkNodes(pi) {
       const key = 'proj:' + pi;
@@ -5946,7 +5948,16 @@
       ghAuthInContainer(container);
       // 画像リサイズのサイズ変化を監視してノードデータに永続化
       olObserveImgSizes();
+      // v1.3.1: proj:N ノートを描画した後、グリッドの Phase列・リンク列を非同期同期
+      if (typeof date === 'string' && date.startsWith('proj:')) {
+        if (_projGridSyncTimer) clearTimeout(_projGridSyncTimer);
+        _projGridSyncTimer = setTimeout(() => {
+          _projGridSyncTimer = null;
+          if (typeof render === 'function') render();
+        }, 80);
+      }
     }
+    let _projGridSyncTimer = null;
 
     // 画像リサイズサイズの永続化 — ResizeObserver で ol-img-wrap の幅変化を監視
     // ユーザーが CSS resize ハンドルで画像を拡縮したとき、node.html 内の style="width:Xpx" を更新して保存する
