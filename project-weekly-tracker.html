@@ -87,10 +87,6 @@
     <div id="note-panel">
       <div id="note-ph">
         <h2>📝 ノート</h2>
-        <button id="ol-tree-toggle-btn" class="btn tree-toggle-btn"
-          onclick="olToggleTreeMode()"
-          title="全日付ツリービュー (Alt+Shift+T)"
-          style="padding:2px 8px;font-size:11px">🌳 ツリー</button>
         <button class="btn" onclick="toggleNotePanel()" style="padding:2px 7px;font-size:11px">✕</button>
       </div>
       <div id="ol-nav">
@@ -100,25 +96,7 @@
         <input type="date" id="ol-date-picker" class="ol-nav-date-only" onchange="olGoDate(this.value)">
         <span class="ol-today-badge ol-nav-date-only" onclick="olGoDate(todayDateStr())">今日</span>
       </div>
-      <div id="today-ol-hd"
-        style="display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--bd2)">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <h3 style="font-size:14px;font-weight:700;margin:0">📝 デイリーノート</h3>
-          <button class="btn" onclick="openOlSlashMenuFromBtn(this)" title="拡張メニュー (Ctrl+.)"
-            style="font-size:11px;padding:2px 8px;background:var(--bg-ok);color:var(--tx-ok);border-color:var(--bd-ok)">⚡拡張 <span style="font-size:10px;opacity:.7">Ctrl+.</span></button>
-        </div>
-        <div class="ol-toolbar" style="display:flex;flex-wrap:wrap;gap:4px;border-top:none;padding-top:0">
-          <button class="ol-tbtn" onclick="olInsertLink()" title="リンク挿入 (Ctrl+L)">🔗 リンク</button>
-          <button class="ol-tbtn" onclick="olInsertTable()" title="表を挿入">⊞ 表</button>
-          <button class="ol-tbtn" onclick="olInsertImageFile()" title="画像を挿入">🖼 写真</button>
-          <button class="ol-tbtn" id="ol-private-btn" onclick="olToggleNodePrivate()" title="プライベート設定">🔓 非公開設定</button>
-        </div>
-        <div style="font-size:10px;color:var(--tx3);line-height:1.2;opacity:0.8">
-          Alt+Shift+↑↓:移動 / Tab:段下げ / Ctrl+L:リンク / Ctrl+.:拡張メニュー / Shift+Click・Shift+↑↓:複数選択
-        </div>
-      </div>
       <div id="ol-container" onclick="olContainerClick(event)" onmousedown="olContainerMouseDown(event)" onpaste="olContainerPaste(event)"></div>
-      <div id="ol-tree-container"></div>
     </div>
 
     <!-- AI panel -->
@@ -280,6 +258,12 @@
       </div>
       <div class="slash-item" onclick="applyOlSlashCommand('unlink')">
         <span class="slash-key">U</span><span class="slash-icon">✂</span><span>リンクを解除</span>
+      </div>
+      <div class="slash-item" onclick="applyOlSlashCommand('insert_table')">
+        <span class="slash-key">H</span><span class="slash-icon">⊞</span><span>表を挿入</span>
+      </div>
+      <div class="slash-item" onclick="applyOlSlashCommand('insert_image')">
+        <span class="slash-key">I</span><span class="slash-icon">🖼</span><span>画像を挿入</span>
       </div>
       <div class="slash-item" onclick="applyOlSlashCommand('submenu_color')">
         <span class="slash-key">C</span><span class="slash-icon">🎨</span><span style="flex:1">文字色の変更</span><span
