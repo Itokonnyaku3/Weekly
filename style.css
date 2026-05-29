@@ -3017,15 +3017,7 @@
     }
     .ol-nodelink-ref:hover { opacity: 1; text-decoration: underline; }
 
-    /* バックリンク表示バー */
-    .ol-backlink-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-      padding: 2px 0 1px;
-      width: 100%;
-      flex-basis: 100%;
-    }
+    /* バックリンク チップ（件数バッジ・インライン） */
     .ol-backlink-chip {
       font-size: 10px;
       color: var(--tx3);
@@ -3033,12 +3025,285 @@
       border: 1px solid rgba(100,160,220,0.2);
       border-radius: 3px;
       padding: 0 6px;
+      margin-left: 4px;
       cursor: pointer;
       line-height: 1.6;
       white-space: nowrap;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      user-select: none;
     }
-    .ol-backlink-chip:hover { background: rgba(100,160,220,0.2); color: var(--tx); }
+    .ol-backlink-chip:hover {
+      background: rgba(100,160,220,0.22);
+      color: var(--tx);
+      border-color: rgba(100,160,220,0.45);
+    }
+
+    /* バックリンク ポップオーバー（リンク元一覧） */
+    #ol-backlink-popup {
+      position: fixed;
+      z-index: 700;
+      min-width: 260px;
+      max-width: 380px;
+      max-height: 340px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border: 1px solid var(--bd2);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(0,0,0,.22);
+      font-family: inherit;
+    }
+    .ol-bl-pop-header {
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--tx2);
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bd);
+      flex-shrink: 0;
+    }
+    #ol-bl-pop-list {
+      overflow-y: auto;
+      max-height: 290px;
+      padding: 4px 0;
+    }
+    .ol-bl-pop-item {
+      padding: 6px 12px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .ol-bl-pop-item:hover {
+      background: var(--bg2);
+      border-left-color: var(--accent);
+    }
+    .ol-bl-pop-date {
+      font-size: 10px;
+      color: var(--tx3);
+      font-weight: 600;
+      margin-bottom: 2px;
+      letter-spacing: 0.02em;
+    }
+    .ol-bl-pop-text {
+      font-size: 12px;
+      color: var(--tx);
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ol-bl-pop-item:hover .ol-bl-pop-text { color: var(--accent); }
+
+    /* 最近開いた日 ポップオーバー */
+    #ol-recent-popup {
+      position: fixed;
+      z-index: 700;
+      min-width: 220px;
+      max-width: 320px;
+      max-height: 320px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border: 1px solid var(--bd2);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(0,0,0,.22);
+      font-family: inherit;
+    }
+    .ol-recent-pop-header {
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--tx2);
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bd);
+      flex-shrink: 0;
+    }
+    #ol-recent-pop-list {
+      overflow-y: auto;
+      max-height: 270px;
+      padding: 4px 0;
+    }
+    .ol-recent-pop-item {
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--tx);
+      border-left: 2px solid transparent;
+      transition: background 0.1s, border-color 0.1s, color 0.1s;
+    }
+    .ol-recent-pop-item:hover {
+      background: var(--bg2);
+      border-left-color: var(--accent);
+      color: var(--accent);
+    }
+    .ol-recent-pop-empty {
+      padding: 12px;
+      font-size: 11px;
+      color: var(--tx3);
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ノートペイン内インクリメンタル検索バー */
+    #ol-incsearch-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--bd);
+      background: var(--bg2);
+      flex-shrink: 0;
+    }
+    .ol-incsearch-icon { font-size: 12px; color: var(--tx3); }
+    #ol-incsearch-input {
+      flex: 1;
+      font-size: 12px;
+      padding: 3px 8px;
+      border: 1px solid var(--bd2);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--tx);
+      font-family: inherit;
+      outline: none;
+    }
+    #ol-incsearch-input:focus { border-color: var(--bd-focus); }
+    #ol-incsearch-stat {
+      font-size: 10px;
+      color: var(--tx3);
+      white-space: nowrap;
+      min-width: 50px;
+      text-align: right;
+    }
+    .ol-incsearch-close {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: 1px solid var(--bd2);
+      background: var(--bg);
+      color: var(--tx2);
+    }
+    .ol-incsearch-close:hover { background: var(--bg3); color: var(--tx); }
+
+    /* インクリメンタル検索のマッチ強調 / 非マッチ薄表示 */
+    .ol-row.ol-incsearch-hit {
+      background: rgba(255, 220, 100, 0.12);
+      box-shadow: inset 2px 0 0 #f6c244;
+    }
+    .ol-row.ol-incsearch-miss {
+      opacity: 0.35;
+    }
+    .ol-row.ol-incsearch-miss:hover {
+      opacity: 0.7;
+    }
+
+    /* ── プロジェクトノート 自動集約セクション (v1.4.3) ── */
+    .ol-proj-aggr {
+      margin: 18px 4px 12px;
+      padding: 10px 12px;
+      border-top: 2px solid var(--bd);
+      background: var(--bg2);
+      border-radius: var(--radius);
+    }
+    .ol-proj-aggr-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--tx2);
+      cursor: pointer;
+      padding: 2px 0 6px;
+      user-select: none;
+      transition: color .1s;
+    }
+    .ol-proj-aggr-header:hover { color: var(--tx); }
+    .ol-proj-aggr-arrow {
+      font-size: 10px;
+      color: var(--tx3);
+      width: 12px;
+      flex-shrink: 0;
+    }
+    .ol-proj-aggr-count {
+      font-size: 10px;
+      color: var(--tx3);
+      font-weight: 400;
+      margin-left: auto;
+      background: var(--bg3);
+      border-radius: 10px;
+      padding: 1px 8px;
+      white-space: nowrap;
+    }
+    .ol-proj-aggr-body {
+      padding: 2px 0 0;
+    }
+    .ol-proj-aggr-day {
+      margin-bottom: 6px;
+    }
+    .ol-proj-aggr-date {
+      font-size: 10px;
+      color: var(--tx3);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 5px 4px 3px;
+      border-bottom: 1px dashed var(--bd2);
+      margin-bottom: 2px;
+      cursor: pointer;
+      transition: color .1s;
+    }
+    .ol-proj-aggr-date:hover {
+      color: var(--accent);
+    }
+    .ol-proj-aggr-item {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 3px 8px 3px 14px;
+      font-size: 12px;
+      color: var(--tx);
+      cursor: pointer;
+      border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: background .1s, border-color .1s, color .1s;
+    }
+    .ol-proj-aggr-item:hover {
+      background: var(--bg3);
+      border-left-color: var(--accent);
+      color: var(--accent);
+    }
+    .ol-proj-aggr-item.done .ol-proj-aggr-text {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    /* 子孫ノード（親からの相対インデント表示）— 親より少し控えめに */
+    .ol-proj-aggr-item.is-child {
+      font-size: 11px;
+    }
+    .ol-proj-aggr-item.is-child .ol-proj-aggr-text {
+      color: var(--tx2);
+    }
+    .ol-proj-aggr-item.is-child:hover .ol-proj-aggr-text {
+      color: var(--accent);
+    }
+    .ol-proj-aggr-item.is-child .ol-proj-aggr-icon {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    .ol-proj-aggr-icon {
+      font-size: 11px;
+      color: var(--tx3);
+      flex-shrink: 0;
+      width: 14px;
+      text-align: center;
+    }
+    .ol-proj-aggr-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* ペースト待機中のスラッシュメニュー項目ハイライト */
     .slash-item.paste-ready {

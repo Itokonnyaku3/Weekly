@@ -95,6 +95,15 @@
         <button class="ol-nav-btn ol-nav-date-only" onclick="olNextDay()" title="翌日 (Ctrl+→)">▶</button>
         <input type="date" id="ol-date-picker" class="ol-nav-date-only" onchange="olGoDate(this.value)">
         <span class="ol-today-badge ol-nav-date-only" onclick="olGoDate(todayDateStr())">今日</span>
+        <button class="ol-nav-btn ol-nav-recent" onclick="event.stopPropagation();toggleRecentNotePopup(event)" title="最近開いた日">📅 履歴</button>
+        <button class="ol-nav-btn ol-nav-incsearch" onclick="event.stopPropagation();toggleIncSearchBar()" title="このノート内を検索 (Ctrl+;)">🔍</button>
+      </div>
+      <div id="ol-incsearch-bar" style="display:none">
+        <span class="ol-incsearch-icon">🔍</span>
+        <input type="text" id="ol-incsearch-input" placeholder="このノート内を絞り込み... (Esc で終了)"
+          oninput="olIncSearchRun()" onkeydown="olIncSearchKey(event)" spellcheck="false" autocomplete="off">
+        <span id="ol-incsearch-stat"></span>
+        <button class="ol-incsearch-close" onclick="closeIncSearchBar()" title="検索を終了 (Esc)">✕</button>
       </div>
       <div id="ol-container" onclick="olContainerClick(event)" onmousedown="olContainerMouseDown(event)" onpaste="olContainerPaste(event)"></div>
     </div>
@@ -212,6 +221,18 @@
       <button class="tcp-apply" onclick="applyTagColor()">適用</button>
       <button class="tcp-reset" onclick="applyTagColor(null)">リセット</button>
     </div>
+  </div>
+
+  <!-- バックリンク ポップオーバー（このノードへのリンク元一覧） -->
+  <div id="ol-backlink-popup" style="display:none">
+    <div class="ol-bl-pop-header">↩ <span id="ol-bl-pop-count">0</span> 件のリンク元</div>
+    <div id="ol-bl-pop-list"></div>
+  </div>
+
+  <!-- 最近開いた日 ポップオーバー（直近の閲覧履歴） -->
+  <div id="ol-recent-popup" style="display:none">
+    <div class="ol-recent-pop-header">📅 最近開いた日</div>
+    <div id="ol-recent-pop-list"></div>
   </div>
 
   <!-- 表操作コンテキストメニュー -->

@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.4.0-05202245-trim-tree-and-header';
+    const APP_VERSION = 'v1.4.4-05282250-aggr-descendants';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3889,6 +3889,16 @@
         openNotePanelToDate(todayDateStr(), null);
         return;
       }
+
+      // Ctrl+;: ノートペイン内インクリメンタル検索（ノートペイン中のみ）
+      if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && !ev.shiftKey && ev.key === ';') {
+        const np = $('note-panel');
+        if (np && (np.contains(document.activeElement) || _notePanelOpen)) {
+          ev.preventDefault();
+          toggleIncSearchBar();
+          return;
+        }
+      }
       // Alt+Shift+E: 新規追加モーダルを開く
       if (ev.altKey && ev.shiftKey && ev.key === 'E') { ev.preventDefault(); openQA(); return }
       // Alt+Shift+C: 圧縮モードトグル
@@ -4067,7 +4077,11 @@
       document.body.classList.toggle('hide-done', _hideDone);
       showHint(_hideDone ? '完了済みを非表示' : '完了済みを表示');
       // ノートパネルが開いている場合は再描画（olVisible のフィルタを反映）
-      if (_olCurrentDate) olRender('ol-container', _olCurrentDate);
+      // v1.4.3a: 集約セクションは renderKey に含まれないため、強制再描画でフィルタを反映させる
+      if (_olCurrentDate) {
+        _olLastRenderKey = '';
+        olRender('ol-container', _olCurrentDate);
+      }
     }
 
     function toggleCompactMode() {
@@ -5123,15 +5137,11 @@
           ? `<div class="ol-nodelink-ref" onclick="event.stopPropagation();olJumpToLinkedNode('${escA(n.linkedNodeId)}','${escA(n.linkedNodeDate||'')}')" title="元のノードへジャンプ">→ 元のノードへ</div>`
           : '';
 
-        // バックリンクバー: このノードへリンクしているノードリンクがあれば表示
+        // バックリンクバー: このノードへリンクしているノードリンクがあれば、件数バッジ1個に集約
+        // クリックで showBacklinkPopup() を呼びポップオーバーで一覧表示
         const _bls = _backlinkMap.get(n.id);
         const backlinkBar = (_bls && _bls.length > 0)
-          ? `<div class="ol-backlink-bar">`
-            + _bls.slice(0, 5).map(bl =>
-                `<span class="ol-backlink-chip" onmousedown="event.preventDefault()" onclick="event.stopPropagation();openNotePanelToDate('${escA(bl.fromDate)}','${escA(bl.fromId)}')" title="${escA(bl.fromText)}">↩ リンク元</span>`
-              ).join('')
-            + (_bls.length > 5 ? `<span class="ol-backlink-chip">+${_bls.length - 5}</span>` : '')
-            + `</div>`
+          ? `<span class="ol-backlink-chip" onmousedown="event.preventDefault()" onclick="event.stopPropagation();showBacklinkPopup('${escA(n.id)}',event)" title="このノードへのリンク元 ${_bls.length} 件（クリックで一覧）">↩ ${_bls.length}</span>`
           : '';
 
         const isNodeLink = nodeTypeForBullet === 'nodelink';
@@ -5338,6 +5348,13 @@
       ghAuthInContainer(container);
       // 画像リサイズのサイズ変化を監視してノードデータに永続化
       olObserveImgSizes();
+      // v1.4.2: ノートペイン内インクリメンタル検索が有効なら、再描画後にハイライトを復元
+      _olReapplyIncSearch();
+      // v1.4.3: プロジェクトノート描画時、末尾に「自動集約セクション」を追加
+      if (typeof date === 'string' && date.startsWith('proj:')) {
+        const _pi = parseInt(date.split(':')[1]);
+        if (!isNaN(_pi)) _renderProjectAggregateSection(container, _pi);
+      }
       // v1.3.1: proj:N ノートを描画した後、グリッドの Phase列・リンク列を非同期同期
       if (typeof date === 'string' && date.startsWith('proj:')) {
         if (_projGridSyncTimer) clearTimeout(_projGridSyncTimer);
@@ -6931,6 +6948,498 @@
       if (!found) { showToast('❌ リンク先のノードが見つかりません（削除された可能性があります）', true); return; }
       openNotePanelToDate(dateStr, nodeId);
       showToast('🔖 リンク元へジャンプしました');
+    }
+
+    /* ===================================================================
+       バックリンク ポップオーバー（このノードへのリンク元一覧）
+       チップ「↩ N」クリックで呼ばれ、リンク元（type:'nodelink' で
+       linkedNodeId が当該ノードを指すもの）を全件リスト表示する。
+       ・各行: 「📅 日付（or 📂 プロジェクト名）／リンク元テキスト」
+       ・行クリックで openNotePanelToDate(fromDate, fromId) でジャンプ
+       ・外側クリック / Esc / 再度同じチップクリックで閉じる
+    =================================================================== */
+
+    /** ノードIDに対するバックリンク配列を一括集計（描画外で都度呼び出し可能）*/
+    function _collectBacklinksFor(nodeId) {
+      const out = [];
+      if (!nodeId || !S.dailyOutline) return out;
+      for (const d in S.dailyOutline) {
+        const ns = S.dailyOutline[d];
+        if (!Array.isArray(ns)) continue;
+        for (const nd of ns) {
+          if (nd.type === 'nodelink' && nd.linkedNodeId === nodeId) {
+            out.push({ fromId: nd.id, fromDate: d, fromText: nd.text || '' });
+          }
+        }
+      }
+      return out;
+    }
+
+    /** 日付キーを表示用ラベルに整形（"YYYY-M-D" → "M/D（曜）"、"proj:N" → "📂 プロジェクト名"）*/
+    function _formatBacklinkDateLabel(dateKey) {
+      if (!dateKey) return '';
+      if (dateKey.startsWith('proj:')) {
+        const pi = parseInt(dateKey.split(':')[1]);
+        const pName = (S.projects && S.projects[pi] && S.projects[pi].name) ? S.projects[pi].name : '不明なプロジェクト';
+        return '📂 ' + pName;
+      }
+      const parts = dateKey.split('-').map(Number);
+      if (parts.length !== 3) return dateKey;
+      const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dow = ['日', '月', '火', '水', '木', '金', '土'][dt.getDay()];
+      const todayStr = todayDateStr();
+      const isToday = dateKey === todayStr;
+      return `📅 ${parts[1]}/${parts[2]}（${dow}）` + (isToday ? ' ★今日' : '');
+    }
+
+    let _olBacklinkPopupNodeId = null;
+
+    /** バックリンクポップオーバー表示 */
+    function showBacklinkPopup(nodeId, ev) {
+      const pop = $('ol-backlink-popup');
+      if (!pop) return;
+
+      // 同じチップを再度クリックしたら閉じる（トグル）
+      if (_olBacklinkPopupNodeId === nodeId && pop.style.display !== 'none') {
+        hideBacklinkPopup();
+        return;
+      }
+
+      const items = _collectBacklinksFor(nodeId);
+      if (items.length === 0) { hideBacklinkPopup(); return; }
+
+      // 日付の新しい順にソート（プロジェクトノートは末尾）
+      items.sort((a, b) => {
+        const ap = a.fromDate.startsWith('proj:') ? 1 : 0;
+        const bp = b.fromDate.startsWith('proj:') ? 1 : 0;
+        if (ap !== bp) return ap - bp;
+        // 通常の日付同士は降順
+        if (ap === 0) {
+          const aPad = a.fromDate.split('-').map(s => s.padStart(4, '0')).join('-');
+          const bPad = b.fromDate.split('-').map(s => s.padStart(4, '0')).join('-');
+          return bPad.localeCompare(aPad);
+        }
+        return 0;
+      });
+
+      const cntEl = $('ol-bl-pop-count');
+      const listEl = $('ol-bl-pop-list');
+      if (cntEl) cntEl.textContent = items.length;
+      if (listEl) {
+        listEl.innerHTML = items.map(bl => {
+          const dateLabel = _formatBacklinkDateLabel(bl.fromDate);
+          const txt = bl.fromText && bl.fromText.trim() ? bl.fromText : '(無題)';
+          return `<div class="ol-bl-pop-item" `
+               + `onclick="event.stopPropagation();hideBacklinkPopup();openNotePanelToDate('${escA(bl.fromDate)}','${escA(bl.fromId)}')" `
+               + `title="クリックでこのリンク元へジャンプ">`
+               + `<div class="ol-bl-pop-date">${esc(dateLabel)}</div>`
+               + `<div class="ol-bl-pop-text">${esc(txt)}</div>`
+               + `</div>`;
+        }).join('');
+      }
+
+      // 位置決定: クリック位置の少し下
+      pop.style.display = 'block';
+      pop.style.visibility = 'hidden'; // サイズ取得用に一旦見えなくする
+      const rect = (ev && ev.currentTarget) ? ev.currentTarget.getBoundingClientRect() : null;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const popW = pop.offsetWidth || 320;
+      const popH = pop.offsetHeight || 200;
+      let x = rect ? rect.left : (vw / 2 - popW / 2);
+      let y = rect ? rect.bottom + 4 : (vh / 2 - popH / 2);
+      // 右端からはみ出さない
+      if (x + popW > vw - 8) x = Math.max(8, vw - popW - 8);
+      // 下端からはみ出すなら上に出す
+      if (y + popH > vh - 8 && rect) {
+        y = Math.max(8, rect.top - popH - 4);
+      }
+      pop.style.left = x + 'px';
+      pop.style.top = y + 'px';
+      pop.style.visibility = '';
+      _olBacklinkPopupNodeId = nodeId;
+    }
+
+    /** バックリンクポップオーバーを閉じる */
+    function hideBacklinkPopup() {
+      const pop = $('ol-backlink-popup');
+      if (pop) pop.style.display = 'none';
+      _olBacklinkPopupNodeId = null;
+    }
+
+    // 外側クリック・Esc で閉じる（capture フェーズで早期にハンドル）
+    document.addEventListener('mousedown', function(e) {
+      const pop = $('ol-backlink-popup');
+      if (!pop || pop.style.display === 'none') return;
+      // ポップオーバー内 or バックリンクチップ自体のクリックは閉じない
+      if (e.target.closest && (e.target.closest('#ol-backlink-popup') || e.target.closest('.ol-backlink-chip'))) return;
+      hideBacklinkPopup();
+    }, true);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const pop = $('ol-backlink-popup');
+        if (pop && pop.style.display !== 'none') {
+          e.stopPropagation();
+          hideBacklinkPopup();
+        }
+      }
+    }, true);
+
+    /* ===================================================================
+       最近開いた日 ドロップダウン（_noteNavHistory から抽出）
+       ol-nav の「📅 履歴」ボタンクリックで表示。重複除外で直近7件まで。
+    =================================================================== */
+
+    /** _noteNavHistory から重複除外で直近 N 件を返す（新しい順） */
+    function _getRecentNoteDates(limit) {
+      const seen = new Set();
+      const out = [];
+      // 末尾（新しい）から走査
+      for (let i = _noteNavHistory.length - 1; i >= 0; i--) {
+        const h = _noteNavHistory[i];
+        if (!h || !h.date) continue;
+        if (seen.has(h.date)) continue;
+        seen.add(h.date);
+        out.push(h.date);
+        if (out.length >= limit) break;
+      }
+      // 履歴が少ない場合は、コンテンツがある日付からも補完
+      if (out.length < limit && S.dailyOutline) {
+        const candidates = [];
+        for (const dk in S.dailyOutline) {
+          if (dk.startsWith('_') || seen.has(dk)) continue;
+          const ns = S.dailyOutline[dk];
+          if (!Array.isArray(ns)) continue;
+          if (!ns.some(n => n.text && n.text.trim())) continue;
+          candidates.push(dk);
+        }
+        // proj: は後ろに、通常日付は新しい順に
+        candidates.sort((a, b) => {
+          const ap = a.startsWith('proj:') ? 1 : 0;
+          const bp = b.startsWith('proj:') ? 1 : 0;
+          if (ap !== bp) return ap - bp;
+          if (ap === 0) {
+            const aPad = a.split('-').map(s => s.padStart(4, '0')).join('-');
+            const bPad = b.split('-').map(s => s.padStart(4, '0')).join('-');
+            return bPad.localeCompare(aPad);
+          }
+          return 0;
+        });
+        for (const dk of candidates) {
+          if (out.length >= limit) break;
+          out.push(dk);
+        }
+      }
+      return out;
+    }
+
+    /** 最近開いた日ポップオーバーのトグル */
+    function toggleRecentNotePopup(ev) {
+      const pop = $('ol-recent-popup');
+      if (!pop) return;
+      if (pop.style.display !== 'none') { closeRecentNotePopup(); return; }
+
+      const dates = _getRecentNoteDates(7);
+      const listEl = $('ol-recent-pop-list');
+      if (listEl) {
+        if (dates.length === 0) {
+          listEl.innerHTML = `<div class="ol-recent-pop-empty">— まだ履歴がありません —</div>`;
+        } else {
+          listEl.innerHTML = dates.map(dk => {
+            const label = _formatBacklinkDateLabel(dk);
+            return `<div class="ol-recent-pop-item" `
+                 + `onclick="event.stopPropagation();closeRecentNotePopup();openNotePanelToDate('${escA(dk)}',null)" `
+                 + `title="クリックでこの日付を開く">${esc(label)}</div>`;
+          }).join('');
+        }
+      }
+
+      pop.style.display = 'block';
+      pop.style.visibility = 'hidden';
+      const rect = (ev && ev.currentTarget) ? ev.currentTarget.getBoundingClientRect() : null;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const popW = pop.offsetWidth || 220;
+      const popH = pop.offsetHeight || 200;
+      let x = rect ? rect.left : (vw / 2 - popW / 2);
+      let y = rect ? rect.bottom + 4 : (vh / 2 - popH / 2);
+      if (x + popW > vw - 8) x = Math.max(8, vw - popW - 8);
+      if (y + popH > vh - 8 && rect) y = Math.max(8, rect.top - popH - 4);
+      pop.style.left = x + 'px';
+      pop.style.top = y + 'px';
+      pop.style.visibility = '';
+    }
+
+    function closeRecentNotePopup() {
+      const pop = $('ol-recent-popup');
+      if (pop) pop.style.display = 'none';
+    }
+
+    // 外側クリック・Esc で閉じる
+    document.addEventListener('mousedown', function(e) {
+      const pop = $('ol-recent-popup');
+      if (!pop || pop.style.display === 'none') return;
+      if (e.target.closest && (e.target.closest('#ol-recent-popup') || e.target.closest('.ol-nav-recent'))) return;
+      closeRecentNotePopup();
+    }, true);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const pop = $('ol-recent-popup');
+        if (pop && pop.style.display !== 'none') {
+          e.stopPropagation();
+          closeRecentNotePopup();
+        }
+      }
+    }, true);
+
+    /* ===================================================================
+       ノートペイン内インクリメンタル検索（Ctrl+;）
+       現在の日のノードを対象に、入力文字列でフィルタする。
+       マッチしないノードは半透明化、マッチノードは強調＋スクロール対象。
+       Esc で終了、再度 Ctrl+; でトグル。
+    =================================================================== */
+
+    let _olIncSearchActive = false;
+    let _olIncSearchQuery = '';
+
+    function toggleIncSearchBar() {
+      if (_olIncSearchActive) { closeIncSearchBar(); return; }
+      openIncSearchBar();
+    }
+
+    function openIncSearchBar() {
+      const bar = $('ol-incsearch-bar');
+      const inp = $('ol-incsearch-input');
+      if (!bar || !inp) return;
+      bar.style.display = 'flex';
+      _olIncSearchActive = true;
+      inp.value = _olIncSearchQuery || '';
+      // フォーカスを少し遅延
+      setTimeout(() => { inp.focus(); inp.select(); }, 30);
+      olIncSearchRun(); // 既存クエリがあれば即フィルタ
+    }
+
+    function closeIncSearchBar() {
+      const bar = $('ol-incsearch-bar');
+      if (bar) bar.style.display = 'none';
+      _olIncSearchActive = false;
+      _olIncSearchQuery = '';
+      _olApplyIncSearchHighlight(''); // ハイライトリセット
+      // フォーカスを ol-container 内のフォーカス中ノードに戻す
+      if (_olFocusId) {
+        const el = document.getElementById('olt-' + _olFocusId);
+        if (el) el.focus();
+      }
+    }
+
+    function olIncSearchRun() {
+      const inp = $('ol-incsearch-input');
+      if (!inp) return;
+      const q = (inp.value || '').trim();
+      _olIncSearchQuery = q;
+      _olApplyIncSearchHighlight(q);
+    }
+
+    function olIncSearchKey(ev) {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+        closeIncSearchBar();
+        return;
+      }
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        // 次マッチへスクロール（簡易実装: 最初の .ol-incsearch-hit にスクロール）
+        const first = document.querySelector('#ol-container .ol-incsearch-hit');
+        if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }
+
+    /** クエリでノード行に .ol-incsearch-hit / .ol-incsearch-miss を付与 */
+    function _olApplyIncSearchHighlight(q) {
+      const container = $('ol-container');
+      if (!container) return;
+      const rows = container.querySelectorAll('.ol-row');
+      const stat = $('ol-incsearch-stat');
+      if (!q) {
+        // リセット
+        rows.forEach(r => { r.classList.remove('ol-incsearch-hit'); r.classList.remove('ol-incsearch-miss'); });
+        if (stat) stat.textContent = '';
+        return;
+      }
+      const qLc = q.toLowerCase();
+      let hit = 0;
+      rows.forEach(r => {
+        const tx = r.querySelector('.ol-text');
+        const txt = tx ? (tx.textContent || '') : '';
+        if (txt.toLowerCase().includes(qLc)) {
+          r.classList.add('ol-incsearch-hit');
+          r.classList.remove('ol-incsearch-miss');
+          hit++;
+        } else {
+          r.classList.remove('ol-incsearch-hit');
+          r.classList.add('ol-incsearch-miss');
+        }
+      });
+      if (stat) stat.textContent = hit > 0 ? `${hit} 件一致` : '一致なし';
+    }
+
+    /** olRender 後にハイライトを再適用するためのフック */
+    function _olReapplyIncSearch() {
+      if (_olIncSearchActive && _olIncSearchQuery) {
+        _olApplyIncSearchHighlight(_olIncSearchQuery);
+      }
+    }
+
+    /* ===================================================================
+       プロジェクトノート 自動集約セクション（v1.4.3）
+       プロジェクトノート（date = 'proj:N'）を開いたとき、末尾に「他の
+       日次/プロジェクトノートでこのプロジェクトに紐付けられたノード」を
+       日付ごとにグループ化して表示する。
+       ・対象: `n.projTag === proj.name.replace(/\s+/g,'_')` のノード
+       ・除外: プロジェクトノート自身、空テキスト、_ で始まるバーチャルキー
+       ・各行クリックで openNotePanelToDate(date, id) でジャンプ
+       ・折りたたみ状態は _projAggrCollapsed (Set<pi>) でセッション内保持
+    =================================================================== */
+
+    const _projAggrCollapsed = new Set();
+
+    function toggleProjAggr(pi) {
+      if (_projAggrCollapsed.has(pi)) _projAggrCollapsed.delete(pi);
+      else _projAggrCollapsed.add(pi);
+      if (_olCurrentDate === 'proj:' + pi) {
+        // renderKey スキップ機構を無効化して強制再描画
+        // （集約状態は renderKey に含めていないため、これがないとスキップされてしまう）
+        _olLastRenderKey = '';
+        olRender('ol-container', _olCurrentDate);
+      }
+    }
+
+    /** ノード1行を集約セクション用 HTML として描画（depth は親からの相対インデント） */
+    function _renderAggrItemHtml(dk, n, depth) {
+      const txt = (n.text && n.text.trim()) ? n.text : '(無題)';
+      let icon = '•';
+      if (n.isTodo) icon = n.checked ? '☑' : '☐';
+      else if (n.type === 'link') icon = '🔗';
+      else if (n.type === 'nodelink') icon = '🔖';
+      const doneCls = (n.isTodo && n.checked) ? ' done' : '';
+      const depthCls = depth > 0 ? ' is-child' : '';
+      const pad = 14 + depth * 16;
+      return `<div class="ol-proj-aggr-item${doneCls}${depthCls}" `
+           + `style="padding-left:${pad}px" `
+           + `onclick="event.stopPropagation();openNotePanelToDate('${escA(dk)}','${escA(n.id)}')" `
+           + `title="クリックで元ノードへジャンプ">`
+           + `<span class="ol-proj-aggr-icon">${icon}</span>`
+           + `<span class="ol-proj-aggr-text">${esc(txt)}</span>`
+           + `</div>`;
+    }
+
+    function _renderProjectAggregateSection(container, pi) {
+      if (!container) return;
+      const proj = S.projects && S.projects[pi];
+      if (!proj) return;
+      const projTag = (proj.name || '').replace(/\s+/g, '_');
+      if (!projTag) return;
+      const selfKey = 'proj:' + pi;
+
+      // 集約対象を収集（v1.4.4: 親+サブツリーを1グループとして取り込む）
+      // - 親ノード: n.projTag === projTag を直接持つもの
+      // - 子孫: その親の indent より深い後続ノード（次の同レベル以下まで）
+      // - 完了非表示（_hideDone）が ON のとき:
+      //     親自身が完了TODOなら、サブツリーごとスキップ（コンテキスト保持のため）
+      //     子孫の中に完了TODOがあればその行のみ除外
+      const groups = []; // [{date, root, descendants:[node]}]
+      let totalRootCount = 0;
+      let totalDescCount = 0;
+
+      if (S.dailyOutline) {
+        for (const dk in S.dailyOutline) {
+          if (!dk || dk.startsWith('_')) continue;
+          if (dk === selfKey) continue;
+          const ns = S.dailyOutline[dk];
+          if (!Array.isArray(ns)) continue;
+
+          for (let i = 0; i < ns.length; i++) {
+            const root = ns[i];
+            if (!root || root.projTag !== projTag) continue;
+            if (!root.text || !root.text.trim()) continue;
+            if (_hideDone && root.isTodo && root.checked) continue; // 親自体が除外
+
+            const myInd = root.indent || 0;
+            const descendants = [];
+            for (let j = i + 1; j < ns.length; j++) {
+              const nd = ns[j];
+              const ndInd = nd.indent || 0;
+              if (ndInd <= myInd) break; // サブツリー終端
+              if (!nd.text || !nd.text.trim()) continue;
+              if (_hideDone && nd.isTodo && nd.checked) continue;
+              descendants.push(nd);
+            }
+            groups.push({ date: dk, root, descendants });
+            totalRootCount++;
+            totalDescCount += descendants.length;
+          }
+        }
+      }
+
+      if (groups.length === 0) return;
+
+      // 日付の新しい順にソート（プロジェクト発のものは末尾）
+      groups.sort((a, b) => {
+        const ap = a.date.startsWith('proj:') ? 1 : 0;
+        const bp = b.date.startsWith('proj:') ? 1 : 0;
+        if (ap !== bp) return ap - bp;
+        if (ap === 0) {
+          const aPad = a.date.split('-').map(s => s.padStart(4, '0')).join('-');
+          const bPad = b.date.split('-').map(s => s.padStart(4, '0')).join('-');
+          return bPad.localeCompare(aPad);
+        }
+        return a.date.localeCompare(b.date);
+      });
+
+      // 日付ごとにグループ化（挿入順を維持）
+      const byDate = new Map();
+      groups.forEach(g => {
+        if (!byDate.has(g.date)) byDate.set(g.date, []);
+        byDate.get(g.date).push(g);
+      });
+
+      const total = totalRootCount + totalDescCount;
+      const collapsed = _projAggrCollapsed.has(pi);
+      const countLabel = totalDescCount > 0
+        ? `${total}件（親${totalRootCount}+子孫${totalDescCount}）/ ${byDate.size}日`
+        : `${total}件 / ${byDate.size}日`;
+
+      let html = `<div class="ol-proj-aggr" data-pi="${pi}">`
+               + `<div class="ol-proj-aggr-header" onclick="event.stopPropagation();toggleProjAggr(${pi})" title="折りたたみ / 展開">`
+               + `<span class="ol-proj-aggr-arrow">${collapsed ? '▶' : '▼'}</span>`
+               + `<span>📥 このプロジェクトに紐付くノード</span>`
+               + `<span class="ol-proj-aggr-count">${countLabel}</span>`
+               + `</div>`;
+
+      if (!collapsed) {
+        html += `<div class="ol-proj-aggr-body">`;
+        for (const [dk, gs] of byDate.entries()) {
+          const dateLabel = _formatBacklinkDateLabel(dk);
+          html += `<div class="ol-proj-aggr-day">`
+               + `<div class="ol-proj-aggr-date" onclick="event.stopPropagation();openNotePanelToDate('${escA(dk)}',null)" title="この日付を開く">${esc(dateLabel)}</div>`;
+          gs.forEach(g => {
+            const baseInd = g.root.indent || 0;
+            // 親
+            html += _renderAggrItemHtml(dk, g.root, 0);
+            // 子孫（親からの相対 depth で表示インデント）
+            g.descendants.forEach(c => {
+              const rel = Math.max(1, (c.indent || 0) - baseInd);
+              html += _renderAggrItemHtml(dk, c, rel);
+            });
+          });
+          html += `</div>`;
+        }
+        html += `</div>`;
+      }
+
+      html += `</div>`;
+
+      const wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      if (wrap.firstChild) container.appendChild(wrap.firstChild);
     }
 
     // サブタスク参照行の展開/折りたたみ（フォーカス中ノード限定）
