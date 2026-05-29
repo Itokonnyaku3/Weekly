@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.4.9-05300020-gsr-kbd-nav';
+    const APP_VERSION = 'v1.5.0-05300200-phase-kbd';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -449,10 +449,10 @@
     } catch (e) { }
 
     function applyWeekColWidths() {
-      let total = _projColWidth + _phaseColWidth + _linkColWidth;
+      // v1.5.0: Phase列を廃止したため幅計算から除外
+      let total = _projColWidth + _linkColWidth;
       const colP = $('gc-proj');
       if (colP) colP.style.width = _projColWidth + 'px';
-      const colPh = $('gc-phase'); if (colPh) colPh.style.width = _phaseColWidth + 'px';
       const colLk = $('gc-link');  if (colLk) colLk.style.width = _linkColWidth + 'px';
       document.querySelectorAll('col[id^="gc-wk-"]').forEach(col => {
         const k = col.id.replace('gc-wk-', '');
@@ -1006,11 +1006,10 @@
 
       // リサイズハンドルの追加
       // Step 2: PJ列の右に Phase列・リンク列を追加（colgroup と thead 両方）
+      // v1.5.0: Phase列を廃止。Phaseはプロジェクト名直下に表示する。
       let ghtml = '<col id="gc-proj" class="col-proj">';
-      ghtml += '<col id="gc-phase" class="col-phase">';
       ghtml += '<col id="gc-link" class="col-link">';
       let hr = `<tr><th class="col-proj" style="text-align:left">プロジェクト<div class="col-resizer" onmousedown="startColResize(event, 'proj')"></div></th>`;
-      hr += `<th class="col-phase" style="text-align:left">Phase<div class="col-resizer" onmousedown="startColResize(event, 'phase')"></div></th>`;
       hr += `<th class="col-link"  style="text-align:left">リンク<div class="col-resizer" onmousedown="startColResize(event, 'link')"></div></th>`;
       weeks.forEach(w => {
         const k = wkey(w);
@@ -1050,11 +1049,9 @@
           rows += `</div>`;
         }
         rows += `</div></td>`;
-        // Step 2: proj-hdr-row でも Phase列・リンク列を出す（簡易：件数のみ）
+        // proj-hdr-row でもリンク列を出す（簡易：件数のみ）。Phase列は廃止（名前下に表示）。
         {
-          const phaseN = getProjPhaseNodes(pi).length;
           const linkN  = getProjLinkNodes(pi).length;
-          rows += `<td class="col-phase">${phaseN ? `<span class="proj-hdr-cnt">${phaseN}件</span>` : ''}</td>`;
           rows += `<td class="col-link">${linkN ? `<span class="proj-hdr-cnt">${linkN}件</span>` : ''}</td>`;
         }
         weeks.forEach(w => {
@@ -1095,36 +1092,34 @@
         rows += `<span style="font-size:10px;cursor:pointer;color:var(--tx3);padding:0 2px" onclick="deleteProj(${pi})" title="削除">✕</span>`;
         rows += `</div>`;
 
+        // v1.5.0: Phaseをプロジェクト名直下に全件表示（旧Phase列の置き換え）。
+        {
+          const _phNodes = getProjPhaseNodes(pi);
+          if (_phNodes.length) {
+            rows += `<div class="proj-phase-list">`;
+            _phNodes.forEach(pn => {
+              const _ptxt = (pn.text || '').trim();
+              const _pdone = !!pn.checked;
+              const _pbul = _pdone ? '✔' : (pn.isTodo ? '□' : '•');
+              rows += `<span class="proj-phase-item${_pdone ? ' is-done' : ''}" `
+                    + `onclick="openNotePanelToDate('proj:${pi}','${pn.id}')" `
+                    + `title="${escA(_ptxt)}">`
+                    + `<span class="proj-phase-bullet">${_pbul}</span>${esc(_ptxt)}</span>`;
+            });
+            rows += `</div>`;
+          }
+        }
+
         // v1.2.2: PJ列直下の旧表示エリアを削除（リンク列に統合済み）。
         // - 旧 proj-entries-toggle / proj-entries-body / ＋追加ボタンは削除
         // - 旧 proj.links (.plinks/.plink) ハードコード版も削除
         // 関連関数 toggleProjEntries() / getProjItems() / CSSルールはデッドコードとして残置（次の掃除で除去予定）。
         rows += `</div></td>`;
 
-        // ── Step 2: Phase列・リンク列（詳細行）──
-        // proj:{pi} ノートの type='phase' / 'link' ノードを集約して縦に列挙する。
+        // ── リンク列（詳細行）── Phase列は廃止（プロジェクト名直下に表示）。
+        // proj:{pi} ノートの type='link' ノードを集約して縦に列挙する。
         // クリックでノートパネルを開いて該当ノードへフォーカス。
         {
-          const phaseNodes = getProjPhaseNodes(pi);
-          rows += `<td class="col-phase" data-pi="${pi}" data-wk="phase">`;
-          if (phaseNodes.length) {
-            phaseNodes.forEach(pn => {
-              const txt = (pn.text || '').trim();
-              const done = !!pn.checked;
-              const ind = pn.indent || 0;
-              const padL = ind * 8;
-              const bullet = done ? '✔' : (pn.isTodo ? '□' : '・');
-              rows += `<span class="phase-cell-item${done ? ' is-done' : ''}" `
-                    + `style="padding-left:${padL}px" `
-                    + `onclick="openNotePanelToDate('proj:${pi}','${pn.id}')" `
-                    + `title="${escA(txt)}">`
-                    + `<span class="phase-bullet">${bullet}</span>${esc(txt)}</span>`;
-            });
-          } else {
-            rows += `<span class="phase-cell-empty" onclick="toggleNotePanel('proj:${pi}')" title="プロジェクトノートでPhaseを追加">＋Phaseを追加</span>`;
-          }
-          rows += `</td>`;
-
           const linkNodes = getProjLinkNodes(pi);
           rows += `<td class="col-link" data-pi="${pi}" data-wk="link">`;
           if (linkNodes.length) {
@@ -1282,8 +1277,8 @@
         });
         rows += '</tr>';
       });
-      // Step 2: 列数 = プロジェクト + Phase + リンク + 週(WEEKS) = WEEKS + 3
-      rows += `<tr><td colspan="${WEEKS + 3}"><div class="parow"><input id="painp" class="painp" type="text" placeholder="新しいプロジェクト名を入力してEnter" onkeydown="if(event.key==='Enter')addProjFromInput(this)" autocomplete="off"><button class="qabtn" onclick="addProjFromInput($('painp'))">追加</button></div></td></tr>`;
+      // v1.5.0: 列数 = プロジェクト + リンク + 週(WEEKS) = WEEKS + 2（Phase列廃止）
+      rows += `<tr><td colspan="${WEEKS + 2}"><div class="parow"><input id="painp" class="painp" type="text" placeholder="新しいプロジェクト名を入力してEnter" onkeydown="if(event.key==='Enter')addProjFromInput(this)" autocomplete="off"><button class="qabtn" onclick="addProjFromInput($('painp'))">追加</button></div></td></tr>`;
       $('gb').innerHTML = rows;
 
       // ノートエディタがフォーカス中の場合はグリッド側にフォーカスを移さない
@@ -1339,6 +1334,13 @@
       o += `<span class="e-prio-bar e-prio-${prio || 'none'}" title="${prio === 'high' ? '高優先度' : prio === 'mid' ? '中優先度' : prio === 'low' ? '低優先度' : ''}"></span>`;
       // ミラーバッジ（↩ アイコン）
       if (isMirror) o += `<span class="mirror-badge" title="継続中 — ${originWk.replace(/-/g, '/')} 週のデータ。編集・子追加は元週に保存されます">↩</span>`;
+      // v1.5.0: 親アイテムにグリッド内折り畳みトグル（子をボックス内で開閉。Ctrl+↑/↓ と同期）
+      if (isParentNode) {
+        const _gc = !!n.gridCollapsed;
+        const _cc = ctx.childCount || 0;
+        o += `<span class="e-collapse-toggle${_gc ? ' is-collapsed' : ''}" onclick="event.stopPropagation();toggleParentCollapse(${pi},'${originWk}','${nodeId}')" title="${_gc ? '子ノードを展開 (Ctrl+↓)' : '子ノードを折りたたむ (Ctrl+↑)'}">${_gc ? '▶' : '▼'}</span>`;
+        if (_gc && _cc) o += `<span class="e-child-count" title="折りたたみ中の子ノード ${_cc} 件">${_cc}</span>`;
+      }
       if (nodeType === 'todo' || (isProj && nodeType === 'todo')) {
         // ミラーの場合: originWkでデータ更新、kでフォーカス維持(displayWk)
         const toggleCall = isMirror
@@ -2624,7 +2626,6 @@
       if (!container) return;
       const imgs = container.querySelectorAll('img');
       if (imgs.length === 0) return;
-      console.debug('ghAuthInContainer: processing', imgs.length, 'images');
       const tasks = [];
       for (const img of imgs) {
         const os = img.getAttribute('src');
@@ -2662,7 +2663,6 @@
       }
 
       try {
-        console.debug('Fetching direct RAW binary from API:', path);
         const apiTarget = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
         const res = await fetch(apiTarget + (branch ? `?ref=${branch}` : ''), {
           headers: { 
@@ -3946,6 +3946,11 @@
         if (ev.key === 'ArrowLeft') { ev.preventDefault(); _noteGoBack(); return }
         if (ev.key === 'ArrowRight') { ev.preventDefault(); _noteGoForward(); return }
       }
+      // G9: グリッド側で Alt+← / Alt+→ → 表示週を前後にスクロール（画面送り。ノートペイン非表示時のみ）
+      if (!_notePanelOpen && ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
+        if (ev.key === 'ArrowLeft')  { ev.preventDefault(); prevW(); showHint('◀ 表示週を前へ'); return; }
+        if (ev.key === 'ArrowRight') { ev.preventDefault(); nextW(); showHint('▶ 表示週を次へ'); return; }
+      }
       if (ev.altKey && ev.shiftKey && !focusKey) {
         if (ev.key === 'ArrowLeft') { ev.preventDefault(); prevW(); showHint('◀ 前週') }
         if (ev.key === 'ArrowRight') { ev.preventDefault(); nextW(); showHint('▶ 次週') }
@@ -4173,6 +4178,21 @@
     function projHdrKeyDown(ev, pi) {
       if (!_compactMode) return;
       const isCollapsed = !_compactExpanded.has(pi);
+
+      // G8: Ctrl+↑ で行を折りたたみ / Ctrl+↓ で行を展開（プロジェクト行の一括折り畳み）
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && !ev.altKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+        ev.preventDefault();
+        if (ev.key === 'ArrowUp') {
+          _compactExpanded.delete(pi);
+          showHint('⊟ 行を折りたたみ');
+        } else {
+          _compactExpanded.add(pi);
+          showHint('⊞ 行を展開');
+        }
+        render();
+        requestAnimationFrame(() => focusCompactHeader(pi));
+        return;
+      }
 
       // ↑/↓: 前後のプロジェクトヘッダへ
       if (!ev.altKey && !ev.shiftKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
@@ -5929,9 +5949,19 @@
         }
       }
 
-      // Ctrl+Enter → サブタスク参照行の展開/折りたたみ
+      // Ctrl+Enter → (N3) TODO行ならチェック完了/未完をトグル、それ以外はサブタスク参照行の展開/折りたたみ
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
         const curNode = nodes[idx];
+        // N3: TODOノードはチェックをトグル（マウス無しで消し込み）
+        if (curNode && getNodeType(curNode) === 'todo') {
+          ev.preventDefault();
+          olSaveTxt(nodes, idx, ev.target);
+          curNode.checked = !curNode.checked;
+          _olFocusId = id; saveState(); olRender('ol-container', date);
+          setTimeout(() => { if (typeof render === 'function') render(); }, 10);
+          if (typeof todoOpen !== 'undefined' && todoOpen && typeof renderTodo === 'function') renderTodo();
+          return;
+        }
         // S.dailyOutline 全体から parentId が curNode.id を指すノードがあるか確認
         const hasRefChildren = S.dailyOutline && Object.values(S.dailyOutline).some(arr =>
           Array.isArray(arr) && arr.some(nd => nd.parentId === curNode.id)
@@ -6248,6 +6278,32 @@
         saveState();
         olRender('ol-container', date); // 即座に応答
         setTimeout(() => { if (typeof render === 'function') render(); }, 10); // 非同期でグリッド同期
+        return;
+      }
+
+      // N6: Ctrl+Shift+↑/↓ — 同階層の兄弟ノードへカーソル移動（子孫をスキップ。親の外には出ない）
+      if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && !ev.altKey && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+        ev.preventDefault();
+        const dir = ev.key === 'ArrowUp' ? -1 : 1;
+        const vis = olGetVisibleForDate(nodes, date).visible;
+        const vi = vis.findIndex(n => n.id === id);
+        if (vi < 0) return;
+        const curInd = vis[vi].indent || 0;
+        let target = null;
+        for (let i = vi + dir; i >= 0 && i < vis.length; i += dir) {
+          const ind = vis[i].indent || 0;
+          if (ind < curInd) break;          // 親より浅い → 親の外。兄弟なし
+          if (ind === curInd) { target = vis[i]; break; }
+          // ind > curInd は子孫 → スキップ
+        }
+        if (target) {
+          try { olSaveTxt(nodes, idx, ev.target); } catch (e) {}
+          _olSelected.clear();
+          _olFocusId = target.id;
+          olRender('ol-container', date);
+        } else {
+          showHint(dir < 0 ? '⤒ 最初の兄弟です' : '⤓ 最後の兄弟です');
+        }
         return;
       }
 
@@ -7738,9 +7794,14 @@
           const ns = S.dailyOutline[dk];
           if (!Array.isArray(ns)) continue;
 
+          // v1.5.0: 入れ子の同projTag親の重複出力を防ぐ。
+          // 上位ルートのサブツリーに取り込まれたノードのインデックスを claimedIdx に記録し、
+          // それらが独立ルートとして再度グループ化されないようにする。
+          const claimedIdx = new Set();
           for (let i = 0; i < ns.length; i++) {
             const root = ns[i];
             if (!root || root.projTag !== projTag) continue;
+            if (claimedIdx.has(i)) continue; // 既に上位ルートのサブツリーに含まれている
             if (!root.text || !root.text.trim()) continue;
             if (_hideDone && root.isTodo && root.checked) continue; // 親自体が除外
 
@@ -7750,6 +7811,7 @@
               const nd = ns[j];
               const ndInd = nd.indent || 0;
               if (ndInd <= myInd) break; // サブツリー終端
+              claimedIdx.add(j); // サブツリーに属する → 独立ルート化させない
               if (!nd.text || !nd.text.trim()) continue;
               if (_hideDone && nd.isTodo && nd.checked) continue;
               descendants.push(nd);
