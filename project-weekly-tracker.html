@@ -102,9 +102,13 @@
         <span class="ol-incsearch-icon">🔍</span>
         <input type="text" id="ol-incsearch-input" placeholder="このノート内を絞り込み... (Esc で終了)"
           oninput="olIncSearchRun()" onkeydown="olIncSearchKey(event)" spellcheck="false" autocomplete="off">
+        <button class="ol-incsearch-scope" id="ol-incsearch-scope-btn"
+          onclick="event.stopPropagation();olIncSearchToggleScope()"
+          title="検索範囲を切替 (Ctrl+Shift+; で全データモード起動)">📄 このノート</button>
         <span id="ol-incsearch-stat"></span>
         <button class="ol-incsearch-close" onclick="closeIncSearchBar()" title="検索を終了 (Esc)">✕</button>
       </div>
+      <div id="ol-incsearch-global-results" style="display:none"></div>
       <div id="ol-container" onclick="olContainerClick(event)" onmousedown="olContainerMouseDown(event)" onpaste="olContainerPaste(event)"></div>
     </div>
 

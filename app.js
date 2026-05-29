@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.4.4-05282250-aggr-descendants';
+    const APP_VERSION = 'v1.4.9-05300020-gsr-kbd-nav';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3890,12 +3890,22 @@
         return;
       }
 
-      // Ctrl+;: ノートペイン内インクリメンタル検索（ノートペイン中のみ）
+      // Ctrl+;: ノートペイン内インクリメンタル検索（ノートペイン中のみ・現ノート対象）
       if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && !ev.shiftKey && ev.key === ';') {
         const np = $('note-panel');
         if (np && (np.contains(document.activeElement) || _notePanelOpen)) {
           ev.preventDefault();
-          toggleIncSearchBar();
+          toggleIncSearchBar('current');
+          return;
+        }
+      }
+      // Ctrl+Shift+;: 全データ横断モードでインクリメンタル検索を起動
+      // 注: Shift+; は物理キー的に ':' が ev.key になる場合があるため両対応
+      if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && !ev.altKey && (ev.key === ';' || ev.key === ':')) {
+        const np = $('note-panel');
+        if (np && (np.contains(document.activeElement) || _notePanelOpen)) {
+          ev.preventDefault();
+          toggleIncSearchBar('all');
           return;
         }
       }
@@ -4867,6 +4877,110 @@
       return false;
     }
 
+    /* ===================================================================
+       段階的折り畳み（Ctrl+↑） / 段階的展開（Ctrl+↓） — v1.4.7
+       1回で全展開/全閉ではなく、現在の展開・折り畳み状態を踏まえて
+       1階層ずつ進めるアルゴリズム。
+       collapsed 親の配下はスキップ（画面で見えていない＝対象外）。
+       戻り値 boolean: 何かが変化したか（false なら呼び出し側は再描画不要）。
+    =================================================================== */
+
+    /** 段階的折り畳み: サブツリーの最深の展開中親ノード群を畳む */
+    function olProgressiveCollapse(nodes, rootIdx) {
+      const root = nodes[rootIdx];
+      if (!root) return false;
+      if (!olHasChildren(nodes, rootIdx)) return false;
+      if (root.collapsed) return false; // 既に完全折り畳み → 何もしない
+
+      const rootInd = root.indent || 0;
+
+      // フェーズ1: 最深の展開中親 indent を探す
+      let maxDepth = -1;
+      let skipDepth = Infinity;
+      for (let i = rootIdx + 1; i < nodes.length; i++) {
+        const ind = nodes[i].indent || 0;
+        if (ind <= rootInd) break; // サブツリー外
+        if (ind > skipDepth) continue; // collapsed の配下
+        skipDepth = Infinity;
+        if (olHasChildren(nodes, i) && !nodes[i].collapsed) {
+          if (ind > maxDepth) maxDepth = ind;
+        }
+        if (nodes[i].collapsed) skipDepth = ind;
+      }
+
+      // サブツリー内に展開中の親が無い → root 自身を畳む（最終段階）
+      if (maxDepth === -1) {
+        root.collapsed = true;
+        return true;
+      }
+
+      // フェーズ2: maxDepth 階層の「展開中＋子持ち」ノードをすべて collapsed=true に
+      let changed = false;
+      skipDepth = Infinity;
+      for (let i = rootIdx + 1; i < nodes.length; i++) {
+        const ind = nodes[i].indent || 0;
+        if (ind <= rootInd) break;
+        if (ind > skipDepth) continue;
+        skipDepth = Infinity;
+        if (ind === maxDepth && olHasChildren(nodes, i) && !nodes[i].collapsed) {
+          nodes[i].collapsed = true;
+          changed = true;
+        }
+        if (nodes[i].collapsed) skipDepth = ind;
+      }
+      return changed;
+    }
+
+    /** 段階的展開: 最も浅い collapsed 親ノード群を1階層展開 */
+    function olProgressiveExpand(nodes, rootIdx) {
+      const root = nodes[rootIdx];
+      if (!root) return false;
+      if (!olHasChildren(nodes, rootIdx)) return false;
+
+      // root 自身が collapsed → まず root を展開（最初の1段階）
+      if (root.collapsed) {
+        root.collapsed = false;
+        return true;
+      }
+
+      const rootInd = root.indent || 0;
+
+      // フェーズ1: 最も浅い「子持ち collapsed」の indent を探す
+      // ※ visible でないノード（より上位の collapsed 配下）は対象外
+      let minDepth = Infinity;
+      let skipDepth = Infinity;
+      for (let i = rootIdx + 1; i < nodes.length; i++) {
+        const ind = nodes[i].indent || 0;
+        if (ind <= rootInd) break;
+        if (ind > skipDepth) continue; // 上位 collapsed の配下
+        skipDepth = Infinity;
+        if (olHasChildren(nodes, i) && nodes[i].collapsed) {
+          if (ind < minDepth) minDepth = ind;
+        }
+        if (nodes[i].collapsed) skipDepth = ind;
+      }
+
+      if (minDepth === Infinity) return false; // 完全展開済み
+
+      // フェーズ2: minDepth 階層の collapsed ノードを展開
+      let changed = false;
+      skipDepth = Infinity;
+      for (let i = rootIdx + 1; i < nodes.length; i++) {
+        const ind = nodes[i].indent || 0;
+        if (ind <= rootInd) break;
+        if (ind > skipDepth) continue;
+        skipDepth = Infinity;
+        if (ind === minDepth && olHasChildren(nodes, i) && nodes[i].collapsed) {
+          nodes[i].collapsed = false;
+          changed = true;
+        }
+        // 注意: ここで collapsed フラグが直前で変更されたノードは skipDepth に入れない
+        // （展開直後に配下のさらに深い collapsed を次回 Ctrl+↓ で処理させるため）
+        if (nodes[i].collapsed) skipDepth = ind;
+      }
+      return changed;
+    }
+
     // ノードのプライベートフラグをトグル
     function olToggleNodePrivate() {
       if (!_olCurrentDate || !_olFocusId) { showToast('ノードを選択してください'); return; }
@@ -5146,7 +5260,18 @@
 
         const isNodeLink = nodeTypeForBullet === 'nodelink';
         const isSearchSummary = nodeTypeForBullet === 'searchsummary';
+
+        // v1.4.8: インデントガイド線（深い階層で親子関係を視覚化）
+        // indent 数だけ縦線スパンを挿入。各線は親階層の bullet 中央付近に位置する。
+        let indentGuides = '';
+        const _myIndent = n.indent || 0;
+        for (let g = 0; g < _myIndent; g++) {
+          const gx = (g * 22) + 19; // bullet 中央付近 (padding-left 12 + bullet幅の半分 ~7)
+          indentGuides += `<span class="ol-indent-guide" style="left:${gx}px" aria-hidden="true"></span>`;
+        }
+
         html += `<div class="ol-row${selCls}${n.isPrivate ? ' ol-private' : ''}${isNodeLink ? ' ol-row-nodelink' : ''}${isSearchSummary ? ' ol-row-searchsummary' : ''}" data-id="${n.id}" style="padding-left:${pl}px">`
+          + indentGuides
           + bulletHtml
           + `<div class="ol-text-area">`
           + parentLabelHtml
@@ -5430,6 +5555,8 @@
       // 自動生成のタグスパン（ol-tag / ol-tag-attr / ol-tag-proj）を除去して保存
       // これにより n.html が毎回変化して renderKey がドリフトするのを防ぎ、上下キー移動を安定させる
       h = h.replace(/<span class="(?:ol-tag|ol-tag-attr|ol-tag-proj)"[^>]*>(.*?)<\/span>/g, '$1');
+      // v1.4.6: インクリメンタル検索のマッチハイライト <mark class="ol-incmark"> は保存に含めない
+      h = h.replace(/<mark class="ol-incmark"[^>]*>(.*?)<\/mark>/g, '$1');
       nodes[idx].html = h;
     }
 
@@ -5769,8 +5896,10 @@
 
       // ── ズームモードのパンくず親ノードにフォーカスが当たっているときの特殊処理 ──
       // Enter / ↓ / Tab → 最初の子ノードへ移動（インデント操作などは行わない）
+      // v1.4.7a: Ctrl/Meta 修飾子付き（Ctrl+↑/Ctrl+↓ 段階折り畳み・展開、Ctrl+Enter サブタスク展開など）は
+      //         後段の専用ハンドラへ譲るため、ここで捕まえないようにする
       if (_olFocusMode && _olFocusMode.date === date && id === _olFocusMode.nodeId) {
-        if (ev.key === 'Enter' || ev.key === 'ArrowDown' || ev.key === 'Tab') {
+        if (!ev.ctrlKey && !ev.metaKey && (ev.key === 'Enter' || ev.key === 'ArrowDown' || ev.key === 'Tab')) {
           ev.preventDefault();
           const { visible: bcVis } = olGetVisibleForDate(nodes, date);
           if (bcVis.length > 0) {
@@ -6122,23 +6251,25 @@
         return;
       }
 
-      // Ctrl+↑: 折りたたむ（子がある場合のみ）— ↑ 単独より先に判定
+      // Ctrl+↑: 段階的折り畳み — 子がある場合のみ。最深の展開中親ノード群から1階層ずつ閉じる
       if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && !ev.altKey && ev.key === 'ArrowUp') {
         ev.preventDefault();
         if (olHasChildren(nodes, idx)) {
           olSaveTxt(nodes, idx, ev.target);
-          nodes[idx].collapsed = true;
-          _olFocusId = id; saveState(); olRender('ol-container', date);
+          if (olProgressiveCollapse(nodes, idx)) {
+            _olFocusId = id; saveState(); olRender('ol-container', date);
+          }
         }
         return;
       }
-      // Ctrl+↓: 展開（子がある場合のみ）— ↓ 単独より先に判定
+      // Ctrl+↓: 段階的展開 — 子がある場合のみ。最も浅い collapsed 親群から1階層ずつ開く
       if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && !ev.altKey && ev.key === 'ArrowDown') {
         ev.preventDefault();
         if (olHasChildren(nodes, idx)) {
           olSaveTxt(nodes, idx, ev.target);
-          nodes[idx].collapsed = false;
-          _olFocusId = id; saveState(); olRender('ol-container', date);
+          if (olProgressiveExpand(nodes, idx)) {
+            _olFocusId = id; saveState(); olRender('ol-container', date);
+          }
         }
         return;
       }
@@ -7199,9 +7330,24 @@
 
     let _olIncSearchActive = false;
     let _olIncSearchQuery = '';
+    let _olIncSearchScope = 'current'; // 'current' | 'all'
+    let _olGlobalActiveIdx = 0; // 全データ結果ドロップダウン内のアクティブ項目インデックス
 
-    function toggleIncSearchBar() {
-      if (_olIncSearchActive) { closeIncSearchBar(); return; }
+    function toggleIncSearchBar(forceScope) {
+      if (_olIncSearchActive) {
+        // forceScope が指定されている場合は、現状と異なるならスコープだけ切替
+        if (forceScope && forceScope !== _olIncSearchScope) {
+          _olIncSearchScope = forceScope;
+          _updateIncSearchScopeUI();
+          olIncSearchRun();
+          const inp = $('ol-incsearch-input');
+          if (inp) inp.focus();
+          return;
+        }
+        closeIncSearchBar();
+        return;
+      }
+      if (forceScope) _olIncSearchScope = forceScope;
       openIncSearchBar();
     }
 
@@ -7212,22 +7358,46 @@
       bar.style.display = 'flex';
       _olIncSearchActive = true;
       inp.value = _olIncSearchQuery || '';
-      // フォーカスを少し遅延
+      _updateIncSearchScopeUI();
       setTimeout(() => { inp.focus(); inp.select(); }, 30);
-      olIncSearchRun(); // 既存クエリがあれば即フィルタ
+      olIncSearchRun();
     }
 
     function closeIncSearchBar() {
       const bar = $('ol-incsearch-bar');
       if (bar) bar.style.display = 'none';
+      const gr = $('ol-incsearch-global-results');
+      if (gr) { gr.style.display = 'none'; gr.innerHTML = ''; }
       _olIncSearchActive = false;
       _olIncSearchQuery = '';
-      _olApplyIncSearchHighlight(''); // ハイライトリセット
-      // フォーカスを ol-container 内のフォーカス中ノードに戻す
+      _olApplyIncSearchHighlight(''); // ハイライト＆<mark>リセット
       if (_olFocusId) {
         const el = document.getElementById('olt-' + _olFocusId);
         if (el) el.focus();
       }
+    }
+
+    /** スコープボタンを「📄 このノート」「🌐 全データ」で更新 */
+    function _updateIncSearchScopeUI() {
+      const btn = $('ol-incsearch-scope-btn');
+      const inp = $('ol-incsearch-input');
+      if (!btn) return;
+      if (_olIncSearchScope === 'all') {
+        btn.textContent = '🌐 全データ';
+        btn.classList.add('active');
+        if (inp) inp.placeholder = '全データから検索... (Esc で終了)';
+      } else {
+        btn.textContent = '📄 このノート';
+        btn.classList.remove('active');
+        if (inp) inp.placeholder = 'このノート内を絞り込み... (Esc で終了)';
+      }
+    }
+
+    /** スコープボタンのクリック: トグル */
+    function olIncSearchToggleScope() {
+      _olIncSearchScope = (_olIncSearchScope === 'all') ? 'current' : 'all';
+      _updateIncSearchScopeUI();
+      olIncSearchRun();
     }
 
     function olIncSearchRun() {
@@ -7244,41 +7414,240 @@
         closeIncSearchBar();
         return;
       }
+
+      // 全データモードのときは ↑↓ で結果項目を移動
+      if (_olIncSearchScope === 'all') {
+        if (ev.key === 'ArrowDown') {
+          ev.preventDefault();
+          _olSetGlobalActiveItem(_olGlobalActiveIdx + 1, true);
+          return;
+        }
+        if (ev.key === 'ArrowUp') {
+          ev.preventDefault();
+          _olSetGlobalActiveItem(_olGlobalActiveIdx - 1, true);
+          return;
+        }
+      }
+
       if (ev.key === 'Enter') {
         ev.preventDefault();
-        // 次マッチへスクロール（簡易実装: 最初の .ol-incsearch-hit にスクロール）
-        const first = document.querySelector('#ol-container .ol-incsearch-hit');
-        if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        if (_olIncSearchScope === 'all') {
+          // 全データモード: アクティブ項目（既定は最上位）へジャンプ
+          const items = document.querySelectorAll('#ol-incsearch-global-results .ol-gsr-item');
+          const cur = items[_olGlobalActiveIdx] || items[0];
+          if (cur) cur.click();
+        } else {
+          const first = document.querySelector('#ol-container .ol-incsearch-hit');
+          if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+        return;
+      }
+      // Ctrl+Shift+; の捕捉（スコープを 'all' に切替）
+      if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && ev.key === ':') {
+        ev.preventDefault();
+        toggleIncSearchBar('all');
       }
     }
 
-    /** クエリでノード行に .ol-incsearch-hit / .ol-incsearch-miss を付与 */
+    /** ノード行の <mark class="ol-incmark"> を除去して元のhtmlに戻す */
+    function _olStripIncMarks(rootEl) {
+      const txs = rootEl.querySelectorAll('.ol-text');
+      txs.forEach(tx => {
+        if (tx.querySelector('.ol-incmark')) {
+          // フォーカス中の場合はそのまま（カーソル維持）
+          if (document.activeElement === tx) return;
+          // mark を除去（中身を残す）
+          tx.querySelectorAll('mark.ol-incmark').forEach(m => {
+            const parent = m.parentNode;
+            while (m.firstChild) parent.insertBefore(m.firstChild, m);
+            parent.removeChild(m);
+          });
+          // テキストノードのマージ
+          tx.normalize();
+        }
+      });
+    }
+
+    /** テキスト中のクエリにマッチする箇所を <mark class="ol-incmark"> で囲む */
+    function _olWrapMarksInElement(el, qLc) {
+      if (!el || !qLc) return 0;
+      // フォーカス中ノードはスキップ（カーソルが飛ぶため）
+      if (document.activeElement === el) return 0;
+      // テキストノードのみを対象（既存の HTML 構造を壊さない）
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      const targets = [];
+      let n;
+      while ((n = walker.nextNode())) {
+        // <mark> 内部・<a> 内部もマッチさせる
+        if (n.nodeValue && n.nodeValue.toLowerCase().includes(qLc)) targets.push(n);
+      }
+      let count = 0;
+      targets.forEach(textNode => {
+        const txt = textNode.nodeValue;
+        const lc = txt.toLowerCase();
+        let idx = 0, pos = 0;
+        const frag = document.createDocumentFragment();
+        while ((idx = lc.indexOf(qLc, pos)) !== -1) {
+          if (idx > pos) frag.appendChild(document.createTextNode(txt.slice(pos, idx)));
+          const mark = document.createElement('mark');
+          mark.className = 'ol-incmark';
+          mark.textContent = txt.slice(idx, idx + qLc.length);
+          frag.appendChild(mark);
+          pos = idx + qLc.length;
+          count++;
+        }
+        if (pos < txt.length) frag.appendChild(document.createTextNode(txt.slice(pos)));
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+      return count;
+    }
+
+    /** 全データモードでの検索結果ドロップダウン構築 */
+    function _olRenderGlobalSearchResults(q) {
+      const gr = $('ol-incsearch-global-results');
+      const stat = $('ol-incsearch-stat');
+      if (!gr) return;
+      if (!q) {
+        gr.style.display = 'none';
+        gr.innerHTML = '';
+        if (stat) stat.textContent = '';
+        return;
+      }
+      const qLc = q.toLowerCase();
+      const hits = []; // {date, node}
+      if (S.dailyOutline) {
+        for (const dk in S.dailyOutline) {
+          if (!dk || dk.startsWith('_')) continue;
+          const ns = S.dailyOutline[dk];
+          if (!Array.isArray(ns)) continue;
+          for (const n of ns) {
+            if (!n || !n.text) continue;
+            if (n.text.toLowerCase().includes(qLc)) {
+              hits.push({ date: dk, node: n });
+              if (hits.length >= 200) break; // 上限保護
+            }
+          }
+          if (hits.length >= 200) break;
+        }
+      }
+
+      // 日付の新しい順
+      hits.sort((a, b) => {
+        const ap = a.date.startsWith('proj:') ? 1 : 0;
+        const bp = b.date.startsWith('proj:') ? 1 : 0;
+        if (ap !== bp) return ap - bp;
+        if (ap === 0) {
+          const aPad = a.date.split('-').map(s => s.padStart(4, '0')).join('-');
+          const bPad = b.date.split('-').map(s => s.padStart(4, '0')).join('-');
+          return bPad.localeCompare(aPad);
+        }
+        return a.date.localeCompare(b.date);
+      });
+
+      if (stat) stat.textContent = hits.length > 0
+        ? `${hits.length} 件一致${hits.length >= 200 ? '+' : ''}`
+        : '一致なし';
+
+      if (hits.length === 0) {
+        gr.style.display = 'block';
+        gr.innerHTML = `<div class="ol-gsr-empty">— 該当なし —</div>`;
+        return;
+      }
+
+      // テキストプレビュー（マッチ部分を <mark> ハイライト・周辺ctx）
+      const buildPreview = (txt) => {
+        const lc = txt.toLowerCase();
+        const idx = lc.indexOf(qLc);
+        if (idx < 0) return esc(txt);
+        const start = Math.max(0, idx - 24);
+        const end = Math.min(txt.length, idx + qLc.length + 36);
+        const pre = (start > 0 ? '…' : '') + esc(txt.slice(start, idx));
+        const m = `<mark class="ol-incmark">${esc(txt.slice(idx, idx + qLc.length))}</mark>`;
+        const post = esc(txt.slice(idx + qLc.length, end)) + (end < txt.length ? '…' : '');
+        return pre + m + post;
+      };
+
+      gr.innerHTML = hits.map((h, i) => {
+        const dateLabel = _formatBacklinkDateLabel(h.date);
+        let icon = '•';
+        if (h.node.isTodo) icon = h.node.checked ? '☑' : '☐';
+        else if (h.node.type === 'link') icon = '🔗';
+        else if (h.node.type === 'nodelink') icon = '🔖';
+        const doneCls = (h.node.isTodo && h.node.checked) ? ' done' : '';
+        const activeCls = (i === 0) ? ' active' : '';
+        return `<div class="ol-gsr-item${doneCls}${activeCls}" data-gsr-idx="${i}" `
+             + `onmouseenter="_olSetGlobalActiveItem(${i}, false)" `
+             + `onclick="event.stopPropagation();closeIncSearchBar();openNotePanelToDate('${escA(h.date)}','${escA(h.node.id)}')" `
+             + `title="クリックでこのノードへジャンプ">`
+             + `<span class="ol-gsr-date">${esc(dateLabel)}</span>`
+             + `<span class="ol-gsr-body"><span class="ol-gsr-icon">${icon}</span>`
+             + `<span class="ol-gsr-text">${buildPreview(h.node.text)}</span></span>`
+             + `</div>`;
+      }).join('');
+      gr.style.display = 'block';
+      _olGlobalActiveIdx = 0;
+    }
+
+    /** 全データ結果ドロップダウンのアクティブ項目を切替 */
+    function _olSetGlobalActiveItem(idx, scrollIntoView) {
+      const items = document.querySelectorAll('#ol-incsearch-global-results .ol-gsr-item');
+      if (!items.length) return;
+      if (idx < 0) idx = 0;
+      if (idx >= items.length) idx = items.length - 1;
+      items.forEach((el, i) => el.classList.toggle('active', i === idx));
+      _olGlobalActiveIdx = idx;
+      if (scrollIntoView !== false) {
+        const cur = items[idx];
+        if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    /** クエリでノード行に .ol-incsearch-hit / .ol-incsearch-miss を付与 + マッチ単語ハイライト */
     function _olApplyIncSearchHighlight(q) {
       const container = $('ol-container');
       if (!container) return;
+
+      // 既存の <mark.ol-incmark> を除去（フォーカス中はスキップ）
+      _olStripIncMarks(container);
+
+      const gr = $('ol-incsearch-global-results');
+
+      // 全データモード: ローカルのフィルタはクリアして、結果ドロップダウンを描画
+      if (_olIncSearchScope === 'all') {
+        // ローカルフィルタ表示をリセット
+        const rows = container.querySelectorAll('.ol-row');
+        rows.forEach(r => { r.classList.remove('ol-incsearch-hit'); r.classList.remove('ol-incsearch-miss'); });
+        _olRenderGlobalSearchResults(q);
+        return;
+      }
+
+      // 現ノートモード: グローバル結果は隠す
+      if (gr) { gr.style.display = 'none'; gr.innerHTML = ''; }
+
       const rows = container.querySelectorAll('.ol-row');
       const stat = $('ol-incsearch-stat');
       if (!q) {
-        // リセット
         rows.forEach(r => { r.classList.remove('ol-incsearch-hit'); r.classList.remove('ol-incsearch-miss'); });
         if (stat) stat.textContent = '';
         return;
       }
       const qLc = q.toLowerCase();
-      let hit = 0;
+      let hitRows = 0;
       rows.forEach(r => {
         const tx = r.querySelector('.ol-text');
         const txt = tx ? (tx.textContent || '') : '';
         if (txt.toLowerCase().includes(qLc)) {
           r.classList.add('ol-incsearch-hit');
           r.classList.remove('ol-incsearch-miss');
-          hit++;
+          // テキスト中のマッチ単語を <mark> でハイライト（フォーカス中ノードはスキップ）
+          if (tx) _olWrapMarksInElement(tx, qLc);
+          hitRows++;
         } else {
           r.classList.remove('ol-incsearch-hit');
           r.classList.add('ol-incsearch-miss');
         }
       });
-      if (stat) stat.textContent = hit > 0 ? `${hit} 件一致` : '一致なし';
+      if (stat) stat.textContent = hitRows > 0 ? `${hitRows} 件一致` : '一致なし';
     }
 
     /** olRender 後にハイライトを再適用するためのフック */
@@ -7300,6 +7669,8 @@
     =================================================================== */
 
     const _projAggrCollapsed = new Set();
+    // v1.4.5: 集約セクションのフィルタ状態（Map<pi, 'all'|'todo'|'recent'>、未設定= 'all'）
+    const _projAggrFilter = new Map();
 
     function toggleProjAggr(pi) {
       if (_projAggrCollapsed.has(pi)) _projAggrCollapsed.delete(pi);
@@ -7307,6 +7678,17 @@
       if (_olCurrentDate === 'proj:' + pi) {
         // renderKey スキップ機構を無効化して強制再描画
         // （集約状態は renderKey に含めていないため、これがないとスキップされてしまう）
+        _olLastRenderKey = '';
+        olRender('ol-container', _olCurrentDate);
+      }
+    }
+
+    /** 集約セクションのフィルタを切替（同じモードを再選択すると 'all' へ戻る） */
+    function setProjAggrFilter(pi, mode) {
+      const cur = _projAggrFilter.get(pi) || 'all';
+      // 同じものをクリックで解除（'all' に戻す）
+      _projAggrFilter.set(pi, (cur === mode && mode !== 'all') ? 'all' : mode);
+      if (_olCurrentDate === 'proj:' + pi) {
         _olLastRenderKey = '';
         olRender('ol-container', _olCurrentDate);
       }
@@ -7394,43 +7776,93 @@
         return a.date.localeCompare(b.date);
       });
 
+      // v1.4.5: フィルタ適用
+      const filterMode = _projAggrFilter.get(pi) || 'all';
+      let filteredGroups = groups;
+      if (filterMode === 'todo') {
+        // 親または子孫に isTodo && !checked を含むグループのみ
+        filteredGroups = groups.filter(g => {
+          if (g.root.isTodo && !g.root.checked) return true;
+          return g.descendants.some(d => d.isTodo && !d.checked);
+        });
+      } else if (filterMode === 'recent') {
+        // 直近2週間（今日含む14日間）以内のグループのみ
+        // プロジェクトノート発（proj:N）は対象外＝常に含める（時系列を持たないため）
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const limit = new Date(today);
+        limit.setDate(limit.getDate() - 13); // 今日含めて14日
+        filteredGroups = groups.filter(g => {
+          if (g.date.startsWith('proj:')) return true;
+          const parts = g.date.split('-').map(Number);
+          if (parts.length !== 3) return true;
+          const d = new Date(parts[0], parts[1] - 1, parts[2]);
+          d.setHours(0, 0, 0, 0);
+          return d >= limit;
+        });
+      }
+
+      // フィルタ後にゼロ件でも、フィルタUI操作のためにセクションは出す
+      // （ユーザーが「すべて」に戻せるように）
+
       // 日付ごとにグループ化（挿入順を維持）
       const byDate = new Map();
-      groups.forEach(g => {
+      filteredGroups.forEach(g => {
         if (!byDate.has(g.date)) byDate.set(g.date, []);
         byDate.get(g.date).push(g);
       });
 
-      const total = totalRootCount + totalDescCount;
+      // 表示用カウント（フィルタ後）
+      let shownRootCount = 0, shownDescCount = 0;
+      filteredGroups.forEach(g => { shownRootCount++; shownDescCount += g.descendants.length; });
+      const shownTotal = shownRootCount + shownDescCount;
       const collapsed = _projAggrCollapsed.has(pi);
-      const countLabel = totalDescCount > 0
-        ? `${total}件（親${totalRootCount}+子孫${totalDescCount}）/ ${byDate.size}日`
-        : `${total}件 / ${byDate.size}日`;
+      const countLabel = shownDescCount > 0
+        ? `${shownTotal}件（親${shownRootCount}+子孫${shownDescCount}）/ ${byDate.size}日`
+        : `${shownTotal}件 / ${byDate.size}日`;
+
+      // フィルタボタン群
+      const fbtn = (mode, label, title) => {
+        const active = filterMode === mode ? ' active' : '';
+        return `<button class="ol-aggr-fbtn${active}" `
+             + `onclick="event.stopPropagation();setProjAggrFilter(${pi},'${mode}')" `
+             + `title="${escA(title)}">${label}</button>`;
+      };
+      const filterBar = `<div class="ol-proj-aggr-filter" onclick="event.stopPropagation()">`
+                     + fbtn('all', 'すべて', 'すべて表示')
+                     + fbtn('todo', '☐ 未完', '未完ToDoを含むグループのみ')
+                     + fbtn('recent', '📅 直近2週', '今日から14日以内のグループのみ')
+                     + `</div>`;
 
       let html = `<div class="ol-proj-aggr" data-pi="${pi}">`
                + `<div class="ol-proj-aggr-header" onclick="event.stopPropagation();toggleProjAggr(${pi})" title="折りたたみ / 展開">`
                + `<span class="ol-proj-aggr-arrow">${collapsed ? '▶' : '▼'}</span>`
                + `<span>📥 このプロジェクトに紐付くノード</span>`
                + `<span class="ol-proj-aggr-count">${countLabel}</span>`
-               + `</div>`;
+               + `</div>`
+               + (collapsed ? '' : filterBar);
 
       if (!collapsed) {
         html += `<div class="ol-proj-aggr-body">`;
-        for (const [dk, gs] of byDate.entries()) {
-          const dateLabel = _formatBacklinkDateLabel(dk);
-          html += `<div class="ol-proj-aggr-day">`
-               + `<div class="ol-proj-aggr-date" onclick="event.stopPropagation();openNotePanelToDate('${escA(dk)}',null)" title="この日付を開く">${esc(dateLabel)}</div>`;
-          gs.forEach(g => {
-            const baseInd = g.root.indent || 0;
-            // 親
-            html += _renderAggrItemHtml(dk, g.root, 0);
-            // 子孫（親からの相対 depth で表示インデント）
-            g.descendants.forEach(c => {
-              const rel = Math.max(1, (c.indent || 0) - baseInd);
-              html += _renderAggrItemHtml(dk, c, rel);
+        if (byDate.size === 0) {
+          html += `<div class="ol-proj-aggr-empty">— 現在のフィルタでは該当なし —</div>`;
+        } else {
+          for (const [dk, gs] of byDate.entries()) {
+            const dateLabel = _formatBacklinkDateLabel(dk);
+            html += `<div class="ol-proj-aggr-day">`
+                 + `<div class="ol-proj-aggr-date" onclick="event.stopPropagation();openNotePanelToDate('${escA(dk)}',null)" title="この日付を開く">${esc(dateLabel)}</div>`;
+            gs.forEach(g => {
+              const baseInd = g.root.indent || 0;
+              // 親
+              html += _renderAggrItemHtml(dk, g.root, 0);
+              // 子孫（親からの相対 depth で表示インデント）
+              g.descendants.forEach(c => {
+                const rel = Math.max(1, (c.indent || 0) - baseInd);
+                html += _renderAggrItemHtml(dk, c, rel);
+              });
             });
-          });
-          html += `</div>`;
+            html += `</div>`;
+          }
         }
         html += `</div>`;
       }
