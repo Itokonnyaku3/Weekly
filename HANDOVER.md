@@ -3,7 +3,7 @@
 このファイルは AI（Claude）が別チャットや別セッションで作業を継続するための引継ぎ情報です。
 作業を再開するときは、まずこのファイルと `CHANGELOG.md`・`PROJECT_KNOWLEDGE.md`・`ARCHITECTURE.md` を読んでください。
 
-最終更新: 2026-05-30 / 担当バージョン: v1.11.0-05302015-clip-p3
+最終更新: 2026-05-31 / 担当バージョン: v1.11.1-05310835-leftscroll
 
 ---
 
@@ -52,6 +52,7 @@
 | v1.4.9 | **全データ検索ドロップダウンの↑↓ナビ**: Ctrl+Shift+; の結果リストを ↑/↓ で移動・Enter で確定。`.active` クラスで強調＋スクロール追従＋マウスホバー連動 |
 | v1.5.0 | **Phase列廃止＋キーボード操作5種**: ①Phase 列を撤去しプロジェクト名直下に全件表示（`.proj-phase-list`）②グリッド親アイテムに ▼/▶ 折り畳みトグル＋子件数バッジ（`gridCollapsed`）③N3 `Ctrl+Enter`=ノートTODOトグル ④N6 `Ctrl+Shift+↑/↓`=兄弟ノード移動 ⑤G5 `Space`=セルTODOトグル ⑥G8 `Ctrl+↑/↓`=行一括折り畳み ⑦G9 `Alt+←/→`=表示週スクロール。集約セクションの入れ子 projTag 重複除外（`claimedIdx`）。`console.debug` 2件除去 |
 | v1.6.0 | **フォーカス系3課題**: ①`Alt+Shift+N`閉じる時に`refocusGrid()`で記憶位置へ復元＋`Alt+Shift+G`新設（ノート維持でグリッドへ）②全データ検索ドロップダウンの`onmouseenter`を`_olGsrHover`化し`body.kb-nav`中はホバー選択を無視（キー操作がマウス位置に奪われない）③入力ボックス↓で次PJの**先頭**アイテムを選択（旧: 最下段）。既存`focusKey`/`refocusGrid`/`kb-nav`の再利用で局所修正 |
+| v1.11.1 | **左セル横スクロール修正**: `_scrollClearSticky` が左固定列を `col-proj` のみ見ていた→`col-link`(同じく左sticky)の右端も考慮し最大値を隠れ境界に。キーボードで左セル移動時に固定列裏に隠れない。実機検証済 |
 | v1.11.0 | **コピペ Phase3: 表**: TSV(タブ区切り)貼付→`olTsvToTableHtml`で表ノード化(`olLooksLikeTsv`でコード誤検出回避)。HTML表はPhase2が取込。表ノードのコピー出力=text/plain TSV(`olTableToTsv`)+html `<table>`(Excel/Sheetsへ)。通常ノードもnode.html装飾を外部貼付で保持。表は1ノード(生html)・編集は既存表メニュー。実機検証済 |
 | v1.10.1 | **追加3課題**: ①qarow(セル追加入力欄)の高さを常時確保しopacityのみ切替→がたつき解消 ②`pDrop`/`deleteProj`が`proj:{index}`ノート(Phase/Link)を並べ替え/削除に追従させるよう修正(従来は取り残し) ③タイトルバンド配色を`color-mix(...64%,#000)`等で深める(黒を足す)。実機検証済 |
 | v1.10.0 | **コピペ Phase2: リッチHTML貼付**: 外部HTMLをサニタイズ(`olSanitizeFragment`/`olFilterStyle`・ホワイトリスト・script/img/on*/javascript:除去)してノード化(`olParseHtmlToNodes`・ul/ol入れ子→indent・h→strong・インライン装飾はnode.html保持)。`olContainerPaste`に①.5追加(リッチかつ複数/構造のみ介入・単一インラインはネイティブ委譲)。外部imgは除去(P4)・表TSVはP3。実機検証済 |
@@ -74,7 +75,7 @@ v1.6.0 **課題1・2・5（フォーカス系）完了** → v1.7.0 **課題3（
 - **AIパネルの再統合**: Phase 3 の途中で取り残されている。
 - **C. app.js のモジュール分割**: 9500行を超えているので、`outline.js` / `grid.js` / `tags.js` のような分割を検討。デグレリスクが大きいので慎重に。
 - **Phase列廃止の後始末（v1.5.0 メモ）**: `_phaseColWidth` 変数・`startColResize` の 'phase' 分岐・`.col-phase` 系 CSS・localStorage `pwt_phase_col_w` が無害なデッドコードとして残置。実害はないが、次回掃除の候補。
-- **追加課題（2026-05-30 米山さん）: キーボードで左セルへ移動時の横スクロール**: 矢印キーで左の週セルへフォーカス移動した際、固定列（col-proj/col-link）の裏に隠れてセルが見えないことがある。`applyFocusToElement` は `scrollIntoView({inline:'nearest'})`＋`_scrollClearSticky` を呼ぶが、左方向で固定列ぶんのオフセットが効かないケースがある。左移動時に固定列幅を考慮した水平スクロール補正が必要。
+- ~~**追加課題: キーボードで左セルへ移動時の横スクロール**~~ → **v1.11.1 で解消**（`_scrollClearSticky` が col-link の右端も考慮するよう修正）。
 - **`proj:{index}` キーのindex依存（v1.10.1メモ）**: Phase/Link/プロジェクトノートは `dailyOutline["proj:{pi}"]`（index基準）で保持。`pDrop`/`deleteProj` は追従修正済みだが、index基準自体が脆い（将来 index を動かす操作を追加する際は要追従）。恒久対策は name 基準キーへの移行だが移行コスト大。**過去の並べ替えで既にズレている proj: データがあるかもしれない**（その場合は再並べ替えで是正可）。
 - **孤立 projTag 残り（v1.7.1）**: `店舗DXサポート`(5)・`AI_ビーコン用アンテナ撤去`(3) は改名先不明で未処理。`dailyOutline["_mv"]` に653ノード（projTag付き139）が無効キーで滞留（旧ツリービュー残骸推測）→別途クリーンアップ要。
 

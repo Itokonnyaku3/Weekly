@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.11.0-05302015-clip-p3';
+    const APP_VERSION = 'v1.11.1-05310835-leftscroll';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1453,14 +1453,22 @@
     function _scrollClearSticky(el) {
       const wrap = document.getElementById('grid-wrap');
       if (!wrap) return;
-      // sticky列（プロジェクト名列）の右端を取得
-      const stickyCol = wrap.querySelector('td.col-proj, th.col-proj');
-      if (!stickyCol) return;
-      const stickyRight = stickyCol.getBoundingClientRect().right;
+      // 左固定列は col-proj と col-link の2本ある。隠れ境界は「両者の右端のうち最大」。
+      // （従来は col-proj のみを見ていたため、col-link の裏に隠れたセルを補正できなかった）
+      let stickyRight = 0;
+      wrap.querySelectorAll('thead th.col-proj, thead th.col-link').forEach(c => {
+        const r = c.getBoundingClientRect().right;
+        if (r > stickyRight) stickyRight = r;
+      });
+      if (!stickyRight) {
+        const sc = wrap.querySelector('td.col-proj, th.col-proj');
+        if (!sc) return;
+        stickyRight = sc.getBoundingClientRect().right;
+      }
       const elRect = el.getBoundingClientRect();
       const PADDING = 12;
       if (elRect.left < stickyRight) {
-        // 要素がsticky列の後ろに隠れている → 左にスクロール
+        // 要素が固定列の後ろに隠れている → 左にスクロールして見えるように
         wrap.scrollLeft -= (stickyRight - elRect.left) + PADDING;
       } else if (elRect.right > wrap.getBoundingClientRect().right) {
         // 要素が右端にはみ出している → 右にスクロール
