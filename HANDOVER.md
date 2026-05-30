@@ -3,7 +3,7 @@
 このファイルは AI（Claude）が別チャットや別セッションで作業を継続するための引継ぎ情報です。
 作業を再開するときは、まずこのファイルと `CHANGELOG.md`・`PROJECT_KNOWLEDGE.md`・`ARCHITECTURE.md` を読んでください。
 
-最終更新: 2026-05-30 / 担当バージョン: v1.9.0-05301615-clip-p1
+最終更新: 2026-05-30 / 担当バージョン: v1.10.0-05301915-clip-p2
 
 ---
 
@@ -52,6 +52,7 @@
 | v1.4.9 | **全データ検索ドロップダウンの↑↓ナビ**: Ctrl+Shift+; の結果リストを ↑/↓ で移動・Enter で確定。`.active` クラスで強調＋スクロール追従＋マウスホバー連動 |
 | v1.5.0 | **Phase列廃止＋キーボード操作5種**: ①Phase 列を撤去しプロジェクト名直下に全件表示（`.proj-phase-list`）②グリッド親アイテムに ▼/▶ 折り畳みトグル＋子件数バッジ（`gridCollapsed`）③N3 `Ctrl+Enter`=ノートTODOトグル ④N6 `Ctrl+Shift+↑/↓`=兄弟ノード移動 ⑤G5 `Space`=セルTODOトグル ⑥G8 `Ctrl+↑/↓`=行一括折り畳み ⑦G9 `Alt+←/→`=表示週スクロール。集約セクションの入れ子 projTag 重複除外（`claimedIdx`）。`console.debug` 2件除去 |
 | v1.6.0 | **フォーカス系3課題**: ①`Alt+Shift+N`閉じる時に`refocusGrid()`で記憶位置へ復元＋`Alt+Shift+G`新設（ノート維持でグリッドへ）②全データ検索ドロップダウンの`onmouseenter`を`_olGsrHover`化し`body.kb-nav`中はホバー選択を無視（キー操作がマウス位置に奪われない）③入力ボックス↓で次PJの**先頭**アイテムを選択（旧: 最下段）。既存`focusKey`/`refocusGrid`/`kb-nav`の再利用で局所修正 |
+| v1.10.0 | **コピペ Phase2: リッチHTML貼付**: 外部HTMLをサニタイズ(`olSanitizeFragment`/`olFilterStyle`・ホワイトリスト・script/img/on*/javascript:除去)してノード化(`olParseHtmlToNodes`・ul/ol入れ子→indent・h→strong・インライン装飾はnode.html保持)。`olContainerPaste`に①.5追加(リッチかつ複数/構造のみ介入・単一インラインはネイティブ委譲)。外部imgは除去(P4)・表TSVはP3。実機検証済 |
 | v1.9.0 | **コピペ堅牢化 Phase1**: システムクリップボード＋独自マーカー`data-pwt-clip`(text/htmlにノードJSON)方式へ。完全一致依存を解消し「貼れない」事象をなくす。Ctrl+C/X単体対応・Ctrl+A全選択・olContainerPaste統合(画像/マーカー/テキスト)・olSetupPasteHandler no-op化(二重リスナー解消)・構造ペーストでparentId保持。仕様書=`仕様書_コピペ貼付機能.md`。残: P2リッチ(HTML・要サニタイズ)/P3表/P4画像 |
 | v1.8.0 | **課題6: ノート作成日とグリッド週の分離（gridWk）**: `node.gridWk`(表示週オーバーライド)追加。`getGridItems`/`getMirrorItems`を実効週(`gridWk||wkey(date)`)ベースに。`eDrop`/`eDropOnItem`は日付移動せず`setGridWkSubtree`で親子まとめてgridWk設定/解除(本来週で解除)。`quickAdd`/`savePanel`新規は現在週以外で作成日=今日+gridWk。後方互換。制限: 混在セルの厳密並べ替えは非保証 |
 | v1.7.1 | **projTag孤立バグ修正**: プロジェクト名リネームで既存ノードのprojTagが旧名のまま孤立→グリッド消失（本番179件）。`startRename`を改名時にprojTag一括更新するよう修正＋`data.json`の孤立タグをリマップ（HACCP→PJ.HACCP 108・管理・全般→０．管理・全般 73）。残: 店舗DXサポート/AI_ビーコン(計8・改名先不明)、`_mv`キー653ノード(無効キー滞留・別途) |
@@ -63,7 +64,7 @@
 v1.6.0 **課題1・2・5（フォーカス系）完了** → v1.7.0 **課題3（視認性・案C）完了** → v1.7.1 **割り込みバグ（projTag孤立）修正** → v1.8.0 **課題6（gridWk）完了**。残り:
 - **課題4 3日分バックアップ**（低優先・最後）: ユーザー希望は「Git上にデータがあるのでそこに」。既存の `ghSyncSave` / push.bat の自動コミット履歴が土台。
 - 追加課題（左セル横スクロール）は上記「残課題」セクション参照。
-- **追加課題（コピペ/複数選択の同等化）**: **Phase1（堅牢化）完了 = v1.9.0**（システムクリップボード＋マーカー`data-pwt-clip`方式・Ctrl+A/単体C/X・ハンドラ統合・parentId保持）。残り **P2リッチ(HTML・要サニタイズ)→P3表(TSV/HTML)→P4画像往復**。画像はGitHub必須維持。**仕様書: `仕様書_コピペ貼付機能.md`**。次セッションはP2から。
+- **追加課題（コピペ/複数選択の同等化）**: **Phase1完了=v1.9.0**（マーカー方式・Ctrl+A/単体C/X・ハンドラ統合・parentId保持）、**Phase2完了=v1.10.0**（リッチHTML貼付・サニタイズ・入れ子/見出し/装飾保持）。残り **P3表(TSV/HTML表→表ノード・コピー出力)→P4画像往復(コピー時に画像保持/外部img)**。画像はGitHub必須維持。**仕様書: `仕様書_コピペ貼付機能.md`**。次セッションはP3から。
 
 ### 残課題（次セッションで検討するもの）
 - **大文字小文字の区別 / 正規表現モード**: 上級者向けのオプション切替。

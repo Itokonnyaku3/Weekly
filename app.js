@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.9.0-05301615-clip-p1';
+    const APP_VERSION = 'v1.10.0-05301915-clip-p2';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6984,6 +6984,109 @@
       return true;
     }
 
+    // ── クリップボード Phase2: リッチHTML貼付（サニタイズ＋ノード化）──
+    const OL_ALLOWED_TAGS = new Set(['b', 'strong', 'i', 'em', 'u', 's', 'strike', 'a', 'span', 'code', 'mark', 'br', 'sup', 'sub', 'p', 'div', 'blockquote', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'thead', 'tbody', 'tr', 'td', 'th', 'col', 'colgroup']);
+    const OL_DANGER_TAGS = 'script,style,link,meta,iframe,object,embed,noscript,svg,img,title,head,input,button,form,textarea,select,video,audio,canvas';
+
+    // インラインstyleを許可プロパティのみに絞る（color等。url()/expression等は除去）
+    function olFilterStyle(s) {
+      if (!s) return '';
+      const allow = ['color', 'background-color', 'font-weight', 'text-decoration', 'text-align', 'width'];
+      const out = [];
+      String(s).split(';').forEach(decl => {
+        const i = decl.indexOf(':'); if (i < 0) return;
+        const prop = decl.slice(0, i).trim().toLowerCase();
+        const val = decl.slice(i + 1).trim();
+        if (!allow.includes(prop)) return;
+        if (/url\(|expression|javascript:|@import/i.test(val)) return;
+        out.push(prop + ': ' + val);
+      });
+      return out.join('; ');
+    }
+
+    // 外部HTMLをホワイトリストでサニタイズし body 要素を返す
+    function olSanitizeFragment(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const body = doc.body;
+      // 危険要素は内容ごと除去
+      body.querySelectorAll(OL_DANGER_TAGS).forEach(el => el.remove());
+      // 属性のサニタイズ
+      body.querySelectorAll('*').forEach(el => {
+        [...el.attributes].forEach(attr => {
+          const an = attr.name.toLowerCase();
+          if (an.startsWith('on')) { el.removeAttribute(attr.name); return; }
+          if (an === 'href') { if (!/^(https?:|mailto:|#)/i.test((attr.value || '').trim())) el.removeAttribute('href'); return; }
+          if (an === 'style') { const f = olFilterStyle(attr.value); if (f) el.setAttribute('style', f); else el.removeAttribute('style'); return; }
+          if (an === 'colspan' || an === 'rowspan' || an === 'target') return;
+          el.removeAttribute(attr.name);
+        });
+      });
+      // 許可外タグはアンラップ（中身は残す）
+      let changed = true, guard = 0;
+      while (changed && guard++ < 80) {
+        changed = false;
+        body.querySelectorAll('*').forEach(el => {
+          if (!OL_ALLOWED_TAGS.has(el.tagName.toLowerCase())) {
+            while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+            el.remove(); changed = true;
+          }
+        });
+      }
+      return body;
+    }
+
+    // 構造/装飾タグを含む「リッチ」HTMLかの簡易判定（プレーン多行はテキスト経路に回す）
+    function olHtmlIsRich(html) {
+      return !!html && /<(ul|ol|li|table|h[1-6]|b|strong|i|em|u|s|a|blockquote|mark|code)\b/i.test(html)
+        || /style=("|')[^"']*(color|font-weight|text-decoration)/i.test(html || '');
+    }
+
+    // サニタイズ済みHTML → ノード配列に変換。戻り値 { nodes, hadBlock }
+    function olParseHtmlToNodes(html) {
+      let body;
+      try { body = olSanitizeFragment(html); } catch (e) { return { nodes: [], hadBlock: false }; }
+      const nodes = []; let hadBlock = false;
+      const textOf = htmlStr => { const t = document.createElement('div'); t.innerHTML = htmlStr || ''; return (t.textContent || '').replace(/ /g, ' ').replace(/\s+/g, ' ').trim(); };
+      const inlineHtmlOf = el => { const c = el.cloneNode(true); [...c.querySelectorAll('ul,ol,li,table,p,div,h1,h2,h3,h4,h5,h6,blockquote')].forEach(b => b.remove()); return c.innerHTML.trim(); };
+      function pushNode(indent, htmlContent, opts) {
+        opts = opts || {};
+        if (opts.table) { nodes.push({ id: null, text: '[表]', html: htmlContent, indent, isTodo: false, checked: false, bold: false, color: '', type: 'log', tags: [], collapsed: false }); return; }
+        const text = textOf(htmlContent);
+        if (!text) return;
+        const html = (htmlContent && htmlContent !== text && /[<&]/.test(htmlContent)) ? htmlContent : '';
+        nodes.push({ id: null, text, html, indent, isTodo: false, checked: false, bold: false, color: '', type: 'log', tags: [], collapsed: false });
+      }
+      // リスト専用: 直下の<li>を indent に、入れ子のul/olを indent+1 で再帰
+      function walkList(listEl, indent) {
+        hadBlock = true;
+        [...listEl.children].forEach(li => {
+          if (li.tagName.toLowerCase() !== 'li') { walk(li, indent); return; }
+          pushNode(indent, inlineHtmlOf(li));
+          [...li.children].forEach(c => { const ct = c.tagName.toLowerCase(); if (ct === 'ul' || ct === 'ol') walkList(c, indent + 1); });
+        });
+      }
+      function walk(container, indent) {
+        [...container.childNodes].forEach(node => {
+          if (node.nodeType === 3) { const t = node.textContent.replace(/\s+/g, ' ').trim(); if (t) pushNode(indent, t); return; }
+          if (node.nodeType !== 1) return;
+          const tag = node.tagName.toLowerCase();
+          if (tag === 'ul' || tag === 'ol') {
+            walkList(node, indent);
+          } else if (/^h[1-6]$/.test(tag)) {
+            hadBlock = true; pushNode(indent, '<strong>' + node.innerHTML.trim() + '</strong>');
+          } else if (tag === 'table') {
+            hadBlock = true; pushNode(indent, node.outerHTML, { table: true });
+          } else if (tag === 'p' || tag === 'div' || tag === 'blockquote') {
+            const hasBlockChild = [...node.children].some(c => /^(ul|ol|table|p|div|h[1-6]|blockquote)$/i.test(c.tagName));
+            if (hasBlockChild) walk(node, indent); else pushNode(indent, node.innerHTML.trim());
+          } else if (tag === 'br') { /* skip */ }
+          else { pushNode(indent, node.outerHTML.trim()); }
+        });
+      }
+      walk(body, 0);
+      return { nodes, hadBlock };
+    }
+
     function olPasteMultiClipboard(date, focusedId) {
       if (!_olMultiClipboard || !_olMultiClipboard.nodes || _olMultiClipboard.nodes.length === 0) return false;
       const nodes = olGetNodes(date);
@@ -7069,6 +7172,21 @@
         if (ix >= 0) olSaveTxt(nodes, ix, olText);
         olStructuredPaste(date, id, markerNodes);
         return;
+      }
+
+      // ①.5 リッチHTML(マーカー無)→ サニタイズしてノード化（Phase2）。
+      //   複数ノード or 構造(リスト/見出し/表)を含む場合のみ介入。単一インライン装飾は
+      //   ネイティブ貼付(contenteditable)に委ねて行内書式を保持する。
+      if (clipHtml && olHtmlIsRich(clipHtml)) {
+        const parsed = olParseHtmlToNodes(clipHtml);
+        if (parsed.nodes.length && (parsed.nodes.length >= 2 || parsed.hadBlock)) {
+          ev.preventDefault();
+          const nodes = olGetNodes(date);
+          const ix = nodes.findIndex(n => n.id === id);
+          if (ix >= 0) olSaveTxt(nodes, ix, olText);
+          olStructuredPaste(date, id, parsed.nodes);
+          return;
+        }
       }
 
       if (!clipText) return;

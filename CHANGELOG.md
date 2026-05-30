@@ -6,6 +6,32 @@
 
 ---
 
+## v1.10.0-05301915-clip-p2 (2026-05-30)
+### 機能追加 — コピペ Phase 2: リッチHTML貼付（サニタイズ付き）
+
+外部（Word / Google Docs / Web / Notion 等）からの `text/html` 貼付を**サニタイズしてノード化**。箇条書きの入れ子・見出し・インライン装飾（太字/リンク/色）を保持。
+
+#### 新規ヘルパ
+- `olFilterStyle`: インラインstyleを許可プロパティ（color / background-color / font-weight / text-decoration / text-align / width）のみに制限。`url()`/`expression`/`javascript:` を除去。
+- `olSanitizeFragment`: `DOMParser` で解析→ ①危険要素(`script/style/iframe/img/input`…)を内容ごと除去 ②属性サニタイズ（`on*`除去・`href`は`http(s)/mailto/#`のみ・`style`はフィルタ・`class/id/src`等は除去）③許可外タグはアンラップ（中身保持）。ホワイトリスト `OL_ALLOWED_TAGS`。
+- `olHtmlIsRich`: 構造/装飾タグを含むかの簡易判定（プレーン多行はテキスト経路へ）。
+- `olParseHtmlToNodes`: サニタイズ済みDOMを走査しノード配列化。`ul/ol`の入れ子→indent（`walkList`再帰）、`h1-6`→`<strong>`、`p/div`→行、`table`→1ノード(html)、インライン装飾はnode.htmlに保持。戻り値 `{nodes, hadBlock}`。
+
+#### olContainerPaste にブランチ①.5を追加
+- マーカー無の `text/html` がリッチ かつ（複数ノード or 構造あり）の場合のみ介入し `olStructuredPaste` で挿入。**単一インライン装飾はネイティブ貼付に委譲**（行内書式を保持・回帰回避）。プレーン多行は従来のテキスト経路（2sp=1段）を維持。
+
+#### スコープ外（後続）
+- 外部 `<img>` は除去（Phase 4 で貼付画像blob→GitHubアップロードを強化）。
+- Excel/Sheets の TSV→表、表のコピー出力は Phase 3。
+
+#### 検証（ブラウザ実機）
+- サニタイズ: `script/img/onerror/onclick/javascript:/url()` 除去・`color`/`font-weight`/`https`リンク保持。
+- 入れ子リスト3階層（A@0/A1@1/A1a@2/A2@1/B@0）・見出し→`<strong>`・太字/リンク保持・段落+リスト混在。
+- olHtmlIsRich がプレーンdivを除外→テキスト経路（2sp=1段）に回る回帰なし。
+- コンソールエラーなし・`node --check` OK（8499行）。
+
+---
+
 ## v1.9.0-05301615-clip-p1 (2026-05-30)
 ### 機能改善 — コピペ/複数選択 堅牢化（Phase 1）／仕様書 `仕様書_コピペ貼付機能.md`
 
