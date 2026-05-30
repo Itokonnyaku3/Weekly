@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.10.1-05301940-ui-fixes';
+    const APP_VERSION = 'v1.11.0-05302015-clip-p3';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6913,21 +6913,70 @@
     function olEncodeClip(obj) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); } catch (e) { return ''; } }
     function olDecodeClip(s) { try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch (e) { return null; } }
 
-    // 選択ノード群を人間可読な入れ子 <ul><li> に（外部アプリ貼付用）
+    // 選択ノード群を人間可読な入れ子 <ul><li> に（外部アプリ貼付用）。
+    // 表ノード(node.htmlに<table>)は表として、装飾htmlはそのまま出力（外部アプリで書式/表が活きる）。
     function olBuildVisibleList(flatNodes) {
       if (!flatNodes.length) return '';
       const minI = Math.min(...flatNodes.map(n => n.indent || 0));
       const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
       let out = '', open = 0;
       flatNodes.forEach(n => {
+        // 表ノード → リストを閉じて <table> をそのまま出力（Phase3: Excel等へ貼れる）
+        if (n.html && /<table/i.test(n.html)) {
+          while (open > 0) { out += '</ul>'; open--; }
+          out += n.html;
+          return;
+        }
         const lv = (n.indent || 0) - minI;
         while (open < lv + 1) { out += '<ul>'; open++; }
         while (open > lv + 1) { out += '</ul>'; open--; }
         const cb = n.isTodo ? (n.checked ? '☑ ' : '☐ ') : '';
-        out += '<li>' + cb + esc(n.text || '') + '</li>';
+        const body = (n.html && /[<&]/.test(n.html)) ? n.html : esc(n.text || '');
+        out += '<li>' + cb + body + '</li>';
       });
       while (open > 0) { out += '</ul>'; open--; }
       return out;
+    }
+
+    // ── Phase3: 表（TSV/HTML表）──
+    // タブ区切りの複数行＝表 と判定（コード等の誤検出を避けるため過半数行にタブを要求）
+    function olLooksLikeTsv(text) {
+      if (!text || text.indexOf('\t') < 0) return false;
+      const lines = text.replace(/\r/g, '').split('\n');
+      while (lines.length && lines[lines.length - 1] === '') lines.pop();
+      if (!lines.length) return false;
+      const withTabs = lines.filter(l => l.indexOf('\t') >= 0).length;
+      if (lines.length === 1) return (lines[0].match(/\t/g) || []).length >= 1;
+      return withTabs >= 2 && withTabs >= Math.ceil(lines.length * 0.5);
+    }
+    // TSV文字列 → <table> html（olInsertTable と同様の様式。先頭行をヘッダ th に）
+    function olTsvToTableHtml(text) {
+      const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+      const lines = text.replace(/\r/g, '').split('\n');
+      while (lines.length && lines[lines.length - 1] === '') lines.pop();
+      const grid = lines.map(l => l.split('\t'));
+      const cols = Math.max(1, ...grid.map(r => r.length));
+      const colW = 120;
+      let html = '<table style="table-layout:fixed">';
+      html += '<colgroup>' + Array.from({ length: cols }, () => `<col style="width:${colW}px">`).join('') + '</colgroup>';
+      grid.forEach((r, ri) => {
+        html += '<tr>';
+        for (let c = 0; c < cols; c++) {
+          const cell = esc(r[c] || '');
+          html += ri === 0 ? `<th>${cell || '&nbsp;'}</th>` : `<td>${cell || '<br>'}</td>`;
+        }
+        html += '</tr>';
+      });
+      html += '</table>';
+      return html;
+    }
+    // <table> html → TSV（表ノードのコピー時、text/plain を Excel等へ貼れる形に）
+    function olTableToTsv(tableHtml) {
+      const div = document.createElement('div'); div.innerHTML = tableHtml || '';
+      const table = div.querySelector('table'); if (!table) return '';
+      return [...table.querySelectorAll('tr')].map(tr =>
+        [...tr.querySelectorAll('th,td')].map(c => (c.textContent || '').replace(/[\t\n]/g, ' ').trim()).join('\t')
+      ).join('\n');
     }
 
     // 構造ペイロードを埋め込んだ text/html を生成（data-pwt-clip にノードJSONをbase64格納）
@@ -6970,7 +7019,10 @@
       const flatNodes = [];
       blocks.forEach(b => { for (let j = b.idx; j < b.idx + b.sub; j++) flatNodes.push(JSON.parse(JSON.stringify(nodes[j]))); });
       const minI = flatNodes.length ? Math.min(...flatNodes.map(n => n.indent || 0)) : 0;
-      const text = flatNodes.map(n => ('  '.repeat(Math.max(0, (n.indent || 0) - minI))) + (n.text || '')).join('\n');
+      const text = flatNodes.map(n => {
+        if (n.html && /<table/i.test(n.html)) return olTableToTsv(n.html); // 表ノードはTSVで（Excel等へ）
+        return '  '.repeat(Math.max(0, (n.indent || 0) - minI)) + (n.text || '');
+      }).join('\n');
       _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
       olWriteClipboard(text, olBuildClipHtml(flatNodes));
       return { flatNodes, text };
@@ -7229,6 +7281,17 @@
         const idx = nodes.findIndex(n => n.id === id);
         if (idx >= 0) olSaveTxt(nodes, idx, olText);
         olPasteMultiClipboard(date, id);
+        return;
+      }
+
+      // ①.7 TSV(タブ区切り) → 表ノード（Phase3。Excel/Sheets等のhtml無し貼付を表に）
+      if (olLooksLikeTsv(clipText)) {
+        ev.preventDefault();
+        const nodes = olGetNodes(date);
+        const ix = nodes.findIndex(n => n.id === id);
+        if (ix >= 0) olSaveTxt(nodes, ix, olText);
+        const tableNode = { id: null, text: '[表]', html: olTsvToTableHtml(clipText), indent: 0, isTodo: false, checked: false, bold: false, color: '', type: 'log', tags: [], collapsed: false };
+        olStructuredPaste(date, id, [tableNode]);
         return;
       }
 
