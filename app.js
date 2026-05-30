@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.7.1-05301425-rename-projtag';
+    const APP_VERSION = 'v1.8.0-05301450-gridwk';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -2393,21 +2393,23 @@
       const projTag = S.projects[pi].name.replace(/\s+/g, '_');
 
       if (ei === null) {
-        // New node
-        let targetDate;
+        // New node — 課題6: 作成日=今日、現在週以外は gridWk で表示週を指定（quickAddと統一）
+        let targetDate, gWk = '';
         if (proj) {
           targetDate = 'proj:' + pi;
         } else if (wk === wkey(new Date())) {
           targetDate = todayDateStr();
         } else {
-          const mondayDate = wkeyToDate(wk);
-          targetDate = mondayDate.getFullYear() + '-' + (mondayDate.getMonth() + 1) + '-' + mondayDate.getDate();
+          targetDate = todayDateStr();
+          gWk = wk;
         }
         const nodes = olGetNodes(targetDate);
-        nodes.push({
+        const nn = {
           id: olNewId(), text, type, isTodo: type === 'todo', checked: false,
           indent: 0, projTag, url, note, images: [], priority, tags: tagChips, start, due, startDate, endDate
-        });
+        };
+        if (gWk) nn.gridWk = gWk;
+        nodes.push(nn);
       } else {
         // Edit existing node
         const found = findNodeById(ei);
@@ -2983,23 +2985,26 @@
       const projTag = p.name.replace(/\s+/g, '_');
 
       // Determine target date for the node
-      let targetDate;
+      // 課題6: ノートの場所＝作成日(今日)。現在週以外のセルで追加した場合は gridWk で表示週を指定。
+      let targetDate, gridWk = '';
       if (wk === 'proj') {
         targetDate = 'proj:' + pi;
       } else if (wk === wkey(new Date())) {
         targetDate = todayDateStr(); // current week → today
       } else {
-        const mondayDate = wkeyToDate(wk);
-        targetDate = mondayDate.getFullYear() + '-' + (mondayDate.getMonth() + 1) + '-' + mondayDate.getDate();
+        targetDate = todayDateStr(); // 作成日は今日
+        gridWk = wk;                 // 表示週はそのセルの週
       }
 
       const nodes = olGetNodes(targetDate);
       const nodeId = olNewId();
-      nodes.push({
+      const newNode = {
         id: nodeId, text: txt, indent: 0, isTodo: true, checked: false,
         type: 'todo', projTag: projTag,
         url: '', note: '', images: [], priority: '', tags: [], start: '', due: '', startDate: '', endDate: ''
-      });
+      };
+      if (gridWk) newNode.gridWk = gridWk;
+      nodes.push(newNode);
 
       saveState();
       render();
@@ -3121,6 +3126,30 @@
       ev.stopPropagation();
     }
     function eDragOver(ev) { ev.preventDefault(); ev.dataTransfer.dropEffect = 'move' }
+
+    // 課題6: ノード＋その子孫(parentId連鎖)に gridWk を設定/解除（親子をまとめて週移動）。
+    // wkOrNull が null/'' のときは gridWk を削除して作成日由来の週に戻す。
+    function setGridWkSubtree(rootId, wkOrNull) {
+      const all = [];
+      for (const k in S.dailyOutline) {
+        if (k.startsWith('proj:')) continue;
+        const a = S.dailyOutline[k];
+        if (Array.isArray(a)) a.forEach(n => all.push(n));
+      }
+      const ids = new Set([rootId]);
+      let changed = true;
+      while (changed) {
+        changed = false;
+        for (const n of all) {
+          if (n.parentId && ids.has(n.parentId) && !ids.has(n.id)) { ids.add(n.id); changed = true; }
+        }
+      }
+      for (const n of all) {
+        if (!ids.has(n.id)) continue;
+        if (wkOrNull) n.gridWk = wkOrNull; else delete n.gridWk;
+      }
+    }
+
     function eDrop(ev, tpi, twk) {
       ev.preventDefault(); if (!dragECtx) return;
       const { pi, wk, ei } = dragECtx; dragECtx = null; // ei is nodeId
@@ -3132,37 +3161,31 @@
       const tProjTag = S.projects[tpi].name.replace(/\s+/g, '_');
       node.projTag = tProjTag;
 
-      // If moving between weeks (or between proj/week), move the node to the new date
-      if (twk !== wk || pi !== tpi) {
-        let targetDate;
-        if (twk === 'proj') {
-          targetDate = 'proj:' + tpi;
-        } else {
-          // If target week is current week, keep on same date or use today
-          // Otherwise move to Monday of target week
-          if (found.date && !found.date.startsWith('proj:') && wk === twk) {
-            targetDate = found.date; // same week, just changing project
-          } else if (twk === wkey(new Date())) {
-            targetDate = todayDateStr();
-          } else {
-            const mondayDate = wkeyToDate(twk);
-            targetDate = mondayDate.getFullYear() + '-' + (mondayDate.getMonth() + 1) + '-' + mondayDate.getDate();
-          }
-        }
-
+      if (twk === 'proj') {
+        // プロジェクトノートへ添付（従来どおりノードを proj:tpi へ移動）。gridWk は無効化。
+        const targetDate = 'proj:' + tpi;
         if (targetDate !== found.date) {
-          // Remove from old location
           const oldNodes = S.dailyOutline[found.date];
-          const oldIdx = oldNodes.findIndex(n => n.id === ei);
+          const oldIdx = oldNodes ? oldNodes.findIndex(n => n.id === ei) : -1;
           if (oldIdx >= 0) oldNodes.splice(oldIdx, 1);
-          // Add to new location
-          const newNodes = olGetNodes(targetDate);
-          newNodes.push(node);
+          olGetNodes(targetDate).push(node);
         }
+        delete node.gridWk;
+      } else {
+        // 課題6: 週移動は作成日(ノートの場所)を動かさず gridWk(表示週)のみ変更。親子はまとめて移動。
+        let natWk = null;
+        if (found.date && !found.date.startsWith('proj:')) {
+          try { natWk = wkey(new Date(found.date.replace(/-/g, '/'))); } catch (e) { natWk = null; }
+        }
+        if (natWk && twk === natWk) {
+          setGridWkSubtree(ei, null);  // 本来の週へ戻す → gridWk 解除
+        } else {
+          setGridWkSubtree(ei, twk);   // 表示週オーバーライド
+        }
+      }
 
-        if (pi !== tpi) {
-          showToast('🏷️ ' + S.projects[pi].name + ' → ' + S.projects[tpi].name + ' に移動しました');
-        }
+      if (pi !== tpi) {
+        showToast('🏷️ ' + S.projects[pi].name + ' → ' + S.projects[tpi].name + ' に移動しました');
       }
 
       saveState(); render();
@@ -3184,25 +3207,35 @@
       const tProjTag = S.projects[tpi].name.replace(/\s+/g, '_');
       found.node.projTag = tProjTag;
 
-      // 移動先の日付を決定
-      let targetDate;
       if (twk === 'proj') {
-        targetDate = 'proj:' + tpi;
+        // プロジェクトノートへ移動（従来どおりノードを proj:tpi へ移し並び替え）。gridWk無効化。
+        const targetDate = 'proj:' + tpi;
+        const oldNodes = S.dailyOutline[found.date];
+        const oldIdx = oldNodes ? oldNodes.findIndex(n => n.id === ei) : -1;
+        if (oldIdx >= 0) oldNodes.splice(oldIdx, 1);
+        delete found.node.gridWk;
+        const newNodes = olGetNodes(targetDate);
+        let tgtIdx = newNodes.findIndex(n => n.id === tei);
+        if (tgtIdx < 0) tgtIdx = newNodes.length;
+        else if (found.date === targetDate && oldIdx >= 0 && oldIdx < tgtIdx) tgtIdx--;
+        newNodes.splice(tgtIdx, 0, found.node);
       } else {
-        targetDate = tFound.date;
+        // 課題6: 対象アイテムの実効週へ gridWk で移動（作成日は動かさない。親子まとめて）。
+        let tDateWk = null; try { tDateWk = wkey(new Date(tFound.date.replace(/-/g, '/'))); } catch (e) {}
+        const tEffWk = tFound.node.gridWk || tDateWk;
+        let natWk = null; try { natWk = wkey(new Date(found.date.replace(/-/g, '/'))); } catch (e) {}
+        if (natWk && tEffWk === natWk) setGridWkSubtree(ei, null);
+        else if (tEffWk) setGridWkSubtree(ei, tEffWk);
+        // 同一日配列内（出自が同じ）の場合のみ並び替えを反映
+        if (found.date === tFound.date && !found.node.gridWk && !tFound.node.gridWk) {
+          const arr = S.dailyOutline[found.date];
+          const oldIdx = arr.findIndex(n => n.id === ei);
+          if (oldIdx >= 0) arr.splice(oldIdx, 1);
+          let tgtIdx = arr.findIndex(n => n.id === tei);
+          if (tgtIdx < 0) tgtIdx = arr.length;
+          arr.splice(tgtIdx, 0, found.node);
+        }
       }
-
-      // 元の位置から削除
-      const oldNodes = S.dailyOutline[found.date];
-      const oldIdx = oldNodes ? oldNodes.findIndex(n => n.id === ei) : -1;
-      if (oldIdx >= 0) oldNodes.splice(oldIdx, 1);
-
-      // 挿入位置を計算（削除後のインデックスずれを補正）
-      const newNodes = olGetNodes(targetDate);
-      let tgtIdx = newNodes.findIndex(n => n.id === tei);
-      if (tgtIdx < 0) tgtIdx = newNodes.length;
-      else if (found.date === targetDate && oldIdx >= 0 && oldIdx < tgtIdx) tgtIdx--;
-      newNodes.splice(tgtIdx, 0, found.node);
 
       if (pi !== tpi) {
         showToast('🏷️ ' + S.projects[pi].name + ' → ' + S.projects[tpi].name + ' に移動しました');
@@ -4773,13 +4806,13 @@
         try {
           dateWk = wkey(new Date(date.replace(/-/g, '/')));
         } catch(e) { continue; }
-        if (dateWk !== wk) continue;
         const nodes = S.dailyOutline[date];
         if (!Array.isArray(nodes)) continue;
         nodes.forEach((n, idx) => {
-          if (n.projTag === projTag) {
-            items.push({ node: n, date, idx });
-          }
+          if (n.projTag !== projTag) return;
+          // 課題6: 実効週 = gridWk(表示週オーバーライド)があればそれ、無ければ作成日の週
+          const effWk = n.gridWk || dateWk;
+          if (effWk === wk) items.push({ node: n, date, idx });
         });
       }
       return items;
@@ -4822,22 +4855,32 @@
     // 子アイテムは親がミラー対象なら一緒に返す
     function getMirrorItems(pi, currentWk) {
       if (!S.dailyOutline) return [];
+      const proj = S.projects[pi];
+      if (!proj) return [];
+      const projTag = proj.name.replace(/\s+/g, '_');
       const result = [];
       const seenIds = new Set();
-      const processedWks = new Set();
 
+      // 課題6: 実効週(gridWk優先)ベースで「過去週」を列挙。
+      // 日付比較は文字列でなく wkeyToDate のタイムスタンプで行う（ゼロ埋め無し週キーの誤比較を回避）。
+      let curT; try { curT = wkeyToDate(currentWk).getTime(); } catch(e) { return result; }
+      const pastWks = new Set();
       for (const date in S.dailyOutline) {
         if (date.startsWith('proj:')) continue;
         let dateWk;
-        try {
-          dateWk = wkey(new Date(date.replace(/-/g, '/')));
-        } catch(e) { continue; }
-        // 今週以降はスキップ（過去週のみ）
-        if (dateWk >= currentWk) continue;
-        if (processedWks.has(dateWk)) continue;
-        processedWks.add(dateWk);
+        try { dateWk = wkey(new Date(date.replace(/-/g, '/'))); } catch(e) { continue; }
+        const nodes = S.dailyOutline[date];
+        if (!Array.isArray(nodes)) continue;
+        for (const n of nodes) {
+          if (n.projTag !== projTag) continue;
+          const effWk = n.gridWk || dateWk;
+          let effT; try { effT = wkeyToDate(effWk).getTime(); } catch(e) { continue; }
+          if (effT < curT) pastWks.add(effWk);
+        }
+      }
 
-        const treeItems = getTreeOrderedItems(pi, dateWk);
+      for (const wkP of pastWks) {
+        const treeItems = getTreeOrderedItems(pi, wkP);
         for (const item of treeItems) {
           if (item.isChild) continue; // トップレベルのみ判定
           const n = item.node;
@@ -4849,13 +4892,13 @@
           if (!shouldMirror) continue;
           if (seenIds.has(n.id)) continue;
           seenIds.add(n.id);
-          result.push({ ...item, isMirror: true, originWk: dateWk });
+          result.push({ ...item, isMirror: true, originWk: wkP });
           // 子アイテムも追加（done/undone問わず、gridCollapsedを尊重）
           if (!n.gridCollapsed) {
             for (const child of item.children) {
               if (seenIds.has(child.node.id)) continue;
               seenIds.add(child.node.id);
-              result.push({ ...child, isMirror: true, isChild: true, children: [], originWk: dateWk });
+              result.push({ ...child, isMirror: true, isChild: true, children: [], originWk: wkP });
             }
           }
         }

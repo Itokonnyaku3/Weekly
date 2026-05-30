@@ -49,11 +49,19 @@ interface Node {
   priority: string;     // 'high' | 'mid' | 'low' | ''
   start: string;        // 開始日 (YYYY-MM-DD or '') ★現在グリッド表示には使用されていない
   due: string;          // 期限日 (YYYY-MM-DD or '') ★ミラー表示の条件に使用
+  gridWk?: string;      // ★v1.8.0 表示週オーバーライド（"YYYY-M-D"=その週の月曜）。
+                        //   設定時はグリッドで「実効週=gridWk」のセルに表示。作成日(dateキー)は不変。
+                        //   未設定なら作成日から週を導出（後方互換）。週セルへのドラッグで設定、
+                        //   本来の週へ戻すと解除。親子(subtree)はまとめて設定。
 
   // 分類・紐づけ
   projTag: string;      // プロジェクト帰属キー（プロジェクト名の空白を'_'に変換）
+  phase: string;        // フェーズ名（プロジェクトの Phase ノード名と一致）。空ならフェーズ未割当。
+                        //   #RFP のようなタグを書くと自動的に node.phase へ正規化される（両対応）。
   tags: string[];       // 汎用タグ配列
-  type: string;         // 'todo' | 'log' | 'link' | ...
+  type: string;         // 'todo' | 'log' | 'link' | 'phase' | ...
+                        //   'phase' / 'link' は proj:{pi} ノート内でのみ使用し、
+                        //   グリッドの Phase列・リンク列に集約表示される。
 
   // リンク
   url: string;
@@ -170,6 +178,11 @@ for (const date in S.dailyOutline) {
 ```
 
 **= 「1ノードが入るセルは dateキー が属する週のセルだけ」**
+
+> ★v1.8.0 更新: 現在は `実効週 = node.gridWk || wkey(date)` で判定する。
+> `gridWk`（表示週オーバーライド）があればそのセルに表示し、作成日(dateキー)は動かさない。
+> `getMirrorItems` も実効週ベースで過去週を列挙する（週比較は `wkeyToDate().getTime()` で実施）。
+> ドラッグ（`eDrop`/`eDropOnItem`）は日付を移動せず `setGridWkSubtree` で親子に `gridWk` を設定/解除する。
 
 ---
 
