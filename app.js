@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.8.0-05301450-gridwk';
+    const APP_VERSION = 'v1.9.0-05301615-clip-p1';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6547,63 +6547,55 @@
       //   ・構造: トップレベル選択ノード（サブツリーを含む）の深いコピーを _olMultiClipboard に保存
       //          ※ Ctrl+Shift+V で構造ペーストできるようにする
       // ※ 未選択時はブラウザのネイティブコピー動作に委ねる
-      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && ev.key === 'c' && _olSelected.size > 0) {
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && (ev.key === 'c' || ev.key === 'C')) {
+        // 複数選択中 → そのブロック群。未選択でカーソルのみ（テキスト未選択）→ 現在ノードのサブツリー。
+        // 行内テキストを選択中（範囲選択あり）の場合はネイティブのテキストコピーに委ねる。
+        const _sel = window.getSelection && window.getSelection();
+        const hasTextSel = _sel && !_sel.isCollapsed && ev.target && ev.target.contains && ev.target.contains(_sel.anchorNode);
+        let blocks = null;
+        if (_olSelected.size >= 1) blocks = olCollectSelectionBlocks(nodes);
+        else if (!hasTextSel) blocks = [{ idx, sub: olGetSubtree(nodes, idx) }];
+        if (!blocks || !blocks.length) return; // ネイティブに委ねる
         ev.preventDefault();
-        const vis = olGetVisibleForDate(nodes, date).visible;
-        const lines = vis
-          .filter(n => _olSelected.has(n.id))
-          .map(n => ('  '.repeat(n.indent)) + (n.text || ''));
-        const text = lines.join('\n');
-        // 構造クリップボード（トップレベル選択ノード＋サブツリーを保存）
-        const blocks = olCollectSelectionBlocks(nodes);
-        const flatNodes = [];
-        blocks.forEach(b => {
-          for (let j = b.idx; j < b.idx + b.sub; j++) {
-            flatNodes.push(JSON.parse(JSON.stringify(nodes[j])));
-          }
-        });
-        _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
-        navigator.clipboard.writeText(text)
-          .then(() => showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+V でそのまま貼り付けられます）'))
-          .catch(() => {
-            const ta = document.createElement('textarea');
-            ta.value = text; document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-            showToast('📋 ' + _olSelected.size + '行をコピーしました（Ctrl+V でそのまま貼り付けられます）');
-          });
+        const { flatNodes } = olCopyBlocks(nodes, blocks, date);
+        showToast('📋 ' + flatNodes.length + ' 件をコピーしました（Ctrl+V でそのまま貼り付けられます）');
         return;
       }
 
-      // Ctrl+X: マルチセレクト中はコピー＋削除（カット）
-      // ※ 単一選択時はブラウザのネイティブ動作に任せる
-      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && ev.key === 'x' && _olSelected.size >= 2) {
+      // Ctrl+A: アウトライン全選択（1回目=可視ノード全選択 / 既に全選択ならネイティブ）
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && (ev.key === 'a' || ev.key === 'A')) {
+        const vis = olGetVisibleForDate(nodes, date).visible;
+        if (vis.length && _olSelected.size < vis.length) {
+          ev.preventDefault();
+          _olSelected.clear();
+          vis.forEach(n => _olSelected.add(n.id));
+          _olShiftSelecting = true; // フォーカス移動で選択がクリアされないように
+          olRender('ol-container', date);
+          setTimeout(() => { _olShiftSelecting = false; }, 0);
+          return;
+        }
+        // 既に全選択 → ネイティブ（行内テキスト選択）に委ねる
+      }
+
+      // Ctrl+X: 複数選択中 or カーソルのみ（テキスト未選択）でカット（コピー＋削除）。
+      // 行内テキストを範囲選択中の場合はネイティブのテキストカットに委ねる。
+      if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && (ev.key === 'x' || ev.key === 'X')) {
+        const _sel = window.getSelection && window.getSelection();
+        const hasTextSel = _sel && !_sel.isCollapsed && ev.target && ev.target.contains && ev.target.contains(_sel.anchorNode);
+        let blocks = null;
+        if (_olSelected.size >= 1) blocks = olCollectSelectionBlocks(nodes);
+        else if (!hasTextSel) blocks = [{ idx, sub: olGetSubtree(nodes, idx) }];
+        if (!blocks || !blocks.length) return; // ネイティブに委ねる
         ev.preventDefault();
         olPushHistory(date);
         olSaveTxt(nodes, idx, ev.target);
-        const vis = olGetVisibleForDate(nodes, date).visible;
-        const lines = vis
-          .filter(n => _olSelected.has(n.id))
-          .map(n => ('  '.repeat(n.indent)) + (n.text || ''));
-        const text = lines.join('\n');
-        // 構造クリップボードへ深いコピー
-        const blocks = olCollectSelectionBlocks(nodes);
-        const flatNodes = [];
-        blocks.forEach(b => {
-          for (let j = b.idx; j < b.idx + b.sub; j++) {
-            flatNodes.push(JSON.parse(JSON.stringify(nodes[j])));
-          }
-        });
-        _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
-        // システムクリップボードにもテキスト書き込み
-        navigator.clipboard.writeText(text).catch(() => {
-          const ta = document.createElement('textarea');
-          ta.value = text; document.body.appendChild(ta); ta.select();
-          document.execCommand('copy'); document.body.removeChild(ta);
-        });
-        // ノードを削除（トップレベルブロックを下から削除）
+        // 保存後にブロックを採り直す（olSaveTxt 後も idx 構造は不変だが安全のため）
+        const { flatNodes } = olCopyBlocks(nodes, blocks, date);
         const cutCount = flatNodes.length;
-        for (let k = blocks.length - 1; k >= 0; k--) {
-          nodes.splice(blocks[k].idx, blocks[k].sub);
+        // ノードを削除（ブロックを下から削除してインデックスずれを回避）
+        const sorted = blocks.slice().sort((a, b) => a.idx - b.idx);
+        for (let k = sorted.length - 1; k >= 0; k--) {
+          nodes.splice(sorted[k].idx, sorted[k].sub);
         }
         if (nodes.length === 0) nodes.push({ id: olNewId(), text: '', indent: 0, bold: false, color: '', collapsed: false });
         _olSelected.clear();
@@ -6887,6 +6879,111 @@
     // ── マルチセレクト: 構造ペースト ────────────────────────────────
     // _olMultiClipboard.nodes を現在ノードの直後に挿入する。
     // インデントは「貼り付け先ノードの indent ＋ 元クリップボードの最小 indent との相対値」で正規化。
+    // ── クリップボード Phase1: システムクリップボード＋独自マーカー方式 ──
+    // UTF-8 対応 base64（btoa は ASCII のみのため encodeURIComponent 経由）
+    function olEncodeClip(obj) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); } catch (e) { return ''; } }
+    function olDecodeClip(s) { try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch (e) { return null; } }
+
+    // 選択ノード群を人間可読な入れ子 <ul><li> に（外部アプリ貼付用）
+    function olBuildVisibleList(flatNodes) {
+      if (!flatNodes.length) return '';
+      const minI = Math.min(...flatNodes.map(n => n.indent || 0));
+      const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+      let out = '', open = 0;
+      flatNodes.forEach(n => {
+        const lv = (n.indent || 0) - minI;
+        while (open < lv + 1) { out += '<ul>'; open++; }
+        while (open > lv + 1) { out += '</ul>'; open--; }
+        const cb = n.isTodo ? (n.checked ? '☑ ' : '☐ ') : '';
+        out += '<li>' + cb + esc(n.text || '') + '</li>';
+      });
+      while (open > 0) { out += '</ul>'; open--; }
+      return out;
+    }
+
+    // 構造ペイロードを埋め込んだ text/html を生成（data-pwt-clip にノードJSONをbase64格納）
+    function olBuildClipHtml(flatNodes) {
+      const payload = olEncodeClip({ v: 1, nodes: flatNodes });
+      return '<div data-pwt-clip="' + payload + '">' + olBuildVisibleList(flatNodes) + '</div>';
+    }
+
+    // text/html から独自マーカーを読み取り、ノード配列を返す（無ければ null）
+    function olReadClipMarker(html) {
+      if (!html || html.indexOf('data-pwt-clip') < 0) return null;
+      const m = html.match(/data-pwt-clip="([^"]*)"/);
+      if (!m) return null;
+      const obj = olDecodeClip(m[1]);
+      return (obj && Array.isArray(obj.nodes) && obj.nodes.length) ? obj.nodes : null;
+    }
+
+    // システムクリップボードへ text/plain ＋ text/html を書き込む（不可環境はテキストのみ/execCommand）
+    async function olWriteClipboard(text, html) {
+      try {
+        if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+          await navigator.clipboard.write([new ClipboardItem({
+            'text/plain': new Blob([text], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' })
+          })]);
+          return true;
+        }
+      } catch (e) { /* fall through */ }
+      try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* fall through */ }
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+      } catch (e) { }
+      return false;
+    }
+
+    // 選択ブロック群をコピー: flatNodes生成→_olMultiClipboard保存→system clipboard(text+html)書込
+    function olCopyBlocks(nodes, blocks, date) {
+      const flatNodes = [];
+      blocks.forEach(b => { for (let j = b.idx; j < b.idx + b.sub; j++) flatNodes.push(JSON.parse(JSON.stringify(nodes[j]))); });
+      const minI = flatNodes.length ? Math.min(...flatNodes.map(n => n.indent || 0)) : 0;
+      const text = flatNodes.map(n => ('  '.repeat(Math.max(0, (n.indent || 0) - minI))) + (n.text || '')).join('\n');
+      _olMultiClipboard = { nodes: flatNodes, text, ts: Date.now() };
+      olWriteClipboard(text, olBuildClipHtml(flatNodes));
+      return { flatNodes, text };
+    }
+
+    // 構造ペースト: マーカー由来のノード配列を挿入（新ID採番＋内部 parentId を再マップ＝親子保持）
+    function olStructuredPaste(date, focusedId, clipNodes) {
+      if (!Array.isArray(clipNodes) || !clipNodes.length) return false;
+      const nodes = olGetNodes(date);
+      const idx = nodes.findIndex(n => n.id === focusedId);
+      if (idx < 0) return false;
+      olPushHistory(date);
+      const baseIndent = nodes[idx].indent;
+      const minI = Math.min(...clipNodes.map(n => n.indent || 0));
+      const idMap = {};
+      const newNodes = clipNodes.map(n => {
+        const copy = JSON.parse(JSON.stringify(n));
+        const newId = olNewId();
+        if (n.id) idMap[n.id] = newId;
+        copy.id = newId;
+        copy.indent = baseIndent + ((n.indent || 0) - minI);
+        return copy;
+      });
+      // コピー集合内の親子のみ parentId を再マップ。外部参照は解除。
+      newNodes.forEach(copy => {
+        if (copy.parentId && idMap[copy.parentId]) copy.parentId = idMap[copy.parentId];
+        else delete copy.parentId;
+      });
+      const sub = olGetSubtree(nodes, idx);
+      const insertAt = idx + sub;
+      nodes.splice(insertAt, 0, ...newNodes);
+      _olSelected.clear();
+      newNodes.forEach(n => _olSelected.add(n.id));
+      _olFocusId = newNodes[newNodes.length - 1].id;
+      _olFocusAtStart = false;
+      saveState();
+      olRender('ol-container', date);
+      setTimeout(() => { if (typeof render === 'function') render(); }, 10);
+      showToast('📋 ' + newNodes.length + ' 件をペーストしました');
+      return true;
+    }
+
     function olPasteMultiClipboard(date, focusedId) {
       if (!_olMultiClipboard || !_olMultiClipboard.nodes || _olMultiClipboard.nodes.length === 0) return false;
       const nodes = olGetNodes(date);
@@ -6934,10 +7031,49 @@
       const date = olText.getAttribute('data-date') || _olCurrentDate;
       const cd = ev.clipboardData || window.clipboardData;
       if (!cd) return;
+
+      // ⓪ 画像アイテム → GitHubアップロード（旧 olSetupPasteHandler を統合。GitHub必須）
+      const _items = cd.items ? [...cd.items] : [];
+      const _imgItem = _items.find(it => it.type && it.type.startsWith('image/'));
+      if (_imgItem) {
+        ev.preventDefault();
+        const file = _imgItem.getAsFile();
+        if (file) {
+          const { token, repo } = ghGetSettings();
+          if (!token || !repo) { showToast('❌ 画像はGitHubへアップロードされます。設定パネルでGitHubトークンとリポジトリを設定してください。', true); return; }
+          showToast('⏳ GitHubへアップロード中...');
+          (async () => {
+            try {
+              const src = await ghUploadImage(file);
+              const html = `<span class="ol-img-wrap" contenteditable="false" style="width:300px"><img src="${src}" alt="ペースト画像"></span><br>`;
+              olText.focus();
+              document.execCommand('insertHTML', false, html);
+              ghAuthInContainer($('ol-container'));
+              olRichSave();
+              showToast('✓ 画像をGitHubへアップロードしました');
+            } catch (err) { showToast('❌ アップロード失敗: ' + (err && err.message || err), true); }
+          })();
+        }
+        return;
+      }
+
+      const clipHtml = cd.getData ? cd.getData('text/html') : '';
       const clipText = cd.getData ? cd.getData('text/plain') : '';
+
+      // ① 独自マーカー(text/html)→ 構造を完全復元（自アプリ間 無損失。TODO/画像/親子保持）
+      const markerNodes = olReadClipMarker(clipHtml);
+      if (markerNodes) {
+        ev.preventDefault();
+        const nodes = olGetNodes(date);
+        const ix = nodes.findIndex(n => n.id === id);
+        if (ix >= 0) olSaveTxt(nodes, ix, olText);
+        olStructuredPaste(date, id, markerNodes);
+        return;
+      }
+
       if (!clipText) return;
 
-      // ① 内部マルチクリップボードと一致 → 構造ペースト
+      // ①' フォールバック: 内部マルチクリップボードとテキスト一致（マーカー非対応環境）
       if (_olMultiClipboard && _olMultiClipboard.nodes
           && _olMultiClipboard.nodes.length > 0
           && clipText === _olMultiClipboard.text) {
@@ -9201,42 +9337,9 @@
     }
 
     // ノートパネルの画像ペースト処理をセットアップ（常にGitHubへアップロード）
-    function olSetupPasteHandler() {
-      const container = $('ol-container');
-      if (!container || container._pasteListenerSet) return;
-      container._pasteListenerSet = true;
-      container.addEventListener('paste', async ev => {
-        const items = ev.clipboardData && ev.clipboardData.items;
-        if (!items) return;
-        for (const item of items) {
-          if (item.type.startsWith('image/')) {
-            ev.preventDefault();
-            const file = item.getAsFile();
-            if (!file) break;
-
-            // GitHub設定チェック
-            const { token, repo } = ghGetSettings();
-            if (!token || !repo) {
-              showToast('❌ 画像はGitHubへアップロードされます。設定パネルでGitHubトークンとリポジトリを設定してください。', true);
-              break;
-            }
-
-            showToast('⏳ GitHubへアップロード中...');
-            try {
-              const src = await ghUploadImage(file);
-              const html = `<span class="ol-img-wrap" contenteditable="false" style="width:300px"><img src="${src}" alt="ペースト画像"></span><br>`;
-              document.execCommand('insertHTML', false, html);
-              ghAuthInContainer(container);
-              olRichSave();
-              showToast('✓ 画像をGitHubへアップロードしました');
-            } catch (err) {
-              showToast('❌ アップロード失敗: ' + err.message, true);
-            }
-            break;
-          }
-        }
-      });
-    }
+    // 統合(Phase1): 画像/マーカー/テキストのペーストは olContainerPaste(inline onpaste)に集約。
+    // ここでは重複リスナーを張らない（旧 addEventListener('paste') 版は廃止）。
+    function olSetupPasteHandler() { /* no-op: unified into olContainerPaste */ }
 
     // ── ダブルクリックで詳細パネルを開く ────────────────────────────
     function eitemDblClick(ev, el) {

@@ -6,6 +6,32 @@
 
 ---
 
+## v1.9.0-05301615-clip-p1 (2026-05-30)
+### 機能改善 — コピペ/複数選択 堅牢化（Phase 1）／仕様書 `仕様書_コピペ貼付機能.md`
+
+「貼れたり貼れなかったり」の主因＝内部クリップボードの**完全一致依存**を解消。システムクリップボードに `text/plain` ＋ `text/html`（独自マーカー `data-pwt-clip` にノードJSONをbase64格納）を書き出す方式へ。
+
+#### 新規ヘルパ
+- `olEncodeClip`/`olDecodeClip`（UTF-8対応base64）、`olBuildVisibleList`（入れ子`<ul>`）、`olBuildClipHtml`（マーカー埋込html生成）、`olReadClipMarker`（html→ノード配列）、`olWriteClipboard`（`ClipboardItem`で text/plain＋text/html 書込・不可環境はwriteText/execCommandへフォールバック）、`olCopyBlocks`（コピー共通化）、`olStructuredPaste`（新ID採番＋**内部 parentId 再マップ**＝親子保持、外部参照は解除）。
+
+#### 変更
+- **Ctrl+C**: 複数選択 or カーソルのみ（行内テキスト未選択）で現在ノードのサブツリーをコピー。`olCopyBlocks` で text＋マーカーhtml をシステムクリップボードへ。
+- **Ctrl+X**: 同様に**単体カット対応**（旧: 2件以上のみ）。行内テキスト範囲選択時はネイティブのテキストカットに委譲。
+- **Ctrl+A**: アウトライン全選択を新設（1回目=可視ノード全選択／既に全選択ならネイティブ）。
+- **olContainerPaste を統合ハンドラ化**: ⓪画像（GitHubアップロード。旧 `olSetupPasteHandler` を集約）→①`text/html`マーカー→構造復元→①'内部クリップボード一致（フォールバック）→②多行テキスト2sp=1段。`olSetupPasteHandler` は no-op 化し**paste リスナー二重登録を解消**。
+- **構造ペーストで `parentId` を保持**（旧 `olPasteMultiClipboard` は `delete parentId` していた）。
+
+#### 検証（ブラウザ実機・実データ）
+- マーカー encode/decode 往復が無損失（text/parentId/checked/html）。
+- 構造ペーストで内部親子を再マップ・外部参照は解除・インデント保持。
+- Ctrl+A 全選択／Ctrl+C 生成（親子保持）／統合ペースト（TODO/親子保持）／Ctrl+X 単体（ノード＋サブツリー）／外部多行テキスト貼付（回帰なし）。
+- `pasteListenerSet=false`（重複リスナー無）・コンソールエラーなし・`node --check` OK（8396行）。
+
+#### 残（次フェーズ）
+- Phase 2 リッチ貼付（`text/html`→ノード化・**サニタイズ必須**）／Phase 3 表（TSV/HTML表）／Phase 4 画像往復強化。
+
+---
+
 ## v1.8.0-05301450-gridwk (2026-05-30)
 ### 機能追加 — ノート作成日とグリッド表示週の分離（`gridWk`）／課題6
 
