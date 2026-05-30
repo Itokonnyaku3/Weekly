@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.10.0-05301915-clip-p2';
+    const APP_VERSION = 'v1.10.1-05301940-ui-fixes';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3062,7 +3062,20 @@
     function deleteProjE(pi, ei) { deleteE(pi, 'proj', ei); }
     function addProj() { const n = prompt('プロジェクト名:'); if (!n) return; S.projects.push({ name: n, collapsed: false, projEntriesOpen: false, links: [], isPrivate: false }); saveState(); render() }
     function addProjFromInput(inp) { const n = inp.value.trim(); if (!n) return; S.projects.push({ name: n, collapsed: false, projEntriesOpen: false, links: [], isPrivate: false }); inp.value = ''; saveState(); render() }
-    function deleteProj(pi) { if (confirm('「' + S.projects[pi].name + '」を削除しますか？')) { S.projects.splice(pi, 1); saveState(); render() } }
+    function deleteProj(pi) {
+      if (!confirm('「' + S.projects[pi].name + '」を削除しますか？')) return;
+      const n = S.projects.length;
+      // proj:{i} ノートも index 基準。削除位置のノートを除去し、後続を 1 つ前へ詰める
+      const notes = [];
+      for (let i = 0; i < n; i++) notes[i] = S.dailyOutline['proj:' + i];
+      S.projects.splice(pi, 1);
+      notes.splice(pi, 1);
+      for (let i = 0; i < n; i++) {
+        if (i < notes.length && notes[i] !== undefined) S.dailyOutline['proj:' + i] = notes[i];
+        else delete S.dailyOutline['proj:' + i];
+      }
+      saveState(); render();
+    }
     function startRename(pi, el) {
       const inp = document.createElement('input'); inp.className = 'rename-inp'; inp.value = S.projects[pi].name;
       el.replaceWith(inp); inp.focus(); inp.select();
@@ -3118,7 +3131,23 @@
     /* ── drag ── */
     function pDragStart(ev, pi) { dragProjIdx = pi; ev.dataTransfer.effectAllowed = 'move' }
     function pDragOver(ev, pi) { if (dragProjIdx !== null && dragProjIdx !== pi) ev.preventDefault() }
-    function pDrop(ev, pi) { ev.preventDefault(); if (dragProjIdx === null || dragProjIdx === pi) { dragProjIdx = null; return } const [m] = S.projects.splice(dragProjIdx, 1); S.projects.splice(pi, 0, m); dragProjIdx = null; saveState(); render() }
+    function pDrop(ev, pi) {
+      ev.preventDefault();
+      if (dragProjIdx === null || dragProjIdx === pi) { dragProjIdx = null; return; }
+      const n = S.projects.length;
+      // proj:{i} ノート（Phase/Link/プロジェクトノート）は index 基準なので、並べ替えに追従させる
+      const notes = [];
+      for (let i = 0; i < n; i++) notes[i] = S.dailyOutline['proj:' + i];
+      const [m] = S.projects.splice(dragProjIdx, 1);
+      S.projects.splice(pi, 0, m);
+      const [mn] = notes.splice(dragProjIdx, 1);
+      notes.splice(pi, 0, mn);
+      for (let i = 0; i < n; i++) {
+        if (notes[i] !== undefined) S.dailyOutline['proj:' + i] = notes[i];
+        else delete S.dailyOutline['proj:' + i];
+      }
+      dragProjIdx = null; saveState(); render();
+    }
     function eDragStart(ev, pi, wk, ei) {
       dragECtx = { pi, wk, ei }; // ei is now nodeId
       ev.dataTransfer.effectAllowed = 'move';

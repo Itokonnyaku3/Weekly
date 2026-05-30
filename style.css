@@ -431,12 +431,12 @@
     /* プロジェクトヘッダ行（折りたたみ集計）の Phase/リンク セルは PJ列と同じ紺背景・白文字を継承 */
     tbody tr.proj-hdr-row td.col-phase,
     tbody tr.proj-hdr-row td.col-link {
-      background: var(--pc, #3b4468);
-      color: #f0f2fa;
+      background: color-mix(in srgb, var(--pc, #3b4468) 64%, #000);
+      color: #eef0f7;
     }
     @media (prefers-color-scheme: dark) {
       tbody tr.proj-hdr-row td.col-phase,
-      tbody tr.proj-hdr-row td.col-link { background: color-mix(in srgb, var(--pc, #2a3050) 75%, #000); }
+      tbody tr.proj-hdr-row td.col-link { background: color-mix(in srgb, var(--pc, #2a3050) 58%, #000); }
     }
     /* Phase列・リンク列内の各項目 */
     .phase-cell-item,
@@ -531,13 +531,13 @@
     tbody tr.proj-hdr-row td {
       height: auto;
       padding: 0;
-      background: var(--pc, #3b4468);
-      color: #f0f2fa;
+      background: color-mix(in srgb, var(--pc, #3b4468) 64%, #000);
+      color: #eef0f7;
     }
     tbody tr.proj-hdr-row td.col-proj .pcell,
     tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr {
       padding: 0;
-      background: color-mix(in srgb, var(--pc, #2d3347) 82%, #000);
+      background: color-mix(in srgb, var(--pc, #2d3347) 48%, #000);
     }
     tbody tr.proj-hdr-row .proj-hdr-name {
       display: flex;
@@ -571,9 +571,9 @@
     }
     /* ダークモード時は少し明るめに調整 */
     @media (prefers-color-scheme: dark) {
-      tbody tr.proj-hdr-row td { background: color-mix(in srgb, var(--pc, #2a3050) 75%, #000); }
+      tbody tr.proj-hdr-row td { background: color-mix(in srgb, var(--pc, #2a3050) 58%, #000); }
       tbody tr.proj-hdr-row td.col-proj .pcell,
-      tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr { background: color-mix(in srgb, var(--pc, #1e2440) 60%, #000); }
+      tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr { background: color-mix(in srgb, var(--pc, #1e2440) 42%, #000); }
     }
     /* 圧縮モード: ヘッダ行フォーカス — アウトラインなし、行全体を明るい背景色に */
     tbody tr.proj-hdr-row td.col-proj:focus {
@@ -1163,12 +1163,10 @@
     .qarow {
       display: flex;
       gap: 4px;
-      /* 通常は非表示（高さ・余白ゼロ、内容クリップ） */
-      max-height: 0;
-      overflow: hidden;
+      /* 高さは常に確保しておき（がたつき防止）、表示はフォーカス/ホバー時のみ opacity で切替 */
+      margin-top: 6px;
       opacity: 0;
-      margin-top: 0;
-      transition: max-height 0.15s ease, opacity 0.15s ease, margin-top 0.15s ease;
+      transition: opacity 0.15s ease;
       pointer-events: none;
     }
 
@@ -1176,9 +1174,7 @@
     .wcell:focus-within .qarow,
     .wcell:has(.kfocus) .qarow,
     .wcell:hover .qarow {
-      max-height: 40px;
       opacity: 1;
-      margin-top: 6px;
       pointer-events: auto;
     }
 
