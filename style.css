@@ -2518,6 +2518,7 @@
     }
     .search-res-info { font-size: 11px; color: var(--tx3); margin-top: 4px; }
     .search-res-text { font-size: 14px; font-weight: 500; color: var(--tx); line-height: 1.4; }
+    .search-res-icon { color: var(--tx3); margin-right: 3px; font-size: 12px; }
     .search-res-match { background: rgba(255, 215, 0, 0.4); border-radius: 2px; }
     /* 検索タグフィルタ行 */
     #search-row3 {

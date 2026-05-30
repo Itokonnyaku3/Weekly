@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.11.1-05310835-leftscroll';
+    const APP_VERSION = 'v1.12.0-05310920-search-unify';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -4000,15 +4000,13 @@
           return;
         }
       }
-      // Ctrl+Shift+;: 全データ横断モードでインクリメンタル検索を起動
+      // Ctrl+Shift+;: 全データ検索 → 検索モーダルに一本化（旧: ノート内全データドロップダウン）
       // 注: Shift+; は物理キー的に ':' が ev.key になる場合があるため両対応
       if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && !ev.altKey && (ev.key === ';' || ev.key === ':')) {
-        const np = $('note-panel');
-        if (np && (np.contains(document.activeElement) || _notePanelOpen)) {
-          ev.preventDefault();
-          toggleIncSearchBar('all');
-          return;
-        }
+        ev.preventDefault();
+        if (_olIncSearchActive && typeof closeIncSearchBar === 'function') closeIncSearchBar();
+        openSearch();
+        return;
       }
       // Alt+Shift+E: 新規追加モーダルを開く
       if (ev.altKey && ev.shiftKey && ev.key === 'E') { ev.preventDefault(); openQA(); return }
@@ -7821,24 +7819,15 @@
 
     let _olIncSearchActive = false;
     let _olIncSearchQuery = '';
-    let _olIncSearchScope = 'current'; // 'current' | 'all'
-    let _olGlobalActiveIdx = 0; // 全データ結果ドロップダウン内のアクティブ項目インデックス
 
     function toggleIncSearchBar(forceScope) {
-      if (_olIncSearchActive) {
-        // forceScope が指定されている場合は、現状と異なるならスコープだけ切替
-        if (forceScope && forceScope !== _olIncSearchScope) {
-          _olIncSearchScope = forceScope;
-          _updateIncSearchScopeUI();
-          olIncSearchRun();
-          const inp = $('ol-incsearch-input');
-          if (inp) inp.focus();
-          return;
-        }
-        closeIncSearchBar();
+      // 全データ検索は検索モーダルに一本化（バーは「このノート」専用）
+      if (forceScope === 'all') {
+        if (_olIncSearchActive) closeIncSearchBar();
+        openSearch();
         return;
       }
-      if (forceScope) _olIncSearchScope = forceScope;
+      if (_olIncSearchActive) { closeIncSearchBar(); return; }
       openIncSearchBar();
     }
 
@@ -7868,27 +7857,22 @@
       }
     }
 
-    /** スコープボタンを「📄 このノート」「🌐 全データ」で更新 */
+    /** スコープボタン: バーは「このノート」専用。ボタンは全データ検索（モーダル）への導線に。 */
     function _updateIncSearchScopeUI() {
       const btn = $('ol-incsearch-scope-btn');
       const inp = $('ol-incsearch-input');
-      if (!btn) return;
-      if (_olIncSearchScope === 'all') {
-        btn.textContent = '🌐 全データ';
-        btn.classList.add('active');
-        if (inp) inp.placeholder = '全データから検索... (Esc で終了)';
-      } else {
-        btn.textContent = '📄 このノート';
+      if (btn) {
+        btn.textContent = '🌐 全データ検索';
         btn.classList.remove('active');
-        if (inp) inp.placeholder = 'このノート内を絞り込み... (Esc で終了)';
+        btn.title = '全データの検索は検索モーダルで（クリックで開く / Ctrl+Shift+;）';
       }
+      if (inp) inp.placeholder = 'このノート内を絞り込み... (Esc で終了)';
     }
 
-    /** スコープボタンのクリック: トグル */
+    /** スコープボタンのクリック: 全データ検索はモーダルに一本化 */
     function olIncSearchToggleScope() {
-      _olIncSearchScope = (_olIncSearchScope === 'all') ? 'current' : 'all';
-      _updateIncSearchScopeUI();
-      olIncSearchRun();
+      closeIncSearchBar();
+      openSearch();
     }
 
     function olIncSearchRun() {
@@ -7906,37 +7890,18 @@
         return;
       }
 
-      // 全データモードのときは ↑↓ で結果項目を移動
-      if (_olIncSearchScope === 'all') {
-        if (ev.key === 'ArrowDown') {
-          ev.preventDefault();
-          _olSetGlobalActiveItem(_olGlobalActiveIdx + 1, true);
-          return;
-        }
-        if (ev.key === 'ArrowUp') {
-          ev.preventDefault();
-          _olSetGlobalActiveItem(_olGlobalActiveIdx - 1, true);
-          return;
-        }
-      }
-
+      // Enter: 最初のヒット行へスクロール（このノート内検索）
       if (ev.key === 'Enter') {
         ev.preventDefault();
-        if (_olIncSearchScope === 'all') {
-          // 全データモード: アクティブ項目（既定は最上位）へジャンプ
-          const items = document.querySelectorAll('#ol-incsearch-global-results .ol-gsr-item');
-          const cur = items[_olGlobalActiveIdx] || items[0];
-          if (cur) cur.click();
-        } else {
-          const first = document.querySelector('#ol-container .ol-incsearch-hit');
-          if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        }
+        const first = document.querySelector('#ol-container .ol-incsearch-hit');
+        if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
         return;
       }
-      // Ctrl+Shift+; の捕捉（スコープを 'all' に切替）
+      // Ctrl+Shift+; は全データ検索モーダルへ（統合）
       if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && ev.key === ':') {
         ev.preventDefault();
-        toggleIncSearchBar('all');
+        if (typeof closeIncSearchBar === 'function') closeIncSearchBar();
+        openSearch();
       }
     }
 
@@ -7993,113 +7958,6 @@
       return count;
     }
 
-    /** 全データモードでの検索結果ドロップダウン構築 */
-    function _olRenderGlobalSearchResults(q) {
-      const gr = $('ol-incsearch-global-results');
-      const stat = $('ol-incsearch-stat');
-      if (!gr) return;
-      if (!q) {
-        gr.style.display = 'none';
-        gr.innerHTML = '';
-        if (stat) stat.textContent = '';
-        return;
-      }
-      const qLc = q.toLowerCase();
-      const hits = []; // {date, node}
-      if (S.dailyOutline) {
-        for (const dk in S.dailyOutline) {
-          if (!dk || dk.startsWith('_')) continue;
-          const ns = S.dailyOutline[dk];
-          if (!Array.isArray(ns)) continue;
-          for (const n of ns) {
-            if (!n || !n.text) continue;
-            if (n.text.toLowerCase().includes(qLc)) {
-              hits.push({ date: dk, node: n });
-              if (hits.length >= 200) break; // 上限保護
-            }
-          }
-          if (hits.length >= 200) break;
-        }
-      }
-
-      // 日付の新しい順
-      hits.sort((a, b) => {
-        const ap = a.date.startsWith('proj:') ? 1 : 0;
-        const bp = b.date.startsWith('proj:') ? 1 : 0;
-        if (ap !== bp) return ap - bp;
-        if (ap === 0) {
-          const aPad = a.date.split('-').map(s => s.padStart(4, '0')).join('-');
-          const bPad = b.date.split('-').map(s => s.padStart(4, '0')).join('-');
-          return bPad.localeCompare(aPad);
-        }
-        return a.date.localeCompare(b.date);
-      });
-
-      if (stat) stat.textContent = hits.length > 0
-        ? `${hits.length} 件一致${hits.length >= 200 ? '+' : ''}`
-        : '一致なし';
-
-      if (hits.length === 0) {
-        gr.style.display = 'block';
-        gr.innerHTML = `<div class="ol-gsr-empty">— 該当なし —</div>`;
-        return;
-      }
-
-      // テキストプレビュー（マッチ部分を <mark> ハイライト・周辺ctx）
-      const buildPreview = (txt) => {
-        const lc = txt.toLowerCase();
-        const idx = lc.indexOf(qLc);
-        if (idx < 0) return esc(txt);
-        const start = Math.max(0, idx - 24);
-        const end = Math.min(txt.length, idx + qLc.length + 36);
-        const pre = (start > 0 ? '…' : '') + esc(txt.slice(start, idx));
-        const m = `<mark class="ol-incmark">${esc(txt.slice(idx, idx + qLc.length))}</mark>`;
-        const post = esc(txt.slice(idx + qLc.length, end)) + (end < txt.length ? '…' : '');
-        return pre + m + post;
-      };
-
-      gr.innerHTML = hits.map((h, i) => {
-        const dateLabel = _formatBacklinkDateLabel(h.date);
-        let icon = '•';
-        if (h.node.isTodo) icon = h.node.checked ? '☑' : '☐';
-        else if (h.node.type === 'link') icon = '🔗';
-        else if (h.node.type === 'nodelink') icon = '🔖';
-        const doneCls = (h.node.isTodo && h.node.checked) ? ' done' : '';
-        const activeCls = (i === 0) ? ' active' : '';
-        return `<div class="ol-gsr-item${doneCls}${activeCls}" data-gsr-idx="${i}" `
-             + `onmouseenter="_olGsrHover(${i})" `
-             + `onclick="event.stopPropagation();closeIncSearchBar();openNotePanelToDate('${escA(h.date)}','${escA(h.node.id)}')" `
-             + `title="クリックでこのノードへジャンプ">`
-             + `<span class="ol-gsr-date">${esc(dateLabel)}</span>`
-             + `<span class="ol-gsr-body"><span class="ol-gsr-icon">${icon}</span>`
-             + `<span class="ol-gsr-text">${buildPreview(h.node.text)}</span></span>`
-             + `</div>`;
-      }).join('');
-      gr.style.display = 'block';
-      _olGlobalActiveIdx = 0;
-    }
-
-    /** 全データ結果ドロップダウンのアクティブ項目を切替 */
-    function _olSetGlobalActiveItem(idx, scrollIntoView) {
-      const items = document.querySelectorAll('#ol-incsearch-global-results .ol-gsr-item');
-      if (!items.length) return;
-      if (idx < 0) idx = 0;
-      if (idx >= items.length) idx = items.length - 1;
-      items.forEach((el, i) => el.classList.toggle('active', i === idx));
-      _olGlobalActiveIdx = idx;
-      if (scrollIntoView !== false) {
-        const cur = items[idx];
-        if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
-      }
-    }
-
-    /** ドロップダウン項目のマウスホバー。キーボードナビ中(kb-nav)は無視し、
-     *  キー操作で選んだ項目がマウス位置に奪われないようにする（マウスを動かすと kb-nav 解除）。 */
-    function _olGsrHover(idx) {
-      if (document.body.classList.contains('kb-nav')) return;
-      _olSetGlobalActiveItem(idx, false);
-    }
-
     /** クエリでノード行に .ol-incsearch-hit / .ol-incsearch-miss を付与 + マッチ単語ハイライト */
     function _olApplyIncSearchHighlight(q) {
       const container = $('ol-container');
@@ -8108,20 +7966,7 @@
       // 既存の <mark.ol-incmark> を除去（フォーカス中はスキップ）
       _olStripIncMarks(container);
 
-      const gr = $('ol-incsearch-global-results');
-
-      // 全データモード: ローカルのフィルタはクリアして、結果ドロップダウンを描画
-      if (_olIncSearchScope === 'all') {
-        // ローカルフィルタ表示をリセット
-        const rows = container.querySelectorAll('.ol-row');
-        rows.forEach(r => { r.classList.remove('ol-incsearch-hit'); r.classList.remove('ol-incsearch-miss'); });
-        _olRenderGlobalSearchResults(q);
-        return;
-      }
-
-      // 現ノートモード: グローバル結果は隠す
-      if (gr) { gr.style.display = 'none'; gr.innerHTML = ''; }
-
+      // バーは「このノート」専用（全データ検索はモーダルに統合）
       const rows = container.querySelectorAll('.ol-row');
       const stat = $('ol-incsearch-stat');
       if (!q) {
@@ -9663,7 +9508,7 @@
       if (hasText) {
         S.projects.forEach((p, pi) => {
           if (matchesText(p.name)) {
-            results.push({ type: 'PROJECT', text: p.name, info: 'プロジェクト名', pi, wk: null, ei: null });
+            results.push({ type: 'PROJECT', text: p.name, info: 'プロジェクト名', pi, wk: null, ei: null, icon: '📁' });
           }
         });
       }
@@ -9682,7 +9527,7 @@
                 : (function(){ try { return wkey(new Date(dateKey.replace(/-/g,'/'))); } catch(e) { return null; } })();
               const date = dateKey.startsWith('proj:') ? null : dateKey;
               if (matchesText(n.text) && matchesTags(n.tags)) {
-                results.push({ type: 'ENTRY', text: n.text, info: p.name + (wk ? ' (' + wk + ')' : ''), pi, wk, ei: n.id, date, id: n.id });
+                results.push({ type: 'ENTRY', text: n.text, info: p.name + (wk ? ' (' + wk + ')' : ''), pi, wk, ei: n.id, date, id: n.id, icon: (n.isTodo ? (n.checked ? '☑' : '☐') : (getNodeType(n) === 'link' ? '🔗' : '•')) });
               }
             });
           }
@@ -9699,7 +9544,7 @@
             if (n.projTag) return;
             if (n.type === 'searchsummary') return; // 検索対象外
             if (matchesText(n.text) && matchesTags(n.tags)) {
-              results.push({ type: 'DAILY', text: n.text, info: 'ノート: ' + dateKey, date: dateKey, id: n.id });
+              results.push({ type: 'DAILY', text: n.text, info: 'ノート: ' + dateKey, date: dateKey, id: n.id, icon: (n.isTodo ? (n.checked ? '☑' : '☐') : (getNodeType(n) === 'link' ? '🔗' : '•')) });
             }
           });
         }
@@ -9734,6 +9579,18 @@
       return h;
     }
 
+    // 長文は最初のマッチ周辺の文脈窓に切り詰めてからハイライト（ノート検索由来の前後プレビュー）
+    function _searchPreview(text, q1, q2) {
+      text = text || '';
+      const q = (q1 && q1.length >= 2) ? q1 : ((q2 && q2.length >= 2) ? q2 : '');
+      if (!q || text.length <= 90) return _searchHighlight(text, q1, q2);
+      const idx = text.toLowerCase().indexOf(q.toLowerCase());
+      if (idx < 0) return _searchHighlight(text.slice(0, 90) + '…', q1, q2);
+      const start = Math.max(0, idx - 30), end = Math.min(text.length, idx + q.length + 50);
+      const snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      return _searchHighlight(snippet, q1, q2);
+    }
+
     function renderSearchResults(results, q1, q2, tagsArr) {
       tagsArr = tagsArr || [];
       const container = $('search-results');
@@ -9743,7 +9600,7 @@
         return;
       }
       container.innerHTML = results.slice(0, 80).map((res, idx) => {
-        const highlighted = _searchHighlight(res.text, q1, q2);
+        const highlighted = _searchPreview(res.text, q1, q2);
 
         // onclick を文字列引数を安全にクォートして生成
         let action = '';
@@ -9770,7 +9627,7 @@
             <span class="search-res-type">${typeLabel}</span>
             <span class="search-res-info">${esc(res.info || '')}</span>
           </div>
-          <div class="search-res-text">${highlighted}</div>
+          <div class="search-res-text">${res.icon ? '<span class="search-res-icon">' + res.icon + '</span> ' : ''}${highlighted}</div>
         </div>`;
       }).join('');
       // 結果があるとき「保存」フッターを表示

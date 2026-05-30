@@ -3,7 +3,7 @@
 このファイルは AI（Claude）が別チャットや別セッションで作業を継続するための引継ぎ情報です。
 作業を再開するときは、まずこのファイルと `CHANGELOG.md`・`PROJECT_KNOWLEDGE.md`・`ARCHITECTURE.md` を読んでください。
 
-最終更新: 2026-05-31 / 担当バージョン: v1.11.1-05310835-leftscroll
+最終更新: 2026-05-31 / 担当バージョン: v1.12.0-05310920-search-unify
 
 ---
 
@@ -52,6 +52,7 @@
 | v1.4.9 | **全データ検索ドロップダウンの↑↓ナビ**: Ctrl+Shift+; の結果リストを ↑/↓ で移動・Enter で確定。`.active` クラスで強調＋スクロール追従＋マウスホバー連動 |
 | v1.5.0 | **Phase列廃止＋キーボード操作5種**: ①Phase 列を撤去しプロジェクト名直下に全件表示（`.proj-phase-list`）②グリッド親アイテムに ▼/▶ 折り畳みトグル＋子件数バッジ（`gridCollapsed`）③N3 `Ctrl+Enter`=ノートTODOトグル ④N6 `Ctrl+Shift+↑/↓`=兄弟ノード移動 ⑤G5 `Space`=セルTODOトグル ⑥G8 `Ctrl+↑/↓`=行一括折り畳み ⑦G9 `Alt+←/→`=表示週スクロール。集約セクションの入れ子 projTag 重複除外（`claimedIdx`）。`console.debug` 2件除去 |
 | v1.6.0 | **フォーカス系3課題**: ①`Alt+Shift+N`閉じる時に`refocusGrid()`で記憶位置へ復元＋`Alt+Shift+G`新設（ノート維持でグリッドへ）②全データ検索ドロップダウンの`onmouseenter`を`_olGsrHover`化し`body.kb-nav`中はホバー選択を無視（キー操作がマウス位置に奪われない）③入力ボックス↓で次PJの**先頭**アイテムを選択（旧: 最下段）。既存`focusKey`/`refocusGrid`/`kb-nav`の再利用で局所修正 |
+| v1.12.0 | **検索統合**: 全データ検索を検索モーダル(A)に一本化。Ctrl+Shift+;→モーダル、インクリ検索バー(Ctrl+;)は「このノート」専用に(スコープボタンはモーダル導線)。モーダル結果にアイコン＋文脈プレビュー(`_searchPreview`)移植。重複コード(`_olRenderGlobalSearchResults`/`_olSetGlobalActiveItem`/`_olGsrHover`＋全データ分岐)約123行削除。Ctrl+;のノート内ライブハイライトは維持。実機検証済 |
 | v1.11.1 | **左セル横スクロール修正**: `_scrollClearSticky` が左固定列を `col-proj` のみ見ていた→`col-link`(同じく左sticky)の右端も考慮し最大値を隠れ境界に。キーボードで左セル移動時に固定列裏に隠れない。実機検証済 |
 | v1.11.0 | **コピペ Phase3: 表**: TSV(タブ区切り)貼付→`olTsvToTableHtml`で表ノード化(`olLooksLikeTsv`でコード誤検出回避)。HTML表はPhase2が取込。表ノードのコピー出力=text/plain TSV(`olTableToTsv`)+html `<table>`(Excel/Sheetsへ)。通常ノードもnode.html装飾を外部貼付で保持。表は1ノード(生html)・編集は既存表メニュー。実機検証済 |
 | v1.10.1 | **追加3課題**: ①qarow(セル追加入力欄)の高さを常時確保しopacityのみ切替→がたつき解消 ②`pDrop`/`deleteProj`が`proj:{index}`ノート(Phase/Link)を並べ替え/削除に追従させるよう修正(従来は取り残し) ③タイトルバンド配色を`color-mix(...64%,#000)`等で深める(黒を足す)。実機検証済 |
