@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.5.0-05300200-phase-kbd';
+    const APP_VERSION = 'v1.7.1-05301425-rename-projtag';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1033,7 +1033,8 @@
         const isCompactRow = _compactMode && !_compactExpanded.has(pi);
 
         // ── 常にサマリーヘッダ行を出力（圧縮モードON/OFFを問わず） ──
-        rows += `<tr class="proj-hdr-row${proj.isPrivate ? ' is-private' : ''}">`;
+        const _pc = projColor(pi); // 案C: プロジェクト自動カラー（--pc を行に付与しCSSで band/帯/tint を導出）
+        rows += `<tr class="proj-hdr-row${proj.isPrivate ? ' is-private' : ''}" style="--pc:${_pc}">`;
         rows += `<td class="col-proj" data-pi="${pi}" data-wk="proj"${_compactMode ? ` tabindex="0" onkeydown="projHdrKeyDown(event,${pi})"` : ''}>`;
         rows += `<div class="pcell pcell-hdr">`;
         if (_compactMode) {
@@ -1074,7 +1075,7 @@
         // 圧縮モードで折りたたみ中ならヘッダ行のみで終了
         if (isCompactRow) return;
 
-        rows += `<tr class="${proj.isPrivate ? 'is-private' : ''}">`;
+        rows += `<tr class="${proj.isPrivate ? 'is-private' : ''}" style="--pc:${_pc}">`;
         // ── project column ──
         rows += `<td class="col-proj" data-pi="${pi}" data-wk="proj" ondragover="pDragOver(event,${pi})" ondrop="pDrop(event,${pi})">`;
         rows += `<div class="pcell">`;
@@ -1299,6 +1300,14 @@
 
 
     // 繰り返しエントリHTML
+    // ── プロジェクト自動カラーパレット（index順・案C 視認性向上）──
+    // 落ち着いた中明度のハイ彩度色。白文字が乗るバンド色として使用し、淡色tint/左帯はCSS側でcolor-mix導出。
+    const PROJ_PALETTE = ['#2563a8', '#1f7a43', '#a3561d', '#7a3b9e', '#0d7b78', '#b03a5b', '#566012', '#3f51b5', '#9a4a17', '#2e6e8e'];
+    function projColor(pi) {
+      const n = PROJ_PALETTE.length;
+      return PROJ_PALETTE[((+pi % n) + n) % n];
+    }
+
     function renderEntry(n, pi, k, nodeId, ctx) {
       if (!n) return '';
       ctx = ctx || {};
@@ -1887,7 +1896,11 @@
           ev.preventDefault();
           if (pi + 1 < S.projects.length) {
             showHint('▼ 次プロジェクト');
-            applyFocus(pi + 1, wk, 0);
+            // 次PJの視覚上の先頭アイテムへ（空セルなら入力ボックス）
+            const ntd = document.querySelector(`td[data-pi="${pi + 1}"][data-wk="${wk}"]`);
+            const nItems = ntd ? Array.from(ntd.querySelectorAll('.eitem')).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0) : [];
+            if (nItems.length) applyFocusToElement(nItems[0]);
+            else applyFocus(pi + 1, wk, 0);
           }
           return;
         }
@@ -3048,7 +3061,25 @@
     function startRename(pi, el) {
       const inp = document.createElement('input'); inp.className = 'rename-inp'; inp.value = S.projects[pi].name;
       el.replaceWith(inp); inp.focus(); inp.select();
-      const done = () => { const v = inp.value.trim(); if (v) S.projects[pi].name = v; saveState(); render() };
+      const done = () => {
+        const v = inp.value.trim();
+        if (v && v !== S.projects[pi].name) {
+          // プロジェクト名変更時は既存ノードの projTag も一括更新（孤立＝グリッド消失を防止）
+          const oldTag = S.projects[pi].name.replace(/\s+/g, '_');
+          const newTag = v.replace(/\s+/g, '_');
+          S.projects[pi].name = v;
+          if (oldTag !== newTag) {
+            let cnt = 0;
+            for (const k in S.dailyOutline) {
+              const arr = S.dailyOutline[k];
+              if (!Array.isArray(arr)) continue;
+              arr.forEach(n => { if (n && n.projTag === oldTag) { n.projTag = newTag; cnt++; } });
+            }
+            if (cnt) showToast('🏷️ 名称変更に伴い ' + cnt + ' 件のタグを更新しました');
+          }
+        }
+        saveState(); render();
+      };
       inp.onblur = done; inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); if (e.key === 'Escape') { saveState(); render() } };
     }
 
@@ -3919,9 +3950,16 @@
         const np = $('note-panel');
         if (_notePanelOpen && np && np.contains(document.activeElement)) {
           toggleNotePanel(); // ノート内にフォーカス → 閉じる
+          refocusGrid();     // 閉じたら記憶位置(focusKey)へグリッド選択を復元
         } else {
           focusNotePanel(); // それ以外 → 開いてフォーカス
         }
+        return;
+      }
+      // Alt+Shift+G: ノートを開いたままグリッドへフォーカス移動（記憶位置を復元）
+      if (ev.altKey && ev.shiftKey && (ev.key === 'G' || ev.key === 'g')) {
+        ev.preventDefault();
+        refocusGrid();
         return;
       }
       // Alt+Shift+M: フルスクリーンフォーカスモード（オーバーラップ表示）
@@ -7632,7 +7670,7 @@
         const doneCls = (h.node.isTodo && h.node.checked) ? ' done' : '';
         const activeCls = (i === 0) ? ' active' : '';
         return `<div class="ol-gsr-item${doneCls}${activeCls}" data-gsr-idx="${i}" `
-             + `onmouseenter="_olSetGlobalActiveItem(${i}, false)" `
+             + `onmouseenter="_olGsrHover(${i})" `
              + `onclick="event.stopPropagation();closeIncSearchBar();openNotePanelToDate('${escA(h.date)}','${escA(h.node.id)}')" `
              + `title="クリックでこのノードへジャンプ">`
              + `<span class="ol-gsr-date">${esc(dateLabel)}</span>`
@@ -7656,6 +7694,13 @@
         const cur = items[idx];
         if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
       }
+    }
+
+    /** ドロップダウン項目のマウスホバー。キーボードナビ中(kb-nav)は無視し、
+     *  キー操作で選んだ項目がマウス位置に奪われないようにする（マウスを動かすと kb-nav 解除）。 */
+    function _olGsrHover(idx) {
+      if (document.body.classList.contains('kb-nav')) return;
+      _olSetGlobalActiveItem(idx, false);
     }
 
     /** クエリでノード行に .ol-incsearch-hit / .ol-incsearch-miss を付与 + マッチ単語ハイライト */

@@ -431,12 +431,12 @@
     /* プロジェクトヘッダ行（折りたたみ集計）の Phase/リンク セルは PJ列と同じ紺背景・白文字を継承 */
     tbody tr.proj-hdr-row td.col-phase,
     tbody tr.proj-hdr-row td.col-link {
-      background: #3b4468;
+      background: var(--pc, #3b4468);
       color: #f0f2fa;
     }
     @media (prefers-color-scheme: dark) {
       tbody tr.proj-hdr-row td.col-phase,
-      tbody tr.proj-hdr-row td.col-link { background: #2a3050; }
+      tbody tr.proj-hdr-row td.col-link { background: color-mix(in srgb, var(--pc, #2a3050) 75%, #000); }
     }
     /* Phase列・リンク列内の各項目 */
     .phase-cell-item,
@@ -531,21 +531,21 @@
     tbody tr.proj-hdr-row td {
       height: auto;
       padding: 0;
-      background: #3b4468;
+      background: var(--pc, #3b4468);
       color: #f0f2fa;
     }
     tbody tr.proj-hdr-row td.col-proj .pcell,
     tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr {
       padding: 0;
-      background: #2d3347;
+      background: color-mix(in srgb, var(--pc, #2d3347) 82%, #000);
     }
     tbody tr.proj-hdr-row .proj-hdr-name {
       display: flex;
       align-items: center;
       gap: 6px;
       font-weight: 600;
-      font-size: 13px;
-      padding: 5px 8px;
+      font-size: 12.5px;
+      padding: 2px 8px;
       color: #f0f2fa;
       user-select: none;
     }
@@ -558,9 +558,9 @@
       align-items: center;
       gap: 5px;
       font-size: 11px;
-      padding: 4px 8px;
+      padding: 2px 8px;
       width: 100%;
-      min-height: 28px;
+      min-height: 20px;
     }
     tbody tr.proj-hdr-row .proj-hdr-cnt {
       color: #c8cce8;
@@ -571,9 +571,9 @@
     }
     /* ダークモード時は少し明るめに調整 */
     @media (prefers-color-scheme: dark) {
-      tbody tr.proj-hdr-row td { background: #2a3050; }
+      tbody tr.proj-hdr-row td { background: color-mix(in srgb, var(--pc, #2a3050) 75%, #000); }
       tbody tr.proj-hdr-row td.col-proj .pcell,
-      tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr { background: #1e2440; }
+      tbody tr.proj-hdr-row td.col-proj .pcell.pcell-hdr { background: color-mix(in srgb, var(--pc, #1e2440) 60%, #000); }
     }
     /* 圧縮モード: ヘッダ行フォーカス — アウトラインなし、行全体を明るい背景色に */
     tbody tr.proj-hdr-row td.col-proj:focus {
@@ -591,6 +591,24 @@
       tbody tr.proj-hdr-row:has(td.col-proj:focus) td { background: #5060a0; }
       tbody tr.proj-hdr-row:has(td.col-proj:focus) td.col-proj .pcell,
       tbody tr.proj-hdr-row:has(td.col-proj:focus) td.col-proj .pcell.pcell-hdr { background: #3e4c88; }
+    }
+
+    /* ── v1.7.0 案C: 詳細行のプロジェクト色アクセント ── */
+    /* プロジェクト名セルの左に色帯 */
+    tbody tr:not(.proj-hdr-row) td.col-proj {
+      border-left: 4px solid var(--pc, transparent);
+    }
+    /* アイテムのあるセル自体をプロジェクト色で薄く着色（モック案C準拠） */
+    tbody tr:not(.proj-hdr-row) td.col-week .wcell {
+      background: color-mix(in srgb, var(--pc) 11%, var(--bg));
+    }
+    /* 今週セルは青ハイライトとプロジェクト色をブレンド（現在週はインセットのリングで維持） */
+    tbody tr:not(.proj-hdr-row) td.col-week .wcell.cur {
+      background: color-mix(in srgb, var(--pc) 11%, var(--bg-cur));
+    }
+    /* 週列の縦区切り線（セルが色付きなので白い線で分離） */
+    td.col-week {
+      border-right: 2px solid var(--bg);
     }
 
     /* ── project cell ── */
@@ -816,13 +834,13 @@
     /* ── week cell ── */
     /* flex-column で qarow を常に下部に固定。height:100% で td 全高を使用 */
     .wcell {
-      padding: 8px;
+      padding: 4px 6px;
       background: var(--bg);
-      min-height: 80px;
+      min-height: 68px;
       height: 100%;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: background 0.2s;
     }
 
@@ -835,42 +853,41 @@
     .elist {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1px;
       flex: 1
     }
 
     /* ── entry item ── */
+    /* v1.7.0 案C: カード(枠線+影+余白)をやめ密なアウトライン行に。階層は子の左罫/余白で表現。 */
     .eitem {
       display: flex;
       align-items: flex-start;
-      gap: 6px;
-      font-size: 11.5px;
-      line-height: 1.5;
-      padding: 5px 8px 5px 24px;
-      border-radius: var(--radius);
+      gap: 5px;
+      font-size: 12px;
+      line-height: 1.36;
+      padding: 1px 6px 1px 8px;
+      border-radius: 4px;
       cursor: pointer;
       user-select: none;
       outline: none;
       position: relative;
-      background: var(--bg);
-      border: 1px solid var(--bd);
-      margin-bottom: 3px;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      background: transparent;
+      border: 1px solid transparent;
+      margin-bottom: 0;
+      transition: background 0.12s, border-color 0.12s;
+      box-shadow: none;
     }
 
     .eitem:hover {
-      background: var(--bg);
-      border-color: var(--accent);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
+      background: var(--accent-soft);
+      border-color: transparent;
       z-index: 5;
     }
 
     .eitem.kfocus {
       background: var(--bg-info) !important;
       border-color: var(--bd-focus) !important;
-      box-shadow: 0 0 0 2px var(--accent-soft);
+      box-shadow: 0 0 0 1px var(--bd-focus);
       z-index: 10;
     }
     /* キーボードナビ中はマウスホバーの視覚効果を抑制（mousemoveで解除） */
