@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.14.1-05311340-slashmenu-ime';
+    const APP_VERSION = 'v1.15.0-05311420-note-updown';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5965,6 +5965,26 @@
     }, { passive: true });
 
     // キーボード操作
+    // ノート行ナビ(↑↓)用: 全再描画せず、既存の隣接行要素へフォーカス＋caret移動（がたつき/行飛び防止）。
+    // .ol-text の onfocus が _olFocusId・選択解除・書式更新を行うため、ここは focus と caret 配置に専念。
+    function olFocusNodeEl(targetId) {
+      const el = document.getElementById('olt-' + targetId);
+      if (!el) { _olFocusId = targetId; olRender('ol-container', _olCurrentDate); return; } // フォールバック
+      // 複数選択の視覚クラスはDOMから手動除去（plainナビは選択解除・再描画しないため）
+      const cont = document.getElementById('ol-container');
+      if (cont) cont.querySelectorAll('.ol-row.ol-selected').forEach(r => r.classList.remove('ol-selected'));
+      _olFocusId = targetId;
+      _olFocusAtStart = false;
+      el.focus();
+      try {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false); // 末尾へ（従来の再描画時フォーカス復元と同じ挙動）
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      } catch (e) { }
+      el.scrollIntoView({ block: 'nearest' });
+    }
+
     function olKeyDown(ev, date, id) {
       const nodes = olGetNodes(date);
       const idx = nodes.findIndex(n => n.id === id);
@@ -6531,8 +6551,7 @@
         if (vi > 0) {
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
-          _olFocusId = vis[vi - 1].id;
-          olRender('ol-container', date);
+          olFocusNodeEl(vis[vi - 1].id); // 軽量フォーカス移動（全再描画しない）
         } else if (vi === 0 && _olFocusMode && _olFocusMode.date === date) {
           // フォーカスモードの最初の子から↑ → パンくずタイトルへ戻る
           ev.preventDefault();
@@ -6563,8 +6582,7 @@
         if (vi < vis.length - 1) {
           ev.preventDefault();
           try { olSaveTxt(nodes, idx, ev.target); } catch(e) { console.error('olSave error:', e); }
-          _olFocusId = vis[vi + 1].id;
-          olRender('ol-container', date);
+          olFocusNodeEl(vis[vi + 1].id); // 軽量フォーカス移動（全再描画しない）
         }
         return;
       }
