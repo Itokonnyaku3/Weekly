@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.14.0-05311300-slashmenu';
+    const APP_VERSION = 'v1.14.1-05311340-slashmenu-ime';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6013,112 +6013,12 @@
         }
       }
 
-      // Slash Menu Navigation / Execution
-      const slashMenu = $('ol-slash-menu');
-      if (slashMenu && slashMenu.classList.contains('open') && _olSlashNodeId === id) {
-        const mainWrap = slashMenu.querySelector('#slash-menu-main');
-        const colorWrap = slashMenu.querySelector('#slash-menu-color');
-        const dateWrap = slashMenu.querySelector('#slash-menu-date');
-        const isColorOpen = colorWrap && colorWrap.style.display === 'block';
-        const isDateOpen = dateWrap && dateWrap.style.display !== 'none';
-        const activeWrap = isColorOpen ? colorWrap : isDateOpen ? null : mainWrap;
-        const items = activeWrap ? activeWrap.querySelectorAll('.slash-item') : [];
-        let activeIdx = Array.from(items).findIndex(el => el.classList.contains('active'));
-
-        // 日付サブ階層が開いているときは Escape で戻るのみ
-        if (isDateOpen) {
-          if (ev.key === 'Escape' || ev.key === 'ArrowLeft') {
-            ev.preventDefault();
-            applyOlSlashCommand('submenu_main');
-            return;
-          }
-          // 日付サブ階層内では Enter キーで移動を実行
-          if (ev.key === 'Enter') {
-            ev.preventDefault();
-            olSlashDateConfirm();
-            return;
-          }
-          // その他のキーはデフォルト動作（date input に届く）
-          return;
-        }
-
-        // 左右キー（▶ / ◀）でサブ階層の出入りを可能にする
-        if (ev.key === 'ArrowRight' && !isColorOpen) {
-          const activeEl = items[activeIdx];
-          if (activeEl && activeEl.textContent.includes('文字色')) {
-            ev.preventDefault();
-            applyOlSlashCommand('submenu_color');
-            return;
-          }
-          if (activeEl && activeEl.textContent.includes('別の日')) {
-            ev.preventDefault();
-            applyOlSlashCommand('submenu_date');
-            return;
-          }
-        }
-        if (ev.key === 'ArrowLeft' && isColorOpen) {
-          ev.preventDefault();
-          applyOlSlashCommand('submenu_main');
-          return;
-        }
-
-        if (ev.key === 'Escape') { hideOlSlashMenu(); ev.preventDefault(); return; }
-        if (ev.key === 'ArrowDown') {
-          ev.preventDefault();
-          if (activeIdx >= 0) items[activeIdx].classList.remove('active');
-          activeIdx = (activeIdx + 1) % items.length;
-          items[activeIdx].classList.add('active');
-          return;
-        }
-        if (ev.key === 'ArrowUp') {
-          ev.preventDefault();
-          if (activeIdx >= 0) items[activeIdx].classList.remove('active');
-          activeIdx = (activeIdx - 1 + items.length) % items.length;
-          items[activeIdx].classList.add('active');
-          return;
-        }
-        if (ev.key === 'Enter') {
-          ev.preventDefault();
-          if (activeIdx >= 0 && activeIdx < items.length) {
-            items[activeIdx].click();
-          } else {
-            applyOlSlashCommand('todo');
-          }
-          return;
-        }
-
-        // アルファベットキーでショートカット実行
-        // ev.code（'KeyB' など）を使う: IMEオン時も ev.key が 'Process' にならず物理キーを確実に取得できる
-        if (!ev.ctrlKey && !ev.metaKey && !ev.altKey) {
-          const codeMatch = ev.code && ev.code.match(/^Key([A-Z])$/);
-          if (codeMatch) {
-            const k = codeMatch[1].toLowerCase();
-            // IME対策: 端末コマンド（メニューを閉じて再描画する系）の発火時に、フォーカス中の
-            // contenteditable を blur して IME 合成を確定/中断する。合成文字は旧要素に確定され、
-            // 直後の olRender が node から再構築するため漏れ込まない。サブメニュー遷移は次キーのため維持。
-            const _olAbortIme = () => { const a = document.activeElement; if (a && a.blur && a.closest && a.closest('.ol-text')) a.blur(); };
-            if (isColorOpen) {
-              const colorKeys = {
-                n: 'color_', r: 'color_#e74c3c', o: 'color_#e67e22',
-                y: 'color_#f1c40f', g: 'color_#2ecc71', b: 'color_#3498db',
-                p: 'color_#9b59b6', a: 'color_#95a5a6'
-              };
-              if (colorKeys[k]) { ev.preventDefault(); _olSlashShortcutFired = true; _olAbortIme(); applyOlSlashCommand(colorKeys[k]); return; }
-            } else {
-              const mainKeys = {
-                t: 'toggle_todo', d: 'toggle_todo', b: 'bold', p: 'private',
-                l: 'toggle_link', u: 'toggle_link', h: 'insert_table', i: 'insert_image',
-                c: 'submenu_color', m: 'submenu_date'
-              };
-              if (mainKeys[k]) {
-                ev.preventDefault(); _olSlashShortcutFired = true;
-                const _cmd = mainKeys[k];
-                if (_cmd !== 'submenu_color' && _cmd !== 'submenu_date') _olAbortIme();
-                applyOlSlashCommand(_cmd);
-                return;
-              }
-            }
-          }
+      // Slash Menu: メニューがフォーカスを持つ間はメニューの keydown リスナーが処理する。
+      // ここはフォールバック（万一 contenteditable にフォーカスがある場合）として委譲。
+      {
+        const slashMenu = $('ol-slash-menu');
+        if (slashMenu && slashMenu.classList.contains('open') && _olSlashNodeId === id) {
+          if (olSlashMenuKey(ev)) return;
         }
       }
 
@@ -8435,12 +8335,89 @@
           const ll = $('slash-link-label'); if (ll) ll.textContent = (_cn.type === 'link') ? 'リンクを解除' : 'リンクに変換';
         }
       } catch (e) { }
+
+      // IME対策の要: メニューにフォーカスを移し contenteditable から外す（合成文字がノードに漏れない）。
+      // メニューキーは menu 要素の keydown リスナー（olSlashMenuKey）で処理する。
+      if (!menu._kbBound) { menu._kbBound = true; menu.addEventListener('keydown', olSlashMenuKey); }
+      menu.tabIndex = -1;
+      try { menu.focus({ preventScroll: true }); } catch (e) { try { menu.focus(); } catch (e2) { } }
     }
 
     function hideOlSlashMenu() {
       const menu = $('ol-slash-menu');
       if (menu) menu.classList.remove('open');
       // _olSlashNodeId = null; // ここでクリアせず、呼び出し元で制御する
+    }
+
+    // メニューを閉じた後、ノードのテキストへフォーカスを戻す（Escape等で使用）
+    function _olRefocusSlashNode() {
+      if (!_olSlashNodeId) return;
+      const el = document.getElementById('olt-' + _olSlashNodeId);
+      if (el) { _olFocusId = _olSlashNodeId; el.focus(); }
+    }
+
+    // スラッシュメニューのキー操作。メニュー自身がフォーカスを持つため、IME合成がノードに漏れない。
+    // 戻り値: イベントを消費したら true（呼び出し元は return する）。
+    function olSlashMenuKey(ev) {
+      const slashMenu = $('ol-slash-menu');
+      if (!slashMenu || !slashMenu.classList.contains('open') || !_olSlashNodeId) return false;
+      const mainWrap = slashMenu.querySelector('#slash-menu-main');
+      const colorWrap = slashMenu.querySelector('#slash-menu-color');
+      const dateWrap = slashMenu.querySelector('#slash-menu-date');
+      const isColorOpen = colorWrap && colorWrap.style.display === 'block';
+      const isDateOpen = dateWrap && dateWrap.style.display !== 'none';
+      const activeWrap = isColorOpen ? colorWrap : isDateOpen ? null : mainWrap;
+      const items = activeWrap ? activeWrap.querySelectorAll('.slash-item') : [];
+      let activeIdx = Array.from(items).findIndex(el => el.classList.contains('active'));
+
+      // 日付サブ階層: Escape/← で戻る、Enter で確定。その他は date input へ通す。
+      if (isDateOpen) {
+        if (ev.key === 'Escape' || ev.key === 'ArrowLeft') { ev.preventDefault(); applyOlSlashCommand('submenu_main'); return true; }
+        if (ev.key === 'Enter') { ev.preventDefault(); olSlashDateConfirm(); return true; }
+        return false;
+      }
+      if (ev.key === 'ArrowRight' && !isColorOpen) {
+        const activeEl = items[activeIdx];
+        if (activeEl && activeEl.textContent.includes('文字色')) { ev.preventDefault(); applyOlSlashCommand('submenu_color'); return true; }
+        if (activeEl && activeEl.textContent.includes('別の日')) { ev.preventDefault(); applyOlSlashCommand('submenu_date'); return true; }
+      }
+      if (ev.key === 'ArrowLeft' && isColorOpen) { ev.preventDefault(); applyOlSlashCommand('submenu_main'); return true; }
+      if (ev.key === 'Escape') { ev.preventDefault(); hideOlSlashMenu(); _olRefocusSlashNode(); return true; }
+      if (ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        if (!items.length) return true;
+        if (activeIdx >= 0) items[activeIdx].classList.remove('active');
+        activeIdx = (activeIdx + 1) % items.length; items[activeIdx].classList.add('active'); return true;
+      }
+      if (ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        if (!items.length) return true;
+        if (activeIdx >= 0) items[activeIdx].classList.remove('active');
+        activeIdx = (activeIdx - 1 + items.length) % items.length; items[activeIdx].classList.add('active'); return true;
+      }
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        if (activeIdx >= 0 && activeIdx < items.length) items[activeIdx].click();
+        else applyOlSlashCommand('toggle_todo');
+        return true;
+      }
+      // 単キーショートカット（ev.code で物理キー取得＝IME時も確実）
+      if (!ev.ctrlKey && !ev.metaKey && !ev.altKey) {
+        const codeMatch = ev.code && ev.code.match(/^Key([A-Z])$/);
+        if (codeMatch) {
+          const k = codeMatch[1].toLowerCase();
+          if (isColorOpen) {
+            const colorKeys = { n: 'color_', r: 'color_#e74c3c', o: 'color_#e67e22', y: 'color_#f1c40f', g: 'color_#2ecc71', b: 'color_#3498db', p: 'color_#9b59b6', a: 'color_#95a5a6' };
+            if (colorKeys[k]) { ev.preventDefault(); applyOlSlashCommand(colorKeys[k]); return true; }
+          } else {
+            const mainKeys = { t: 'toggle_todo', d: 'toggle_todo', b: 'bold', p: 'private', l: 'toggle_link', u: 'toggle_link', h: 'insert_table', i: 'insert_image', c: 'submenu_color', m: 'submenu_date' };
+            if (mainKeys[k]) { ev.preventDefault(); applyOlSlashCommand(mainKeys[k]); return true; }
+          }
+        }
+        // メニュー表示中の未割り当て英字キーは握りつぶす（contenteditable非フォーカスのため文字挿入は無いが念のため）
+        if (codeMatch) { ev.preventDefault(); return true; }
+      }
+      return false;
     }
 
     // ─── インラインURLポップオーバー ───────────────────────────────────

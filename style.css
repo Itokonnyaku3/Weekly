@@ -3863,6 +3863,7 @@
     #ol-slash-menu.open {
       display: block
     }
+    #ol-slash-menu:focus { outline: none }
 
     .slash-item {
       display: flex;

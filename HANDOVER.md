@@ -3,7 +3,7 @@
 このファイルは AI（Claude）が別チャットや別セッションで作業を継続するための引継ぎ情報です。
 作業を再開するときは、まずこのファイルと `CHANGELOG.md`・`PROJECT_KNOWLEDGE.md`・`ARCHITECTURE.md` を読んでください。
 
-最終更新: 2026-05-31 / 担当バージョン: v1.14.0-05311300-slashmenu
+最終更新: 2026-05-31 / 担当バージョン: v1.14.1-05311340-slashmenu-ime
 
 ---
 
@@ -52,7 +52,8 @@
 | v1.4.9 | **全データ検索ドロップダウンの↑↓ナビ**: Ctrl+Shift+; の結果リストを ↑/↓ で移動・Enter で確定。`.active` クラスで強調＋スクロール追従＋マウスホバー連動 |
 | v1.5.0 | **Phase列廃止＋キーボード操作5種**: ①Phase 列を撤去しプロジェクト名直下に全件表示（`.proj-phase-list`）②グリッド親アイテムに ▼/▶ 折り畳みトグル＋子件数バッジ（`gridCollapsed`）③N3 `Ctrl+Enter`=ノートTODOトグル ④N6 `Ctrl+Shift+↑/↓`=兄弟ノード移動 ⑤G5 `Space`=セルTODOトグル ⑥G8 `Ctrl+↑/↓`=行一括折り畳み ⑦G9 `Alt+←/→`=表示週スクロール。集約セクションの入れ子 projTag 重複除外（`claimedIdx`）。`console.debug` 2件除去 |
 | v1.6.0 | **フォーカス系3課題**: ①`Alt+Shift+N`閉じる時に`refocusGrid()`で記憶位置へ復元＋`Alt+Shift+G`新設（ノート維持でグリッドへ）②全データ検索ドロップダウンの`onmouseenter`を`_olGsrHover`化し`body.kb-nav`中はホバー選択を無視（キー操作がマウス位置に奪われない）③入力ボックス↓で次PJの**先頭**アイテムを選択（旧: 最下段）。既存`focusKey`/`refocusGrid`/`kb-nav`の再利用で局所修正 |
-| v1.14.0 | **Ctrl+.メニュー改善（追加課題#1）**: ToDo⇔ドット/リンク⇔解除をトグル統合(`toggle_todo`/`toggle_link`・動的ラベル)。IME時のショートカット文字漏れ対策=端末コマンド発火時に`_olAbortIme`でcontenteditableをblurし合成中断。実機検証(非IME経路無傷)・IME漏れ解消は実環境確認推奨 |
+| v1.14.1 | **Ctrl+.メニューIME漏れ 根本解決**: v1.14.0のblur方式は合成を確定させ逆効果→撤回。メニューを開いたら`#ol-slash-menu`にフォーカス移動(contenteditable blur)し、メニューキーを`olSlashMenuKey`(menu要素のkeydownリスナー)で処理。入力先が無くなり合成文字がノードに漏れない(構造的解決)。Escapeで`_olRefocusSlashNode`。実機で activeElement=menu・テキスト無傷・ナビ/色サブ階層OKを確認 |
+| v1.14.0 | **Ctrl+.メニュー改善（追加課題#1）**: ToDo⇔ドット/リンク⇔解除をトグル統合(`toggle_todo`/`toggle_link`・動的ラベル)。（IME対策は v1.14.1 で根本解決に差し替え） |
 | v1.13.0 | **課題4: 日次バックアップ**: 現データを GitHub `backups/data_YYYY-MM-DD.json` へPUT・新しい順3件保持(`ghDoBackup`/`ghPruneBackups`)。起動6秒後に1日1回自動(`ghDailyBackupOnLoad`・`pwt_last_backup`でゲート)＋設定モーダルに「今すぐバックアップ」ボタン。未設定時は安全に無処理。実GitHub PUT/DELETEはトークン要のためheadless未検証(実環境のボタンで確認可)。**原6課題すべて完了** |
 | v1.12.0 | **検索統合**: 全データ検索を検索モーダル(A)に一本化。Ctrl+Shift+;→モーダル、インクリ検索バー(Ctrl+;)は「このノート」専用に(スコープボタンはモーダル導線)。モーダル結果にアイコン＋文脈プレビュー(`_searchPreview`)移植。重複コード(`_olRenderGlobalSearchResults`/`_olSetGlobalActiveItem`/`_olGsrHover`＋全データ分岐)約123行削除。Ctrl+;のノート内ライブハイライトは維持。実機検証済 |
 | v1.11.1 | **左セル横スクロール修正**: `_scrollClearSticky` が左固定列を `col-proj` のみ見ていた→`col-link`(同じく左sticky)の右端も考慮し最大値を隠れ境界に。キーボードで左セル移動時に固定列裏に隠れない。実機検証済 |

@@ -6,6 +6,23 @@
 
 ---
 
+## v1.14.1-05311340-slashmenu-ime (2026-05-31)
+### バグ修正 — Ctrl+. メニューの IME文字漏れを根本解決（フォーカス方式に変更）
+
+v1.14.0 の blur 方式は IME 合成を**確定**させてしまい（押した文字がノードに残る）逆効果だった。根本原因は「メニュー表示中も contenteditable にフォーカスが残り、キー押下で必ずそこへIME入力が入る」こと。
+
+#### 修正
+- **メニューを開いたら `#ol-slash-menu` 自身にフォーカスを移す**（`tabindex=-1`＋`focus()`）。contenteditable は blur され、IMEの入力先が無くなるため**合成文字がノードに漏れない**（構造的に解決）。
+- メニューのキー操作を `olKeyDown`（contenteditable）から **メニュー要素の keydown リスナー `olSlashMenuKey`** に移設（ナビ・単キーショートカット・色/日付サブ階層・Enter/Escape を集約）。`olKeyDown` 側は委譲のみ（フォールバック）。
+- Escape で閉じた際は `_olRefocusSlashNode` でノードへフォーカスを戻す。端末コマンドは従来どおり `olRender` で新ノードにフォーカス。
+- 失敗していた `_olAbortIme`（blur確定）を撤去。`#ol-slash-menu:focus{outline:none}`。
+
+#### 検証（ブラウザ実機）
+- メニュー開で `document.activeElement` がメニュー（contenteditable は blur）＝**IME漏れの構造的解消を確認**。T で確定＋テキスト無傷。↑↓ナビ／Escapeで閉じ＆ノード再フォーカス／色サブ階層 C→R 適用／コンソールエラーなし・`node --check` OK。
+- ※ 実IMEの最終確認は実環境推奨だが、入力先の contenteditable が非フォーカスである点は実機で確認済み。
+
+---
+
 ## v1.14.0-05311300-slashmenu (2026-05-31)
 ### 改善 — Ctrl+. スラッシュメニュー: トグル統合 ＋ IME時のショートカット文字漏れ対策
 
