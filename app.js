@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.12.0-05310920-search-unify';
+    const APP_VERSION = 'v1.13.0-05311210-daily-backup';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -3626,6 +3626,88 @@
           } catch (e2) { ghStatus('❌ ' + e2.message, true); }
         } else { ghStatus('❌ ' + msg, true); }
       } finally { _ghSyncing = false; }
+    }
+
+    /* ── 課題4: 日次バックアップ（GitHub backups/ フォルダへ・過去3日分保持）──
+       起動時に1日1回、現在データを backups/data_YYYY-MM-DD.json として保存し、
+       新しい順に3件だけ残す（GitHub上で過去データとの差分参照が可能）。GitHub未設定なら何もしない。 */
+    const GH_LAST_BACKUP_SK = 'pwt_last_backup';
+
+    function _ghBackupStatus(msg, isErr) {
+      const el = $('gh-backup-status');
+      if (el) { el.textContent = msg; el.style.color = isErr ? 'var(--tx-danger)' : 'var(--tx3)'; }
+    }
+    function _ghBackupStamp() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    // 新しい順に keep 件だけ残し、それより古い backups/data_*.json を削除。戻り値: 保持件数
+    async function ghPruneBackups(g, keep) {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${g.repo}/contents/backups`,
+          { headers: { Authorization: `Bearer ${g.token}`, Accept: 'application/vnd.github+json' } });
+        if (!res.ok) return keep;
+        const list = await res.json();
+        if (!Array.isArray(list)) return keep;
+        const baks = list.filter(f => /^data_\d{4}-\d{2}-\d{2}\.json$/.test(f.name))
+          .sort((a, b) => a.name < b.name ? 1 : -1); // 新しい順（ゼロ埋め日付なので文字列比較=日付比較）
+        for (const f of baks.slice(keep)) {
+          await fetch(`https://api.github.com/repos/${g.repo}/contents/backups/${f.name}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${g.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'prune backup: ' + f.name, sha: f.sha })
+          }).catch(() => { });
+        }
+        return Math.min(baks.length, keep);
+      } catch (e) { console.warn('[backup prune]', e.message); return keep; }
+    }
+
+    async function ghDoBackup(opts) {
+      opts = opts || {};
+      const g = ghGetSettings();
+      if (!g.token || !g.repo) { if (opts.manual) _ghBackupStatus('❌ GitHub 同期設定（トークン・リポジトリ）が必要です', true); return false; }
+      const stamp = _ghBackupStamp();
+      const path = 'backups/data_' + stamp + '.json';
+      try {
+        if (opts.manual) _ghBackupStatus('⏳ バックアップ中…');
+        const jsonStr = JSON.stringify(S, null, 2);
+        const bytes = new TextEncoder().encode(jsonStr);
+        const content = btoa(Array.from(bytes, b => String.fromCharCode(b)).join(''));
+        // 同日分が既にあれば sha を取得して上書き（同日再保存に対応）
+        let sha = null;
+        try {
+          const r = await fetch(`https://api.github.com/repos/${g.repo}/contents/${path}`,
+            { headers: { Authorization: `Bearer ${g.token}`, Accept: 'application/vnd.github+json' } });
+          if (r.ok) { const j = await r.json(); sha = j.sha; }
+        } catch (e) { }
+        const body = { message: 'backup: ' + stamp, content, ...(sha ? { sha } : {}) };
+        const res = await fetch(`https://api.github.com/repos/${g.repo}/contents/${path}`, {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${g.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) { const e = await res.json().catch(() => ({ message: 'HTTP ' + res.status })); throw new Error(e.message); }
+        localStorage.setItem(GH_LAST_BACKUP_SK, todayDateStr());
+        const kept = await ghPruneBackups(g, 3);
+        if (opts.manual) _ghBackupStatus('✓ ' + stamp + ' をバックアップしました（保持 ' + kept + ' 件 / backups/）');
+        return true;
+      } catch (e) {
+        console.warn('[backup]', e.message);
+        if (opts.manual) _ghBackupStatus('❌ ' + e.message, true);
+        return false;
+      }
+    }
+
+    // 設定モーダルの「今すぐバックアップ」ボタン
+    function ghBackupNow() { ghDoBackup({ manual: true }); }
+
+    // 起動時の自動日次バックアップ（1日1回・ノンブロッキング）
+    function ghDailyBackupOnLoad() {
+      const g = ghGetSettings();
+      if (!g.token || !g.repo) return;
+      if (localStorage.getItem(GH_LAST_BACKUP_SK) === todayDateStr()) return; // 本日分は実施済み
+      ghDoBackup({ manual: false }).catch(() => { });
     }
 
     /* ================================================================
@@ -9731,6 +9813,8 @@
     updateSaveTimeDisplay();
     if (_loadStateError) { setTimeout(() => alert(_loadStateError), 400); }
     ghSyncLoad(false);
+    // 課題4: 起動から少し待って日次バックアップ（1日1回・GitHub設定時のみ・ノンブロッキング）
+    setTimeout(() => { try { ghDailyBackupOnLoad(); } catch (e) { } }, 6000);
 
     // ── FSA 初期化（非同期・ノンブロッキング） ──
     // loadState() が localStorage から同期読み込みした後に実行

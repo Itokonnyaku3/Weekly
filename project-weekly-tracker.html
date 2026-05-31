@@ -451,6 +451,11 @@
           <input type="file" id="imp" style="display:none" accept=".json" onchange="importData(event)">
         </div>
         <p style="font-size:10px;color:var(--tx3);margin-top:8px">※ 読み込み（復元）を行うと、現在のデータは上書きされますのでご注意ください。</p>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--bd)">
+          <p style="font-size:11px;color:var(--tx2);margin-bottom:6px"><strong>🕒 GitHubへ日次バックアップ</strong>（<code>backups/</code> に過去3日分を保持・起動時に自動／GitHub同期設定が必要）</p>
+          <button class="btn" onclick="ghBackupNow()" style="width:100%;padding:8px">🕒 今すぐバックアップ</button>
+          <div id="gh-backup-status" style="font-size:11px;color:var(--tx3);margin-top:6px;min-height:1.2em"></div>
+        </div>
       </div>
 
       <div class="settings-section">

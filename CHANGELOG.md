@@ -6,6 +6,27 @@
 
 ---
 
+## v1.13.0-05311210-daily-backup (2026-05-31)
+### 機能追加 — 課題4: 日次バックアップ（GitHub `backups/` へ・過去3日分保持）
+
+「万一おかしくなった/消したときに過去データとの差分を参照したい」（ユーザー希望: Git上に）に対応。現在データを GitHub リポジトリの `backups/data_YYYY-MM-DD.json` として保存し、**新しい順に3件だけ保持**（GitHub上で過去版との差分が参照可能）。
+
+#### 実装
+- `ghDoBackup({manual})`: 現データ(`JSON.stringify(S,null,2)`)を `backups/data_<日付>.json` へ PUT（既存の `ghPushRaw`/`ghUploadImage` と同じ Contents API パターン。同日分があれば sha 取得で上書き）。
+- `ghPruneBackups(g, keep)`: `backups/` を一覧し `data_YYYY-MM-DD.json` を新しい順にソート、3件超を DELETE。
+- `ghDailyBackupOnLoad()`: 起動6秒後に1日1回（`localStorage['pwt_last_backup']` で当日実施済みを判定）・GitHub設定時のみ・ノンブロッキング。
+- 設定モーダルの「データのバックアップ・復元」に **「🕒 今すぐバックアップ」ボタン＋ステータス**（`gh-backup-status`）を追加。
+- GitHub未設定時はエラートースト/ステータスのみで安全に無処理。
+
+#### 検証
+- ブラウザ実機: 関数存在・日付スタンプ（ゼロ埋め YYYY-MM-DD）・当日済みゲート・**未設定時の安全な無処理**（throwなし・ステータス表示）・設定UI描画・コンソールエラーなし・`node --check` OK・HTML整合（script/`</body>`）。
+- ⚠️ 実GitHubへの PUT/DELETE はトークン必須のため headless では未検証。**実環境では設定モーダルの「今すぐバックアップ」で動作確認可能**。Contents API の PUT は既存のデータ同期(同サイズ~2MB)で実績あり。
+
+#### 補足
+- これで 2026-05-30 依頼の **原6課題はすべて完了**（1/2/5/3/6/4）。
+
+---
+
 ## v1.12.0-05310920-search-unify (2026-05-31)
 ### 機能整理 — 検索のグリッド版/ノート版を統合（全データ検索はモーダルに一本化）
 
