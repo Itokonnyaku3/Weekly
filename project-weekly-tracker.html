@@ -266,11 +266,8 @@
       <div class="slash-item" onclick="applyOlSlashCommand('copy_link')">
         <span class="slash-icon">🔖</span><span>このノードのリンクを生成</span>
       </div>
-      <div class="slash-item active" onclick="applyOlSlashCommand('todo')">
-        <span class="slash-key">T</span><span class="slash-icon">☑</span><span>ToDoに変更</span>
-      </div>
-      <div class="slash-item" onclick="applyOlSlashCommand('bullet')">
-        <span class="slash-key">D</span><span class="slash-icon">•</span><span>ドットに戻す</span>
+      <div class="slash-item active" onclick="applyOlSlashCommand('toggle_todo')">
+        <span class="slash-key">T</span><span class="slash-icon">☑</span><span id="slash-todo-label">ToDo ⇔ ・ （トグル）</span>
       </div>
       <div class="slash-item" onclick="applyOlSlashCommand('bold')">
         <span class="slash-key">B</span><span class="slash-icon" style="font-weight:bold;">B</span><span>太字（トグル）</span>
@@ -278,11 +275,8 @@
       <div class="slash-item" onclick="applyOlSlashCommand('private')">
         <span class="slash-key">P</span><span class="slash-icon">🔒</span><span>プライベート設定（トグル）</span>
       </div>
-      <div class="slash-item" onclick="applyOlSlashCommand('link')">
-        <span class="slash-key">L</span><span class="slash-icon">🔗</span><span>リンクに変換</span>
-      </div>
-      <div class="slash-item" onclick="applyOlSlashCommand('unlink')">
-        <span class="slash-key">U</span><span class="slash-icon">✂</span><span>リンクを解除</span>
+      <div class="slash-item" onclick="applyOlSlashCommand('toggle_link')">
+        <span class="slash-key">L</span><span class="slash-icon">🔗</span><span id="slash-link-label">リンク ⇔ 解除 （トグル）</span>
       </div>
       <div class="slash-item" onclick="applyOlSlashCommand('insert_table')">
         <span class="slash-key">H</span><span class="slash-icon">⊞</span><span>表を挿入</span>

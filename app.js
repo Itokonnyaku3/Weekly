@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.13.0-05311210-daily-backup';
+    const APP_VERSION = 'v1.14.0-05311300-slashmenu';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -6093,20 +6093,30 @@
           const codeMatch = ev.code && ev.code.match(/^Key([A-Z])$/);
           if (codeMatch) {
             const k = codeMatch[1].toLowerCase();
+            // IME対策: 端末コマンド（メニューを閉じて再描画する系）の発火時に、フォーカス中の
+            // contenteditable を blur して IME 合成を確定/中断する。合成文字は旧要素に確定され、
+            // 直後の olRender が node から再構築するため漏れ込まない。サブメニュー遷移は次キーのため維持。
+            const _olAbortIme = () => { const a = document.activeElement; if (a && a.blur && a.closest && a.closest('.ol-text')) a.blur(); };
             if (isColorOpen) {
               const colorKeys = {
                 n: 'color_', r: 'color_#e74c3c', o: 'color_#e67e22',
                 y: 'color_#f1c40f', g: 'color_#2ecc71', b: 'color_#3498db',
                 p: 'color_#9b59b6', a: 'color_#95a5a6'
               };
-              if (colorKeys[k]) { ev.preventDefault(); _olSlashShortcutFired = true; applyOlSlashCommand(colorKeys[k]); return; }
+              if (colorKeys[k]) { ev.preventDefault(); _olSlashShortcutFired = true; _olAbortIme(); applyOlSlashCommand(colorKeys[k]); return; }
             } else {
               const mainKeys = {
-                t: 'todo', d: 'bullet', b: 'bold', p: 'private',
-                l: 'link', u: 'unlink', h: 'insert_table', i: 'insert_image',
+                t: 'toggle_todo', d: 'toggle_todo', b: 'bold', p: 'private',
+                l: 'toggle_link', u: 'toggle_link', h: 'insert_table', i: 'insert_image',
                 c: 'submenu_color', m: 'submenu_date'
               };
-              if (mainKeys[k]) { ev.preventDefault(); _olSlashShortcutFired = true; applyOlSlashCommand(mainKeys[k]); return; }
+              if (mainKeys[k]) {
+                ev.preventDefault(); _olSlashShortcutFired = true;
+                const _cmd = mainKeys[k];
+                if (_cmd !== 'submenu_color' && _cmd !== 'submenu_date') _olAbortIme();
+                applyOlSlashCommand(_cmd);
+                return;
+              }
             }
           }
         }
@@ -8416,6 +8426,15 @@
       menu.querySelectorAll('.slash-item').forEach(el => el.classList.remove('active'));
       const visibleItems = Array.from(items).filter(el => el.style.display !== 'none');
       if (visibleItems.length > 0) visibleItems[0].classList.add('active');
+
+      // トグル項目のラベルを現在のノード状態に合わせて更新（ToDo⇔ドット / リンク⇔解除）
+      try {
+        const _cn = olGetNodes(_olSlashDate || _olCurrentDate).find(x => x.id === _olSlashNodeId);
+        if (_cn) {
+          const tl = $('slash-todo-label'); if (tl) tl.textContent = _cn.isTodo ? '・ ドットに戻す' : 'ToDo に変更';
+          const ll = $('slash-link-label'); if (ll) ll.textContent = (_cn.type === 'link') ? 'リンクを解除' : 'リンクに変換';
+        }
+      } catch (e) { }
     }
 
     function hideOlSlashMenu() {
@@ -8567,6 +8586,10 @@
       const nodes = olGetNodes(_olSlashDate);
       const n = nodes.find(x => x.id === _olSlashNodeId);
       if (!n) return;
+
+      // トグル統合: 現状に応じて todo/bullet・link/unlink を切替
+      if (cmd === 'toggle_todo') cmd = n.isTodo ? 'bullet' : 'todo';
+      else if (cmd === 'toggle_link') cmd = (n.type === 'link') ? 'unlink' : 'link';
 
       // ── 挿入系: 表 ──────────────────────────────────────────────────
       if (cmd === 'insert_table') {

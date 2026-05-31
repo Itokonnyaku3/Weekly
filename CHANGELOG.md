@@ -6,6 +6,24 @@
 
 ---
 
+## v1.14.0-05311300-slashmenu (2026-05-31)
+### 改善 — Ctrl+. スラッシュメニュー: トグル統合 ＋ IME時のショートカット文字漏れ対策
+
+#### トグル統合
+- 「ToDoに変更」/「ドットに戻す」を **1項目（`toggle_todo`）に統合**。「リンクに変換」/「リンクを解除」も **1項目（`toggle_link`）に統合**。
+- `applyOlSlashCommand` 先頭で現ノード状態に応じ `todo`/`bullet`・`link`/`unlink` に解決。
+- メニュー項目のラベルは開くたびに状態で動的更新（`slash-todo-label`/`slash-link-label`：「ToDoに変更」⇔「・ドットに戻す」、「リンクに変換」⇔「リンクを解除」）。
+- キーボード: `T`/`D`→`toggle_todo`、`L`/`U`→`toggle_link`（旧キーもエイリアスで動作）。
+
+#### IME時のショートカット文字漏れ対策
+- IMEオン時に単キーショートカットが合成を開始し、確定文字がノードへ漏れ込む問題に対し、**端末コマンド（メニューを閉じ再描画する系）の発火時に contenteditable を blur**（`_olAbortIme`）して IME 合成を確定/中断。直後の `olRender` が node から再構築するため漏れ込まない。サブメニュー遷移（色/日付）は次キーのためフォーカス維持（従来の `_olSlashShortcutFired` 抑制を継続）。
+
+#### 検証
+- ブラウザ実機: toggle_todo（log⇔todo）・toggle_link（log⇔link）・動的ラベル・単一項目化・キーボード`T`で確定＋テキスト無傷・コンソールエラーなし・`node --check` OK。
+- ⚠️ IME合成の漏れ込み解消は headless では IME を再現できないため**実環境での確認推奨**（非IME経路は無傷を確認済み。blur による合成中断は定石）。
+
+---
+
 ## v1.13.0-05311210-daily-backup (2026-05-31)
 ### 機能追加 — 課題4: 日次バックアップ（GitHub `backups/` へ・過去3日分保持）
 
