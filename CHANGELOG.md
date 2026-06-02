@@ -6,6 +6,22 @@
 
 ---
 
+## v1.15.1-06011802-link-edit (2026-06-01)
+### バグ修正 — type=link ノードの URL / 表示名が編集できなかった
+
+`type=link` ノードの URL 表示行（`.ol-link-url`）は `.ol-text` の外にあったため、右クリックしてもブラウザのネイティブメニューが出るだけで編集不能だった。
+
+#### 修正
+- URL行に `data-nid`/`data-date` 属性 + **✎ ボタン**を追加。ホバー時のみ表示（opacity 遷移）。
+- `olEditLinkNode(nodeId, date, ev)` 新設: 既存のリンク編集ポップアップを流用して `node.text`/`node.url` を初期値にセット。
+- `_olLinkEditApply` に type=link 更新パスを追加（`_olLinkEditNodeId` がある場合は node を直接更新して `olRender`）。
+- contextmenu リスナーを拡張: `.ol-link-url[data-nid]` の右クリックでも `olEditLinkNode` を開く。
+
+#### 検証
+- ✎ ボタンクリック → ポップアップに表示名/URL が入る → 更新後 `node.text`/`node.url` に反映。右クリック経路も同様（headless では発火のみ確認）。エラーなし。
+
+---
+
 ## v1.15.0-05311420-note-updown (2026-05-31)
 ### パフォーマンス修正 — ノート ↑/↓ 行移動の「がたつき／数行飛び」を解消
 

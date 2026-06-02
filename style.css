@@ -3067,6 +3067,16 @@
       opacity: 0.75;
     }
     .ol-link-url a:hover { opacity: 1; text-decoration: underline; }
+    /* ✎ リンク編集ボタン（通常は非表示・ホバー時のみ表示） */
+    .ol-link-edit-btn {
+      display: inline-block; opacity: 0; pointer-events: none;
+      background: none; border: none; cursor: pointer;
+      font-size: 11px; padding: 0 3px; margin-left: 4px;
+      color: var(--accent); line-height: 1; vertical-align: middle;
+      transition: opacity 0.15s;
+    }
+    .ol-link-url:hover .ol-link-edit-btn { opacity: 0.7; pointer-events: auto; }
+    .ol-link-edit-btn:hover { opacity: 1 !important; }
 
     /* ── ノードリンク（🔖 内部リンク） ── */
     .ol-nodelink-bullet {

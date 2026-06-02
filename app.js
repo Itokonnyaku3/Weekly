@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.15.0-05311420-note-updown';
+    const APP_VERSION = 'v1.15.1-06011802-link-edit';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5455,7 +5455,8 @@
               const isWF2 = n.url.includes('workflowy.com');
               const tgt2 = isWF2 ? 'workflowy-pane' : '_blank';
               const short = n.url.length > 50 ? n.url.slice(0, 47) + '…' : n.url;
-              return `<div class="ol-link-url"><a href="${escA(n.url)}" target="${tgt2}" rel="noopener" onclick="event.stopPropagation()" title="${escA(n.url)}">${esc(short)}</a></div>`;
+              // data-nid / data-date を付与しリンクノード編集に対応（右クリック or ✎ボタン）
+              return `<div class="ol-link-url" data-nid="${escA(n.id)}" data-date="${escA(date)}"><a href="${escA(n.url)}" target="${tgt2}" rel="noopener" onclick="event.stopPropagation()" title="${escA(n.url)}">${esc(short)}</a><button class="ol-link-edit-btn" onmousedown="event.preventDefault()" onclick="event.stopPropagation();olEditLinkNode('${escA(n.id)}','${escA(date)}',event)" title="リンクを編集">✎</button></div>`;
             })()
           : '';
 
@@ -9118,6 +9119,41 @@
       }, 30);
     }
 
+    // type=link ノードの URL / 表示名を編集するポップアップを開く
+    // （URL行 `.ol-link-url` の ✎ ボタンまたは右クリックから呼ばれる）
+    let _olLinkEditNodeId = null;   // 編集中の type=link ノードID（通常のインライン <a> 編集とは別）
+    let _olLinkEditNodeDate = null;
+
+    function olEditLinkNode(nodeId, date, ev) {
+      const nodes = olGetNodes(date);
+      const node = nodes.find(n => n.id === nodeId);
+      if (!node) return;
+      _olLinkEditNodeId = nodeId;
+      _olLinkEditNodeDate = date;
+      // 通常の <a> 編集フィールドを流用（_olLinkEditAnchor = null にして「新規挿入」経路を避ける）
+      _olLinkEditAnchor = null;
+      _olLinkEditRange  = null;
+      _olLinkEditSelText = '';
+      const popup  = $('ol-link-edit-popup');
+      const lblInp = $('ol-link-edit-label');
+      const urlInp = $('ol-link-edit-url');
+      if (!popup || !lblInp || !urlInp) return;
+      lblInp.value = node.text || '';
+      urlInp.value = node.url  || '';
+      // 位置決め
+      const x = ev ? ev.clientX : null, y = ev ? ev.clientY : null;
+      if (x != null && y != null) {
+        const pw = 316;
+        popup.style.left = Math.min(Math.max(x, 8), window.innerWidth - pw - 8) + 'px';
+        popup.style.top  = Math.min(y + 6, window.innerHeight - 200) + 'px';
+        popup.style.transform = '';
+      } else {
+        popup.style.left = '50%'; popup.style.top = '30%'; popup.style.transform = 'translateX(-50%)';
+      }
+      popup.style.display = 'block';
+      setTimeout(() => { if (!urlInp.value) urlInp.focus(); else lblInp.focus(); }, 50);
+    }
+
     function _olLinkEditClose() {
       const popup = $('ol-link-edit-popup');
       if (popup) { popup.style.display = 'none'; popup.style.transform = ''; }
@@ -9138,10 +9174,24 @@
       if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
       if (!label) label = url;
 
+      // ── type=link ノードの URL / 表示名を更新（olEditLinkNode から呼ばれた場合）──
+      if (_olLinkEditNodeId) {
+        const nid = _olLinkEditNodeId, nd = _olLinkEditNodeDate;
+        _olLinkEditNodeId = null; _olLinkEditNodeDate = null;
+        _olLinkEditClose();
+        const ns = olGetNodes(nd);
+        const nn = ns.find(x => x.id === nid);
+        if (nn) { nn.url = url; nn.text = label; nn.html = ''; }
+        saveState();
+        if (_olCurrentDate === nd) olRender('ol-container', nd);
+        showToast('🔗 リンクを更新しました');
+        return;
+      }
+
       _olLinkEditClose();
 
       if (_olLinkEditAnchor) {
-        // ── 既存リンクの編集 ──
+        // ── 既存インラインリンクの編集 ──
         _olLinkEditAnchor.setAttribute('href', url);
         _olLinkEditAnchor.target = '_blank';
         _olLinkEditAnchor.rel = 'noopener';
@@ -9458,7 +9508,14 @@
 
     // 右クリック: 表セルでコンテキストメニュー
     document.addEventListener('contextmenu', ev => {
-      // ノートエディタ内の <a> タグ右クリック → リンク編集ポップアップ
+      // type=link ノードの URL行（.ol-link-url）右クリック → リンクノード編集
+      const linkUrlRow = ev.target.closest && ev.target.closest('.ol-link-url[data-nid]');
+      if (linkUrlRow) {
+        ev.preventDefault();
+        olEditLinkNode(linkUrlRow.dataset.nid, linkUrlRow.dataset.date, ev);
+        return;
+      }
+      // ノートエディタ内のインライン <a> タグ右クリック → リンク編集ポップアップ
       const anchor = ev.target.closest && ev.target.closest('a[href]');
       if (anchor && anchor.closest('.ol-text')) {
         ev.preventDefault();

@@ -3,7 +3,7 @@
 このファイルは AI（Claude）が別チャットや別セッションで作業を継続するための引継ぎ情報です。
 作業を再開するときは、まずこのファイルと `CHANGELOG.md`・`PROJECT_KNOWLEDGE.md`・`ARCHITECTURE.md` を読んでください。
 
-最終更新: 2026-05-31 / 担当バージョン: v1.15.0-05311420-note-updown
+最終更新: 2026-06-01 / 担当バージョン: v1.15.1-06011802-link-edit
 
 ---
 
@@ -52,6 +52,7 @@
 | v1.4.9 | **全データ検索ドロップダウンの↑↓ナビ**: Ctrl+Shift+; の結果リストを ↑/↓ で移動・Enter で確定。`.active` クラスで強調＋スクロール追従＋マウスホバー連動 |
 | v1.5.0 | **Phase列廃止＋キーボード操作5種**: ①Phase 列を撤去しプロジェクト名直下に全件表示（`.proj-phase-list`）②グリッド親アイテムに ▼/▶ 折り畳みトグル＋子件数バッジ（`gridCollapsed`）③N3 `Ctrl+Enter`=ノートTODOトグル ④N6 `Ctrl+Shift+↑/↓`=兄弟ノード移動 ⑤G5 `Space`=セルTODOトグル ⑥G8 `Ctrl+↑/↓`=行一括折り畳み ⑦G9 `Alt+←/→`=表示週スクロール。集約セクションの入れ子 projTag 重複除外（`claimedIdx`）。`console.debug` 2件除去 |
 | v1.6.0 | **フォーカス系3課題**: ①`Alt+Shift+N`閉じる時に`refocusGrid()`で記憶位置へ復元＋`Alt+Shift+G`新設（ノート維持でグリッドへ）②全データ検索ドロップダウンの`onmouseenter`を`_olGsrHover`化し`body.kb-nav`中はホバー選択を無視（キー操作がマウス位置に奪われない）③入力ボックス↓で次PJの**先頭**アイテムを選択（旧: 最下段）。既存`focusKey`/`refocusGrid`/`kb-nav`の再利用で局所修正 |
+| v1.15.1 | **バグ修正: type=linkノード編集不可**: URL行(.ol-link-url)は.ol-textの外にあり右クリックがブラウザメニューになっていた。✎ボタン追加＋`olEditLinkNode`新設＋contextmenu拡張で修正。右クリック/✎ボタンでリンク編集ポップアップを開けるように |
 | v1.15.0 | **ノート↑↓のがたつき/行飛び解消**: 原因=平↑↓が1キーごとに`olRender`(ノート全再構築)。新規`olFocusNodeEl`で再描画せず隣接`.ol-text`へfocus+caret移動の軽量化。scrollIntoViewはnearest。実機で1キー=1行/再描画なし/20キー22ms確認 |
 | v1.14.1 | **Ctrl+.メニューIME漏れ 根本解決**: v1.14.0のblur方式は合成を確定させ逆効果→撤回。メニューを開いたら`#ol-slash-menu`にフォーカス移動(contenteditable blur)し、メニューキーを`olSlashMenuKey`(menu要素のkeydownリスナー)で処理。入力先が無くなり合成文字がノードに漏れない(構造的解決)。Escapeで`_olRefocusSlashNode`。実機で activeElement=menu・テキスト無傷・ナビ/色サブ階層OKを確認 |
 | v1.14.0 | **Ctrl+.メニュー改善（追加課題#1）**: ToDo⇔ドット/リンク⇔解除をトグル統合(`toggle_todo`/`toggle_link`・動的ラベル)。（IME対策は v1.14.1 で根本解決に差し替え） |
