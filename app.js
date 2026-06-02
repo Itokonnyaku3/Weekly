@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.15.1-06011802-link-edit';
+    const APP_VERSION = 'v1.16.0-06020940-rich-fmt';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5831,9 +5831,18 @@
         node.html = el.innerHTML;
 
         // デイリー抽出用: todoノードのテキスト変更もグリッドに即時反映
+        // 選択範囲がある間（貼り付け直後など）は render() をさらに 400ms 遅らせて
+        // 選択が消えるタイミングの衝突を避ける（課題(c)対策）
         if (node.isTodo && !node.linkedEntryRef) {
           clearTimeout(olInput._gridTimer);
           olInput._gridTimer = setTimeout(() => {
+            // 範囲選択中なら再スケジュールして選択が安定してから再描画
+            const _gSel = window.getSelection && window.getSelection();
+            if (_gSel && !_gSel.isCollapsed) {
+              clearTimeout(olInput._gridTimer);
+              olInput._gridTimer = setTimeout(arguments.callee, 400);
+              return;
+            }
             const focusedEl = document.activeElement;
             const focusedInNote = focusedEl && focusedEl.closest('#ol-container');
             let savedRange = null;
@@ -6179,12 +6188,21 @@
         return;
       }
 
-      // Ctrl+B: 太字トグル
+      // Ctrl+B: 太字トグル（選択範囲あり→インライン太字 / 選択なし→ノード全体フラグ）
       if ((ev.ctrlKey || ev.metaKey) && ev.key === 'b') {
         ev.preventDefault();
-        olSaveTxt(nodes, idx, ev.target);
-        nodes[idx].bold = !nodes[idx].bold;
-        _olFocusId = id; saveState(); olRender('ol-container', date); return;
+        const _bSel = window.getSelection && window.getSelection();
+        const _bHasSel = _bSel && !_bSel.isCollapsed && ev.target.contains(_bSel.anchorNode);
+        if (_bHasSel) {
+          // 選択範囲のみ太字を適用／解除（execCommandはcontenteditable内のみ有効）
+          document.execCommand('bold', false, null);
+          olRichSave();
+        } else {
+          olSaveTxt(nodes, idx, ev.target);
+          nodes[idx].bold = !nodes[idx].bold;
+          _olFocusId = id; saveState(); olRender('ol-container', date);
+        }
+        return;
       }
 
       // Ctrl+L: リンク挿入（Ctrl+K はグローバルコマンドパレットに使用）
@@ -6211,7 +6229,7 @@
           _olFocusId = newNode.id; _olFocusAtStart = true;
           saveState(); olRender('ol-container', date); return;
         }
-        // 通常テキスト: カーソル位置で分割（olGetCaretOffset で正確な位置を取得）
+        // テキスト/HTML分割: カーソル位置で前半・後半に分割（<br>・インライン書式を保持）
         const offset = olGetCaretOffset(el);
         const full = el.textContent;
         const isAtEnd = offset >= full.length;
@@ -6229,9 +6247,41 @@
           saveState(); olRender('ol-container', date); return;
         }
 
-        nodes[idx].text = full.slice(0, offset);
-        nodes[idx].html = '';
-        const newNode = { id: olNewId(), text: full.slice(offset), html: '', indent: newIndent, bold: false, color: '', collapsed: false, isPrivate: nodes[idx].isPrivate || false };
+        // Range を使って HTML を前半・後半に分割（Shift+Enter の <br>・太字等を保持）
+        let beforeHtml = '', afterHtml = '';
+        try {
+          const sel3 = window.getSelection();
+          if (sel3 && sel3.rangeCount) {
+            const caretRange = sel3.getRangeAt(0);
+            // 前半: el の先頭からカーソルまで
+            const beforeRange = document.createRange();
+            beforeRange.setStart(el, 0);
+            beforeRange.setEnd(caretRange.startContainer, caretRange.startOffset);
+            beforeHtml = beforeRange.cloneContents().textContent.length > 0
+              ? (() => { const d = document.createElement('div'); d.appendChild(beforeRange.cloneContents()); return d.innerHTML; })()
+              : '';
+            // 後半: カーソルから el の末尾まで
+            const afterRange = document.createRange();
+            afterRange.setStart(caretRange.startContainer, caretRange.startOffset);
+            afterRange.setEnd(el, el.childNodes.length);
+            afterHtml = (() => { const d = document.createElement('div'); d.appendChild(afterRange.cloneContents()); return d.innerHTML; })();
+          }
+        } catch (e) { /* フォールバック: textContent で分割 */ }
+
+        // フォールバック: HTML分割失敗時はテキストで分割
+        if (!beforeHtml && !afterHtml) {
+          beforeHtml = el.innerHTML; afterHtml = '';
+        }
+
+        // 末尾の不要な <br> を除去（contenteditable が自動付与するもの）
+        const _cleanEndBr = h => h.replace(/<br\s*\/?>$/i, '').replace(/<br\s*\/?>\s*$/i, '');
+        beforeHtml = _cleanEndBr(beforeHtml);
+        const beforeText = (function(h){ const t=document.createElement('div'); t.innerHTML=h; return t.textContent; })(beforeHtml);
+        const afterText  = (function(h){ const t=document.createElement('div'); t.innerHTML=h; return t.textContent; })(afterHtml);
+
+        nodes[idx].text = beforeText;
+        nodes[idx].html = (beforeHtml !== beforeText) ? beforeHtml : '';
+        const newNode = { id: olNewId(), text: afterText, html: (afterHtml !== afterText) ? afterHtml : '', indent: newIndent, bold: false, color: '', collapsed: false, isPrivate: nodes[idx].isPrivate || false };
         // 文中で分割した場合: タグ・プロジェクト・サブタスク紐づけを新ノード（後半）に移す
         if (!isAtEnd) {
           if (nodes[idx].tags && nodes[idx].tags.length) {
@@ -7544,24 +7594,42 @@
       }
     }
 
-    // 太字ボタン
+    // 太字ボタン（選択範囲あり→インライン太字 / 選択なし→ノード全体）
     function olSetBold(date) {
       if (!_olFocusId) return;
-      const nodes = olGetNodes(date);
       const el = document.getElementById('olt-' + _olFocusId);
+      if (!el) return;
+      const _bSel = window.getSelection && window.getSelection();
+      const _bHasSel = _bSel && !_bSel.isCollapsed && el.contains(_bSel.anchorNode);
+      if (_bHasSel) { el.focus(); document.execCommand('bold', false, null); olRichSave(); return; }
+      const nodes = olGetNodes(date);
       const node = nodes.find(n => n.id === _olFocusId);
       const idx = nodes.findIndex(n => n.id === _olFocusId);
-      if (el && node && idx >= 0) { olSaveTxt(nodes, idx, el); node.bold = !node.bold; saveState(); olRender('ol-container', date); }
+      if (node && idx >= 0) { olSaveTxt(nodes, idx, el); node.bold = !node.bold; saveState(); olRender('ol-container', date); }
     }
 
-    // カラーボタン（同じ色を再選択するとリセット）
+    // カラーボタン（選択範囲あり→インライン文字色 / 選択なし→ノード全体）
     function olSetColor(date, color) {
       if (!_olFocusId) return;
-      const nodes = olGetNodes(date);
       const el = document.getElementById('olt-' + _olFocusId);
+      if (!el) return;
+      const _cSel = window.getSelection && window.getSelection();
+      const _cHasSel = _cSel && !_cSel.isCollapsed && el.contains(_cSel.anchorNode);
+      if (_cHasSel) {
+        el.focus();
+        // 同じ色を再適用 → 解除（黒に戻す）
+        const nodes = olGetNodes(date);
+        const node = nodes.find(n => n.id === _olFocusId);
+        const isSameColor = node && node.color === color;
+        document.execCommand('foreColor', false, isSameColor ? 'inherit' : color);
+        if (isSameColor) document.execCommand('removeFormat', false, null); // 色スパンを撤去
+        olRichSave();
+        return;
+      }
+      const nodes = olGetNodes(date);
       const node = nodes.find(n => n.id === _olFocusId);
       const idx = nodes.findIndex(n => n.id === _olFocusId);
-      if (el && node && idx >= 0) { olSaveTxt(nodes, idx, el); node.color = (node.color === color) ? '' : color; saveState(); olRender('ol-container', date); }
+      if (node && idx >= 0) { olSaveTxt(nodes, idx, el); node.color = (node.color === color) ? '' : color; saveState(); olRender('ol-container', date); }
     }
 
     // リンクモード: アウトラインをリンク選択モードで描画

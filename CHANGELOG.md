@@ -6,6 +6,27 @@
 
 ---
 
+## v1.16.0-06020940-rich-fmt (2026-06-02)
+### 機能改善/バグ修正 — 修飾・貼り付け関連（課題#2）
+
+#### (a) 修飾を選択範囲に適用
+- Ctrl+B・ツールバー太字ボタン（`olSetBold`）: 選択範囲があれば `execCommand('bold')` でインライン `<b>` を適用（`node.html` に保存）。選択なしは従来どおりノード全体フラグ（`node.bold`）。
+- カラーボタン（`olSetColor`）: 選択範囲があれば `execCommand('foreColor')` でインライン色を適用。同色再選択で `removeFormat` によりリセット。選択なしは `node.color` フラグ。
+
+#### (b) Shift+Enter の行内改行（`<br>`）が Enter 確定後に消える
+- Enter 分割ロジックを **Range ベースの HTML 分割（案A）** に変更。カーソル前後の `innerHTML` を `cloneContents()` で切り出し、`<br>`・インライン太字等を前半・後半に保持したまま分割。
+- 末尾の自動 `<br>` は除去して保存（contenteditable が付加するもの）。HTML がプレーンテキストと同一の場合は `html=''` に保存（軽量化）。フォールバック: Range 取得失敗時は `innerHTML` 全体を前半として使用。
+
+#### (c) 貼り付け後の一部選択がすぐ消える
+- `olInput` の debounced `render()` タイマー: 範囲選択中（`!sel.isCollapsed`）なら 400ms 後に再スケジュールし、選択が安定してから `render()` を実行。貼り付け直後の `render()` による選択解除を防止。
+
+#### 検証（ロジック実測）
+- (a) `execCommand('bold')` で選択テキストが `<b>テスト</b>文字列` になることを DOM で確認。
+- (b) `<br>` を含む contenteditable で Range 分割を実行 → 前半:「行前半」/後半:「行後半」に正しく分割。
+- (c) 選択中ガード条件 `!sel.isCollapsed` を確認。※ preview キャッシュの都合により統合テストは実環境確認推奨。`node --check` OK（8642行）、構文エラーなし。
+
+---
+
 ## v1.15.1-06011802-link-edit (2026-06-01)
 ### バグ修正 — type=link ノードの URL / 表示名が編集できなかった
 
