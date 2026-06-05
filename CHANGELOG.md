@@ -6,6 +6,18 @@
 
 ---
 
+## v1.16.1-06031050-compact-rows (2026-06-03)
+### スタイル調整 — ノート行間を詰める
+
+- `.ol-row`: `min-height` 26px → 20px、`padding` 1px → 0
+- `.ol-text`: `line-height` 1.6 → 1.4、`min-height` 22px → 18px
+- `.ol-toggle` / `.ol-bullet`: サイズ 22px → 20px（ボタン縮小で行高に干渉しないよう）
+- `.ol-toggle-ph`: 幅 22px → 20px
+- `#ol-container`: `padding` 8px → 6px、`line-height` 1.6 → 1.4
+- JS: インデントストライド 22 → 20、ガイドX 19 → 17（比例調整）
+
+---
+
 ## v1.16.0-06020940-rich-fmt (2026-06-02)
 ### 機能改善/バグ修正 — 修飾・貼り付け関連（課題#2）
 

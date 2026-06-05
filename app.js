@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.16.0-06020940-rich-fmt';
+    const APP_VERSION = 'v1.16.1-06031050-compact-rows';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5410,7 +5410,7 @@
       visible.forEach(n => {
         const isParent = olHasChildren(nodes, n._idx);
         // 三角ボタン削除に伴い、インデント位置を調整（少し右に寄せて余白を確保）
-        const pl = (n.indent * 22) + 12;
+        const pl = (n.indent * 20) + 10;
 
         // projTag バッジ（プロジェクト帰属表示）
         const projTagBadge = n.projTag
@@ -5485,7 +5485,7 @@
         let indentGuides = '';
         const _myIndent = n.indent || 0;
         for (let g = 0; g < _myIndent; g++) {
-          const gx = (g * 22) + 19; // bullet 中央付近 (padding-left 12 + bullet幅の半分 ~7)
+          const gx = (g * 20) + 17; // bullet 中央付近 (padding-left 10 + bullet幅の半分 ~7)
           indentGuides += `<span class="ol-indent-guide" style="left:${gx}px" aria-hidden="true"></span>`;
         }
 
