@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.16.3-06061130-fix-searchsave';
+    const APP_VERSION = 'v1.17.0-06061230-search-filters';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5402,7 +5402,7 @@
       visible.forEach(n => {
         if (n.type === 'searchsummary' && !n.collapsed && n.savedQuery) {
           const q = n.savedQuery;
-          const res = _runSearchQuery(q.q1 || '', q.q2 || '', q.tags || []);
+          const res = _runSearchQuery(q.q1 || '', q.q2 || '', q.tags || [], q.filters || {});
           _ssResultsMap.set(n.id, res);
         }
       });
@@ -9672,6 +9672,47 @@
     /* ── 検索機能 ── */
     let _searchActiveIdx = -1;    // キーボードで選択中の結果インデックス
     let _searchSelectedTags = new Set(); // タグフィルタ（検索）
+    // 絞り込みフィルタ（種別/完了状態/プロジェクト紐づけ）。既定は 'all'。
+    let _searchFilters = { type: 'all', done: 'all', link: 'all' };
+
+    // フィルタ定義（描画と判定で共用）
+    const _SEARCH_FILTER_DEFS = [
+      { group: 'type', label: '種別', opts: [
+        { v: 'all',  t: 'すべて' }, { v: 'todo', t: '☐ToDo' },
+        { v: 'link', t: '🔗リンク' }, { v: 'log', t: '📝ログ' } ] },
+      { group: 'done', label: '状態', opts: [
+        { v: 'all', t: 'すべて' }, { v: 'undone', t: '未完了' }, { v: 'done', t: '完了' } ] },
+      { group: 'link', label: '紐づけ', opts: [
+        { v: 'all', t: 'すべて' }, { v: 'tagged', t: 'PJ付き' }, { v: 'untagged', t: '未割当' } ] },
+    ];
+
+    // フィルタが既定（すべて all）かどうか
+    function _searchFiltersActive(f) {
+      f = f || _searchFilters;
+      return f.type !== 'all' || f.done !== 'all' || f.link !== 'all';
+    }
+
+    // 絞り込みフィルタ行を描画
+    function _searchUpdateFilterRow() {
+      const row = $('search-row4');
+      if (!row) return;
+      let h = '';
+      _SEARCH_FILTER_DEFS.forEach(def => {
+        h += `<span class="search-filter-grp"><span class="search-filter-lbl">${def.label}:</span>`;
+        def.opts.forEach(o => {
+          const sel = (_searchFilters[def.group] === o.v) ? ' selected' : '';
+          h += `<span class="search-filter-chip${sel}" onmousedown="event.preventDefault()" onclick="_searchSetFilter('${def.group}','${o.v}')">${o.t}</span>`;
+        });
+        h += `</span>`;
+      });
+      row.innerHTML = h;
+    }
+
+    function _searchSetFilter(group, value) {
+      _searchFilters[group] = value;
+      _searchUpdateFilterRow();
+      _searchRun();
+    }
 
     function openSearch(q = '') {
       $('search-modal').classList.add('open');
@@ -9680,7 +9721,9 @@
       $('search-input2').value = '';
       _searchActiveIdx = -1;
       _searchSelectedTags.clear();
+      _searchFilters = { type: 'all', done: 'all', link: 'all' };
       _searchUpdateTagRow();
+      _searchUpdateFilterRow();
       if (q) _searchRun();
       else { $('search-results').innerHTML = ''; _searchShowFooter(false); }
       inp.focus();
@@ -9723,18 +9766,26 @@
       const q1 = ($('search-input').value  || '').trim();
       const q2 = ($('search-input2').value || '').trim();
       _searchActiveIdx = -1;
-      doSearch(q1, q2, [..._searchSelectedTags]);
+      doSearch(q1, q2, [..._searchSelectedTags], { ..._searchFilters });
     }
 
     // ── 純粋検索ロジック（DOM副作用なし）──
-    // q1/q2 テキスト AND タグ配列 tagsArr でノードを検索して結果配列を返す
-    function _runSearchQuery(q1, q2, tagsArr) {
+    // q1/q2 テキスト AND タグ配列 tagsArr AND filters でノードを検索して結果配列を返す
+    // filters = { type:'all'|'todo'|'link'|'log', done:'all'|'undone'|'done', link:'all'|'tagged'|'untagged' }
+    // ※ filters 省略時は全て 'all'（既存の保存済み searchsummary ノードとの後方互換）
+    function _runSearchQuery(q1, q2, tagsArr, filters) {
       q1 = (q1 || '').trim();
       q2 = (q2 || '').trim();
       tagsArr = tagsArr || [];
+      filters = filters || {};
+      const fType = filters.type || 'all';
+      const fDone = filters.done || 'all';
+      const fLink = filters.link || 'all';
+      const hasFilters = fType !== 'all' || fDone !== 'all' || fLink !== 'all';
       const hasText = q1.length >= 2;
       const hasTags = tagsArr.length > 0;
-      if (!hasText && !hasTags) return [];
+      // テキストもタグもフィルタも無ければ結果なし（フィルタ単独検索は許可）
+      if (!hasText && !hasTags && !hasFilters) return [];
 
       const low1 = hasText ? q1.toLowerCase() : '';
       const low2 = q2.length >= 2 ? q2.toLowerCase() : '';
@@ -9752,11 +9803,20 @@
         const nt = nodeTags || [];
         return tagsArr.every(t => nt.includes(t));
       };
+      // 絞り込みフィルタ条件（種別/完了状態/紐づけ）
+      const matchesFilters = (n) => {
+        if (fType !== 'all' && getNodeType(n) !== fType) return false;
+        if (fDone === 'done'   && !n.checked) return false;
+        if (fDone === 'undone' &&  n.checked) return false;
+        if (fLink === 'tagged'   && !n.projTag) return false;
+        if (fLink === 'untagged' &&  n.projTag) return false;
+        return true;
+      };
 
       const results = [];
 
-      // プロジェクト名（タグ検索は対象外）
-      if (hasText) {
+      // プロジェクト名（タグ検索・ノード絞り込みフィルタは対象外）
+      if (hasText && !hasFilters) {
         S.projects.forEach((p, pi) => {
           if (matchesText(p.name)) {
             results.push({ type: 'PROJECT', text: p.name, info: 'プロジェクト名', pi, wk: null, ei: null, icon: '📁' });
@@ -9777,7 +9837,7 @@
               const wk = dateKey.startsWith('proj:') ? null
                 : (function(){ try { return wkey(new Date(dateKey.replace(/-/g,'/'))); } catch(e) { return null; } })();
               const date = dateKey.startsWith('proj:') ? null : dateKey;
-              if (matchesText(n.text) && matchesTags(n.tags)) {
+              if (matchesText(n.text) && matchesTags(n.tags) && matchesFilters(n)) {
                 results.push({ type: 'ENTRY', text: n.text, info: p.name + (wk ? ' (' + wk + ')' : ''), pi, wk, ei: n.id, date, id: n.id, icon: (n.isTodo ? (n.checked ? '☑' : '☐') : (getNodeType(n) === 'link' ? '🔗' : '•')) });
               }
             });
@@ -9794,7 +9854,7 @@
           nodes.forEach(n => {
             if (n.projTag) return;
             if (n.type === 'searchsummary') return; // 検索対象外
-            if (matchesText(n.text) && matchesTags(n.tags)) {
+            if (matchesText(n.text) && matchesTags(n.tags) && matchesFilters(n)) {
               results.push({ type: 'DAILY', text: n.text, info: 'ノート: ' + dateKey, date: dateKey, id: n.id, icon: (n.isTodo ? (n.checked ? '☑' : '☐') : (getNodeType(n) === 'link' ? '🔗' : '•')) });
             }
           });
@@ -9804,17 +9864,19 @@
       return results;
     }
 
-    // q1/q2/tagsArr で検索 → 結果を描画
-    function doSearch(q1, q2, tagsArr) {
+    // q1/q2/tagsArr/filters で検索 → 結果を描画
+    function doSearch(q1, q2, tagsArr, filters) {
       tagsArr = tagsArr || [];
+      filters = filters || {};
       const hasText = q1 && q1.length >= 2;
       const hasTags = tagsArr.length > 0;
-      if (!hasText && !hasTags) {
+      const hasFilters = _searchFiltersActive(filters);
+      if (!hasText && !hasTags && !hasFilters) {
         $('search-results').innerHTML = '';
         _searchShowFooter(false);
         return;
       }
-      const results = _runSearchQuery(q1, q2, tagsArr);
+      const results = _runSearchQuery(q1, q2, tagsArr, filters);
       renderSearchResults(results, q1, q2 || '', tagsArr);
     }
 
@@ -9890,6 +9952,7 @@
       const q1 = ($('search-input').value || '').trim();
       const q2 = ($('search-input2').value || '').trim();
       const tags = [..._searchSelectedTags];
+      const filters = { ..._searchFilters };
 
       // 挿入先: 現在開いているノート（なければ今日のデイリーノートへ）
       if (!_olCurrentDate) {
@@ -9905,12 +9968,17 @@
       if (q1) parts.push(q1);
       if (q2 && q2.length >= 2) parts.push(q2);
       tags.forEach(t => parts.push('#' + t));
+      // フィルタもラベルに反映（既定 'all' 以外のみ）
+      const _fLbl = { todo: 'ToDo', link: 'リンク', log: 'ログ', undone: '未完了', done: '完了', tagged: 'PJ付き', untagged: '未割当' };
+      if (filters.type !== 'all') parts.push(_fLbl[filters.type]);
+      if (filters.done !== 'all') parts.push(_fLbl[filters.done]);
+      if (filters.link !== 'all') parts.push(_fLbl[filters.link]);
       const label = '検索結果（' + (parts.join(' and ') || '全件') + '）';
 
       const nodes = olGetNodes(_olCurrentDate);
       const newNode = {
         id: olNewId(), text: label, html: '', type: 'searchsummary',
-        savedQuery: { q1, q2, tags },
+        savedQuery: { q1, q2, tags, filters },
         indent: 0, bold: false, color: '', collapsed: false,
         isTodo: false, checked: false, tags: [], images: []
       };

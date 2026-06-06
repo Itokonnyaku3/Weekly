@@ -2566,6 +2566,32 @@
       background: var(--accent, #4a90d9); color: #fff;
       border-color: var(--accent, #4a90d9);
     }
+    /* 検索の絞り込みフィルタ行（種別/状態/紐づけ） */
+    #search-row4 {
+      display: flex; align-items: center; gap: 12px;
+      padding: 6px 16px 8px; background: var(--bg2);
+      border-bottom: 1px solid var(--bd);
+      flex-wrap: wrap;
+    }
+    .search-filter-grp {
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .search-filter-lbl {
+      font-size: 10px; color: var(--tx3); white-space: nowrap;
+      margin-right: 2px; flex-shrink: 0;
+    }
+    .search-filter-chip {
+      display: inline-flex; align-items: center;
+      font-size: 11px; padding: 2px 8px; border-radius: 12px;
+      background: rgba(120,120,120,0.06); border: 1px solid var(--bd2);
+      cursor: pointer; user-select: none; color: var(--tx2);
+      transition: all 0.15s;
+    }
+    .search-filter-chip:hover { opacity: 0.8; }
+    .search-filter-chip.selected {
+      background: var(--accent, #4a90d9); color: #fff;
+      border-color: var(--accent, #4a90d9);
+    }
     /* 検索を保存フッター */
     #search-footer {
       display: none;
