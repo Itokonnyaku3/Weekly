@@ -593,6 +593,52 @@
       tbody tr.proj-hdr-row:has(td.col-proj:focus) td.col-proj .pcell.pcell-hdr { background: #3e4c88; }
     }
 
+    /* ── 課題#2: 未分類タスク仮想行（警告色・最上部）── */
+    tbody tr.proj-hdr-row.unassigned-row td,
+    tbody tr.proj-hdr-row.unassigned-row td.col-proj .pcell,
+    tbody tr.proj-hdr-row.unassigned-row td.col-proj .pcell.pcell-hdr,
+    tbody tr.proj-hdr-row.unassigned-row td.col-link {
+      background: #8a5a00;          /* 警告アンバー */
+      color: #fff6e0;
+      vertical-align: top;
+    }
+    @media (prefers-color-scheme: dark) {
+      tbody tr.proj-hdr-row.unassigned-row td,
+      tbody tr.proj-hdr-row.unassigned-row td.col-proj .pcell,
+      tbody tr.proj-hdr-row.unassigned-row td.col-proj .pcell.pcell-hdr,
+      tbody tr.proj-hdr-row.unassigned-row td.col-link { background: #6e4800; }
+    }
+    tbody tr.unassigned-row .proj-hdr-name {
+      padding: 4px 8px;
+      font-weight: 700;
+      color: #fff6e0;
+    }
+    tbody tr.unassigned-row .unassigned-icon { font-size: 12px; }
+    tbody tr.unassigned-row .proj-hdr-cnt { color: #ffe7b0; padding: 0 6px; }
+    /* 週セル内の未分類タスク一覧 */
+    .unassigned-wcell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 3px 4px;
+      background: transparent !important;  /* proj色tintを無効化 */
+    }
+    .unassigned-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: 11px;
+      line-height: 1.3;
+      color: #fff6e0;
+      cursor: pointer;
+      padding: 1px 3px;
+      border-radius: 3px;
+      word-break: break-word;
+      transition: background 0.12s;
+    }
+    .unassigned-item:hover { background: rgba(255,255,255,0.18); }
+    .unassigned-bullet { flex-shrink: 0; opacity: 0.85; }
+
     /* ── v1.7.0 案C: 詳細行のプロジェクト色アクセント ── */
     /* プロジェクト名セルの左に色帯 */
     tbody tr:not(.proj-hdr-row) td.col-proj {

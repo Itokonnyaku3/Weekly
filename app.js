@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.17.0-06061230-search-filters';
+    const APP_VERSION = 'v1.18.0-06061300-unassigned-row';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -1024,6 +1024,34 @@
       const firstWk = wkey(weeks[0]);
       const lastWk  = wkey(weeks[weeks.length - 1]);
       const SPAN_COLORS = ['#3b82f6','#8b5cf6','#059669','#f59e0b','#ef4444','#06b6d4','#ec4899','#10b981'];
+
+      // ── 課題#2: 未分類タスク仮想行（最上部・警告色）──
+      // プロジェクト未割当の未完了ToDoを表示週ごとに列挙。クリックでノートを開き @ で割当。
+      // 表示中の全週で0件なら行ごと非表示。既存のプロジェクト描画ループには干渉しない独立ブロック。
+      {
+        const _uaPerWeek = weeks.map(w => {
+          const k = wkey(w);
+          return { k, isCur: k === cw, items: getUntaggedOpenTodos(k) };
+        });
+        const _uaTotal = _uaPerWeek.reduce((s, x) => s + x.items.length, 0);
+        if (_uaTotal > 0) {
+          rows += `<tr class="proj-hdr-row unassigned-row">`;
+          rows += `<td class="col-proj"><div class="pcell pcell-hdr"><div class="proj-hdr-name">`;
+          rows += `<span class="unassigned-icon">⚠</span><span>未分類タスク</span></div></div></td>`;
+          rows += `<td class="col-link"><span class="proj-hdr-cnt">${_uaTotal}件</span></td>`;
+          _uaPerWeek.forEach(({ k, isCur, items }) => {
+            rows += `<td class="col-week${isCur ? ' cur-week' : ''}">`;
+            rows += `<div class="wcell unassigned-wcell${isCur ? ' cur' : ''}">`;
+            items.forEach(it => {
+              const txt = (it.node.text || '').trim();
+              rows += `<div class="unassigned-item" onclick="openNotePanelToDate('${it.date}','${it.node.id}')" title="${escA(txt)} — クリックでノートを開き @ で割当">`
+                    + `<span class="unassigned-bullet">☐</span>${esc(txt)}</div>`;
+            });
+            rows += `</div></td>`;
+          });
+          rows += `</tr>`;
+        }
+      }
 
       S.projects.forEach((proj, pi) => {
         // 表示モードによるフィルタリング
@@ -4928,6 +4956,29 @@
         nodes.forEach((n, idx) => {
           if (n.projTag !== projTag) return;
           // 課題6: 実効週 = gridWk(表示週オーバーライド)があればそれ、無ければ作成日の週
+          const effWk = n.gridWk || dateWk;
+          if (effWk === wk) items.push({ node: n, date, idx });
+        });
+      }
+      return items;
+    }
+
+    // 課題#2: プロジェクト未割当の「未完了ToDo」を実効週ごとに取得（未分類仮想行用）
+    // getGridItems と同じ実効週ロジック（gridWk優先）。projTag なし & type=todo & 未完了のみ。
+    function getUntaggedOpenTodos(wk) {
+      const items = [];
+      if (!S.dailyOutline) return items;
+      for (const date in S.dailyOutline) {
+        if (date.startsWith('proj:')) continue;
+        let dateWk;
+        try {
+          dateWk = wkey(new Date(date.replace(/-/g, '/')));
+        } catch(e) { continue; }
+        const nodes = S.dailyOutline[date];
+        if (!Array.isArray(nodes)) continue;
+        nodes.forEach((n, idx) => {
+          if (n.projTag) return;                              // 未割当のみ
+          if (getNodeType(n) !== 'todo' || n.checked) return; // 未完了ToDoのみ
           const effWk = n.gridWk || dateWk;
           if (effWk === wk) items.push({ node: n, date, idx });
         });
