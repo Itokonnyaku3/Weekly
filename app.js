@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.19.0-06061400-inline-meta-chips';
+    const APP_VERSION = 'v1.20.0-06061500-note-props-panel';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -2244,6 +2244,7 @@
     function openPanel(pi, wk, ei) {
       const isProj = wk === 'proj' || wk === null;
       if (isProj) wk = 'proj';
+      _panelFromNote = null; // 既定はグリッド起点。ノート起点は olOpenProps が後で設定
       pCtx = { pi, wk, ei, proj: isProj }; clearDirty();
       const isNew = ei === null;
       let n;
@@ -2262,6 +2263,30 @@
       setTimeout(() => { const t = $('pf-text'); if (t) t.focus() }, 60);
     }
     function openProjPanel(pi, ei) { openPanel(pi, 'proj', ei); }
+
+    // ノート（アウトライン）から詳細パネルを開く。projTag→pi、日付→wk を解決。
+    // 未割当(projTagなし)ノードは pi=-1 で開く（buildPB/savePanel 側でガード済み）。
+    // 保存・キャンセル後はグリッドではなくノートにフォーカスを戻すため _panelFromNote に記録。
+    let _panelFromNote = null;
+    function olOpenProps(date, nodeId) {
+      const found = findNodeById(nodeId);
+      if (!found) return;
+      const n = found.node;
+      const realDate = found.date || date;
+      let pi = -1;
+      if (n.projTag) pi = S.projects.findIndex(p => p.name.replace(/\s+/g, '_') === n.projTag);
+      let wk;
+      if (realDate && realDate.startsWith('proj:')) {
+        wk = 'proj';
+      } else {
+        try { wk = n.gridWk || wkey(new Date(realDate.replace(/-/g, '/'))); }
+        catch(e) { wk = wkey(new Date()); }
+      }
+      openPanel(pi, wk, nodeId);
+      _panelFromNote = { date: realDate, nodeId };
+      // 全画面フォーカスモード(note-panel z-index:999)でも前面に出るようオーバーレイ表示
+      const _pnl = $('panel'); if (_pnl) _pnl.classList.add('panel-overlay');
+    }
 
 
     function buildPB(n, pi, wk, ei, isNew, isProj, isRec) {
@@ -2361,11 +2386,14 @@
       }
 
       h += `<div class="fsep"></div>`;
+      const _projName = (pi >= 0 && S.projects[pi]) ? S.projects[pi].name : '';
       if (!isProj) {
-        h += `<div style="font-size:11px;color:var(--tx2);margin-bottom:10px">週: ${wkeyLabel(wk)}&nbsp;&nbsp;プロジェクト: ${esc(S.projects[pi].name)}</div>`;
-        if (!isNew) h += `<button class="fbtn fbtn-postpone" onclick="postpone()">⏩ 次の週に延期</button>`;
+        const _projDisp = _projName ? esc(_projName) : '<span style="color:var(--tx-warn)">（未割当）</span>';
+        h += `<div style="font-size:11px;color:var(--tx2);margin-bottom:10px">週: ${wkeyLabel(wk)}&nbsp;&nbsp;プロジェクト: ${_projDisp}</div>`;
+        // 「次の週に延期」は週コンテキストが必要。未割当(pi<0)では非表示。
+        if (!isNew && pi >= 0) h += `<button class="fbtn fbtn-postpone" onclick="postpone()">⏩ 次の週に延期</button>`;
       } else {
-        h += `<div style="font-size:11px;color:var(--tx2);margin-bottom:10px">プロジェクト全体のメモ: ${esc(S.projects[pi].name)}</div>`;
+        h += `<div style="font-size:11px;color:var(--tx2);margin-bottom:10px">プロジェクト全体のメモ: ${esc(_projName)}</div>`;
       }
       h += `<button class="fbtn fbtn-save" onclick="savePanel()">${isNew ? '追加' : '保存　(Enter)'}</button>`;
       if (!isNew) h += `<button class="fbtn fbtn-del" onclick="deleteFromPanel()">削除</button>`;
@@ -2454,7 +2482,8 @@
       const startDate = $('pf-startDate') ? ($('pf-startDate').value || '') : '';
       const endDate   = $('pf-endDate')   ? ($('pf-endDate').value   || '') : '';
 
-      const projTag = S.projects[pi].name.replace(/\s+/g, '_');
+      // pi<0（ノートから未割当ノードを開いた場合）は projTag 空。新規追加分岐でのみ使用。
+      const projTag = (pi >= 0 && S.projects[pi]) ? S.projects[pi].name.replace(/\s+/g, '_') : '';
 
       if (ei === null) {
         // New node — 課題6: 作成日=今日、現在週以外は gridWk で表示週を指定（quickAddと統一）
@@ -2490,19 +2519,38 @@
       }
 
       cleanupUnusedTags(); // パネルでタグを削除した場合、未使用タグをtagMetaから除去
+      const fromNote = _panelFromNote;
       clearDirty(); saveState(); render(); closePanel();
-      refocusGrid();
+      if (fromNote) {
+        // ノート起点: ノートを再描画して該当ノードへフォーカスを戻す（グリッドへは飛ばさない）
+        if (_notePanelOpen) {
+          olRender('ol-container', _olCurrentDate);
+          _olFocusId = fromNote.nodeId;
+          setTimeout(() => { if (typeof olFocusNodeEl === 'function') olFocusNodeEl(fromNote.nodeId); }, 30);
+        }
+      } else {
+        refocusGrid();
+      }
     }
 
     function tryClosePanel() {
       if (panelDirty) { if (!confirm('未保存の変更があります。破棄しますか？')) return }
+      const fromNote = _panelFromNote;
       clearDirty(); closePanel();
-      refocusGrid();
+      if (fromNote) {
+        if (_notePanelOpen) {
+          _olFocusId = fromNote.nodeId;
+          setTimeout(() => { if (typeof olFocusNodeEl === 'function') olFocusNodeEl(fromNote.nodeId); }, 30);
+        }
+      } else {
+        refocusGrid();
+      }
     }
     function closePanel() {
       $('panel').style.width = '0';
+      $('panel').classList.remove('panel-overlay');
       $('rz-right').classList.remove('visible');
-      pCtx = null; clearDirty();
+      pCtx = null; _panelFromNote = null; clearDirty();
     }
     function postpone() {
       const { pi, wk, ei } = pCtx;
@@ -8603,7 +8651,7 @@
             const colorKeys = { n: 'color_', r: 'color_#e74c3c', o: 'color_#e67e22', y: 'color_#f1c40f', g: 'color_#2ecc71', b: 'color_#3498db', p: 'color_#9b59b6', a: 'color_#95a5a6' };
             if (colorKeys[k]) { ev.preventDefault(); applyOlSlashCommand(colorKeys[k]); return true; }
           } else {
-            const mainKeys = { t: 'toggle_todo', d: 'toggle_todo', b: 'bold', p: 'private', l: 'toggle_link', u: 'toggle_link', h: 'insert_table', i: 'insert_image', c: 'submenu_color', m: 'submenu_date' };
+            const mainKeys = { t: 'toggle_todo', d: 'toggle_todo', b: 'bold', p: 'private', l: 'toggle_link', u: 'toggle_link', h: 'insert_table', i: 'insert_image', e: 'open_props', c: 'submenu_color', m: 'submenu_date' };
             if (mainKeys[k]) { ev.preventDefault(); applyOlSlashCommand(mainKeys[k]); return true; }
           }
         }
@@ -8760,6 +8808,22 @@
       // トグル統合: 現状に応じて todo/bullet・link/unlink を切替
       if (cmd === 'toggle_todo') cmd = n.isTodo ? 'bullet' : 'todo';
       else if (cmd === 'toggle_link') cmd = (n.type === 'link') ? 'unlink' : 'link';
+
+      // ── プロパティ: グリッドの Shift+Enter と同じ詳細パネルをノートから開く ──
+      if (cmd === 'open_props') {
+        const d = _olSlashDate, nid = _olSlashNodeId;
+        // スラッシュトリガー文字を除去
+        if (_olSlashTrigger) {
+          const elP = document.getElementById('olt-' + nid);
+          if (elP) {
+            const tP = elP.textContent;
+            if (tP.endsWith(_olSlashTrigger)) { const ntP = tP.slice(0, -_olSlashTrigger.length); elP.textContent = ntP; n.text = ntP; n.html = ntP; }
+          }
+        }
+        hideOlSlashMenu();
+        olOpenProps(d, nid);
+        return;
+      }
 
       // ── 挿入系: 表 ──────────────────────────────────────────────────
       if (cmd === 'insert_table') {

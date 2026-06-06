@@ -1607,6 +1607,16 @@
       flex-direction: column;
       overflow: hidden;
     }
+    /* ノート（特に全画面フォーカスモード z-index:999）から開いたときは前面オーバーレイで表示 */
+    #panel.panel-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      z-index: 1000;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.28);
+    }
 
     #ph {
       display: flex;
