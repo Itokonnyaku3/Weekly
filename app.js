@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.18.0-06061300-unassigned-row';
+    const APP_VERSION = 'v1.19.0-06061400-inline-meta-chips';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -432,6 +432,34 @@
         cls += ' e-due-none';
       }
       return `<span class="${cls}">${disp}</span>`;
+    }
+
+    // 案A Phase1: ノート行に due/priority をインラインチップで表示（表示のみ）。
+    // 設定済みのものだけ出す（プログレッシブ・ディスクロージャ）。色判定は getDueBadge と統一。
+    function olMetaChips(n) {
+      if (!n) return '';
+      let h = '';
+      // 優先度チップ
+      const prio = n.priority || '';
+      if (prio === 'high' || prio === 'mid' || prio === 'low') {
+        const lbl = prio === 'high' ? '高' : (prio === 'mid' ? '中' : '低');
+        h += `<span class="ol-meta-chip ol-prio-chip ol-prio-${prio}" title="優先度: ${lbl}（詳細パネルで変更）">${lbl}</span>`;
+      }
+      // 期限チップ
+      const due = (n.due || '').trim();
+      if (due) {
+        const pad = s => s.split('-').map(x => x.padStart(2, '0')).join('-');
+        const today = pad(todayDateStr());
+        const dueP = pad(due);
+        let cls = 'ol-due-future';
+        if (n.checked) cls = 'ol-due-done';
+        else if (dueP < today) cls = 'ol-due-over';
+        else if (dueP === today) cls = 'ol-due-today';
+        const m = due.match(/-(\d+)-(\d+)$/);
+        const disp = m ? `${+m[1]}/${+m[2]}` : due;
+        h += `<span class="ol-meta-chip ol-due-chip ${cls}" title="期限: ${esc(due)}（詳細パネルで変更）">📅${disp}</span>`;
+      }
+      return h;
     }
 
     function doRollover() {
@@ -5561,6 +5589,7 @@
               const ts = tagChipStyle(t);
               return `<span class="ol-note-tag-chip" style="${ts}" onclick="event.stopPropagation();setTagFilter('${escA(t)}')" oncontextmenu="event.preventDefault();event.stopPropagation();showTagColorPicker('${escA(t)}',event)" title="クリック: フィルタ / 右クリック: 色設定">#${esc(t)}<span class="ol-tag-del" onmousedown="event.preventDefault()" onclick="event.stopPropagation();olRemoveTag('${escA(date)}','${escA(n.id)}','${escA(t)}')" title="タグを削除"> ×</span></span>`
             }).join('') : '')
+          + olMetaChips(n)
           + (() => {
               // サブタスク件数バッジ（インライン・右側）
               if (!_childrenByParentId.has(n.id)) return '';
@@ -5634,7 +5663,7 @@
       // _ssResultsMap も含めて searchsummary の結果変化を検出する
       const _ssKey = _ssResultsMap.size ? '|ss:' + [..._ssResultsMap.entries()].map(([id, res]) => id + '=' + res.length + ':' + res.slice(0,3).map(r => r.id || r.text || '').join('|')).join(',') : '';
       const _selKey = _olSelected.size ? '|sel:' + [..._olSelected].sort().join(',') : '';
-      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + _selKey + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.text}:${n.html}`).join(',');
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + _selKey + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.due||''}:${n.priority||''}:${n.text}:${n.html}`).join(',');
 
       if (_olLastRenderKey === renderKey) {
         ghAuthInContainer(container);

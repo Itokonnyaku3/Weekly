@@ -2296,6 +2296,32 @@
       vertical-align: middle;
     }
     .ol-note-tag-chip:hover { opacity: 0.8; }
+
+    /* ── 案A Phase1: ノート行のメタチップ（期限・優先度。表示のみ） ── */
+    .ol-meta-chip {
+      display: inline-block;
+      font-size: 10px;
+      padding: 0 5px;
+      border-radius: 8px;
+      line-height: 1.5;
+      margin-right: 3px;
+      white-space: nowrap;
+      vertical-align: middle;
+      user-select: none;
+      font-weight: 600;
+    }
+    /* 期限チップ：近さで色分け（getDueBadge と整合） */
+    .ol-due-chip { background: var(--bg3); color: var(--tx2); }
+    .ol-due-chip.ol-due-over   { background: rgba(229,57,53,0.16);  color: #e53935; }
+    .ol-due-chip.ol-due-today  { background: rgba(245,166,35,0.18); color: #d98300; }
+    .ol-due-chip.ol-due-future { background: var(--bg3);            color: var(--tx2); }
+    .ol-due-chip.ol-due-done   { background: var(--bg3);            color: var(--tx3); text-decoration: line-through; opacity: 0.7; }
+    /* 優先度チップ */
+    .ol-prio-chip.ol-prio-high { background: rgba(229,57,53,0.16);  color: #e53935; }
+    .ol-prio-chip.ol-prio-mid  { background: rgba(245,166,35,0.18); color: #d98300; }
+    .ol-prio-chip.ol-prio-low  { background: rgba(66,133,244,0.14); color: #3b78d8; }
+    .ol-prio-chip::before { content: '⚑'; font-size: 9px; margin-right: 1px; opacity: 0.85; }
+
     .ol-tag-del {
       display: inline-block;
       margin-left: 2px;
