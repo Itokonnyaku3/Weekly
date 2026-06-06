@@ -199,7 +199,8 @@
     </div>
   </div>
 
-  <div id="img-full" onclick="this.classList.remove('open')">
+  <div id="img-full" onclick="if(event.target===this||event.target.id==='img-full-img')this.classList.remove('open')">
+    <button id="img-full-close" onclick="document.getElementById('img-full').classList.remove('open')" title="閉じる (Esc)">✕</button>
     <img id="img-full-img" src="" alt="">
   </div>
   <div id="shortcut-hint"></div>

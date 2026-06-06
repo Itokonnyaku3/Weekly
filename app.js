@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.16.1-06031050-compact-rows';
+    const APP_VERSION = 'v1.16.2-06061100-img-lightbox';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5692,6 +5692,8 @@
       ghAuthInContainer(container);
       // 画像リサイズのサイズ変化を監視してノードデータに永続化
       olObserveImgSizes();
+      // ノート画像クリック → ライトボックス（一度だけ登録）
+      olSetupImgClickHandler();
       // v1.4.2: ノートペイン内インクリメンタル検索が有効なら、再描画後にハイライトを復元
       _olReapplyIncSearch();
       // v1.4.3: プロジェクトノート描画時、末尾に「自動集約セクション」を追加
@@ -5759,6 +5761,30 @@
       const container = document.getElementById('ol-container');
       if (!container) return;
       container.querySelectorAll('.ol-img-wrap').forEach(el => _imgResizeObs.observe(el));
+    }
+
+    // ノート画像クリック → ライトボックス表示（イベント委譲、一度だけ登録）
+    let _olImgClickSetup = false;
+    function olSetupImgClickHandler() {
+      if (_olImgClickSetup) return;
+      const container = document.getElementById('ol-container');
+      if (!container) return;
+      _olImgClickSetup = true;
+      container.addEventListener('click', ev => {
+        const img = ev.target;
+        if (!img || img.tagName !== 'IMG') return;
+        if (!img.closest('.ol-img-wrap')) return;
+        const src = img.src;
+        if (!src) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        const fullImg = document.getElementById('img-full-img');
+        const fullEl  = document.getElementById('img-full');
+        if (fullImg && fullEl) {
+          fullImg.src = src;
+          fullEl.classList.add('open');
+        }
+      });
     }
 
     // ノードのテキスト＋HTMLを両方保存するヘルパー（keydown等で利用）

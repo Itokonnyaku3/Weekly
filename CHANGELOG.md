@@ -6,6 +6,21 @@
 
 ---
 
+## v1.16.2-06061100-img-lightbox (2026-06-06)
+### 機能追加 — ノート画像クリックでライトボックス表示
+
+- ノート内画像（`.ol-img-wrap img`）をクリックするとライトボックスが開くように
+  - `olSetupImgClickHandler()`: `#ol-container` へのイベント委譲（一度だけ登録）
+  - 画像の現在の認証済み URL（`ghAuthInContainer` 処理済み）をそのまま使用
+- ライトボックス（`#img-full`）の改善
+  - 画像サイズ `max-width: 90vw / 90vh` → `95vw / 95vh`（ウィンドウいっぱい）
+  - 右上に `×` 閉じるボタン追加（`#img-full-close`）
+  - 背景オーバーレイの不透明度を `.88` → `.92` に強化
+  - 画像クリックでも閉じる（背景クリックと同様）
+- `.ol-img-wrap img`: `cursor: default` → `cursor: zoom-in`、hover で淡色フィードバック
+
+---
+
 ## v1.16.1-06031050-compact-rows (2026-06-03)
 ### スタイル調整 — ノート行間を詰める
 
