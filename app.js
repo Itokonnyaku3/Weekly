@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.16.2-06061100-img-lightbox';
+    const APP_VERSION = 'v1.16.3-06061130-fix-searchsave';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -9888,6 +9888,7 @@
     // 現在の検索条件で searchsummary ノードを生成
     function _searchSave() {
       const q1 = ($('search-input').value || '').trim();
+      const q2 = ($('search-input2').value || '').trim();
       const tags = [..._searchSelectedTags];
 
       // 挿入先: 現在開いているノート（なければ今日のデイリーノートへ）
