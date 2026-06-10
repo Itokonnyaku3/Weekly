@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.20.0-06061500-note-props-panel';
+    const APP_VERSION = 'v1.21.0-06111000-daily-agenda';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5456,6 +5456,72 @@
       return { visible, focusNodeText };
     }
 
+    // ── デイリーノートの「本日期限 / 本日作業期間」アジェンダ ──
+    // 表示中の日付(date: "YYYY-M-D")を基準に、全ノード横断で
+    //  - due が当日のタスク（本日期限）
+    //  - startDate <= 当日 <= endDate のタスク（本日作業期間）
+    // を未完(checked=false)のみ集める。proj: ノートでは無効。
+    function _agPad(s) { return (s || '').split('-').map(x => x.padStart(2, '0')).join('-'); }
+    function getDayAgenda(date) {
+      const out = { due: [], span: [] };
+      if (!date || date.startsWith('proj:')) return out;
+      const today = _agPad(date);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(today)) return out;
+      const all = getAllNodes({ includeProj: true });
+      all.forEach(({ node: n, date: d }) => {
+        if (!n || n.checked) return;                 // 未完のみ
+        const t = getNodeType(n);
+        if (t === 'searchsummary' || t === 'nodelink') return;
+        if (n.due && _agPad(n.due) === today) out.due.push({ node: n, date: d });
+        if (n.startDate && n.endDate) {
+          const s = _agPad(n.startDate), e = _agPad(n.endDate);
+          if (s <= today && today <= e) out.span.push({ node: n, date: d });
+        }
+      });
+      return out;
+    }
+    // アジェンダ1行のHTML。isDue=true かつ todo は機能するチェックボックス。
+    function olAgendaRowHtml(it, isDue) {
+      const n = it.node, d = it.date;
+      const isTodo = getNodeType(n) === 'todo';
+      // 所属ラベル（プロジェクト名 or 日付）
+      let info = '';
+      if (n.projTag) {
+        const p = S.projects.find(pp => pp.name.replace(/\s+/g, '_') === n.projTag);
+        info = p ? p.name : n.projTag;
+      } else if (d && d.startsWith('proj:')) {
+        const pi = +d.slice(5); info = (S.projects[pi] ? S.projects[pi].name : '') + ' メモ';
+      } else if (d) {
+        info = d;
+      }
+      const jump = `openNotePanelToDate('${escA(d)}','${escA(n.id)}')`;
+      const lead = (isDue && isTodo)
+        ? `<input type="checkbox" class="ol-agenda-cb" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();olAgendaToggle('${escA(n.id)}')">`
+        : `<span class="ol-agenda-bullet">${isTodo ? '☐' : '•'}</span>`;
+      // 作業期間セクションはスパン範囲を表示
+      let rangeChip = '';
+      if (!isDue && n.startDate && n.endDate) {
+        rangeChip = `<span class="ol-agenda-info">📊${esc(n.startDate.slice(5))}〜${esc(n.endDate.slice(5))}</span>`;
+      }
+      return `<div class="ol-row ol-agenda-row" onclick="${jump}" title="クリックで元ノードへ移動">`
+        + lead
+        + `<div class="ol-text-area">`
+        +   `<span class="ol-agenda-text">${esc(n.text || '')}</span>`
+        +   (info ? `<span class="ol-agenda-info">${esc(info)}</span>` : '')
+        +   rangeChip
+        +   olMetaChips(n)
+        + `</div></div>`;
+    }
+    // アジェンダのチェックボックス: 元ノードの完了状態をトグル（グリッドにも反映）
+    function olAgendaToggle(nodeId) {
+      const found = findNodeById(nodeId);
+      if (!found) return;
+      found.node.checked = !found.node.checked;
+      saveState();
+      olRender('ol-container', _olCurrentDate);
+      if (typeof render === 'function') render();
+    }
+
     // アウトラインを描画する
     function olRender(containerId, date) {
       const container = document.getElementById(containerId);
@@ -5707,11 +5773,32 @@
         }
       });
 
+      // ── 本日期限 / 本日作業期間 アジェンダ（デイリーノート最下部に自動表示）──
+      let _agDue = [], _agSpan = [];
+      if (date && !date.startsWith('proj:')) {
+        const _ag = getDayAgenda(date);
+        _agDue = _ag.due; _agSpan = _ag.span;
+        if (_agDue.length || _agSpan.length) {
+          html += `<div class="ol-agenda-sep"></div>`;
+          if (_agDue.length) {
+            html += `<div class="ol-agenda-head">本日期限</div>`;
+            _agDue.forEach(it => { html += olAgendaRowHtml(it, true); });
+          }
+          if (_agSpan.length) {
+            html += `<div class="ol-agenda-head">本日作業期間</div>`;
+            _agSpan.forEach(it => { html += olAgendaRowHtml(it, false); });
+          }
+        }
+      }
+      // agenda の内容変化を renderKey に反映（id+完了+テキストで署名）
+      const _agSig = arr => arr.map(i => i.node.id + ':' + (i.node.checked ? 1 : 0) + ':' + (i.node.text || '').slice(0, 24)).join(',');
+      const _agKey = '|ag:' + _agSig(_agDue) + ';' + _agSig(_agSpan);
+
       // 現在の構造（ノードID・インデント・状態・内容）のハッシュを生成
       // _ssResultsMap も含めて searchsummary の結果変化を検出する
-      const _ssKey = _ssResultsMap.size ? '|ss:' + [..._ssResultsMap.entries()].map(([id, res]) => id + '=' + res.length + ':' + res.slice(0,3).map(r => r.id || r.text || '').join('|')).join(',') : '';
+      const _ssKey =_ssResultsMap.size ? '|ss:' + [..._ssResultsMap.entries()].map(([id, res]) => id + '=' + res.length + ':' + res.slice(0,3).map(r => r.id || r.text || '').join('|')).join(',') : '';
       const _selKey = _olSelected.size ? '|sel:' + [..._olSelected].sort().join(',') : '';
-      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + _selKey + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.due||''}:${n.priority||''}:${n.text}:${n.html}`).join(',');
+      const renderKey = date + '|' + (_olFocusMode ? `${_olFocusMode.nodeId}|` : '') + _olFocusId + '|' + _olFocusAtStart + '|' + (_olRefRowsExpanded ? '1' : '0') + _selKey + '|' + JSON.stringify(S.tagMeta||{}) + _ssKey + '|' + visible.map(n => `${n.id}:${n.indent}:${n.collapsed}:${n.isTodo}:${n.checked}:${n.isPrivate}:${n.bold}:${n.color}:${n.linkedEntryRef}:${n.projTag||''}:${n.type||''}:${n.url||''}:${n.parentId||''}:${(n.tags||[]).join(',')}:${n.due||''}:${n.priority||''}:${n.text}:${n.html}`).join(',') + _agKey;
 
       if (_olLastRenderKey === renderKey) {
         ghAuthInContainer(container);

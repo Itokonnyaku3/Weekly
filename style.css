@@ -2307,6 +2307,52 @@
     }
     .ol-note-tag-chip:hover { opacity: 0.8; }
 
+    /* ── デイリーノートのアジェンダ（本日期限 / 本日作業期間） ── */
+    .ol-agenda-sep {
+      border-top: 1px dashed var(--bd2);
+      margin: 16px 8px 6px;
+    }
+    .ol-agenda-head {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--tx2);
+      margin: 10px 8px 2px;
+      user-select: none;
+    }
+    .ol-agenda-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 2px 8px;
+      min-height: 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .ol-agenda-row:hover { background: var(--accent-soft); }
+    .ol-agenda-cb {
+      width: 15px; height: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .ol-agenda-bullet {
+      width: 15px;
+      flex-shrink: 0;
+      text-align: center;
+      color: var(--tx2);
+      font-size: 13px;
+      user-select: none;
+    }
+    .ol-agenda-text { color: var(--tx); word-break: break-word; }
+    .ol-agenda-info {
+      font-size: 10px;
+      color: var(--tx3);
+      margin-left: 6px;
+      white-space: nowrap;
+    }
+
     /* ── 案A Phase1: ノート行のメタチップ（期限・優先度。表示のみ） ── */
     .ol-meta-chip {
       display: inline-block;
