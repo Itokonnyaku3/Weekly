@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.21.0-06111000-daily-agenda';
+    const APP_VERSION = 'v1.22.0-06111100-agenda-overdue-nodue';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5462,17 +5462,27 @@
     //  - startDate <= 当日 <= endDate のタスク（本日作業期間）
     // を未完(checked=false)のみ集める。proj: ノートでは無効。
     function _agPad(s) { return (s || '').split('-').map(x => x.padStart(2, '0')).join('-'); }
+    let _agNoDueExpanded = false; // 「期限なし」セクションの展開状態（既定:折りたたみ）
     function getDayAgenda(date) {
-      const out = { due: [], span: [] };
+      const out = { overdue: [], due: [], span: [], nodue: [] };
       if (!date || date.startsWith('proj:')) return out;
       const today = _agPad(date);
       if (!/^\d{4}-\d{2}-\d{2}$/.test(today)) return out;
+      // 期限超過・期限なしは「今日」のデイリーノートのみ（過去/未来の日付では出さない）
+      const isToday = (typeof todayDateStr === 'function') && (_agPad(todayDateStr()) === today);
       const all = getAllNodes({ includeProj: true });
       all.forEach(({ node: n, date: d }) => {
         if (!n || n.checked) return;                 // 未完のみ
         const t = getNodeType(n);
         if (t === 'searchsummary' || t === 'nodelink') return;
-        if (n.due && _agPad(n.due) === today) out.due.push({ node: n, date: d });
+        if (n.due) {
+          const due = _agPad(n.due);
+          if (due === today) out.due.push({ node: n, date: d });
+          else if (isToday && due < today) out.overdue.push({ node: n, date: d });
+        } else if (isToday && t === 'todo') {
+          // 期限なしは「タスク(todo)」のみ（無期限のログ等は除外してノイズ防止）
+          out.nodue.push({ node: n, date: d });
+        }
         if (n.startDate && n.endDate) {
           const s = _agPad(n.startDate), e = _agPad(n.endDate);
           if (s <= today && today <= e) out.span.push({ node: n, date: d });
@@ -5520,6 +5530,11 @@
       saveState();
       olRender('ol-container', _olCurrentDate);
       if (typeof render === 'function') render();
+    }
+    // 「期限なし」セクションの折りたたみ切替
+    function olAgendaToggleNoDue() {
+      _agNoDueExpanded = !_agNoDueExpanded;
+      olRender('ol-container', _olCurrentDate);
     }
 
     // アウトラインを描画する
@@ -5773,26 +5788,40 @@
         }
       });
 
-      // ── 本日期限 / 本日作業期間 アジェンダ（デイリーノート最下部に自動表示）──
-      let _agDue = [], _agSpan = [];
+      // ── アジェンダ（デイリーノート最下部に自動表示）──
+      // 任意の表示日: 本日期限・本日作業期間 / 今日のみ: 期限超過・期限なし(折りたたみ)
+      let _ag = { overdue: [], due: [], span: [], nodue: [] };
       if (date && !date.startsWith('proj:')) {
-        const _ag = getDayAgenda(date);
-        _agDue = _ag.due; _agSpan = _ag.span;
-        if (_agDue.length || _agSpan.length) {
+        _ag = getDayAgenda(date);
+        if (_ag.overdue.length || _ag.due.length || _ag.span.length || _ag.nodue.length) {
           html += `<div class="ol-agenda-sep"></div>`;
-          if (_agDue.length) {
-            html += `<div class="ol-agenda-head">本日期限</div>`;
-            _agDue.forEach(it => { html += olAgendaRowHtml(it, true); });
+          if (_ag.overdue.length) {
+            html += `<div class="ol-agenda-head ol-agenda-head-over">⚠ 期限超過（〜昨日）</div>`;
+            _ag.overdue.forEach(it => { html += olAgendaRowHtml(it, true); });
           }
-          if (_agSpan.length) {
+          if (_ag.due.length) {
+            html += `<div class="ol-agenda-head">本日期限</div>`;
+            _ag.due.forEach(it => { html += olAgendaRowHtml(it, true); });
+          }
+          if (_ag.span.length) {
             html += `<div class="ol-agenda-head">本日作業期間</div>`;
-            _agSpan.forEach(it => { html += olAgendaRowHtml(it, false); });
+            _ag.span.forEach(it => { html += olAgendaRowHtml(it, false); });
+          }
+          if (_ag.nodue.length) {
+            html += `<div class="ol-agenda-head ol-agenda-collapsible" onclick="olAgendaToggleNoDue()" title="クリックで展開/折りたたみ">`
+              + `<span class="ol-agenda-caret">${_agNoDueExpanded ? '▼' : '▶'}</span> 期限なし `
+              + `<span class="ol-agenda-count">(${_ag.nodue.length})</span></div>`;
+            if (_agNoDueExpanded) {
+              _ag.nodue.slice(0, 60).forEach(it => { html += olAgendaRowHtml(it, true); });
+              if (_ag.nodue.length > 60) html += `<div class="ol-agenda-more">他 ${_ag.nodue.length - 60} 件</div>`;
+            }
           }
         }
       }
       // agenda の内容変化を renderKey に反映（id+完了+テキストで署名）
       const _agSig = arr => arr.map(i => i.node.id + ':' + (i.node.checked ? 1 : 0) + ':' + (i.node.text || '').slice(0, 24)).join(',');
-      const _agKey = '|ag:' + _agSig(_agDue) + ';' + _agSig(_agSpan);
+      const _agKey = '|ag:' + _agSig(_ag.overdue) + ';' + _agSig(_ag.due) + ';' + _agSig(_ag.span)
+        + ';nd' + _ag.nodue.length + (_agNoDueExpanded ? 'E' + _agSig(_ag.nodue.slice(0, 60)) : 'C');
 
       // 現在の構造（ノードID・インデント・状態・内容）のハッシュを生成
       // _ssResultsMap も含めて searchsummary の結果変化を検出する

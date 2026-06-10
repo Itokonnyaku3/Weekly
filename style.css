@@ -2352,6 +2352,27 @@
       margin-left: 6px;
       white-space: nowrap;
     }
+    /* 期限超過の見出し（警告色） */
+    .ol-agenda-head-over { color: #c62828; }
+    @media (prefers-color-scheme: dark) {
+      .ol-agenda-head-over { color: #ef9a9a; }
+    }
+    /* 折りたたみ見出し（期限なし） */
+    .ol-agenda-collapsible {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ol-agenda-collapsible:hover { color: var(--accent); }
+    .ol-agenda-caret { font-size: 10px; opacity: 0.8; }
+    .ol-agenda-count { font-size: 11px; color: var(--tx3); font-weight: 600; }
+    .ol-agenda-more {
+      font-size: 11px;
+      color: var(--tx3);
+      padding: 2px 8px 2px 26px;
+      font-style: italic;
+    }
 
     /* ── 案A Phase1: ノート行のメタチップ（期限・優先度。表示のみ） ── */
     .ol-meta-chip {
