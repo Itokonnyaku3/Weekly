@@ -126,7 +126,7 @@
 
     /* ── constants / state ── */
     const SK = 'pwt_v5', PK_R = 'pwt_rp', PK_L = 'pwt_lp', WEEKS = 6;
-    const APP_VERSION = 'v1.22.0-06111100-agenda-overdue-nodue';
+    const APP_VERSION = 'v1.22.1-06111200-agenda-todo-only';
     let S = { projects: [], wOff: 0 };
     let pCtx = null;
     let dragProjIdx = null, dragECtx = null;
@@ -5473,14 +5473,13 @@
       const all = getAllNodes({ includeProj: true });
       all.forEach(({ node: n, date: d }) => {
         if (!n || n.checked) return;                 // 未完のみ
-        const t = getNodeType(n);
-        if (t === 'searchsummary' || t === 'nodelink') return;
+        // アジェンダは「タスク(todo)」のみ。メモ/ログ/リンク/ノードリンク/検索サマリは対象外
+        if (getNodeType(n) !== 'todo') return;
         if (n.due) {
           const due = _agPad(n.due);
           if (due === today) out.due.push({ node: n, date: d });
           else if (isToday && due < today) out.overdue.push({ node: n, date: d });
-        } else if (isToday && t === 'todo') {
-          // 期限なしは「タスク(todo)」のみ（無期限のログ等は除外してノイズ防止）
+        } else if (isToday) {
           out.nodue.push({ node: n, date: d });
         }
         if (n.startDate && n.endDate) {
