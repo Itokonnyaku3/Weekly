@@ -1,0 +1,18 @@
+:root{
+  --bg:#f7f8fa; --panel:#fff; --tx:#1c2530; --tx3:#8a96a3;
+  --bd:#e3e7ec; --bd2:#cfd6de; --pc:#2c3e50; --accent:#2c6df0; --accent-soft:#eaf1fe;
+}
+:root.dark{
+  --bg:#11151a; --panel:#171c23; --tx:#e6eaef; --tx3:#7e8a98;
+  --bd:#252c35; --bd2:#333c47; --pc:#9fb3c8; --accent:#5b8cff; --accent-soft:#1b2740;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow:hidden}
+#toolbar{display:flex;align-items:center;gap:8px;height:40px;padding:0 10px;border-bottom:1px solid var(--bd);background:var(--panel)}
+#toolbar h1{font-size:15px;margin:0;font-weight:700}
+#ver{font-size:10px;color:var(--tx3);font-weight:400}
+.spacer{flex:1}
+#app{height:calc(100% - 40px);overflow:auto;padding:12px}
+.btn{font:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}

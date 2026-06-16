@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Tracker v2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toolbar">
+    <h1>📋 Tracker <span id="ver"></span></h1>
+    <div class="spacer"></div>
+    <button class="btn" id="dev-add">＋テストカード</button>
+  </div>
+  <div id="app">
+    <div id="view-daily" hidden></div>
+    <div id="view-list" hidden></div>
+    <pre id="dev-dump" style="font-size:11px;color:var(--tx3)"></pre>
+  </div>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
