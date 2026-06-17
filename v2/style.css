@@ -16,3 +16,12 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 #app{height:calc(100% - 40px);overflow:auto;padding:12px}
 .btn{font:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);border-radius:6px;cursor:pointer}
 .btn:hover{border-color:var(--accent)}
+
+/* 最小デイリービュー */
+.day-sec{margin:0 0 18px;max-width:760px}
+.day-head{font-weight:700;font-size:13px;padding:4px 0;border-bottom:1px solid var(--bd);margin-bottom:4px}
+.card-row{display:flex;align-items:flex-start;gap:7px;padding:3px 0;font-size:13px;line-height:1.5}
+.card-row input[type=checkbox]{margin:3px 0 0;cursor:pointer;flex:none}
+.card-dot{color:var(--tx3);flex:none;width:14px;text-align:center}
+.card-txt{white-space:pre-wrap}
+.card-txt.done{text-decoration:line-through;opacity:.5}
