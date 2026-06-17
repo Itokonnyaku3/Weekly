@@ -58,10 +58,33 @@ export function createStore(initial){
     return createCard({ kind:'day', content:date, parentRefId:null });
   }
 
+  // ── 構造編集ヘルパ（インデント/アウトデント/分割の順序計算）──
+  function siblings(refId){
+    const r = S.refs[refId]; if (!r) return [];
+    return childRefs(r.parentRefId);
+  }
+  function prevSiblingRef(refId){
+    const sibs = siblings(refId);
+    const i = sibs.findIndex(r => r.id === refId);
+    return i > 0 ? sibs[i-1] : null;
+  }
+  function orderAfter(refId){            // refId の直後に差し込む order（兄弟間・分数）
+    const r = S.refs[refId]; if (!r) return 0;
+    const sibs = childRefs(r.parentRefId);
+    const i = sibs.findIndex(x => x.id === refId);
+    const next = sibs[i+1];
+    return next ? (r.order + next.order) / 2 : r.order + 1;
+  }
+  function endOrder(parentRefId){        // parent の末尾に追加する order
+    const sibs = childRefs(parentRefId);
+    return sibs.length ? sibs[sibs.length-1].order + 1 : 0;
+  }
+
   function subscribe(fn){ subs.add(fn); return () => subs.delete(fn); }
   const toJSON = () => S;
 
   return { createBody, createRef, createCard, getBody, getRef, updateBody, updateRef,
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
+           siblings, prevSiblingRef, orderAfter, endOrder,
            subscribe, toJSON, _state:S };
 }

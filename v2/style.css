@@ -23,5 +23,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-row{display:flex;align-items:flex-start;gap:7px;padding:3px 0;font-size:13px;line-height:1.5}
 .card-row input[type=checkbox]{margin:3px 0 0;cursor:pointer;flex:none}
 .card-dot{color:var(--tx3);flex:none;width:14px;text-align:center}
-.card-txt{white-space:pre-wrap}
+.card-txt{white-space:pre-wrap;outline:none;flex:1;min-height:1.45em;cursor:text}
+.card-txt:empty::after{content:"\00a0";color:transparent}
 .card-txt.done{text-decoration:line-through;opacity:.5}
+.card-row:focus-within{background:var(--accent-soft);border-radius:4px}
