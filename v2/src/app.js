@@ -3,13 +3,17 @@ const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily } = await import('./daily.js' + _q);
+const { renderList } = await import('./list.js' + _q);
 
-export const APP_VERSION = '0.2.0';
+export const APP_VERSION = '0.3.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
 
 store.subscribe(() => saveState(store));         // 保存のみ（再描画は構造変更時に明示）
+
+let currentView = 'daily';
+const listState = { hideDone:false, dueFilter:'all', sort:'due' };
 
 function renderDump(){
   const el = document.getElementById('dev-dump');
@@ -18,13 +22,24 @@ function renderDump(){
 }
 function renderAll(){
   renderDump();
-  const v = document.getElementById('view-daily');
-  if (v){ v.hidden = false; renderDaily(store, v, renderAll); }
+  const dv = document.getElementById('view-daily');
+  const lv = document.getElementById('view-list');
+  if (dv) dv.hidden = currentView !== 'daily';
+  if (lv) lv.hidden = currentView !== 'list';
+  if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll);
+  if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState);
+  document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
+  document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
 }
+function setView(v){ currentView = v; renderAll(); }
 
 function boot(){
   const ver = document.getElementById('ver');
   if (ver) ver.textContent = 'v' + APP_VERSION;
+
+  document.getElementById('view-daily-btn')?.addEventListener('click', () => setView('daily'));
+  document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
+
   const btn = document.getElementById('dev-add');
   if (btn) btn.onclick = () => {
     const day = store.ensureDayCard(new Date().toISOString().slice(0,10));

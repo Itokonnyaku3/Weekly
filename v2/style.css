@@ -27,3 +27,22 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-txt:empty::after{content:"\00a0";color:transparent}
 .card-txt.done{text-decoration:line-through;opacity:.5}
 .card-row:focus-within{background:var(--accent-soft);border-radius:4px}
+
+/* ビュー切替ボタン */
+.btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+
+/* リストビュー */
+.list-controls{display:flex;align-items:center;gap:14px;margin-bottom:10px;font-size:12px;flex-wrap:wrap}
+.list-field{display:flex;align-items:center;gap:5px;color:var(--tx3)}
+.list-field select,.list-table select,.list-table input[type=date]{font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
+.list-cb{display:flex;align-items:center;gap:5px;color:var(--tx3);cursor:pointer}
+.list-count{margin-left:auto;color:var(--tx3)}
+.list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px}
+.list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
+.list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
+.list-table .c-st{width:28px}
+.list-table .c-prio{width:84px}
+.list-table .c-due{width:150px}
+.list-title{outline:none;display:block;min-height:1.4em;cursor:text}
+.row-done .list-title{text-decoration:line-through;opacity:.5}
+.list-empty{color:var(--tx3);padding:10px 8px}
