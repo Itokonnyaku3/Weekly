@@ -98,6 +98,17 @@ export function createStore(initial){
   }
   function listViews(){ return S.views.slice(); }
 
+  // ── プロジェクト（kind:'project' の本体。付箋は持たず明示管理。rename は updateBody）──
+  function createProject(name){ return createBody({ kind:'project', content: name || '新規プロジェクト' }); }
+  function listProjects(){
+    return Object.values(S.bodies).filter(b => b.kind === 'project')
+      .sort((a,b) => (a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0));
+  }
+  function deleteProject(id){
+    for (const b of Object.values(S.bodies)) if (b.proj === id) delete b.proj; // タスクの帰属を外す
+    delete S.bodies[id]; emit();
+  }
+
   function subscribe(fn){ subs.add(fn); return () => subs.delete(fn); }
   const toJSON = () => S;
 
@@ -105,5 +116,6 @@ export function createStore(initial){
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
            siblings, prevSiblingRef, orderAfter, endOrder,
            saveView, updateView, deleteView, listViews,
+           createProject, listProjects, deleteProject,
            subscribe, toJSON, _state:S };
 }

@@ -29,4 +29,14 @@ assert.equal(selectTasks(tasks, { sort:'priority' }, today)[0].id, '2');
 // 作成日昇順
 assert.deepEqual(selectTasks(tasks, { sort:'created' }, today).map(t=>t.id), ['1','2','3','4']);
 
+// projFilter（プロジェクト帰属）
+const pj = [
+  { id:'a', content:'A', proj:'p1', createdAt:'2026-06-01T00:00:00Z' },
+  { id:'b', content:'B', proj:'p2', createdAt:'2026-06-02T00:00:00Z' },
+  { id:'c', content:'C',            createdAt:'2026-06-03T00:00:00Z' }, // 未割当
+];
+assert.deepEqual(selectTasks(pj, { projFilter:'p1', sort:'created' }, today).map(t=>t.id), ['a']);
+assert.deepEqual(selectTasks(pj, { projFilter:'none', sort:'created' }, today).map(t=>t.id), ['c']);
+assert.deepEqual(selectTasks(pj, { projFilter:'all',  sort:'created' }, today).map(t=>t.id), ['a','b','c']);
+
 console.log('PASS list.select');

@@ -1,13 +1,14 @@
 // リストビュー（タスク本体のレンズ）: 絞り込み→並べ替え→選んだ列で表示。
-// 行で直接編集（完了・タイトル・優先度・期限）→本体更新で全ビューに反映。
-// 列の選択＋カスタムビュー保存（条件＝絞り込み/並べ替え/列の組）に対応。
+// 行で直接編集（完了・タイトル・優先度・期限・プロジェクト）→本体更新で全ビューに反映。
+// 列選択／カスタムビュー保存／プロジェクト（フィルタ＋割当＋管理）に対応。
 
-// ── 純ロジック（テスト対象）: タスク配列を絞り込み＋並べ替え ──
+// ── 純ロジック（テスト対象）──
 export function selectTasks(tasks, opts, today){
-  const { hideDone=false, dueFilter='all', sort='due' } = opts || {};
+  const { hideDone=false, dueFilter='all', projFilter='all', sort='due' } = opts || {};
   let out = tasks.slice();
   if (hideDone) out = out.filter(t => !t.done);
   out = out.filter(t => dueMatch(t.due, dueFilter, today));
+  out = out.filter(t => projMatch(t.proj, projFilter));
   out.sort(sortCmp(sort));
   return out;
 }
@@ -21,6 +22,11 @@ function dueMatch(due, filter, today){
   if (filter === 'today')   return d <= 0;
   if (filter === 'next3')   return d >= 0 && d <= 3;
   return true;
+}
+function projMatch(proj, filter){
+  if (filter === 'all')  return true;
+  if (filter === 'none') return !proj;
+  return proj === filter;        // 特定PJのID
 }
 function dayDiff(due, today){
   return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
@@ -48,7 +54,7 @@ const COLUMNS = {
   created:  { label:'作成日',     cls:'c-created', render: cellCreated },
 };
 const COLUMN_ORDER = ['status', 'title', 'project', 'priority', 'due', 'created'];
-export const DEFAULT_COLUMNS = ['status', 'title', 'priority', 'due'];
+export const DEFAULT_COLUMNS = ['status', 'title', 'project', 'priority', 'due'];
 
 function activeColumns(state){
   const list = (state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS).filter(k => COLUMNS[k]);
@@ -64,7 +70,7 @@ export function renderList(store, mount, requestRender, state){
 
   mount.innerHTML = '';
   mount.appendChild(buildViewBar(store, requestRender, state));
-  mount.appendChild(buildControls(requestRender, state, rows.length, all.length));
+  mount.appendChild(buildControls(store, requestRender, state, rows.length, all.length));
 
   const table = document.createElement('table');
   table.className = 'list-table';
@@ -97,7 +103,7 @@ export function renderList(store, mount, requestRender, state){
   mount.appendChild(table);
 }
 
-// ── 保存ビュー バー ──
+// ── 保存ビュー バー（＋プロジェクト管理）──
 function buildViewBar(store, requestRender, state){
   const bar = document.createElement('div');
   bar.className = 'view-bar';
@@ -123,7 +129,7 @@ function buildViewBar(store, requestRender, state){
   const name = document.createElement('input');
   name.type = 'text'; name.className = 'view-name'; name.placeholder = 'ビュー名';
   name.value = state._draftName || '';
-  name.addEventListener('input', () => { state._draftName = name.value; }); // 入力中は再描画しない
+  name.addEventListener('input', () => { state._draftName = name.value; });
   bar.appendChild(name);
 
   const saveBtn = document.createElement('button');
@@ -133,7 +139,7 @@ function buildViewBar(store, requestRender, state){
     if (!nm){ name.focus(); return; }
     const v = store.saveView({
       name: nm, hideDone: state.hideDone, dueFilter: state.dueFilter,
-      sort: state.sort, columns: activeColumns(state).slice(),
+      projFilter: state.projFilter || 'all', sort: state.sort, columns: activeColumns(state).slice(),
     });
     state._viewId = v.id; state._draftName = '';
     requestRender();
@@ -146,26 +152,77 @@ function buildViewBar(store, requestRender, state){
     del.onclick = () => { store.deleteView(state._viewId); state._viewId = null; requestRender(); };
     bar.appendChild(del);
   }
+
+  bar.appendChild(buildProjectManager(store, requestRender, state));
   return bar;
 }
 function applyView(state, v){
   state.hideDone = !!v.hideDone;
   state.dueFilter = v.dueFilter || 'all';
+  state.projFilter = v.projFilter || 'all';
   state.sort = v.sort || 'due';
   state.columns = (v.columns && v.columns.length ? v.columns.slice() : DEFAULT_COLUMNS.slice());
   state._viewId = v.id;
 }
 
+// ── プロジェクト管理（作成・改名・削除）──
+function buildProjectManager(store, requestRender, state){
+  const det = document.createElement('details');
+  det.className = 'proj-manager';
+  det.open = !!state._pmOpen;
+  det.addEventListener('toggle', () => { state._pmOpen = det.open; });
+  const sum = document.createElement('summary');
+  sum.textContent = 'プロジェクト ▾';
+  det.appendChild(sum);
+
+  const box = document.createElement('div');
+  box.className = 'proj-manager-box';
+  for (const p of store.listProjects()){
+    const row = document.createElement('div');
+    row.className = 'pm-row';
+    const nm = document.createElement('input');
+    nm.type = 'text'; nm.value = p.content || '';
+    nm.addEventListener('change', () => { store.updateBody(p.id, { content: nm.value }); requestRender(); });
+    const del = document.createElement('button');
+    del.className = 'btn'; del.textContent = '削除';
+    del.onclick = () => { store.deleteProject(p.id); requestRender(); };
+    row.appendChild(nm); row.appendChild(del);
+    box.appendChild(row);
+  }
+  const addRow = document.createElement('div');
+  addRow.className = 'pm-row';
+  const ni = document.createElement('input');
+  ni.type = 'text'; ni.placeholder = '新規PJ名'; ni.value = state._pmDraft || '';
+  ni.addEventListener('input', () => { state._pmDraft = ni.value; });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn'; addBtn.textContent = '＋追加';
+  addBtn.onclick = () => {
+    const nm = (state._pmDraft || '').trim();
+    if (!nm){ ni.focus(); return; }
+    store.createProject(nm); state._pmDraft = '';
+    requestRender();
+  };
+  addRow.appendChild(ni); addRow.appendChild(addBtn);
+  box.appendChild(addRow);
+
+  det.appendChild(box);
+  return det;
+}
+
 // ── フィルタ/並べ替え/列 バー ──
-function buildControls(requestRender, state, shown, total){
+function buildControls(store, requestRender, state, shown, total){
   const bar = document.createElement('div');
   bar.className = 'list-controls';
-  const touch = () => { state._viewId = null; requestRender(); }; // 条件を触ったら保存ビュー選択を解除
+  const touch = () => { state._viewId = null; requestRender(); };
 
   bar.appendChild(labelWrap('期限', selectEl([
     ['all','すべて'], ['next3','今後3日以内'], ['today','今日まで'],
     ['overdue','期限切れ'], ['has','期限あり'], ['none','期限なし'],
   ], state.dueFilter, v => { state.dueFilter = v; touch(); })));
+
+  const projOpts = [['all','すべて'], ['none','未割当'],
+    ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
+  bar.appendChild(labelWrap('PJ', selectEl(projOpts, state.projFilter || 'all', v => { state.projFilter = v; touch(); })));
 
   bar.appendChild(labelWrap('並べ替え', selectEl([
     ['due','期限'], ['priority','優先度'], ['created','作成日'], ['title','タイトル'],
@@ -202,7 +259,7 @@ function buildColumnPicker(state, touch){
     const lab = document.createElement('label');
     const cb = document.createElement('input');
     cb.type = 'checkbox'; cb.checked = cur.has(k);
-    if (k === 'title'){ cb.checked = true; cb.disabled = true; } // タイトルは必須
+    if (k === 'title'){ cb.checked = true; cb.disabled = true; }
     cb.onchange = () => {
       const set = new Set(activeColumns(state));
       if (cb.checked) set.add(k); else set.delete(k);
@@ -230,15 +287,16 @@ function cellTitle(store, requestRender, t){
   const sp = document.createElement('span');
   sp.className = 'list-title'; sp.contentEditable = 'true'; sp.spellcheck = false;
   sp.textContent = t.content || '';
-  sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent })); // 入力中は再描画しない
+  sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent }));
   td.appendChild(sp); return td;
 }
 function cellProject(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-proj';
-  const pj = t.proj ? store.getBody(t.proj) : null;
-  if (pj){ td.textContent = pj.content || '(無題PJ)'; }
-  else { td.textContent = '—'; td.classList.add('cell-muted'); }
-  return td;
+  const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
+  const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); });
+  sel.classList.add('proj-select');
+  if (!t.proj) sel.classList.add('cell-muted');
+  td.appendChild(sel); return td;
 }
 function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';

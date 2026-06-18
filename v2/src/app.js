@@ -5,7 +5,7 @@ const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 
-export const APP_VERSION = '0.5.0';
+export const APP_VERSION = '0.6.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -14,7 +14,7 @@ store.subscribe(() => saveState(store));         // 変更→保存（デバウ�
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';
-const listState = { hideDone:false, dueFilter:'all', sort:'due', columns: DEFAULT_COLUMNS.slice() };
+const listState = { hideDone:false, dueFilter:'all', projFilter:'all', sort:'due', columns: DEFAULT_COLUMNS.slice() };
 
 function renderAll(){
   const dv = document.getElementById('view-daily');
