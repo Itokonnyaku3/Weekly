@@ -2,6 +2,7 @@ const nowIso = () => new Date().toISOString();
 
 export function createStore(initial){
   const S = initial || { v:1, seq:0, bodies:{}, refs:{}, views:[] };
+  if (!S.views) S.views = [];          // 後方互換（古い保存に views が無い場合）
   const subs = new Set();
   const emit = () => subs.forEach(fn => { try{ fn(); }catch(e){ console.error(e); } });
   const genId = (p) => p + (++S.seq);
@@ -80,11 +81,29 @@ export function createStore(initial){
     return sibs.length ? sibs[sibs.length-1].order + 1 : 0;
   }
 
+  // ── カスタムビュー（保存した絞り込み/並べ替え/列の組）。中身の形は呼び出し側が決める ──
+  function saveView(viewObj){
+    const id = genId('v');
+    const view = { id, ...viewObj };
+    S.views.push(view); emit(); return view;
+  }
+  function updateView(id, patch){
+    const v = S.views.find(x => x.id === id);
+    if (v){ Object.assign(v, patch, { id }); emit(); }
+    return v;
+  }
+  function deleteView(id){
+    const i = S.views.findIndex(x => x.id === id);
+    if (i >= 0){ S.views.splice(i, 1); emit(); }
+  }
+  function listViews(){ return S.views.slice(); }
+
   function subscribe(fn){ subs.add(fn); return () => subs.delete(fn); }
   const toJSON = () => S;
 
   return { createBody, createRef, createCard, getBody, getRef, updateBody, updateRef,
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
            siblings, prevSiblingRef, orderAfter, endOrder,
+           saveView, updateView, deleteView, listViews,
            subscribe, toJSON, _state:S };
 }

@@ -3,9 +3,9 @@ const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily } = await import('./daily.js' + _q);
-const { renderList } = await import('./list.js' + _q);
+const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 
-export const APP_VERSION = '0.3.0';
+export const APP_VERSION = '0.4.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -13,7 +13,7 @@ window.__store = store;                          // preview 検証用ハンド�
 store.subscribe(() => saveState(store));         // 保存のみ（再描画は構造変更時に明示）
 
 let currentView = 'daily';
-const listState = { hideDone:false, dueFilter:'all', sort:'due' };
+const listState = { hideDone:false, dueFilter:'all', sort:'due', columns: DEFAULT_COLUMNS.slice() };
 
 function renderDump(){
   const el = document.getElementById('dev-dump');
