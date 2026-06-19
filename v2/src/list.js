@@ -68,6 +68,10 @@ export function renderList(store, mount, requestRender, state){
   const rows = selectTasks(all, state, today);
   const cols = activeColumns(state);
 
+  // 再描画でコントロールが作り直されてもフォーカスを保つ: 直前のフォーカス先を記録
+  const active = document.activeElement;
+  const refocus = (active && mount.contains(active) && active.dataset && active.dataset.fkey) ? active.dataset.fkey : null;
+
   mount.innerHTML = '';
   mount.appendChild(buildViewBar(store, requestRender, state));
   mount.appendChild(buildControls(store, requestRender, state, rows.length, all.length));
@@ -101,6 +105,8 @@ export function renderList(store, mount, requestRender, state){
   }
   table.appendChild(tb);
   mount.appendChild(table);
+
+  if (refocus){ const el = mount.querySelector('[data-fkey="' + refocus + '"]'); if (el) el.focus(); }
 }
 
 // ── 保存ビュー バー（＋プロジェクト管理）──
@@ -109,7 +115,7 @@ function buildViewBar(store, requestRender, state){
   bar.className = 'view-bar';
 
   const sel = document.createElement('select');
-  sel.className = 'view-select';
+  sel.className = 'view-select'; sel.dataset.fkey = 'view';
   const cur = document.createElement('option');
   cur.value = ''; cur.textContent = '（現在の条件）';
   sel.appendChild(cur);
@@ -218,20 +224,21 @@ function buildControls(store, requestRender, state, shown, total){
   bar.appendChild(labelWrap('期限', selectEl([
     ['all','すべて'], ['next3','今後3日以内'], ['today','今日まで'],
     ['overdue','期限切れ'], ['has','期限あり'], ['none','期限なし'],
-  ], state.dueFilter, v => { state.dueFilter = v; touch(); })));
+  ], state.dueFilter, v => { state.dueFilter = v; touch(); }, 'filter-due')));
 
   const projOpts = [['all','すべて'], ['none','未割当'],
     ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-  bar.appendChild(labelWrap('PJ', selectEl(projOpts, state.projFilter || 'all', v => { state.projFilter = v; touch(); })));
+  bar.appendChild(labelWrap('PJ', selectEl(projOpts, state.projFilter || 'all', v => { state.projFilter = v; touch(); }, 'filter-proj')));
 
   bar.appendChild(labelWrap('並べ替え', selectEl([
     ['due','期限'], ['priority','優先度'], ['created','作成日'], ['title','タイトル'],
-  ], state.sort, v => { state.sort = v; touch(); })));
+  ], state.sort, v => { state.sort = v; touch(); }, 'sort')));
 
   const cbWrap = document.createElement('label');
   cbWrap.className = 'list-cb';
   const cb = document.createElement('input');
   cb.type = 'checkbox'; cb.checked = !!state.hideDone;
+  cb.dataset.fkey = 'hidedone';
   cb.onchange = () => { state.hideDone = cb.checked; touch(); };
   cbWrap.appendChild(cb); cbWrap.appendChild(document.createTextNode('完了を隠す'));
   bar.appendChild(cbWrap);
@@ -279,6 +286,7 @@ function buildColumnPicker(state, touch){
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!t.done;
+  cb.dataset.fkey = 'status:' + t.id;
   cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); };
   td.appendChild(cb); return td;
 }
@@ -286,6 +294,7 @@ function cellTitle(store, requestRender, t){
   const td = document.createElement('td');
   const sp = document.createElement('span');
   sp.className = 'list-title'; sp.contentEditable = 'true'; sp.spellcheck = false;
+  sp.dataset.fkey = 'title:' + t.id;
   sp.textContent = t.content || '';
   sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent }));
   td.appendChild(sp); return td;
@@ -293,7 +302,7 @@ function cellTitle(store, requestRender, t){
 function cellProject(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-proj';
   const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-  const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); });
+  const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
   sel.classList.add('proj-select');
   if (!t.proj) sel.classList.add('cell-muted');
   td.appendChild(sel); return td;
@@ -301,12 +310,13 @@ function cellProject(store, requestRender, t){
 function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';
   td.appendChild(selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(t.prio || 0),
-    v => { store.updateBody(t.id, { prio: Number(v) }); requestRender(); }));
+    v => { store.updateBody(t.id, { prio: Number(v) }); requestRender(); }, 'prio:' + t.id));
   return td;
 }
 function cellDue(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-due';
   const d = document.createElement('input'); d.type = 'date'; d.value = t.due || '';
+  d.dataset.fkey = 'due:' + t.id;
   d.onchange = () => { store.updateBody(t.id, { due: d.value || '' }); requestRender(); };
   td.appendChild(d); return td;
 }
@@ -317,8 +327,9 @@ function cellCreated(store, requestRender, t){
 }
 
 // ── 小物 ──
-function selectEl(options, value, onChange){
+function selectEl(options, value, onChange, fkey){
   const sel = document.createElement('select');
+  if (fkey) sel.dataset.fkey = fkey;                // 再描画後にフォーカスを戻すための識別キー
   for (const [v, label] of options){
     const o = document.createElement('option');
     o.value = v; o.textContent = label;
