@@ -2,11 +2,12 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
+const { openPalette } = await import('./palette.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.11.2';
+export const APP_VERSION = '0.12.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -50,6 +51,28 @@ function addProject(){
   renderAll();
   const el = document.querySelector(`.proj-manager-box input[data-proj="${p.id}"]`);
   if (el){ el.focus(); el.select(); }
+}
+
+// Ctrl+K パレット: カードへジャンプ（祖先を展開＋ズーム解除＋フォーカス）
+function jumpToCard(bodyId){
+  const refs = store.refsForBody(bodyId);
+  if (!refs.length) return;
+  const ref = refs[0];
+  let p = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
+  while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
+  resetZoom();
+  currentView = 'daily';
+  renderAll();
+  focusCard(ref.id, -1);
+}
+function paletteCommands(){
+  return [
+    { label: 'デイリーを表示', run: () => setView('daily') },
+    { label: 'リストを表示', run: () => setView('list') },
+    { label: '今日に追加', run: addToday },
+    { label: 'プロジェクトを追加', run: addProject },
+    { label: 'GitHub同期設定', run: openSettings },
+  ];
 }
 
 // ── GitHub 同期 UI ──
@@ -105,6 +128,12 @@ function boot(){
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
+  document.addEventListener('keydown', (e) => {              // Ctrl/⌘+K でパレット
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')){
+      e.preventDefault();
+      openPalette({ store, commands: paletteCommands(), onJump: jumpToCard });
+    }
+  });
 
   document.getElementById('settings-btn')?.addEventListener('click', openSettings);
   document.getElementById('gh-save')?.addEventListener('click', saveSettings);

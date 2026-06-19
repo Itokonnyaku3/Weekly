@@ -81,6 +81,19 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .zoom-title{margin:0 0 10px}
 .zoom-title-txt{font-size:20px;font-weight:700;outline:none;display:block;min-height:1.4em}
 
+/* Ctrl+K コマンドパレット */
+.cmdk-overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:flex-start;justify-content:center;z-index:70;padding-top:12vh}
+.cmdk-box{background:var(--panel);border:1px solid var(--bd);border-radius:10px;box-shadow:0 16px 48px rgba(0,0,0,.28);width:min(520px,92vw);max-height:60vh;overflow:hidden;display:flex;flex-direction:column}
+.cmdk-input{font:inherit;font-size:15px;padding:12px 14px;border:none;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);outline:none}
+.cmdk-list{overflow-y:auto}
+.cmdk-empty{padding:10px 14px;color:var(--tx3);font-size:13px}
+.cmdk-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;font-size:13px}
+.cmdk-item .cmdk-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmdk-item .cmdk-hint{flex:none;font-size:11px;color:var(--tx3)}
+.cmdk-item.sel{background:var(--accent-soft);color:var(--accent)}
+.cmdk-item.sel .cmdk-hint{color:var(--accent)}
+.cmdk-item:hover{background:var(--accent-soft)}
+
 /* ビュー切替ボタン */
 .btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 

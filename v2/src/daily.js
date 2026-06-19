@@ -497,6 +497,7 @@ export function focusCard(refId, pos = 0){
   const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
   if (el) setCaret(el, pos);
 }
+export function resetZoom(){ _focusRef = null; }   // ズーム解除（パレットからのジャンプ用）
 function visibleFlat(store){
   const out = [];
   const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
