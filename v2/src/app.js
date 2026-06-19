@@ -5,7 +5,7 @@ const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 
-export const APP_VERSION = '0.6.0';
+export const APP_VERSION = '0.6.1';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -36,12 +36,22 @@ function addToday(){
   focusCard(ref.id, 0);                           // 追加した空カードへ即フォーカス
 }
 
+function addProject(){
+  const p = store.createProject('新規プロジェクト');
+  currentView = 'list';
+  listState._pmOpen = true;                       // 管理パネルを開く
+  renderAll();
+  const el = document.querySelector(`.proj-manager-box input[data-proj="${p.id}"]`);
+  if (el){ el.focus(); el.select(); }             // 新規PJ名をすぐ編集できるよう選択状態に
+}
+
 function boot(){
   const ver = document.getElementById('ver');
   if (ver) ver.textContent = 'v' + APP_VERSION;
   document.getElementById('view-daily-btn')?.addEventListener('click', () => setView('daily'));
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
   document.getElementById('add-today')?.addEventListener('click', addToday);
+  document.getElementById('add-proj')?.addEventListener('click', addProject);
   renderAll();
   console.log('[tracker-v2] boot', APP_VERSION);
 }

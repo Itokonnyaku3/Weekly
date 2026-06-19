@@ -181,7 +181,7 @@ function buildProjectManager(store, requestRender, state){
     const row = document.createElement('div');
     row.className = 'pm-row';
     const nm = document.createElement('input');
-    nm.type = 'text'; nm.value = p.content || '';
+    nm.type = 'text'; nm.value = p.content || ''; nm.dataset.proj = p.id;
     nm.addEventListener('change', () => { store.updateBody(p.id, { content: nm.value }); requestRender(); });
     const del = document.createElement('button');
     del.className = 'btn'; del.textContent = '削除';
