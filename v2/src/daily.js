@@ -9,12 +9,21 @@ let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 let _dragRef = null;        // ドラッグ中のカード ref.id
 let _slashPanel = null;     // スラッシュメニューの DOM（document.body 直下に浮かせる）
 let _slashCloser = null;    // スラッシュメニュー外側クリック close
+let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
 
 export function renderDaily(store, mount, requestRender){
+  mount.innerHTML = '';
+
+  // ズーム中: フォーカスしたカードのサブツリーだけ表示
+  if (_focusRef){
+    const fref = store.getRef(_focusRef);
+    const fbody = fref && store.getBody(fref.bodyId);
+    if (fref && fbody){ renderZoomed(store, mount, requestRender, fref, fbody); manageOutsideClose(requestRender); return; }
+    _focusRef = null; // 無効になっていたら解除
+  }
+
   const days = store.queryBodies(b => b.kind === 'day')
     .sort((a, b) => (a.content < b.content ? 1 : -1)); // 新しい日付を上に
-
-  mount.innerHTML = '';
   if (!days.length){
     mount.innerHTML = '<p style="color:var(--tx3)">まだカードがありません。右上の「＋ 今日に追加」で始めてください。</p>';
     return;
@@ -271,6 +280,56 @@ function closeSlashMenu(){
   if (_slashPanel){ _slashPanel.remove(); _slashPanel = null; }
 }
 
+// ── ズーム（フォーカス）──
+function zoomIn(store, refId, requestRender){
+  _focusRef = refId;
+  requestRender();
+  const fc = store.childRefs(refId)[0];
+  focusCard(fc ? fc.id : refId, 0);
+}
+function zoomOut(store){
+  if (!_focusRef) return;
+  const fref = store.getRef(_focusRef);
+  if (!fref){ _focusRef = null; return; }
+  const parent = fref.parentRefId ? store.getRef(fref.parentRefId) : null;
+  _focusRef = (parent && store.getBody(parent.bodyId)?.kind !== 'day') ? parent.id : null;
+}
+function crumbSep(){ const s = document.createElement('span'); s.className = 'crumb-sep'; s.textContent = '›'; return s; }
+function renderZoomed(store, mount, requestRender, fref, fbody){
+  const crumb = document.createElement('div'); crumb.className = 'zoom-crumb';
+  const home = document.createElement('span'); home.className = 'crumb-item'; home.textContent = '全体';
+  home.onclick = () => { _focusRef = null; requestRender(); };
+  crumb.appendChild(home);
+  const path = [];
+  let p = fref.parentRefId ? store.getRef(fref.parentRefId) : null;
+  while (p){ path.push(p); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
+  path.reverse();
+  for (const aref of path){
+    const ab = store.getBody(aref.bodyId); if (!ab) continue;
+    crumb.appendChild(crumbSep());
+    const it = document.createElement('span'); it.className = 'crumb-item';
+    it.textContent = ab.kind === 'day' ? ab.content : (ab.content || '(空)');
+    it.onclick = () => { _focusRef = ab.kind === 'day' ? null : aref.id; requestRender(); };
+    crumb.appendChild(it);
+  }
+  mount.appendChild(crumb);
+
+  const title = document.createElement('div'); title.className = 'zoom-title';
+  const tt = document.createElement('span');
+  tt.className = 'card-txt zoom-title-txt'; tt.contentEditable = 'true'; tt.spellcheck = false;
+  tt.dataset.ref = fref.id; tt.textContent = fbody.content || '';
+  tt.addEventListener('input', () => store.updateBody(fbody.id, { content: tt.textContent }));
+  title.appendChild(tt);
+  mount.appendChild(title);
+
+  const wrap = document.createElement('div'); wrap.className = 'zoom-children';
+  renderChildren(store, fref.id, wrap, 0, requestRender);
+  const add = document.createElement('div'); add.className = 'card-add'; add.textContent = '＋ 追加';
+  add.onclick = () => { const { ref } = store.createCard({ kind:'task', content:'', parentRefId: fref.id }); requestRender(); focusCard(ref.id, 0); };
+  wrap.appendChild(add);
+  mount.appendChild(wrap);
+}
+
 function manageOutsideClose(requestRender){
   if (_menuCloser){ document.removeEventListener('mousedown', _menuCloser); _menuCloser = null; }
   if (!_openMenu) return;
@@ -301,9 +360,22 @@ function onKey(e, store, ref, body, requestRender){
     }
   }
 
+  // Workflowy: ズームイン(Alt+.) / アウト(Alt+,)
+  if (e.altKey && e.key === '.'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
+  if (e.altKey && e.key === ','){ e.preventDefault(); zoomOut(store); requestRender(); return; }
+  // Workflowy: 折りたたみ(Ctrl+↑) / 展開(Ctrl+↓)
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
+    if (!store.childRefs(ref.id).length) return;
+    e.preventDefault();
+    store.updateRef(ref.id, { collapsed: e.key === 'ArrowUp' });   // ↑=折りたたみ / ↓=展開
+    requestRender(); focusCard(ref.id, pos);
+    return;
+  }
+
+  // Workflowy: 完了トグル（Ctrl/⌘+Enter）
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
     e.preventDefault();
-    store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' });
+    store.updateBody(body.id, { done: !body.done });
     requestRender();
     focusCard(ref.id, pos);
     return;
@@ -333,6 +405,18 @@ function onKey(e, store, ref, body, requestRender){
     }
     requestRender();
     focusCard(ref.id, pos);
+    return;
+  }
+  // Workflowy: 削除（Ctrl/⌘+Shift+Backspace）
+  if (e.key === 'Backspace' && e.shiftKey && (e.ctrlKey || e.metaKey)){
+    e.preventDefault();
+    const flat = visibleFlat(store);
+    const idx = flat.indexOf(ref.id);
+    if (store.childRefs(ref.id).length && !confirm('子を含めて削除しますか？')) return;
+    store.deleteRef(ref.id);
+    requestRender();
+    const target = flat[idx - 1] || flat[idx + 1];
+    if (target) focusCard(target, -1);
     return;
   }
   if (e.key === 'Backspace' && pos === 0 && window.getSelection().isCollapsed){
@@ -411,8 +495,9 @@ export function focusCard(refId, pos = 0){
 }
 function visibleFlat(store){
   const out = [];
-  const days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
   const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
+  if (_focusRef && store.getRef(_focusRef)){ walk(_focusRef); return out; }   // ズーム中はサブツリー内のみ
+  const days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
   for (const day of days){
     const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
     if (dayRef) walk(dayRef.id);
