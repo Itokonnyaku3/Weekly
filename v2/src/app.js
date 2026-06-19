@@ -6,7 +6,7 @@ const { renderDaily, focusCard } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.9.0';
+export const APP_VERSION = '0.10.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
