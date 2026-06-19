@@ -38,6 +38,21 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .btn-accent{border-color:var(--accent);background:var(--accent);color:#fff}
 .btn-accent:hover{filter:brightness(1.07)}
 
+/* 行メニュー（⋯）と属性バッジ */
+.card-menu-btn{flex:none;border:none;background:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:0 4px;opacity:0;line-height:1}
+.card-row:hover .card-menu-btn,.card-row:focus-within .card-menu-btn{opacity:.6}
+.card-menu-btn:hover{opacity:1;color:var(--accent)}
+.cd-badge{flex:none;font-size:10px;color:var(--tx3);background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:0 5px;margin-left:4px;line-height:1.7;white-space:nowrap}
+.cd-badge.prio-3{color:#d9534f;border-color:#d9534f}
+.cd-badge.prio-2{color:#e08a00}
+.card-menu{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:2px 0 6px;padding:8px 10px;background:var(--panel);border:1px solid var(--bd);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.10);max-width:540px}
+.cm-field{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx3)}
+.cm-field select,.cm-field input[type=date]{font:inherit;font-size:12px;padding:2px 5px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx)}
+.cm-btn{font:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--bd2);border-radius:6px;background:var(--panel);color:var(--tx);cursor:pointer}
+.cm-btn:hover{border-color:var(--accent)}
+.cm-del{color:#d9534f;margin-left:auto}
+.cm-del:hover{border-color:#d9534f}
+
 /* ビュー切替ボタン */
 .btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 

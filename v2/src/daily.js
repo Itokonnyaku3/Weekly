@@ -1,7 +1,11 @@
 // デイリービュー（編集可能・最小アウトライナー）
 // 入力=その場編集 / Enter=分割 / Tab・Shift+Tab=インデント / Backspace(行頭)=結合 / ↑↓=移動 /
-// Ctrl+Enter=メモ⇄タスク切替 / 「•」クリックでタスク化 / 子持ちは ▾▸ で折りたたみ(ref.collapsed)。
+// Ctrl+Enter=メモ⇄タスク / 「•」クリックでタスク化 / 子持ちは ▾▸ で折りたたみ(ref.collapsed) /
+// 「⋯」で行メニュー（メモ⇄タスク・優先度・期限・プロジェクト割当・削除）。
 // 描画方針: テキスト入力では再描画しない（caret保持）。構造変更だけ requestRender＋caret復元。
+
+let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
+let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 
 export function renderDaily(store, mount, requestRender){
   const days = store.queryBodies(b => b.kind === 'day')
@@ -21,8 +25,7 @@ export function renderDaily(store, mount, requestRender){
     head.textContent = day.content;
     sec.appendChild(head);
     if (dayRef){
-      renderChildren(store, dayRef.id, sec, 0, requestRender, mount);
-      // 各日の末尾に「＋ 追加」
+      renderChildren(store, dayRef.id, sec, 0, requestRender);
       const add = document.createElement('div');
       add.className = 'card-add'; add.textContent = '＋ 追加';
       add.onclick = () => {
@@ -34,9 +37,10 @@ export function renderDaily(store, mount, requestRender){
     }
     mount.appendChild(sec);
   }
+  manageOutsideClose(requestRender);   // メニューが開いていれば外側クリックで閉じる
 }
 
-function renderChildren(store, parentRefId, mountEl, depth, requestRender, root){
+function renderChildren(store, parentRefId, mountEl, depth, requestRender){
   for (const ref of store.childRefs(parentRefId)){
     const body = store.getBody(ref.bodyId);
     if (!body) continue;
@@ -46,19 +50,17 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender, root)
     row.className = 'card-row';
     row.style.paddingLeft = (depth * 18) + 'px';
 
-    // 折りたたみトグル（子がある時のみ）
+    // 折りたたみトグル
     const tog = document.createElement('span');
     tog.className = 'card-toggle';
     if (kids.length){
       tog.textContent = ref.collapsed ? '▸' : '▾';
       tog.title = ref.collapsed ? '展開' : '折りたたみ';
       tog.onclick = () => { store.updateRef(ref.id, { collapsed: !ref.collapsed }); requestRender(); };
-    } else {
-      tog.classList.add('leaf');
-    }
+    } else { tog.classList.add('leaf'); }
     row.appendChild(tog);
 
-    // マーカー（タスク=チェックボックス / メモ=•）
+    // マーカー
     if (body.kind === 'task'){
       const cb = document.createElement('input');
       cb.type = 'checkbox'; cb.checked = !!body.done;
@@ -72,7 +74,7 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender, root)
       row.appendChild(dot);
     }
 
-    // テキスト（contenteditable）
+    // テキスト
     const txt = document.createElement('span');
     txt.className = 'card-txt';
     txt.contentEditable = 'true';
@@ -81,22 +83,95 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender, root)
     txt.textContent = body.content || '';
     if (body.kind === 'task' && body.done) txt.classList.add('done');
     txt.addEventListener('input', () => store.updateBody(body.id, { content: txt.textContent }));
-    txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender, root));
+    txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
     row.appendChild(txt);
 
+    // 属性の小バッジ（設定済みのみ・控えめ表示）
+    appendBadges(row, store, body);
+
+    // ⋯ メニュー
+    const menuBtn = document.createElement('button');
+    menuBtn.type = 'button'; menuBtn.className = 'card-menu-btn'; menuBtn.textContent = '⋯'; menuBtn.title = '設定';
+    menuBtn.onclick = (e) => { e.stopPropagation(); _openMenu = (_openMenu === ref.id ? null : ref.id); requestRender(); };
+    row.appendChild(menuBtn);
+
     mountEl.appendChild(row);
-    if (kids.length && !ref.collapsed) renderChildren(store, ref.id, mountEl, depth + 1, requestRender, root);
+    if (_openMenu === ref.id){
+      const m = buildCardMenu(store, ref, body, requestRender);
+      m.style.marginLeft = (depth * 18 + 30) + 'px';
+      mountEl.appendChild(m);
+    }
+    if (kids.length && !ref.collapsed) renderChildren(store, ref.id, mountEl, depth + 1, requestRender);
   }
 }
 
-function onKey(e, store, ref, body, requestRender, root){
+const PRIO_LABEL = ['なし', '低', '中', '高'];
+
+function appendBadges(row, store, body){
+  if (body.kind !== 'task') return;
+  if (body.prio){ const b = document.createElement('span'); b.className = 'cd-badge prio-' + body.prio; b.textContent = PRIO_LABEL[body.prio]; row.appendChild(b); }
+  if (body.due){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '📅' + body.due.slice(5); row.appendChild(b); }
+  if (body.proj){ const p = store.getBody(body.proj); if (p){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '#' + (p.content || 'PJ'); row.appendChild(b); } }
+}
+
+function buildCardMenu(store, ref, body, requestRender){
+  const menu = document.createElement('div');
+  menu.className = 'card-menu';
+  menu.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ _openMenu = null; requestRender(); } });
+
+  const kindBtn = document.createElement('button');
+  kindBtn.type = 'button'; kindBtn.className = 'cm-btn';
+  kindBtn.textContent = body.kind === 'task' ? '• メモにする' : '☐ タスクにする';
+  kindBtn.onclick = () => { store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' }); requestRender(); };
+  menu.appendChild(kindBtn);
+
+  menu.appendChild(cmField('優先度', selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(body.prio || 0),
+    v => { store.updateBody(body.id, { prio: Number(v) }); requestRender(); })));
+
+  const due = document.createElement('input'); due.type = 'date'; due.value = body.due || '';
+  due.onchange = () => { store.updateBody(body.id, { due: due.value || '' }); requestRender(); };
+  menu.appendChild(cmField('期限', due));
+
+  const projOpts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
+  menu.appendChild(cmField('PJ', selectEl(projOpts, body.proj || '',
+    v => { store.updateBody(body.id, { proj: v || undefined }); requestRender(); })));
+
+  const del = document.createElement('button');
+  del.type = 'button'; del.className = 'cm-btn cm-del'; del.textContent = '削除';
+  del.onclick = () => {
+    const kids = store.childRefs(ref.id).length;
+    if (kids && !confirm(`このカードには子が ${kids} 件あります。まとめて削除しますか？`)) return;
+    store.deleteRef(ref.id); _openMenu = null; requestRender();
+  };
+  menu.appendChild(del);
+  return menu;
+}
+function cmField(label, control){
+  const f = document.createElement('label'); f.className = 'cm-field';
+  f.appendChild(document.createTextNode(label)); f.appendChild(control);
+  return f;
+}
+
+function manageOutsideClose(requestRender){
+  if (_menuCloser){ document.removeEventListener('mousedown', _menuCloser); _menuCloser = null; }
+  if (!_openMenu) return;
+  _menuCloser = (e) => {
+    if (!e.target.closest('.card-menu') && !e.target.closest('.card-menu-btn')){
+      _openMenu = null;
+      document.removeEventListener('mousedown', _menuCloser); _menuCloser = null;
+      requestRender();
+    }
+  };
+  setTimeout(() => { if (_menuCloser) document.addEventListener('mousedown', _menuCloser); }, 0);
+}
+
+function onKey(e, store, ref, body, requestRender){
   if (e.isComposing || e.keyCode === 229) return; // IME変換中は素通り
 
   const el = e.target;
   const text = el.textContent;
   const pos = caretOffset(el);
 
-  // Ctrl/Cmd+Enter: メモ⇄タスク切替
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
     e.preventDefault();
     store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' });
@@ -104,7 +179,6 @@ function onKey(e, store, ref, body, requestRender, root){
     focusCard(ref.id, pos);
     return;
   }
-
   if (e.key === 'Enter'){
     e.preventDefault();
     store.updateBody(body.id, { content: text.slice(0, pos) });
@@ -116,13 +190,12 @@ function onKey(e, store, ref, body, requestRender, root){
     focusCard(created.ref.id, 0);
     return;
   }
-
   if (e.key === 'Tab'){
     e.preventDefault();
     if (e.shiftKey){
       const parentRef = store.getRef(ref.parentRefId);
       if (!parentRef) return;
-      if (store.getBody(parentRef.bodyId)?.kind === 'day') return; // 日直下より上には出さない
+      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
       store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
     } else {
       const prev = store.prevSiblingRef(ref.id);
@@ -133,7 +206,6 @@ function onKey(e, store, ref, body, requestRender, root){
     focusCard(ref.id, pos);
     return;
   }
-
   if (e.key === 'Backspace' && pos === 0 && window.getSelection().isCollapsed){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
@@ -151,7 +223,6 @@ function onKey(e, store, ref, body, requestRender, root){
     focusCard(prevRefId, mergePos);
     return;
   }
-
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
@@ -163,7 +234,7 @@ function onKey(e, store, ref, body, requestRender, root){
   }
 }
 
-// ── caret / 走査ヘルパ ──
+// ── caret / 走査 / 小物 ──
 function caretOffset(el){
   const sel = window.getSelection();
   if (!sel.rangeCount) return 0;
@@ -189,15 +260,21 @@ export function focusCard(refId, pos = 0){
 function visibleFlat(store){
   const out = [];
   const days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
-  const walk = (refId) => {
-    for (const r of store.childRefs(refId)){
-      out.push(r.id);
-      if (!r.collapsed) walk(r.id);          // 折りたたみ中は中へ入らない
-    }
-  };
+  const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
   for (const day of days){
     const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
     if (dayRef) walk(dayRef.id);
   }
   return out;
+}
+function selectEl(options, value, onChange){
+  const sel = document.createElement('select');
+  for (const [v, label] of options){
+    const o = document.createElement('option');
+    o.value = v; o.textContent = label;
+    if (v === value) o.selected = true;
+    sel.appendChild(o);
+  }
+  sel.onchange = () => onChange(sel.value);
+  return sel;
 }
