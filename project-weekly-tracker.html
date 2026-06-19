@@ -422,8 +422,8 @@
         </div>
         <div class="settings-row">
           <label>GitHub Personal Access Token (classic)</label>
-          <input type="password" id="gh-token-s" placeholder="ghp_xxxxxxxxxxxx" autocomplete="new-password">
-          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。トークンはブラウザの localStorage にのみ保存されます。
+          <input type="password" id="gh-token-s" placeholder="ghp_xxxxxxxxxxxx" autocomplete="new-password" onfocus="this.select()">
+          <p style="font-size:10px;color:var(--tx3);margin-top:2px">※ repo 権限が必要です。クリックで全選択されるので、そのまま新トークンを貼り付けてください。トークンはブラウザの localStorage にのみ保存されます。
           </p>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
