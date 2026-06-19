@@ -31,4 +31,16 @@ s.updateRef(b2.ref.id, { parentRefId: pRef.parentRefId, order: s.orderAfter(pRef
 assert.deepEqual(s.childRefs(day.ref.id).map(r=>s.getBody(r.bodyId).content), ['A','B','B2','C'], 'B の直後に戻る');
 assert.equal(s.childRefs(b.ref.id).length, 0);
 
+// orderBefore（ドラッグで対象の直前に入れる順序）
+const s2 = createStore();
+const dd = s2.createCard({ kind:'day', content:'2026-06-18' });
+const x = s2.createCard({ kind:'task', content:'X', parentRefId: dd.ref.id });
+const y = s2.createCard({ kind:'task', content:'Y', parentRefId: dd.ref.id });
+const ob = s2.orderBefore(y.ref.id);
+assert.ok(ob > x.ref.order && ob < y.ref.order, 'X と Y の間に入る order');
+assert.equal(s2.orderBefore(x.ref.id), x.ref.order - 1, '先頭の前は order-1');
+// ドラッグ相当: Y を X の前へ
+s2.updateRef(y.ref.id, { order: s2.orderBefore(x.ref.id) });
+assert.deepEqual(s2.childRefs(dd.ref.id).map(r=>s2.getBody(r.bodyId).content), ['Y','X']);
+
 console.log('PASS store.struct');

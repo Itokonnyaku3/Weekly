@@ -76,6 +76,13 @@ export function createStore(initial){
     const next = sibs[i+1];
     return next ? (r.order + next.order) / 2 : r.order + 1;
   }
+  function orderBefore(refId){           // refId の直前に差し込む order（兄弟間・分数）
+    const r = S.refs[refId]; if (!r) return 0;
+    const sibs = childRefs(r.parentRefId);
+    const i = sibs.findIndex(x => x.id === refId);
+    const prev = sibs[i-1];
+    return prev ? (prev.order + r.order) / 2 : r.order - 1;
+  }
   function endOrder(parentRefId){        // parent の末尾に追加する order
     const sibs = childRefs(parentRefId);
     return sibs.length ? sibs[sibs.length-1].order + 1 : 0;
@@ -121,7 +128,7 @@ export function createStore(initial){
 
   return { createBody, createRef, createCard, getBody, getRef, updateBody, updateRef,
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
-           siblings, prevSiblingRef, orderAfter, endOrder,
+           siblings, prevSiblingRef, orderAfter, orderBefore, endOrder,
            saveView, updateView, deleteView, listViews,
            createProject, listProjects, deleteProject,
            replaceState, subscribe, toJSON, _state:S };

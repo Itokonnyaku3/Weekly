@@ -6,6 +6,7 @@
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
+let _dragRef = null;        // ドラッグ中のカード ref.id
 
 export function renderDaily(store, mount, requestRender){
   const days = store.queryBodies(b => b.kind === 'day')
@@ -49,6 +50,15 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     const row = document.createElement('div');
     row.className = 'card-row';
     row.style.paddingLeft = (depth * 18) + 'px';
+    setupRowDrop(row, ref.id, store, requestRender);
+
+    // ドラッグハンドル
+    const handle = document.createElement('span');
+    handle.className = 'card-drag'; handle.textContent = '⠿'; handle.title = 'ドラッグで移動';
+    handle.draggable = true;
+    handle.addEventListener('dragstart', (e) => { _dragRef = ref.id; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', ref.id); } catch(_){} });
+    handle.addEventListener('dragend', () => { _dragRef = null; clearDropIndicators(); });
+    row.appendChild(handle);
 
     // 折りたたみトグル
     const tog = document.createElement('span');
@@ -152,6 +162,40 @@ function cmField(label, control){
   return f;
 }
 
+function setupRowDrop(row, refId, store, requestRender){
+  row.addEventListener('dragover', (e) => {
+    if (!_dragRef || _dragRef === refId) return;
+    e.preventDefault();
+    const rect = row.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+    clearDropIndicators();
+    row.classList.add(after ? 'drop-after' : 'drop-before');
+    row._dropAfter = after;
+  });
+  row.addEventListener('dragleave', () => { row.classList.remove('drop-before', 'drop-after'); });
+  row.addEventListener('drop', (e) => {
+    if (!_dragRef) return;
+    e.preventDefault();
+    doDrop(store, _dragRef, refId, !!row._dropAfter, requestRender);
+  });
+}
+function doDrop(store, dragId, targetId, after, requestRender){
+  clearDropIndicators();
+  _dragRef = null;
+  if (dragId === targetId) return;
+  // 循環防止: target が drag の子孫なら不可（drag が target の祖先チェーンに居たら中止）
+  let p = store.getRef(targetId);
+  while (p){ if (p.id === dragId) return; p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
+  const target = store.getRef(targetId);
+  if (!target) return;
+  store.updateRef(dragId, { parentRefId: target.parentRefId, order: after ? store.orderAfter(targetId) : store.orderBefore(targetId) });
+  requestRender();
+}
+function clearDropIndicators(){
+  document.querySelectorAll('.card-row.drop-before, .card-row.drop-after')
+    .forEach(r => r.classList.remove('drop-before', 'drop-after'));
+}
+
 function manageOutsideClose(requestRender){
   if (_menuCloser){ document.removeEventListener('mousedown', _menuCloser); _menuCloser = null; }
   if (!_openMenu) return;
@@ -221,6 +265,19 @@ function onKey(e, store, ref, body, requestRender){
     store.deleteRef(ref.id);
     requestRender();
     focusCard(prevRefId, mergePos);
+    return;
+  }
+  if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
+    e.preventDefault();                              // 兄弟内で上下に並べ替え
+    const sibs = store.siblings(ref.id);
+    const i = sibs.findIndex(x => x.id === ref.id);
+    const j = e.key === 'ArrowUp' ? i - 1 : i + 1;
+    if (j < 0 || j >= sibs.length) return;
+    const oi = sibs[i].order, oj = sibs[j].order;   // 入れ替え前に値を退避（更新で参照が変わるため）
+    store.updateRef(sibs[i].id, { order: oj });
+    store.updateRef(sibs[j].id, { order: oi });
+    requestRender();
+    focusCard(ref.id, pos);
     return;
   }
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){

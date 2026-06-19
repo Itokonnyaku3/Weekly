@@ -53,6 +53,14 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cm-del{color:#d9534f;margin-left:auto}
 .cm-del:hover{border-color:#d9534f}
 
+/* ドラッグ並べ替え */
+.card-drag{flex:none;width:14px;text-align:center;color:var(--tx3);cursor:grab;opacity:0;font-size:11px;user-select:none}
+.card-row:hover .card-drag{opacity:.45}
+.card-drag:hover{opacity:1;color:var(--accent)}
+.card-drag:active{cursor:grabbing}
+.card-row.drop-before{box-shadow:inset 0 2px 0 var(--accent)}
+.card-row.drop-after{box-shadow:inset 0 -2px 0 var(--accent)}
+
 /* ビュー切替ボタン */
 .btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 
