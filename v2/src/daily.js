@@ -205,8 +205,6 @@ function addDaysISO(n){ const d = new Date(); d.setDate(d.getDate() + n); return
 function buildSlashCommands(store, ref, body){
   const cmds = [
     { label: body.kind === 'task' ? '• メモにする' : '☐ タスクにする', run: () => store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' }) },
-    { label: '⬇ インデント', run: () => { const p = store.prevSiblingRef(ref.id); if (p) store.updateRef(ref.id, { parentRefId: p.id, order: store.endOrder(p.id) }); } },
-    { label: '⬆ アウトデント', run: () => { const pr = store.getRef(ref.parentRefId); if (pr && store.getBody(pr.bodyId)?.kind !== 'day') store.updateRef(ref.id, { parentRefId: pr.parentRefId, order: store.orderAfter(pr.id) }); } },
     { label: '🔴 優先度: 高', run: () => store.updateBody(body.id, { prio: 3 }) },
     { label: '🟠 優先度: 中', run: () => store.updateBody(body.id, { prio: 2 }) },
     { label: '🔵 優先度: 低', run: () => store.updateBody(body.id, { prio: 1 }) },
@@ -248,6 +246,8 @@ function openSlashMenu(store, ref, body, requestRender, anchorEl){
       item.onmousedown = (ev) => { ev.preventDefault(); exec(c); };
       list.appendChild(item);
     });
+    const selEl = list.querySelector('.slash-item.sel');
+    if (selEl) selEl.scrollIntoView({ block: 'nearest' });   // ↑↓で選択が見える位置へ追従
   };
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
@@ -364,6 +364,16 @@ function onKey(e, store, ref, body, requestRender){
     requestRender();
     focusCard(ref.id, pos);
     return;
+  }
+  if (e.key === 'ArrowLeft' && pos === 0 && window.getSelection().isCollapsed){
+    const flat = visibleFlat(store);
+    const idx = flat.indexOf(ref.id);
+    if (idx > 0){ e.preventDefault(); focusCard(flat[idx - 1], -1); return; }   // 行頭← → 前カードの文末へ
+  }
+  if (e.key === 'ArrowRight' && pos === text.length && window.getSelection().isCollapsed){
+    const flat = visibleFlat(store);
+    const idx = flat.indexOf(ref.id);
+    if (idx < flat.length - 1){ e.preventDefault(); focusCard(flat[idx + 1], 0); return; }   // 行末→ → 次カードの先頭へ
   }
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
     const flat = visibleFlat(store);
