@@ -29,8 +29,11 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-row:focus-within{background:var(--accent-soft);border-radius:4px}
 
 /* 折りたたみ / 追加 / メモ→タスク / 主ボタン */
-.card-toggle{flex:none;width:16px;text-align:center;color:var(--tx3);cursor:pointer;user-select:none;font-size:10px;line-height:1.6}
-.card-toggle.leaf{cursor:default;color:transparent}
+.card-toggle{flex:none;width:20px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;user-select:none;border-radius:5px}
+.card-toggle svg{width:15px;height:15px;display:block;transition:transform .13s ease}
+.card-toggle.expanded svg{transform:rotate(90deg)}
+.card-toggle:hover{color:var(--accent);background:var(--accent-soft)}
+.card-toggle.leaf{cursor:default}
 .card-dot{cursor:pointer}
 .card-dot:hover{color:var(--accent)}
 .card-add{color:var(--tx3);font-size:12px;cursor:pointer;padding:4px 0 2px 34px;opacity:.7}

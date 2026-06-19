@@ -11,6 +11,9 @@ let _slashPanel = null;     // スラッシュメニューの DOM（document.bod
 let _slashCloser = null;    // スラッシュメニュー外側クリック close
 let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
 
+// 折りたたみアイコン（シェブロン）: 既定は右向き、展開時は .expanded で90°回転＝下向き
+const CHEVRON_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
 export function renderDaily(store, mount, requestRender){
   mount.innerHTML = '';
 
@@ -75,7 +78,8 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     const tog = document.createElement('span');
     tog.className = 'card-toggle';
     if (kids.length){
-      tog.textContent = ref.collapsed ? '▸' : '▾';
+      tog.innerHTML = CHEVRON_SVG;
+      if (!ref.collapsed) tog.classList.add('expanded');   // 展開中は下向き
       tog.title = ref.collapsed ? '展開' : '折りたたみ';
       tog.onclick = () => { store.updateRef(ref.id, { collapsed: !ref.collapsed }); requestRender(); };
     } else { tog.classList.add('leaf'); }
