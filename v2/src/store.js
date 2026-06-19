@@ -109,6 +109,13 @@ export function createStore(initial){
     delete S.bodies[id]; emit();
   }
 
+  function replaceState(newState){          // GitHub取得などで状態を丸ごと差し替え（S参照は維持）
+    for (const k of Object.keys(S)) delete S[k];
+    Object.assign(S, newState);
+    if (!S.views) S.views = [];
+    emit();
+  }
+
   function subscribe(fn){ subs.add(fn); return () => subs.delete(fn); }
   const toJSON = () => S;
 
@@ -117,5 +124,5 @@ export function createStore(initial){
            siblings, prevSiblingRef, orderAfter, endOrder,
            saveView, updateView, deleteView, listViews,
            createProject, listProjects, deleteProject,
-           subscribe, toJSON, _state:S };
+           replaceState, subscribe, toJSON, _state:S };
 }

@@ -83,3 +83,18 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .pm-row input[type=text]{flex:1;font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 .pm-row .btn{padding:2px 8px}
 .list-table .proj-select{max-width:150px}
+
+/* GitHub同期: バッジ＋設定モーダル */
+.gh-badge{font-size:11px;color:var(--tx3);margin-right:8px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:50}
+.modal[hidden]{display:none}
+.modal-box{background:var(--panel);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;width:min(460px,92vw);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.modal-box h3{margin:0 0 6px;font-size:15px}
+.modal-note{font-size:11px;color:var(--tx3);margin:0 0 12px}
+.f-row{display:flex;align-items:center;gap:7px;font-size:13px;margin:8px 0}
+.f-col{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--tx3);margin:10px 0}
+.f-col .hint{font-size:10px}
+.f-col input{font:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--tx)}
+.modal-actions{display:flex;align-items:center;gap:6px;margin-top:14px;flex-wrap:wrap}
+.modal-actions .spacer{flex:1}
+.gh-status{margin-top:10px;font-size:12px;color:var(--tx3);min-height:1.2em}

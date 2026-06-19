@@ -11,7 +11,11 @@ export function loadState(){
 let timer = null;
 export function saveState(store, { immediate=false } = {}){
   const doSave = () => {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(store.toJSON())); }
+    try {
+      const s = store.toJSON();
+      s.savedAt = new Date().toISOString();   // 競合判定用タイムスタンプ（GitHub同期と共有）
+      localStorage.setItem(LS_KEY, JSON.stringify(s));
+    }
     catch(e){ console.error('[persist] save failed', e); }
   };
   if (immediate){ doSave(); return; }

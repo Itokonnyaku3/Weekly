@@ -12,13 +12,39 @@
     <button class="btn" id="view-daily-btn">デイリー</button>
     <button class="btn" id="view-list-btn">リスト</button>
     <div class="spacer"></div>
+    <span id="gh-badge" class="gh-badge" hidden></span>
     <button class="btn" id="add-proj">＋ プロジェクト</button>
     <button class="btn btn-accent" id="add-today">＋ 今日に追加</button>
+    <button class="btn" id="settings-btn" title="GitHub同期設定">⚙</button>
   </div>
   <div id="app">
     <div id="view-daily" hidden></div>
     <div id="view-list" hidden></div>
   </div>
+
+  <div id="gh-modal" class="modal" hidden>
+    <div class="modal-box">
+      <h3>GitHub 同期設定</h3>
+      <p class="modal-note">v2専用パスに保存します（既存の data.json には触れません）。</p>
+      <label class="f-row"><input type="checkbox" id="gh-enabled"> 自動同期を有効にする</label>
+      <label class="f-col">リポジトリ <span class="hint">owner/repo 形式</span>
+        <input type="text" id="gh-repo" autocomplete="off" placeholder="例: Yoneyama/WeeklyReports"></label>
+      <label class="f-col">ファイルパス
+        <input type="text" id="gh-file" autocomplete="off" placeholder="v2-data/tracker.json"></label>
+      <label class="f-col">アクセストークン (PAT)
+        <input type="password" id="gh-token" autocomplete="new-password" placeholder="ghp_..." onfocus="this.select()"></label>
+      <div class="modal-actions">
+        <button class="btn btn-accent" id="gh-save">保存</button>
+        <button class="btn" id="gh-push">↑ 送信</button>
+        <button class="btn" id="gh-pull">↓ 取得</button>
+        <button class="btn" id="gh-backup">今すぐバックアップ</button>
+        <span class="spacer"></span>
+        <button class="btn" id="gh-close">閉じる</button>
+      </div>
+      <div id="gh-status" class="gh-status"></div>
+    </div>
+  </div>
+
   <script type="module">import('./src/app.js?v=' + Date.now());</script>
 </body>
 </html>
