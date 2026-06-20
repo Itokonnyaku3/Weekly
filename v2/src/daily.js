@@ -44,7 +44,7 @@ export function renderDaily(store, mount, requestRender){
       const add = document.createElement('div');
       add.className = 'card-add'; add.textContent = '＋ 追加';
       add.onclick = () => {
-        const { ref } = store.createCard({ kind:'task', content:'', parentRefId: dayRef.id });
+        const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: dayRef.id });
         requestRender();
         focusCard(ref.id, 0);
       };
@@ -323,13 +323,14 @@ function renderZoomed(store, mount, requestRender, fref, fbody){
   tt.className = 'card-txt zoom-title-txt'; tt.contentEditable = 'true'; tt.spellcheck = false;
   tt.dataset.ref = fref.id; tt.textContent = fbody.content || '';
   tt.addEventListener('input', () => store.updateBody(fbody.id, { content: tt.textContent }));
+  tt.addEventListener('keydown', (e) => onKey(e, store, fref, fbody, requestRender));   // タイトルからも Alt+↑ で出る等
   title.appendChild(tt);
   mount.appendChild(title);
 
   const wrap = document.createElement('div'); wrap.className = 'zoom-children';
   renderChildren(store, fref.id, wrap, 0, requestRender);
   const add = document.createElement('div'); add.className = 'card-add'; add.textContent = '＋ 追加';
-  add.onclick = () => { const { ref } = store.createCard({ kind:'task', content:'', parentRefId: fref.id }); requestRender(); focusCard(ref.id, 0); };
+  add.onclick = () => { const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: fref.id }); requestRender(); focusCard(ref.id, 0); };
   wrap.appendChild(add);
   mount.appendChild(wrap);
 }
@@ -364,9 +365,9 @@ function onKey(e, store, ref, body, requestRender){
     }
   }
 
-  // Workflowy: ズームイン(Alt+.) / アウト(Alt+,)
-  if (e.altKey && e.key === '.'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
-  if (e.altKey && e.key === ','){ e.preventDefault(); zoomOut(store); requestRender(); return; }
+  // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); zoomOut(store); requestRender(); focusCard(ref.id, pos); return; }
   // Workflowy: 折りたたみ(Ctrl+↑) / 展開(Ctrl+↓)
   if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
     if (!store.childRefs(ref.id).length) return;
@@ -501,7 +502,7 @@ export function resetZoom(){ _focusRef = null; }   // ズーム解除（パレ�
 function visibleFlat(store){
   const out = [];
   const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
-  if (_focusRef && store.getRef(_focusRef)){ walk(_focusRef); return out; }   // ズーム中はサブツリー内のみ
+  if (_focusRef && store.getRef(_focusRef)){ out.push(_focusRef); walk(_focusRef); return out; }   // ズーム中はタイトル＋サブツリー内
   const days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
   for (const day of days){
     const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);

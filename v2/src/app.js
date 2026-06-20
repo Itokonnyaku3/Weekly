@@ -7,7 +7,7 @@ const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { openPalette } = await import('./palette.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.12.0';
+export const APP_VERSION = '0.13.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -39,7 +39,7 @@ function setView(v){ currentView = v; renderAll(); }
 
 function addToday(){
   const day = store.ensureDayCard(todayStr());
-  const { ref } = store.createCard({ kind:'task', content:'', parentRefId: day.ref.id });
+  const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: day.ref.id });
   currentView = 'daily';
   renderAll();
   focusCard(ref.id, 0);
