@@ -27,6 +27,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-txt:empty::after{content:"\00a0";color:transparent}
 .card-txt.done{text-decoration:line-through;opacity:.5}
 .card-row:focus-within{background:var(--accent-soft);border-radius:4px}
+.card-row.selected{background:var(--accent-soft);border-radius:4px;box-shadow:inset 3px 0 0 var(--accent)}
 
 /* 折りたたみ / 追加 / メモ→タスク / 主ボタン */
 .card-toggle{flex:none;width:20px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;user-select:none;border-radius:5px}
@@ -93,6 +94,10 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cmdk-item.sel{background:var(--accent-soft);color:var(--accent)}
 .cmdk-item.sel .cmdk-hint{color:var(--accent)}
 .cmdk-item:hover{background:var(--accent-soft)}
+
+/* トースト通知 */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--pc);color:#fff;font-size:13px;padding:7px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:90}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ビュー切替ボタン */
 .btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}

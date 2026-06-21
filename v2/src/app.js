@@ -2,13 +2,13 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { openPalette } = await import('./palette.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.14.0';
+export const APP_VERSION = '0.15.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -146,7 +146,7 @@ function boot(){
   document.getElementById('gh-backup')?.addEventListener('click', () => GH.ghBackupNow(store, { onStatus: ghStatus }));
   document.getElementById('gh-close')?.addEventListener('click', () => { document.getElementById('gh-modal').hidden = true; });
 
-  installClipboard(store, renderAll, focusCard);   // コピー/カット/貼り付け
+  installClipboard(store, renderAll, focusCard, clearSelection);   // コピー/カット/貼り付け
   renderAll();
   refreshBadge();
 

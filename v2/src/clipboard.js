@@ -74,37 +74,61 @@ export function insertNodes(store, currentRefId, nodes){
   return firstRef;
 }
 
+// ── トースト通知 ──
+let _toastTimer = null;
+export function showToast(msg){
+  let el = document.getElementById('pwt2-toast');
+  if (!el){ el = document.createElement('div'); el.id = 'pwt2-toast'; el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
 // ── DOM 配線（copy / cut / paste をシステムクリップボード経由で）──
-export function installClipboard(store, requestRender, focusCard){
+export function installClipboard(store, requestRender, focusCard, clearSelection){
   const activeCard = () => {
     const el = document.activeElement;
     return (el && el.classList && el.classList.contains('card-txt') && el.dataset.ref) ? el : null;
   };
+  const hasSel = () => !!document.querySelector('.card-row.selected');
+  // 対象 ref 群（選択優先・なければフォーカス中）。子孫は除外して「根」だけ返す。
+  const targetRoots = () => {
+    let ids = [...document.querySelectorAll('.card-row.selected .card-txt[data-ref]')].map(e => e.dataset.ref);
+    if (!ids.length){ const c = activeCard(); ids = c ? [c.dataset.ref] : []; }
+    const set = new Set(ids);
+    return ids.filter(id => { let p = store.getRef(id)?.parentRefId; while (p){ if (set.has(p)) return false; p = store.getRef(p)?.parentRefId; } return true; });
+  };
+  const writeClip = (e, roots) => {
+    const allNodes = [], plains = [];
+    for (const rid of roots){ const { nodes, plain } = serializeSubtree(store, rid); allNodes.push(...nodes); plains.push(plain); }
+    const plain = plains.join('\n');
+    e.clipboardData.setData('text/plain', plain);
+    e.clipboardData.setData('text/html', encodeClipHtml(allNodes, plain));
+  };
 
   document.addEventListener('copy', (e) => {
-    const card = activeCard(); if (!card) return;
-    if (!window.getSelection().isCollapsed) return;        // 文字選択中は標準コピー
-    const { nodes, plain } = serializeSubtree(store, card.dataset.ref);
+    if (!hasSel()){ const c = activeCard(); if (!c || !window.getSelection().isCollapsed) return; } // 文字選択中は標準
+    const roots = targetRoots(); if (!roots.length) return;
     e.preventDefault();
-    e.clipboardData.setData('text/plain', plain);
-    e.clipboardData.setData('text/html', encodeClipHtml(nodes, plain));
+    writeClip(e, roots);
+    showToast(roots.length > 1 ? `${roots.length}件コピーしました` : 'コピーしました');
   });
 
   document.addEventListener('cut', (e) => {
-    const card = activeCard(); if (!card) return;
-    if (!window.getSelection().isCollapsed) return;        // 文字選択中は標準カット
-    const refId = card.dataset.ref;
-    const { nodes, plain } = serializeSubtree(store, refId);
+    if (!hasSel()){ const c = activeCard(); if (!c || !window.getSelection().isCollapsed) return; }
+    const roots = targetRoots(); if (!roots.length) return;
     e.preventDefault();
-    e.clipboardData.setData('text/plain', plain);
-    e.clipboardData.setData('text/html', encodeClipHtml(nodes, plain));
-    // カット＝コピー後に削除（フォーカスは前カード/親へ）
-    const prev = store.prevSiblingRef(refId);
-    const parentRef = store.getRef(store.getRef(refId).parentRefId);
-    store.deleteRef(refId);
+    writeClip(e, roots);
+    const firstRoot = roots[0];
+    const prev = store.prevSiblingRef(firstRoot);
+    const parentRef = store.getRef(store.getRef(firstRoot).parentRefId);
+    for (const rid of roots) store.deleteRef(rid);
+    if (clearSelection) clearSelection();
     requestRender();
     const target = prev ? prev.id : (parentRef && store.getBody(parentRef.bodyId)?.kind !== 'day' ? parentRef.id : null);
     if (target) focusCard(target, -1);
+    showToast(roots.length > 1 ? `${roots.length}件カットしました` : 'カットしました');
   });
 
   document.addEventListener('paste', (e) => {
@@ -118,8 +142,8 @@ export function installClipboard(store, requestRender, focusCard){
     const refId = card.dataset.ref;
     const curBody = store.getBody(store.getRef(refId).bodyId);
     const first = insertNodes(store, refId, nodes);
-    // 空のカードに貼ったら、その空カードは消して貼り付け結果に置き換える
     if (curBody && !curBody.content && !store.childRefs(refId).length) store.deleteRef(refId);
+    if (clearSelection) clearSelection();
     requestRender();
     if (first) focusCard(first, -1);
   });
