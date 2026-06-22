@@ -8,6 +8,8 @@ let _openMenu = null;       // 行メニューを開いている ref.id（再描
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 let _dragRef = null;        // ドラッグ中のカード ref.id
 let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
+let _mentionJump = null;    // @チップのクリック→移動（app から設定）
+let _mPanel = null, _mCloser = null;   // @メンション検索ポップアップ
 
 // 折りたたみアイコン（シェブロン）: 既定は右向き、展開時は .expanded で90°回転＝下向き
 const CHEVRON_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -16,7 +18,8 @@ const CHEVRON_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4
 const _sel = new Set();
 let _selAnchor = null, _selHead = null;
 
-export function renderDaily(store, mount, requestRender){
+export function renderDaily(store, mount, requestRender, onMentionJump){
+  if (onMentionJump) _mentionJump = onMentionJump;
   mount.innerHTML = '';
 
   // ズーム中: フォーカスしたカードのサブツリーだけ表示
@@ -109,9 +112,9 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     txt.contentEditable = 'true';
     txt.spellcheck = false;
     txt.dataset.ref = ref.id;
-    txt.textContent = body.content || '';
+    fillEditable(txt, body.content || '', store);   // ⟦id⟧ マーカー→@チップ
     if (body.kind === 'task' && body.done) txt.classList.add('done');
-    txt.addEventListener('input', () => store.updateBody(body.id, { content: txt.textContent }));
+    txt.addEventListener('input', () => store.updateBody(body.id, { content: serializeEditable(txt) }));
     txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
     txt.addEventListener('mousedown', (e) => { if (e.shiftKey){ e.preventDefault(); shiftClickSelect(store, ref.id); } else clearSelection(); });
     row.appendChild(txt);
@@ -265,6 +268,21 @@ function renderZoomed(store, mount, requestRender, fref, fbody){
   add.onclick = () => { const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: fref.id }); requestRender(); focusCard(ref.id, 0); };
   wrap.appendChild(add);
   mount.appendChild(wrap);
+
+  // バックリンク（このカードを ⟦id⟧ で参照しているカード）
+  const backs = store.queryBodies(b => b.id !== fbody.id && (b.content || '').includes('⟦' + fbody.id + '⟧'));
+  if (backs.length){
+    const bl = document.createElement('div'); bl.className = 'backlinks';
+    const h = document.createElement('div'); h.className = 'backlinks-head'; h.textContent = '🔗 バックリンク (' + backs.length + ')';
+    bl.appendChild(h);
+    for (const b of backs){
+      const item = document.createElement('div'); item.className = 'backlink-item';
+      item.textContent = ((b.content || '').replace(MENTION_RE, '@…').slice(0, 80)) || '(空)';
+      item.onclick = () => { if (_mentionJump) _mentionJump(b.id); };
+      bl.appendChild(item);
+    }
+    mount.appendChild(bl);
+  }
 }
 
 function manageOutsideClose(requestRender){
@@ -284,13 +302,27 @@ function onKey(e, store, ref, body, requestRender){
   if (e.isComposing || e.keyCode === 229) return; // IME変換中は素通り
 
   const el = e.target;
-  const text = el.textContent;
+  const text = serializeEditable(el);
   const pos = caretOffset(el);
 
   // 複数選択: Shift+↑↓ で拡張 / それ以外のキーで解除（Ctrl系・修飾単独は維持）
   const _isShiftArrow = e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown');
   if (!_isShiftArrow && !e.ctrlKey && !e.metaKey && !['Shift','Control','Alt','Meta'].includes(e.key)) clearSelection();
   if (_isShiftArrow){ e.preventDefault(); extendSelection(store, ref.id, e.key === 'ArrowDown' ? 'down' : 'up'); return; }
+
+  // @ でメンション検索（カード/日付）。挿入位置を覚えてチップ化。Esc は @ を文字として挿入
+  if (e.key === '@' && !e.ctrlKey && !e.metaKey){
+    e.preventDefault();
+    const at = pos;
+    openMentionSearch(store, el, (targetId) => {
+      const cur = store.getBody(body.id).content || '';
+      const ins = targetId ? '⟦' + targetId + '⟧' : '@';
+      store.updateBody(body.id, { content: cur.slice(0, at) + ins + cur.slice(at) });
+      requestRender();
+      focusCard(ref.id, at + ins.length);
+    });
+    return;
+  }
 
   // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
   if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
@@ -403,29 +435,141 @@ function onKey(e, store, ref, body, requestRender){
 }
 
 // ── caret / 走査 / 小物 ──
-function caretOffset(el){
+// ── メンション: 本文文字列は ⟦bodyId⟧ マーカーでリンクを表す。描画時にチップ化／編集時に文字列へ戻す ──
+const MENTION_RE = /⟦([^⟧]+)⟧/g;
+const mlen = (n) => n.nodeType === 3 ? n.textContent.length
+  : (n.classList && n.classList.contains('mention')) ? ('⟦' + n.dataset.ref + '⟧').length
+  : n.textContent.length;
+
+function makeChip(targetId, store){
+  const sp = document.createElement('span');
+  sp.className = 'mention'; sp.contentEditable = 'false'; sp.dataset.ref = targetId;
+  const b = store.getBody(targetId);
+  sp.textContent = '@' + (b ? (b.kind === 'day' ? b.content : (b.content || '無題').slice(0, 24)) : '?');
+  if (!b) sp.classList.add('broken');
+  sp.addEventListener('mousedown', (e) => { e.preventDefault(); if (_mentionJump) _mentionJump(targetId); });
+  return sp;
+}
+function fillEditable(el, content, store){
+  el.textContent = '';
+  let last = 0, m; MENTION_RE.lastIndex = 0;
+  while ((m = MENTION_RE.exec(content))){
+    if (m.index > last) el.appendChild(document.createTextNode(content.slice(last, m.index)));
+    el.appendChild(makeChip(m[1], store));
+    last = m.index + m[0].length;
+  }
+  if (last < content.length) el.appendChild(document.createTextNode(content.slice(last)));
+}
+function serializeEditable(el){
+  let out = '';
+  el.childNodes.forEach(n => {
+    if (n.nodeType === 3) out += n.textContent;
+    else if (n.nodeType === 1 && n.classList && n.classList.contains('mention')) out += '⟦' + n.dataset.ref + '⟧';
+    else if (n.nodeType === 1) out += n.textContent;
+  });
+  return out;
+}
+function caretOffset(el){              // 直列化文字列における caret 位置
   const sel = window.getSelection();
   if (!sel.rangeCount) return 0;
   const r = sel.getRangeAt(0);
   if (!el.contains(r.startContainer)) return 0;
-  return r.startOffset;
+  let idx = 0;
+  const nodes = el.childNodes;
+  for (let i = 0; i < nodes.length; i++){
+    if (r.startContainer === el && r.startOffset === i) return idx;
+    if (nodes[i] === r.startContainer) return idx + r.startOffset;
+    idx += mlen(nodes[i]);
+  }
+  return idx;
 }
-function setCaret(el, pos){
+function setCaret(el, pos){            // pos: 直列化インデックス（<0 で末尾）
   el.focus();
-  const node = el.firstChild;
+  const content = serializeEditable(el);
+  const target = pos < 0 ? content.length : Math.min(pos, content.length);
   const sel = window.getSelection();
   const r = document.createRange();
-  if (!node){ r.setStart(el, 0); }
-  else { r.setStart(node, pos < 0 ? node.textContent.length : Math.min(pos, node.textContent.length)); }
-  r.collapse(true);
-  sel.removeAllRanges();
-  sel.addRange(r);
+  const nodes = [...el.childNodes];
+  let idx = 0;
+  for (let i = 0; i < nodes.length; i++){
+    const n = nodes[i], len = mlen(n);
+    if (target <= idx + len){
+      if (n.nodeType === 3){ r.setStart(n, Math.max(0, target - idx)); }
+      else { r.setStart(el, i + (target <= idx ? 0 : 1)); }   // チップ前後の境界へ
+      r.collapse(true); sel.removeAllRanges(); sel.addRange(r); return;
+    }
+    idx += len;
+  }
+  if (!nodes.length) r.setStart(el, 0); else r.setStartAfter(nodes[nodes.length - 1]);
+  r.collapse(true); sel.removeAllRanges(); sel.addRange(r);
 }
 export function focusCard(refId, pos = 0){
   const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
   if (el) setCaret(el, pos);
 }
 export function resetZoom(){ _focusRef = null; }   // ズーム解除（パレットからのジャンプ用）
+
+// ── @メンション検索ポップアップ ──
+function closeMention(){
+  if (_mCloser){ document.removeEventListener('mousedown', _mCloser); _mCloser = null; }
+  if (_mPanel){ _mPanel.remove(); _mPanel = null; }
+}
+function parseDateQuery(q){
+  q = q.trim(); const p = (n) => String(n).padStart(2, '0');
+  const fmt = (d) => d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(q)){ const [y, mo, d] = q.split('-').map(Number); return y + '-' + p(mo) + '-' + p(d); }
+  if (/^\d{1,2}\/\d{1,2}$/.test(q)){ const [mo, d] = q.split('/').map(Number); return new Date().getFullYear() + '-' + p(mo) + '-' + p(d); }
+  if (q === '今日') return fmt(new Date());
+  if (q === '明日'){ const d = new Date(); d.setDate(d.getDate() + 1); return fmt(d); }
+  return null;
+}
+function openMentionSearch(store, anchorEl, onPick){
+  closeMention();
+  const panel = document.createElement('div'); panel.className = 'mention-pop';
+  const input = document.createElement('input'); input.className = 'mention-input'; input.type = 'text'; input.placeholder = '@ カード名 / 2026-06-25 / 6/25 / 今日'; input.spellcheck = false;
+  const list = document.createElement('div'); list.className = 'mention-list';
+  panel.appendChild(input); panel.appendChild(list); document.body.appendChild(panel); _mPanel = panel;
+  const sel = window.getSelection();
+  let rect = sel.rangeCount ? sel.getRangeAt(0).getBoundingClientRect() : null;
+  if (!rect || (!rect.top && !rect.left)) rect = anchorEl.getBoundingClientRect();
+  panel.style.left = Math.round(rect.left) + 'px'; panel.style.top = Math.round(rect.bottom + 4) + 'px';
+
+  let items = [], si = 0;
+  const compute = (q) => {
+    const ql = q.trim().toLowerCase(); const out = [];
+    const ds = parseDateQuery(q);
+    if (ds) out.push({ label: '📅 ' + ds, hint: '日付', run: () => onPick(store.ensureDayCard(ds).body.id) });
+    if (ql) store.queryBodies(b => (b.kind === 'task' || b.kind === 'memo' || b.kind === 'day') && (b.content || '').toLowerCase().includes(ql))
+      .slice(0, 12)
+      .forEach(b => out.push({ label: (b.kind === 'day' ? '📅 ' : '') + (b.content || '(空)').slice(0, 30), hint: b.kind === 'task' ? 'タスク' : (b.kind === 'day' ? '日付' : 'メモ'), run: () => onPick(b.id) }));
+    return out;
+  };
+  const exec = (it) => { closeMention(); it.run(); };
+  const render = () => {
+    list.innerHTML = '';
+    if (!items.length){ const e = document.createElement('div'); e.className = 'mention-empty'; e.textContent = 'カード名 / 2026-06-25 / 6/25 / 今日'; list.appendChild(e); return; }
+    items.forEach((it, i) => {
+      const el = document.createElement('div'); el.className = 'mention-item' + (i === si ? ' sel' : '');
+      const lab = document.createElement('span'); lab.textContent = it.label; el.appendChild(lab);
+      if (it.hint){ const h = document.createElement('span'); h.className = 'mention-hint'; h.textContent = it.hint; el.appendChild(h); }
+      el.onmousedown = (ev) => { ev.preventDefault(); exec(it); };
+      list.appendChild(el);
+    });
+    const s = list.querySelector('.mention-item.sel'); if (s) s.scrollIntoView({ block: 'nearest' });
+  };
+  const update = () => { items = compute(input.value); si = 0; render(); };
+  input.addEventListener('input', update);
+  input.addEventListener('keydown', (e) => {
+    if (e.isComposing) return;
+    if (e.key === 'ArrowDown'){ e.preventDefault(); si = Math.min(si + 1, items.length - 1); render(); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); si = Math.max(si - 1, 0); render(); }
+    else if (e.key === 'Enter'){ e.preventDefault(); if (items[si]) exec(items[si]); }
+    else if (e.key === 'Escape'){ e.preventDefault(); closeMention(); onPick(null); }
+  });
+  update(); input.focus();
+  _mCloser = (e) => { if (!e.target.closest('.mention-pop')) closeMention(); };
+  setTimeout(() => { if (_mCloser) document.addEventListener('mousedown', _mCloser); }, 0);
+}
 
 // ── 複数選択 ──
 function applySelStyles(root){

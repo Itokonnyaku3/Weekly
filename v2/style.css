@@ -111,6 +111,26 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cal-day.today{outline:1px solid var(--accent)}
 .cal-day.has::after{content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
 
+/* @メンション チップ */
+.mention{color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 5px;cursor:pointer;white-space:nowrap;font-size:.92em}
+.mention:hover{text-decoration:underline}
+.mention.broken{color:#d9534f;background:none}
+/* @メンション検索ポップアップ */
+.mention-pop{position:fixed;z-index:65;background:var(--panel);border:1px solid var(--bd);border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.22);width:280px;max-height:300px;overflow:hidden;display:flex;flex-direction:column}
+.mention-input{font:inherit;font-size:13px;padding:7px 10px;border:none;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);outline:none}
+.mention-list{overflow-y:auto}
+.mention-empty{padding:8px 10px;color:var(--tx3);font-size:12px}
+.mention-item{display:flex;align-items:center;gap:8px;padding:5px 10px;font-size:13px;cursor:pointer}
+.mention-item>span:first-child{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mention-hint{flex:none;font-size:11px;color:var(--tx3)}
+.mention-item.sel{background:var(--accent-soft);color:var(--accent)}
+.mention-item:hover{background:var(--accent-soft)}
+/* バックリンク（ズーム時） */
+.backlinks{margin-top:18px;border-top:1px solid var(--bd);padding-top:10px;max-width:760px}
+.backlinks-head{font-size:12px;color:var(--tx3);font-weight:700;margin-bottom:6px}
+.backlink-item{font-size:13px;padding:4px 8px;border-radius:6px;cursor:pointer;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.backlink-item:hover{background:var(--accent-soft);color:var(--accent)}
+
 /* トースト通知 */
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);background:var(--pc);color:#fff;font-size:13px;padding:7px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:90}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
