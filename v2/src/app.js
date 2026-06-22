@@ -2,14 +2,14 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearSelection } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.19.0';
+export const APP_VERSION = '0.20.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -62,7 +62,7 @@ function jumpToCard(bodyId){
   const ref = refs[0];
   let p = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
   while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
-  resetZoom();
+  resetZoom(); clearDayFocus();
   currentView = 'daily';
   renderAll();
   focusCard(ref.id, -1);
@@ -80,8 +80,9 @@ function jumpToMention(bodyId){           // @チップのクリック先（日�
   if (b && b.kind === 'day') gotoDate(b.content);
   else jumpToCard(bodyId);
 }
-function gotoDate(date){                  // カレンダー/コマンドからその日へ
+function gotoDate(date){                  // カレンダー/コマンドからその日へ（全体表示でスクロール）
   store.ensureDayCard(date);
+  resetZoom(); clearDayFocus();
   currentView = 'daily';
   renderAll();
   const sec = document.querySelector(`.day-sec[data-date="${date}"]`);

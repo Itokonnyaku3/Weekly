@@ -20,6 +20,9 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 /* 最小デイリービュー */
 .day-sec{margin:0 0 18px;max-width:760px}
 .day-head{font-weight:700;font-size:13px;padding:4px 0;border-bottom:1px solid var(--bd);margin-bottom:4px}
+.day-head-clk{cursor:pointer}
+.day-head-clk:hover{color:var(--accent)}
+.day-head-clk:hover::after{content:" ⤢";font-size:11px;font-weight:400}
 .card-row{display:flex;align-items:flex-start;gap:7px;padding:3px 0;font-size:13px;line-height:1.5}
 .card-row input[type=checkbox]{margin:3px 0 0;cursor:pointer;flex:none}
 .card-dot{color:var(--tx3);flex:none;width:14px;text-align:center}
@@ -79,6 +82,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .crumb-item{cursor:pointer}
 .crumb-item:hover{color:var(--accent);text-decoration:underline}
 .crumb-sep{color:var(--tx3)}
+.crumb-cur{cursor:default;color:var(--tx);font-weight:600}
+.crumb-cur:hover{color:var(--tx);text-decoration:none}
 .zoom-title{margin:0 0 10px}
 .zoom-title-txt{font-size:20px;font-weight:700;outline:none;display:block;min-height:1.4em}
 

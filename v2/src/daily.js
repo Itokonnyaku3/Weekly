@@ -1,6 +1,7 @@
 // デイリービュー（編集可能・最小アウトライナー）
 // 入力=その場編集 / Enter=分割 / Tab・Shift+Tab=インデント / Backspace(行頭)=結合 / ↑↓=移動 /
-// Ctrl+Enter=メモ⇄タスク / 「•」クリックでタスク化 / 子持ちは ▾▸ で折りたたみ(ref.collapsed) /
+// Ctrl+Enter=メモ→タスク→完了→メモ の3状態サイクル / 「•」クリックでタスク化 /
+// 子持ちは ▾▸ で折りたたみ(ref.collapsed) / 日付見出しクリックでその日だけにフォーカス /
 // 「⋯」で行メニュー（メモ⇄タスク・優先度・期限・プロジェクト割当・削除）。
 // 描画方針: テキスト入力では再描画しない（caret保持）。構造変更だけ requestRender＋caret復元。
 
@@ -8,6 +9,7 @@ let _openMenu = null;       // 行メニューを開いている ref.id（再描
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 let _dragRef = null;        // ドラッグ中のカード ref.id
 let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
+let _focusDate = null;      // 日フォーカス中の 'YYYY-MM-DD'（null=全日表示）
 let _mentionJump = null;    // @チップのクリック→移動（app から設定）
 let _mPanel = null, _mCloser = null;   // @メンション検索ポップアップ
 
@@ -36,29 +38,58 @@ export function renderDaily(store, mount, requestRender, onMentionJump){
     mount.innerHTML = '<p style="color:var(--tx3)">まだカードがありません。右上の「＋ 今日に追加」で始めてください。</p>';
     return;
   }
-  for (const day of days){
-    const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
-    const sec = document.createElement('div');
-    sec.className = 'day-sec';
-    sec.dataset.date = day.content;        // カレンダーからのスクロール用
-    const head = document.createElement('div');
-    head.className = 'day-head';
-    head.textContent = day.content;
-    sec.appendChild(head);
-    if (dayRef){
-      renderChildren(store, dayRef.id, sec, 0, requestRender);
-      const add = document.createElement('div');
-      add.className = 'card-add'; add.textContent = '＋ 追加';
-      add.onclick = () => {
-        const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: dayRef.id });
-        requestRender();
-        focusCard(ref.id, 0);
-      };
-      sec.appendChild(add);
+
+  // 日フォーカス中: その日だけ表示（パンくず「全体」で戻る）
+  if (_focusDate){
+    const day = days.find(d => d.content === _focusDate);
+    if (day){
+      const crumb = document.createElement('div'); crumb.className = 'zoom-crumb';
+      const home = document.createElement('span'); home.className = 'crumb-item'; home.textContent = '全体';
+      home.onclick = () => { _focusDate = null; requestRender(); };
+      crumb.appendChild(home); crumb.appendChild(crumbSep());
+      const cur = document.createElement('span'); cur.className = 'crumb-item crumb-cur'; cur.textContent = _focusDate;
+      crumb.appendChild(cur);
+      mount.appendChild(crumb);
+      mount.appendChild(renderDaySection(store, day, requestRender, false));
+      manageOutsideClose(requestRender);
+      return;
     }
-    mount.appendChild(sec);
+    _focusDate = null; // 対象日が無くなっていたら解除
+  }
+
+  for (const day of days){
+    mount.appendChild(renderDaySection(store, day, requestRender, true));
   }
   manageOutsideClose(requestRender);   // メニューが開いていれば外側クリックで閉じる
+}
+
+// 1日分のセクション（日付見出し＋カード＋「＋追加」）。focusable=true で見出しクリック→その日にフォーカス
+function renderDaySection(store, day, requestRender, focusable){
+  const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
+  const sec = document.createElement('div');
+  sec.className = 'day-sec';
+  sec.dataset.date = day.content;        // カレンダーからのスクロール用
+  const head = document.createElement('div');
+  head.className = 'day-head';
+  head.textContent = day.content;
+  if (focusable){
+    head.classList.add('day-head-clk');
+    head.title = 'この日にフォーカス';
+    head.onclick = () => { _focusRef = null; _focusDate = day.content; requestRender(); };
+  }
+  sec.appendChild(head);
+  if (dayRef){
+    renderChildren(store, dayRef.id, sec, 0, requestRender);
+    const add = document.createElement('div');
+    add.className = 'card-add'; add.textContent = '＋ 追加';
+    add.onclick = () => {
+      const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: dayRef.id });
+      requestRender();
+      focusCard(ref.id, 0);
+    };
+    sec.appendChild(add);
+  }
+  return sec;
 }
 
 function renderChildren(store, parentRefId, mountEl, depth, requestRender){
@@ -336,10 +367,13 @@ function onKey(e, store, ref, body, requestRender){
     return;
   }
 
-  // Workflowy: 完了トグル（Ctrl/⌘+Enter）
+  // Ctrl/⌘+Enter: メモ → タスク(未完) → 完了 → メモ の3状態サイクル
+  // （完了の単純トグルはチェックボックスのクリックで可能）
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
     e.preventDefault();
-    store.updateBody(body.id, { done: !body.done });
+    if (body.kind !== 'task')   store.updateBody(body.id, { kind: 'task', done: false });
+    else if (!body.done)        store.updateBody(body.id, { done: true });
+    else                        store.updateBody(body.id, { kind: 'memo', done: false });
     requestRender();
     focusCard(ref.id, pos);
     return;
@@ -507,7 +541,8 @@ export function focusCard(refId, pos = 0){
   const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
   if (el) setCaret(el, pos);
 }
-export function resetZoom(){ _focusRef = null; }   // ズーム解除（パレットからのジャンプ用）
+export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
+export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
 
 // ── @メンション検索ポップアップ ──
 function closeMention(){
