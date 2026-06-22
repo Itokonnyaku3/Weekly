@@ -4,11 +4,11 @@ const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard, resetZoom, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
-const { openPalette } = await import('./palette.js' + _q);
+const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.16.0';
+export const APP_VERSION = '0.17.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -66,14 +66,50 @@ function jumpToCard(bodyId){
   renderAll();
   focusCard(ref.id, -1);
 }
-function paletteCommands(){
-  return [
-    { label: 'デイリーを表示', run: () => setView('daily') },
-    { label: 'リストを表示', run: () => setView('list') },
-    { label: '今日に追加', run: addToday },
-    { label: 'プロジェクトを追加', run: addProject },
-    { label: 'GitHub同期設定', run: openSettings },
+const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+function dispatchCardKey(refId, init){              // フォーカス中カードへキーを発火（既存のキー操作を再利用）
+  focusCard(refId, -1);
+  const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
+  if (el) el.dispatchEvent(new KeyboardEvent('keydown', Object.assign({ bubbles:true, cancelable:true }, init)));
+}
+function setCardAttr(bodyId, patch, refId){ store.updateBody(bodyId, patch); renderAll(); focusCard(refId, -1); }
+
+function buildCommands(cardRef){
+  const cmds = [
+    { cat:'表示', label:'デイリーを表示', run: () => setView('daily') },
+    { cat:'表示', label:'リストを表示', run: () => setView('list') },
+    { cat:'追加', label:'今日に追加', run: addToday },
+    { cat:'追加', label:'プロジェクトを追加', run: addProject },
+    { cat:'設定', label:'GitHub同期設定', run: openSettings },
   ];
+  const body = cardRef && store.getBody(store.getRef(cardRef)?.bodyId);
+  if (cardRef && body){
+    const id = body.id;
+    cmds.push(
+      { cat:'カード', label: body.kind === 'task' ? 'メモにする' : 'タスクにする', run: () => setCardAttr(id, { kind: body.kind === 'task' ? 'memo' : 'task' }, cardRef) },
+      { cat:'カード', label:'完了の切替', hint:'Ctrl+Enter', run: () => dispatchCardKey(cardRef, { key:'Enter', ctrlKey:true }) },
+      { cat:'カード', label:'インデント', hint:'Tab', run: () => dispatchCardKey(cardRef, { key:'Tab' }) },
+      { cat:'カード', label:'アウトデント', hint:'Shift+Tab', run: () => dispatchCardKey(cardRef, { key:'Tab', shiftKey:true }) },
+      { cat:'カード', label:'上へ移動', hint:'Alt+Shift+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true, shiftKey:true }) },
+      { cat:'カード', label:'下へ移動', hint:'Alt+Shift+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true, shiftKey:true }) },
+      { cat:'カード', label:'折りたたみ', hint:'Ctrl+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', ctrlKey:true }) },
+      { cat:'カード', label:'展開', hint:'Ctrl+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', ctrlKey:true }) },
+      { cat:'カード', label:'ズームイン', hint:'Alt+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true }) },
+      { cat:'カード', label:'ズームアウト', hint:'Alt+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true }) },
+      { cat:'カード', label:'削除', hint:'Ctrl+Shift+Backspace', run: () => dispatchCardKey(cardRef, { key:'Backspace', ctrlKey:true, shiftKey:true }) },
+      { cat:'優先度', label:'高', run: () => setCardAttr(id, { prio:3 }, cardRef) },
+      { cat:'優先度', label:'中', run: () => setCardAttr(id, { prio:2 }, cardRef) },
+      { cat:'優先度', label:'低', run: () => setCardAttr(id, { prio:1 }, cardRef) },
+      { cat:'優先度', label:'なし', run: () => setCardAttr(id, { prio:0 }, cardRef) },
+      { cat:'期限', label:'今日', run: () => setCardAttr(id, { due: todayStr() }, cardRef) },
+      { cat:'期限', label:'明日', run: () => setCardAttr(id, { due: addDays(1) }, cardRef) },
+      { cat:'期限', label:'来週', run: () => setCardAttr(id, { due: addDays(7) }, cardRef) },
+      { cat:'期限', label:'なし', run: () => setCardAttr(id, { due: '' }, cardRef) },
+      ...store.listProjects().map(p => ({ cat:'プロジェクト割当', label: p.content || 'PJ', run: () => setCardAttr(id, { proj: p.id }, cardRef) })),
+      { cat:'プロジェクト割当', label:'割当なし', run: () => setCardAttr(id, { proj: undefined }, cardRef) },
+    );
+  }
+  return cmds;
 }
 
 // ── GitHub 同期 UI ──
@@ -129,10 +165,16 @@ function boot(){
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
-  document.addEventListener('keydown', (e) => {              // Ctrl/⌘+K でパレット
-    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')){
+  document.addEventListener('keydown', (e) => {              // Ctrl/⌘+K=コマンド / Ctrl/⌘+E=検索
+    if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+    if (e.key === 'k' || e.key === 'K'){
       e.preventDefault();
-      openPalette({ store, commands: paletteCommands(), onJump: jumpToCard });
+      const ae = document.activeElement;
+      const cardRef = (ae && ae.classList && ae.classList.contains('card-txt')) ? ae.dataset.ref : null;
+      openCommandPalette({ commands: buildCommands(cardRef) });
+    } else if (e.key === 'e' || e.key === 'E'){
+      e.preventDefault();
+      openSearchPalette({ store, onJump: jumpToCard });
     }
   });
 

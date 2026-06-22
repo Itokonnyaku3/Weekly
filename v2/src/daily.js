@@ -7,8 +7,6 @@
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 let _dragRef = null;        // ドラッグ中のカード ref.id
-let _slashPanel = null;     // スラッシュメニューの DOM（document.body 直下に浮かせる）
-let _slashCloser = null;    // スラッシュメニュー外側クリック close
 let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
 
 // 折りたたみアイコン（シェブロン）: 既定は右向き、展開時は .expanded で90°回転＝下向き
@@ -217,79 +215,6 @@ function clearDropIndicators(){
     .forEach(r => r.classList.remove('drop-before', 'drop-after'));
 }
 
-// ── スラッシュコマンドメニュー（/ で開く・絞り込み・↑↓・Enter・Escape）──
-function todayISO(){ return new Date().toISOString().slice(0, 10); }
-function addDaysISO(n){ const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
-
-function buildSlashCommands(store, ref, body){
-  const cmds = [
-    { label: body.kind === 'task' ? '• メモにする' : '☐ タスクにする', run: () => store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' }) },
-    { label: '🔴 優先度: 高', run: () => store.updateBody(body.id, { prio: 3 }) },
-    { label: '🟠 優先度: 中', run: () => store.updateBody(body.id, { prio: 2 }) },
-    { label: '🔵 優先度: 低', run: () => store.updateBody(body.id, { prio: 1 }) },
-    { label: '優先度: なし', run: () => store.updateBody(body.id, { prio: 0 }) },
-    { label: '📅 期限: 今日', run: () => store.updateBody(body.id, { due: todayISO() }) },
-    { label: '📅 期限: 明日', run: () => store.updateBody(body.id, { due: addDaysISO(1) }) },
-    { label: '📅 期限: 来週', run: () => store.updateBody(body.id, { due: addDaysISO(7) }) },
-    { label: '📅 期限: なし', run: () => store.updateBody(body.id, { due: '' }) },
-  ];
-  for (const p of store.listProjects()) cmds.push({ label: '# ' + (p.content || 'PJ'), run: () => store.updateBody(body.id, { proj: p.id }) });
-  cmds.push({ label: '# プロジェクトなし', run: () => store.updateBody(body.id, { proj: undefined }) });
-  cmds.push({ label: '🗑 削除', isDelete: true, run: () => store.deleteRef(ref.id) });
-  return cmds;
-}
-
-function openSlashMenu(store, ref, body, requestRender, anchorEl){
-  closeSlashMenu();
-  const cmds = buildSlashCommands(store, ref, body);
-  let filtered = cmds, sel = 0;
-
-  const panel = document.createElement('div'); panel.className = 'slash-menu';
-  const input = document.createElement('input'); input.className = 'slash-input'; input.type = 'text'; input.placeholder = 'コマンド…'; input.spellcheck = false;
-  const list = document.createElement('div'); list.className = 'slash-list';
-  panel.appendChild(input); panel.appendChild(list);
-  document.body.appendChild(panel);
-  _slashPanel = panel;
-
-  const rect = anchorEl.getBoundingClientRect();
-  panel.style.left = Math.round(rect.left) + 'px';
-  panel.style.top = Math.round(rect.bottom + 4) + 'px';
-
-  const exec = (c) => { closeSlashMenu(); c.run(); requestRender(); if (!c.isDelete) focusCard(ref.id, -1); };
-  const renderList = () => {
-    list.innerHTML = '';
-    filtered.forEach((c, i) => {
-      const item = document.createElement('div');
-      item.className = 'slash-item' + (i === sel ? ' sel' : '') + (c.isDelete ? ' del' : '');
-      item.textContent = c.label;
-      item.onmousedown = (ev) => { ev.preventDefault(); exec(c); };
-      list.appendChild(item);
-    });
-    const selEl = list.querySelector('.slash-item.sel');
-    if (selEl) selEl.scrollIntoView({ block: 'nearest' });   // ↑↓で選択が見える位置へ追従
-  };
-  input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    filtered = q ? cmds.filter(c => c.label.toLowerCase().includes(q)) : cmds;
-    sel = 0; renderList();
-  });
-  input.addEventListener('keydown', (e) => {
-    if (e.isComposing) return;
-    if (e.key === 'ArrowDown'){ e.preventDefault(); sel = Math.min(sel + 1, filtered.length - 1); renderList(); }
-    else if (e.key === 'ArrowUp'){ e.preventDefault(); sel = Math.max(sel - 1, 0); renderList(); }
-    else if (e.key === 'Enter'){ e.preventDefault(); if (filtered[sel]) exec(filtered[sel]); }
-    else if (e.key === 'Escape'){ e.preventDefault(); closeSlashMenu(); focusCard(ref.id, -1); }
-  });
-  renderList();
-  input.focus();                                               // メニュー入力欄へ即フォーカス→IMEがカードに漏れない
-  _slashCloser = (e) => { if (!e.target.closest('.slash-menu')) closeSlashMenu(); };
-  setTimeout(() => { if (_slashCloser) document.addEventListener('mousedown', _slashCloser); }, 0);
-}
-function closeSlashMenu(){
-  if (_slashCloser){ document.removeEventListener('mousedown', _slashCloser); _slashCloser = null; }
-  if (_slashPanel){ _slashPanel.remove(); _slashPanel = null; }
-}
-
 // ── ズーム（フォーカス）──
 function zoomIn(store, refId, requestRender){
   _focusRef = refId;
@@ -365,16 +290,6 @@ function onKey(e, store, ref, body, requestRender){
   const _isShiftArrow = e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown');
   if (!_isShiftArrow && !e.ctrlKey && !e.metaKey && !['Shift','Control','Alt','Meta'].includes(e.key)) clearSelection();
   if (_isShiftArrow){ e.preventDefault(); extendSelection(store, ref.id, e.key === 'ArrowDown' ? 'down' : 'up'); return; }
-
-  // 「/」（行頭 or 空白の直後）でスラッシュコマンドメニュー
-  if (e.key === '/' && !e.ctrlKey && !e.metaKey){
-    const before = text.slice(0, pos);
-    if (before === '' || before.endsWith(' ')){
-      e.preventDefault();
-      openSlashMenu(store, ref, body, requestRender, el);
-      return;
-    }
-  }
 
   // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
   if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
