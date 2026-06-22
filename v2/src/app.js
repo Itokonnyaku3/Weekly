@@ -5,10 +5,11 @@ const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard, resetZoom, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
+const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.17.0';
+export const APP_VERSION = '0.18.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -74,10 +75,22 @@ function dispatchCardKey(refId, init){              // フォーカス中カー�
 }
 function setCardAttr(bodyId, patch, refId){ store.updateBody(bodyId, patch); renderAll(); focusCard(refId, -1); }
 
+function gotoDate(date){                  // カレンダー/コマンドからその日へ
+  store.ensureDayCard(date);
+  currentView = 'daily';
+  renderAll();
+  const sec = document.querySelector(`.day-sec[data-date="${date}"]`);
+  if (sec){
+    sec.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const fc = sec.querySelector('.card-txt');
+    if (fc) focusCard(fc.dataset.ref, 0);
+  }
+}
 function buildCommands(cardRef){
   const cmds = [
     { cat:'表示', label:'デイリーを表示', run: () => setView('daily') },
     { cat:'表示', label:'リストを表示', run: () => setView('list') },
+    { cat:'表示', label:'日付へ移動（カレンダー）', run: () => openCalendar({ store, onPick: gotoDate }) },
     { cat:'追加', label:'今日に追加', run: addToday },
     { cat:'追加', label:'プロジェクトを追加', run: addProject },
     { cat:'設定', label:'GitHub同期設定', run: openSettings },
@@ -178,6 +191,7 @@ function boot(){
     }
   });
 
+  document.getElementById('cal-btn')?.addEventListener('click', () => openCalendar({ store, onPick: gotoDate }));
   document.getElementById('settings-btn')?.addEventListener('click', openSettings);
   document.getElementById('gh-save')?.addEventListener('click', saveSettings);
   document.getElementById('gh-push')?.addEventListener('click', () => GH.ghSyncSave(store, { manual:true, onStatus: ghStatus }));

@@ -37,6 +37,7 @@ export function renderDaily(store, mount, requestRender){
     const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
     const sec = document.createElement('div');
     sec.className = 'day-sec';
+    sec.dataset.date = day.content;        // カレンダーからのスクロール用
     const head = document.createElement('div');
     head.className = 'day-head';
     head.textContent = day.content;
