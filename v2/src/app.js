@@ -8,7 +8,7 @@ const { openPalette } = await import('./palette.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.15.0';
+export const APP_VERSION = '0.16.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -32,7 +32,7 @@ function renderAll(){
   if (dv) dv.hidden = currentView !== 'daily';
   if (lv) lv.hidden = currentView !== 'list';
   if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll);
-  if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState);
+  if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, jumpToCard);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
 }

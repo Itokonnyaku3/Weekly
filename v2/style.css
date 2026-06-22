@@ -114,7 +114,10 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table .c-st{width:28px}
 .list-table .c-prio{width:84px}
 .list-table .c-due{width:150px}
-.list-title{outline:none;display:block;min-height:1.4em;cursor:text}
+.c-title-wrap{display:flex;align-items:center;gap:4px}
+.list-jump{flex:none;border:none;background:none;color:var(--tx3);cursor:pointer;font-size:12px;padding:0 2px;opacity:.5}
+.list-jump:hover{opacity:1;color:var(--accent)}
+.list-title{outline:none;flex:1;min-width:0;min-height:1.4em;cursor:text}
 .row-done .list-title{text-decoration:line-through;opacity:.5}
 .list-empty{color:var(--tx3);padding:10px 8px}
 

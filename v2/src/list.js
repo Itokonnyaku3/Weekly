@@ -3,6 +3,8 @@
 // 列選択／カスタムビュー保存／プロジェクト（フィルタ＋割当＋管理）に対応。
 
 // ── 純ロジック（テスト対象）──
+let _onJump = null;   // 行の「↗」→デイリーで該当カードを開くコールバック
+
 export function selectTasks(tasks, opts, today){
   const { hideDone=false, dueFilter='all', projFilter='all', sort='due' } = opts || {};
   let out = tasks.slice();
@@ -62,7 +64,8 @@ function activeColumns(state){
 }
 
 // ── 描画 ──
-export function renderList(store, mount, requestRender, state){
+export function renderList(store, mount, requestRender, state, onJump){
+  if (onJump) _onJump = onJump;
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
   const rows = selectTasks(all, state, today);
@@ -292,12 +295,18 @@ function cellStatus(store, requestRender, t){
 }
 function cellTitle(store, requestRender, t){
   const td = document.createElement('td');
+  const jump = document.createElement('button');
+  jump.type = 'button'; jump.className = 'list-jump'; jump.textContent = '↗'; jump.title = 'デイリーで開く';
+  jump.onmousedown = (e) => e.preventDefault();
+  jump.onclick = () => { if (_onJump) _onJump(t.id); };
   const sp = document.createElement('span');
   sp.className = 'list-title'; sp.contentEditable = 'true'; sp.spellcheck = false;
   sp.dataset.fkey = 'title:' + t.id;
   sp.textContent = t.content || '';
   sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent }));
-  td.appendChild(sp); return td;
+  const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
+  wrap.appendChild(jump); wrap.appendChild(sp);
+  td.appendChild(wrap); return td;
 }
 function cellProject(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-proj';
