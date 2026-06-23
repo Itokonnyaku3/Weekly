@@ -1,7 +1,8 @@
 // デイリービュー（編集可能・最小アウトライナー）
 // 入力=その場編集 / Enter=分割 / Tab・Shift+Tab=インデント / Backspace(行頭)=結合 / ↑↓=移動 /
 // Ctrl+Enter=メモ→タスク→完了→メモ の3状態サイクル / 「•」クリックでタスク化 /
-// 子持ちは ▾▸ で折りたたみ(ref.collapsed) / 日付見出しクリックでその日だけにフォーカス /
+// 子持ちは ▾▸ で折りたたみ(ref.collapsed) / ↑↓は日付見出しも選択対象 /
+// 日付見出しで Alt+↓=その日だけにフォーカス・Alt+↑=解除（クリックでもフォーカス可）/
 // 「⋯」で行メニュー（メモ⇄タスク・優先度・期限・プロジェクト割当・削除）。
 // 描画方針: テキスト入力では再描画しない（caret保持）。構造変更だけ requestRender＋caret復元。
 
@@ -72,10 +73,13 @@ function renderDaySection(store, day, requestRender, focusable){
   const head = document.createElement('div');
   head.className = 'day-head';
   head.textContent = day.content;
+  head.tabIndex = -1;                 // ↑↓ でカードと同様に選択できるように
+  head.dataset.date = day.content;
+  head.addEventListener('keydown', (e) => onDayHeadKey(e, store, day, requestRender));
   if (focusable){
     head.classList.add('day-head-clk');
-    head.title = 'この日にフォーカス';
-    head.onclick = () => { _focusRef = null; _focusDate = day.content; requestRender(); };
+    head.title = 'クリックでこの日にフォーカス（Alt+↓でも可）';
+    head.onclick = () => { _focusRef = null; _focusDate = day.content; requestRender(); focusDayHead(day.content); };
   }
   sec.appendChild(head);
   if (dayRef){
@@ -458,12 +462,13 @@ function onKey(e, store, ref, body, requestRender){
     if (idx < flat.length - 1){ e.preventDefault(); focusCard(flat[idx + 1], 0); return; }   // 行末→ → 次カードの先頭へ
   }
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
-    const flat = visibleFlat(store);
-    const idx = flat.indexOf(ref.id);
-    const target = e.key === 'ArrowUp' ? flat[idx - 1] : flat[idx + 1];
+    const els = navEls();
+    const idx = els.indexOf(el);
+    const target = els[idx + (e.key === 'ArrowUp' ? -1 : 1)];
     if (!target) return;
     e.preventDefault();
-    focusCard(target, pos);
+    if (target.classList.contains('day-head')) target.focus();   // 日付見出しも選択対象に含める
+    else setCaret(target, pos);                                   // カードは桁位置を維持
     return;
   }
 }
@@ -540,6 +545,34 @@ function setCaret(el, pos){            // pos: 直列化インデックス（<0 
 export function focusCard(refId, pos = 0){
   const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
   if (el) setCaret(el, pos);
+}
+// ↑↓ ナビ対象（描画順）= 日付見出し＋カード。折りたたみ/ズーム/日フォーカスは DOM が反映済み
+function navEls(){ return [...document.querySelectorAll('#view-daily .day-head, #view-daily .card-txt')]; }
+function focusDayHead(date){ const el = document.querySelector(`#view-daily .day-head[data-date="${date}"]`); if (el) el.focus(); }
+// 日付見出し上のキー操作: Alt+↓=この日にフォーカス / Alt+↑=解除 / ↑↓=隣のカード・見出しへ
+function onDayHeadKey(e, store, day, requestRender){
+  if (e.isComposing) return;
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){
+    e.preventDefault();
+    _focusRef = null; _focusDate = day.content;
+    requestRender(); focusDayHead(day.content);
+    return;
+  }
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){
+    e.preventDefault();
+    if (_focusDate){ _focusDate = null; requestRender(); focusDayHead(day.content); }
+    return;
+  }
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){
+    e.preventDefault();
+    const els = navEls();
+    const idx = els.indexOf(e.currentTarget);
+    const target = els[idx + (e.key === 'ArrowUp' ? -1 : 1)];
+    if (!target) return;
+    if (target.classList.contains('day-head')) target.focus();
+    else setCaret(target, e.key === 'ArrowDown' ? 0 : -1);
+    return;
+  }
 }
 export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
 export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
@@ -647,7 +680,8 @@ function visibleFlat(store){
   const out = [];
   const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
   if (_focusRef && store.getRef(_focusRef)){ out.push(_focusRef); walk(_focusRef); return out; }   // ズーム中はタイトル＋サブツリー内
-  const days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
+  let days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
+  if (_focusDate) days = days.filter(d => d.content === _focusDate);   // 日フォーカス中はその日だけ
   for (const day of days){
     const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
     if (dayRef) walk(dayRef.id);
