@@ -58,6 +58,13 @@ function sortCmp(sort, projOrder){
 }
 
 const PRIO_LABEL = ['なし', '低', '中', '高'];
+// プロジェクト色: id から安定したパレット色を引く（並べ替えに依らず一定）
+const PROJ_PALETTE = ['#e0524d','#e08a00','#c9a227','#3a9d3a','#0a9b8a','#2a8fbd','#5b6ee0','#7a5cd0','#c0568f','#b5683a'];
+export function projColor(id){
+  let h = 0; const s = String(id || '');
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return PROJ_PALETTE[h % PROJ_PALETTE.length];
+}
 const COLUMNS = {
   status:   { label:'完了',       cls:'c-st',      render: cellStatus },
   title:    { label:'タイトル',   cls:'c-title',   render: cellTitle },
@@ -74,6 +81,20 @@ function activeColumns(state){
   const set = new Set(stored.length ? stored : DEFAULT_COLUMNS);
   set.add('title');                                  // タイトルは必須
   return COLUMN_ORDER.filter(k => set.has(k));        // 常にこの順（プロジェクトが左端）
+}
+
+// プロジェクト区切り行（プロジェクト並べ替え時）
+function groupRow(store, projId, span, count){
+  const tr = document.createElement('tr'); tr.className = 'list-group';
+  const td = document.createElement('td'); td.colSpan = span;
+  const dot = document.createElement('span'); dot.className = 'list-group-dot';
+  if (projId) dot.style.background = projColor(projId); else dot.classList.add('none');
+  const nm = document.createElement('span'); nm.className = 'list-group-name';
+  if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; nm.style.color = projColor(projId); }
+  else nm.textContent = '未割当';
+  td.appendChild(dot); td.appendChild(nm);
+  if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
+  tr.appendChild(td); return tr;
 }
 
 // ── 描画 ──
@@ -113,7 +134,15 @@ export function renderList(store, mount, requestRender, state, onJump){
     td.textContent = '該当するタスクがありません。';
     tr.appendChild(td); tb.appendChild(tr);
   } else {
+    const grouped = state.sort === 'proj';          // プロジェクト並べ替え時だけ区切りを入れる
+    const counts = {};
+    if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; }
+    let curGroup;
     for (const t of rows){
+      if (grouped){
+        const g = t.proj || '';
+        if (g !== curGroup){ curGroup = g; tb.appendChild(groupRow(store, g, cols.length, counts[g])); }
+      }
       const tr = document.createElement('tr');
       if (t.done) tr.classList.add('row-done');
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
@@ -327,7 +356,7 @@ function cellProject(store, requestRender, t){
   const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
   sel.classList.add('proj-select');
-  if (!t.proj) sel.classList.add('cell-muted');
+  if (t.proj) sel.style.color = projColor(t.proj); else sel.classList.add('cell-muted');
   td.appendChild(sel); return td;
 }
 function cellPriority(store, requestRender, t){

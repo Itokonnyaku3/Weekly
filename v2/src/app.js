@@ -9,7 +9,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.22.0';
+export const APP_VERSION = '0.23.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -107,6 +107,7 @@ function buildCommands(cardRef){
   const cmds = [
     { cat:'表示', label:'デイリーを表示', run: () => setView('daily') },
     { cat:'表示', label:'リストを表示', run: () => setView('list') },
+    { cat:'表示', label:'今日へ移動', hint:'Alt+D', run: () => gotoDate(todayStr()) },
     { cat:'表示', label:'日付へ移動（カレンダー）', run: () => openCalendar({ store, onPick: gotoDate }) },
     { cat:'追加', label:'今日に追加', run: addToday },
     { cat:'追加', label:'プロジェクトを追加', run: addProject },
@@ -195,7 +196,10 @@ function boot(){
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
-  document.addEventListener('keydown', (e) => {              // Ctrl/⌘+K=コマンド / Ctrl/⌘+E=検索
+  document.addEventListener('keydown', (e) => {              // Alt+D=今日 / Ctrl/⌘+K=コマンド / Ctrl/⌘+E=検索
+    if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === 'd' || e.key === 'D')){
+      e.preventDefault(); gotoDate(todayStr()); return;     // 今日のデイリーへ
+    }
     if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
     if (e.key === 'k' || e.key === 'K'){
       e.preventDefault();

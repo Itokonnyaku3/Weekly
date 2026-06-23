@@ -188,7 +188,16 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .pm-row{display:flex;gap:6px;align-items:center}
 .pm-row input[type=text]{flex:1;font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 .pm-row .btn{padding:2px 8px}
-.list-table .proj-select{max-width:150px}
+/* プロジェクトセル: 通常は色付き太字テキスト、hover/フォーカスでボックス化 */
+.list-table select.proj-select{appearance:none;-webkit-appearance:none;max-width:150px;font-weight:700;border-color:transparent;background:transparent;padding:2px 4px;cursor:pointer}
+.list-table select.proj-select:hover{border-color:var(--bd2)}
+.list-table select.proj-select:focus{border-color:var(--accent);background:var(--panel)}
+.list-table select.proj-select.cell-muted{font-weight:400}
+/* プロジェクト区切り行（並べ替え=プロジェクト時）*/
+.list-table tr.list-group td{padding:11px 8px 3px;border-bottom:1px solid var(--bd)}
+.list-group-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle;background:var(--tx3)}
+.list-group-name{font-weight:700;font-size:12px}
+.list-group-count{color:var(--tx3);font-size:11px;margin-left:7px}
 
 /* GitHub同期: バッジ＋設定モーダル */
 .gh-badge{font-size:11px;color:var(--tx3);margin-right:8px}
