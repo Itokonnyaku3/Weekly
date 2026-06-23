@@ -83,17 +83,20 @@ function activeColumns(state){
   return COLUMN_ORDER.filter(k => set.has(k));        // 常にこの順（プロジェクトが左端）
 }
 
-// プロジェクト区切り行（プロジェクト並べ替え時）
-function groupRow(store, projId, span, count){
+// プロジェクト区切り行（行自体に淡色＋左の色帯＋折りたたみトグル）
+function groupRow(store, projId, span, count, isCollapsed, onToggle){
   const tr = document.createElement('tr'); tr.className = 'list-group';
   const td = document.createElement('td'); td.colSpan = span;
-  const dot = document.createElement('span'); dot.className = 'list-group-dot';
-  if (projId) dot.style.background = projColor(projId); else dot.classList.add('none');
+  const color = projId ? projColor(projId) : '#9aa0a6';
+  td.style.background = color + '22';                  // 8桁hex=淡い背景
+  td.style.boxShadow = 'inset 3px 0 0 ' + color;        // 左に色帯
+  const tog = document.createElement('span'); tog.className = 'list-group-tog'; tog.textContent = isCollapsed ? '▸' : '▾';
   const nm = document.createElement('span'); nm.className = 'list-group-name';
-  if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; nm.style.color = projColor(projId); }
+  if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; nm.style.color = color; }
   else nm.textContent = '未割当';
-  td.appendChild(dot); td.appendChild(nm);
+  td.appendChild(tog); td.appendChild(nm);
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
+  td.onclick = onToggle;
   tr.appendChild(td); return tr;
 }
 
@@ -135,14 +138,18 @@ export function renderList(store, mount, requestRender, state, onJump){
     tr.appendChild(td); tb.appendChild(tr);
   } else {
     const grouped = state.sort === 'proj';          // プロジェクト並べ替え時だけ区切りを入れる
+    const collapsed = state._collapsedGroups || (state._collapsedGroups = {});
     const counts = {};
     if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; }
-    let curGroup;
+    let curGroup, skip = false;
     for (const t of rows){
-      if (grouped){
-        const g = t.proj || '';
-        if (g !== curGroup){ curGroup = g; tb.appendChild(groupRow(store, g, cols.length, counts[g])); }
+      const g = t.proj || '';
+      if (grouped && g !== curGroup){
+        curGroup = g; skip = !!collapsed[g];
+        tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
+          () => { collapsed[g] = !collapsed[g]; requestRender(); }));
       }
+      if (grouped && skip) continue;                 // 折りたたみ中はタスク行を出さない
       const tr = document.createElement('tr');
       if (t.done) tr.classList.add('row-done');
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
@@ -353,11 +360,26 @@ function cellTitle(store, requestRender, t){
 }
 function cellProject(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-proj';
-  const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-  const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
-  sel.classList.add('proj-select');
-  if (t.proj) sel.style.color = projColor(t.proj); else sel.classList.add('cell-muted');
-  td.appendChild(sel); return td;
+  td.appendChild(projChip(store, requestRender, t));
+  return td;
+}
+// 通常は色付き太字テキスト。クリック/Enter で select に変身して編集（フォーカス＋矢印だけでは変えない）
+function projChip(store, requestRender, t){
+  const chip = document.createElement('span');
+  chip.className = 'proj-chip'; chip.tabIndex = 0; chip.dataset.fkey = 'proj:' + t.id;
+  if (t.proj){ const p = store.getBody(t.proj); chip.textContent = p ? (p.content || '(無題)') : '(不明)'; chip.style.color = projColor(t.proj); }
+  else { chip.textContent = '—'; chip.classList.add('none'); }
+  const edit = () => {
+    const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
+    const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
+    sel.classList.add('proj-select');
+    chip.replaceWith(sel); sel.focus();
+    try { sel.showPicker && sel.showPicker(); } catch (_){}            // 対応ブラウザは即ドロップダウンを開く
+    sel.addEventListener('blur', () => { if (sel.isConnected) sel.replaceWith(chip); });   // 変更せず離脱→テキストに戻す
+  };
+  chip.addEventListener('click', edit);
+  chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); edit(); } });
+  return chip;
 }
 function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';
