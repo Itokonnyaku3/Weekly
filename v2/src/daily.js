@@ -576,6 +576,7 @@ function onDayHeadKey(e, store, day, requestRender){
 }
 export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
 export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
+export function setZoom(refId){ _focusRef = refId; _focusDate = null; }   // 指定ノードにズーム（リスト↗用）
 
 // ── @メンション検索ポップアップ ──
 function closeMention(){

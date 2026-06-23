@@ -5,13 +5,13 @@
 // ── 純ロジック（テスト対象）──
 let _onJump = null;   // 行の「↗」→デイリーで該当カードを開くコールバック
 
-export function selectTasks(tasks, opts, today){
-  const { hideDone=false, dueFilter='all', projFilter='all', sort='due' } = opts || {};
+export function selectTasks(tasks, opts, today, projOrder){
+  const { hideDone=false, dueFilter='all', projFilter='all', sort='proj' } = opts || {};
   let out = tasks.slice();
   if (hideDone) out = out.filter(t => !t.done);
   out = out.filter(t => dueMatch(t.due, dueFilter, today));
   out = out.filter(t => projMatch(t.proj, projFilter));
-  out.sort(sortCmp(sort));
+  out.sort(sortCmp(sort, projOrder || {}));
   return out;
 }
 function dueMatch(due, filter, today){
@@ -34,7 +34,18 @@ function dayDiff(due, today){
   return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
 }
 function cmpStr(x, y){ x = x||''; y = y||''; return x < y ? -1 : x > y ? 1 : 0; }
-function sortCmp(sort){
+function dueCmp(a, b){
+  if (!a.due && !b.due) return 0;
+  if (!a.due) return 1;
+  if (!b.due) return -1;
+  return cmpStr(a.due, b.due);
+}
+function sortCmp(sort, projOrder){
+  if (sort === 'proj'){                       // プロジェクト単位（群の順は projOrder・未割当は最後・群内は期限→優先度→名前）
+    projOrder = projOrder || {};
+    const rank = (t) => !t.proj ? 1e9 : (projOrder[t.proj] != null ? projOrder[t.proj] : 1e9 - 1);
+    return (a,b) => rank(a) - rank(b) || dueCmp(a,b) || (b.prio||0) - (a.prio||0) || cmpStr(a.content, b.content);
+  }
   if (sort === 'priority') return (a,b) => (b.prio||0) - (a.prio||0) || cmpStr(a.content, b.content);
   if (sort === 'created')  return (a,b) => cmpStr(a.createdAt, b.createdAt);
   if (sort === 'title')    return (a,b) => cmpStr(a.content, b.content);
@@ -55,12 +66,14 @@ const COLUMNS = {
   due:      { label:'期限',       cls:'c-due',     render: cellDue },
   created:  { label:'作成日',     cls:'c-created', render: cellCreated },
 };
-const COLUMN_ORDER = ['status', 'title', 'project', 'priority', 'due', 'created'];
-export const DEFAULT_COLUMNS = ['status', 'title', 'project', 'priority', 'due'];
+const COLUMN_ORDER = ['project', 'status', 'title', 'priority', 'due', 'created'];
+export const DEFAULT_COLUMNS = ['project', 'status', 'title', 'priority', 'due'];
 
 function activeColumns(state){
-  const list = (state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS).filter(k => COLUMNS[k]);
-  return list.length ? list : DEFAULT_COLUMNS;
+  const stored = (state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS).filter(k => COLUMNS[k]);
+  const set = new Set(stored.length ? stored : DEFAULT_COLUMNS);
+  set.add('title');                                  // タイトルは必須
+  return COLUMN_ORDER.filter(k => set.has(k));        // 常にこの順（プロジェクトが左端）
 }
 
 // ── 描画 ──
@@ -68,7 +81,8 @@ export function renderList(store, mount, requestRender, state, onJump){
   if (onJump) _onJump = onJump;
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
-  const rows = selectTasks(all, state, today);
+  const projOrder = {}; store.listProjects().forEach((p, i) => { projOrder[p.id] = i; });
+  const rows = selectTasks(all, state, today, projOrder);
   const cols = activeColumns(state);
 
   // 再描画でコントロールが作り直されてもフォーカスを保つ: 直前のフォーカス先を記録
@@ -169,7 +183,7 @@ function applyView(state, v){
   state.hideDone = !!v.hideDone;
   state.dueFilter = v.dueFilter || 'all';
   state.projFilter = v.projFilter || 'all';
-  state.sort = v.sort || 'due';
+  state.sort = v.sort || 'proj';
   state.columns = (v.columns && v.columns.length ? v.columns.slice() : DEFAULT_COLUMNS.slice());
   state._viewId = v.id;
 }
@@ -234,7 +248,7 @@ function buildControls(store, requestRender, state, shown, total){
   bar.appendChild(labelWrap('PJ', selectEl(projOpts, state.projFilter || 'all', v => { state.projFilter = v; touch(); }, 'filter-proj')));
 
   bar.appendChild(labelWrap('並べ替え', selectEl([
-    ['due','期限'], ['priority','優先度'], ['created','作成日'], ['title','タイトル'],
+    ['proj','プロジェクト'], ['due','期限'], ['priority','優先度'], ['created','作成日'], ['title','タイトル'],
   ], state.sort, v => { state.sort = v; touch(); }, 'sort')));
 
   const cbWrap = document.createElement('label');

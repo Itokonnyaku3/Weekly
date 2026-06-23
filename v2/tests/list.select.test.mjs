@@ -39,4 +39,16 @@ assert.deepEqual(selectTasks(pj, { projFilter:'p1', sort:'created' }, today).map
 assert.deepEqual(selectTasks(pj, { projFilter:'none', sort:'created' }, today).map(t=>t.id), ['c']);
 assert.deepEqual(selectTasks(pj, { projFilter:'all',  sort:'created' }, today).map(t=>t.id), ['a','b','c']);
 
+// プロジェクト単位の並び替え（projOrderで群順・群内は期限昇順・未割当は最後）
+const pj2 = [
+  { id:'x', content:'X', proj:'p2', due:'2026-06-20', createdAt:'2026-06-01T00:00:00Z' },
+  { id:'y', content:'Y', proj:'p1', due:'2026-06-25', createdAt:'2026-06-02T00:00:00Z' },
+  { id:'z', content:'Z',            createdAt:'2026-06-03T00:00:00Z' },                    // 未割当→最後
+  { id:'w', content:'W', proj:'p1', due:'2026-06-22', createdAt:'2026-06-04T00:00:00Z' },
+];
+const order = { p1:0, p2:1 };
+assert.deepEqual(selectTasks(pj2, { sort:'proj' }, today, order).map(t=>t.id), ['w','y','x','z']);
+// projOrder 未指定でも落ちない（全部同ランク→群内ソートのみ）
+assert.equal(selectTasks(pj2, { sort:'proj' }, today).length, 4);
+
 console.log('PASS list.select');

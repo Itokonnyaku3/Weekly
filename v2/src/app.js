@@ -2,21 +2,21 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, clearSelection } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.21.0';
+export const APP_VERSION = '0.22.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';
-const listState = { hideDone:false, dueFilter:'all', projFilter:'all', sort:'due', columns: DEFAULT_COLUMNS.slice() };
+const listState = { hideDone:false, dueFilter:'all', projFilter:'all', sort:'proj', columns: DEFAULT_COLUMNS.slice() };
 
 // 変更 → ローカル保存（デバウンス）＋ GitHub自動送信（有効時・デバウンス）
 let _ghTimer = null;
@@ -33,7 +33,7 @@ function renderAll(){
   if (dv) dv.hidden = currentView !== 'daily';
   if (lv) lv.hidden = currentView !== 'list';
   if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
-  if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, jumpToCard);
+  if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
 }
@@ -63,6 +63,17 @@ function jumpToCard(bodyId){
   let p = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
   while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
   resetZoom(); clearDayFocus();
+  currentView = 'daily';
+  renderAll();
+  focusCard(ref.id, -1);
+}
+// リスト↗: そのノードにズームした状態でデイリーを開く
+function zoomToCard(bodyId){
+  const refs = store.refsForBody(bodyId);
+  if (!refs.length) return;
+  const ref = refs[0];
+  clearDayFocus();
+  setZoom(ref.id);
   currentView = 'daily';
   renderAll();
   focusCard(ref.id, -1);
