@@ -229,6 +229,17 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cardimg{max-width:min(440px,100%);max-height:360px;border-radius:6px;border:1px solid var(--bd);display:block;background:var(--bg)}
 .cardimg.broken{min-width:160px;min-height:42px;border-style:dashed;color:var(--tx3);font-size:12px}
 
+/* 行単位の修飾（太字・色・リンク）*/
+.card-txt.cd-bold{font-weight:700}
+.card-txt.cd-link{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.card-linkbtn{flex:none;text-decoration:none;font-size:12px;opacity:.6;padding:0 3px;cursor:pointer}
+.card-linkbtn:hover{opacity:1}
+.cm-colors{display:inline-flex;gap:4px;align-items:center}
+.cm-swatch{width:16px;height:16px;border-radius:50%;border:1px solid var(--bd2);cursor:pointer;padding:0;font-size:10px;line-height:1;color:var(--tx3);background:var(--panel)}
+.cm-swatch.sel{box-shadow:0 0 0 2px var(--accent)}
+.cm-url{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx);min-width:150px}
+.cm-btn.on{border-color:var(--accent);color:var(--accent)}
+
 /* GitHub同期: バッジ＋設定モーダル */
 .gh-badge{font-size:11px;color:var(--tx3);margin-right:8px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:50}

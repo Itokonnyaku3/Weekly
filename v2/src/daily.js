@@ -159,10 +159,21 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
       txt.dataset.ref = ref.id;
       fillEditable(txt, body.content || '', store);   // ⟦id⟧ マーカー→@チップ
       if (body.kind === 'task' && body.done) txt.classList.add('done');
+      if (body.bold) txt.classList.add('cd-bold');     // 行単位の修飾（カード全体）
+      if (body.color) txt.style.color = body.color;
+      if (body.url) txt.classList.add('cd-link');
       txt.addEventListener('input', () => store.updateBody(body.id, { content: serializeEditable(txt) }));
       txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
       txt.addEventListener('mousedown', (e) => { if (e.shiftKey){ e.preventDefault(); shiftClickSelect(store, ref.id); } else clearSelection(); });
       row.appendChild(txt);
+
+      if (body.url){                                   // リンクを開く 🔗（本文は編集可のまま）
+        const lk = document.createElement('a');
+        lk.className = 'card-linkbtn'; lk.textContent = '🔗'; lk.title = body.url;
+        lk.href = body.url; lk.target = '_blank'; lk.rel = 'noopener noreferrer';
+        lk.addEventListener('mousedown', (e) => e.stopPropagation());
+        row.appendChild(lk);
+      }
 
       // 属性の小バッジ（設定済みのみ・控えめ表示）
       appendBadges(row, store, body);
@@ -292,6 +303,29 @@ function buildCardMenu(store, ref, body, requestRender){
   const projOpts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   menu.appendChild(cmField('PJ', selectEl(projOpts, body.proj || '',
     v => { store.updateBody(body.id, { proj: v || undefined }); requestRender(); })));
+
+  // 行単位の修飾: 太字
+  const boldBtn = document.createElement('button');
+  boldBtn.type = 'button'; boldBtn.className = 'cm-btn' + (body.bold ? ' on' : '');
+  boldBtn.textContent = body.bold ? '太字 ✓' : '太字';
+  boldBtn.onclick = () => { store.updateBody(body.id, { bold: !body.bold }); requestRender(); };
+  menu.appendChild(boldBtn);
+
+  // 文字色（スウォッチ・×でなし）
+  const colorWrap = document.createElement('span'); colorWrap.className = 'cm-colors';
+  for (const [c, label] of [['', 'なし'], ['#d9534f','赤'], ['#e08a00','橙'], ['#3a9d3a','緑'], ['#2a8fbd','青'], ['#7a5cd0','紫']]){
+    const sw = document.createElement('button');
+    sw.type = 'button'; sw.className = 'cm-swatch' + ((body.color || '') === c ? ' sel' : ''); sw.title = label;
+    if (c) sw.style.background = c; else sw.textContent = '×';
+    sw.onclick = () => { store.updateBody(body.id, { color: c || undefined }); requestRender(); };
+    colorWrap.appendChild(sw);
+  }
+  menu.appendChild(cmField('色', colorWrap));
+
+  // リンク（カードに URL を持たせる）
+  const url = document.createElement('input'); url.type = 'url'; url.className = 'cm-url'; url.placeholder = 'https://…'; url.value = body.url || '';
+  url.onchange = () => { store.updateBody(body.id, { url: url.value.trim() || undefined }); requestRender(); };
+  menu.appendChild(cmField('リンク', url));
 
   const del = document.createElement('button');
   del.type = 'button'; del.className = 'cm-btn cm-del'; del.textContent = '削除';
