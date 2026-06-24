@@ -92,6 +92,7 @@ function renderPage(store, mount, requestRender, projState){
   renderOutlinePage(store, mount, requestRender, fref, fbody, {
     crumb,
     inheritProj: projState.projId,                          // ページで作るカードは所属PJを継承
+    groupStyle: true,                                       // 中項目（子を持つカード）を見出し風に
     ...projZoomHandlers(store, requestRender, projState, pageRootId),
   });
 }
