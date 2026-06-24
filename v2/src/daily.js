@@ -131,35 +131,39 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     } else { tog.classList.add('leaf'); }
     row.appendChild(tog);
 
-    // マーカー
-    if (body.kind === 'task'){
-      const cb = document.createElement('input');
-      cb.type = 'checkbox'; cb.checked = !!body.done;
-      cb.onchange = () => { store.updateBody(body.id, { done: cb.checked }); requestRender(); };
-      row.appendChild(cb);
+    if (body.kind === 'table'){
+      row.appendChild(buildTableWidget(store, ref, body, requestRender));   // 表ブロック（テキストではない葉）
     } else {
-      const dot = document.createElement('span');
-      dot.className = 'card-dot'; dot.textContent = '•';
-      dot.title = 'クリックでタスク化';
-      dot.onclick = () => { store.updateBody(body.id, { kind:'task' }); requestRender(); focusCard(ref.id, -1); };
-      row.appendChild(dot);
+      // マーカー
+      if (body.kind === 'task'){
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = !!body.done;
+        cb.onchange = () => { store.updateBody(body.id, { done: cb.checked }); requestRender(); };
+        row.appendChild(cb);
+      } else {
+        const dot = document.createElement('span');
+        dot.className = 'card-dot'; dot.textContent = '•';
+        dot.title = 'クリックでタスク化';
+        dot.onclick = () => { store.updateBody(body.id, { kind:'task' }); requestRender(); focusCard(ref.id, -1); };
+        row.appendChild(dot);
+      }
+
+      // テキスト
+      const txt = document.createElement('span');
+      txt.className = 'card-txt';
+      txt.contentEditable = 'true';
+      txt.spellcheck = false;
+      txt.dataset.ref = ref.id;
+      fillEditable(txt, body.content || '', store);   // ⟦id⟧ マーカー→@チップ
+      if (body.kind === 'task' && body.done) txt.classList.add('done');
+      txt.addEventListener('input', () => store.updateBody(body.id, { content: serializeEditable(txt) }));
+      txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
+      txt.addEventListener('mousedown', (e) => { if (e.shiftKey){ e.preventDefault(); shiftClickSelect(store, ref.id); } else clearSelection(); });
+      row.appendChild(txt);
+
+      // 属性の小バッジ（設定済みのみ・控えめ表示）
+      appendBadges(row, store, body);
     }
-
-    // テキスト
-    const txt = document.createElement('span');
-    txt.className = 'card-txt';
-    txt.contentEditable = 'true';
-    txt.spellcheck = false;
-    txt.dataset.ref = ref.id;
-    fillEditable(txt, body.content || '', store);   // ⟦id⟧ マーカー→@チップ
-    if (body.kind === 'task' && body.done) txt.classList.add('done');
-    txt.addEventListener('input', () => store.updateBody(body.id, { content: serializeEditable(txt) }));
-    txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
-    txt.addEventListener('mousedown', (e) => { if (e.shiftKey){ e.preventDefault(); shiftClickSelect(store, ref.id); } else clearSelection(); });
-    row.appendChild(txt);
-
-    // 属性の小バッジ（設定済みのみ・控えめ表示）
-    appendBadges(row, store, body);
 
     // ⋯ メニュー
     const menuBtn = document.createElement('button');
@@ -186,10 +190,72 @@ function appendBadges(row, store, body){
   if (body.proj){ const p = store.getBody(body.proj); if (p){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '#' + (p.content || 'PJ'); row.appendChild(b); } }
 }
 
+// ── 表ブロック（kind:'table'・content は {rows:[[...]]} のJSON）──
+export function tableRows(body){
+  let o; try { o = JSON.parse(body.content || '{}'); } catch(_){ o = {}; }
+  let rows = Array.isArray(o.rows) && o.rows.length
+    ? o.rows.map(r => Array.isArray(r) ? r.map(c => (c == null ? '' : String(c))) : [''])
+    : [['', '']];
+  const ncol = Math.max(1, ...rows.map(r => r.length));
+  rows.forEach(r => { while (r.length < ncol) r.push(''); });   // 矩形に正規化
+  return rows;
+}
+function saveTable(store, body, rows){ store.updateBody(body.id, { content: JSON.stringify({ rows }) }); }
+function buildTableWidget(store, ref, body, requestRender){
+  const wrap = document.createElement('div'); wrap.className = 'cardtable-wrap';
+  const rows = tableRows(body);
+  const tbl = document.createElement('table'); tbl.className = 'cardtable';
+
+  // 列削除コントロール行（× を各列の上に）
+  const ctr = document.createElement('tr'); ctr.className = 'ct-ctrlrow';
+  ctr.appendChild(document.createElement('td'));            // 左上の角
+  rows[0].forEach((_, c) => {
+    const td = document.createElement('td'); td.className = 'ct-coldel';
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = '×'; b.title = '列を削除';
+    b.onclick = () => { if (rows[0].length > 1){ rows.forEach(rw => rw.splice(c, 1)); saveTable(store, body, rows); requestRender(); } };
+    td.appendChild(b); ctr.appendChild(td);
+  });
+  tbl.appendChild(ctr);
+
+  // データ行（先頭に行削除×、続いてセル）
+  rows.forEach((row, r) => {
+    const tr = document.createElement('tr');
+    const delTd = document.createElement('td'); delTd.className = 'ct-rowdel';
+    const delBtn = document.createElement('button'); delBtn.type = 'button'; delBtn.textContent = '×'; delBtn.title = '行を削除';
+    delBtn.onclick = () => { if (rows.length > 1){ rows.splice(r, 1); saveTable(store, body, rows); requestRender(); } };
+    delTd.appendChild(delBtn); tr.appendChild(delTd);
+    row.forEach((cell, c) => {
+      const td = document.createElement('td'); td.className = 'ct-cell' + (r === 0 ? ' ct-head' : '');
+      td.contentEditable = 'true'; td.spellcheck = false; td.textContent = cell;
+      td.addEventListener('input', () => { rows[r][c] = td.textContent; saveTable(store, body, rows); });
+      tr.appendChild(td);
+    });
+    tbl.appendChild(tr);
+  });
+  wrap.appendChild(tbl);
+
+  const ctrl = document.createElement('div'); ctrl.className = 'ct-ctrl';
+  const addRow = document.createElement('button'); addRow.type = 'button'; addRow.className = 'ct-btn'; addRow.textContent = '＋行';
+  addRow.onclick = () => { rows.push(new Array(rows[0].length).fill('')); saveTable(store, body, rows); requestRender(); };
+  const addCol = document.createElement('button'); addCol.type = 'button'; addCol.className = 'ct-btn'; addCol.textContent = '＋列';
+  addCol.onclick = () => { rows.forEach(rw => rw.push('')); saveTable(store, body, rows); requestRender(); };
+  ctrl.appendChild(addRow); ctrl.appendChild(addCol);
+  wrap.appendChild(ctrl);
+  return wrap;
+}
+
 function buildCardMenu(store, ref, body, requestRender){
   const menu = document.createElement('div');
   menu.className = 'card-menu';
   menu.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ _openMenu = null; requestRender(); } });
+
+  if (body.kind === 'table'){                 // 表は削除のみ
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'cm-btn cm-del'; del.textContent = '表を削除';
+    del.onclick = () => { store.deleteRef(ref.id); _openMenu = null; requestRender(); };
+    menu.appendChild(del);
+    return menu;
+  }
 
   const kindBtn = document.createElement('button');
   kindBtn.type = 'button'; kindBtn.className = 'cm-btn';
@@ -449,9 +515,10 @@ function onKey(e, store, ref, body, requestRender){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
     if (idx <= 0) return;
-    e.preventDefault();
     const prevRefId = flat[idx - 1];
     const prevBody = store.getBody(store.getRef(prevRefId).bodyId);
+    if (prevBody.kind === 'table' || prevBody.kind === 'image') return;   // 表/画像へは結合しない
+    e.preventDefault();
     const mergePos = (prevBody.content || '').length;
     store.updateBody(prevBody.id, { content: (prevBody.content || '') + text });
     for (const child of store.childRefs(ref.id)){
