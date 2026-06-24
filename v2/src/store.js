@@ -113,7 +113,18 @@ export function createStore(initial){
   }
   function deleteProject(id){
     for (const b of Object.values(S.bodies)) if (b.proj === id) delete b.proj; // タスクの帰属を外す
-    delete S.bodies[id]; emit();
+    const root = refsForBody(id).find(r => r.parentRefId === null);
+    if (root) deleteRef(root.id);             // ノートページ（ルート参照＋配下）を連鎖削除＋GC
+    if (S.bodies[id]) delete S.bodies[id];     // GC されていなければ本体も削除
+    emit();
+  }
+  // プロジェクトのノートページ用ルート参照を確保（ensureDayCard と対）
+  function ensureProjectPage(projId){
+    const body = S.bodies[projId];
+    if (!body || body.kind !== 'project') return null;   // 不正な id は安全に null
+    let ref = refsForBody(projId).find(r => r.parentRefId === null);
+    if (!ref) ref = createRef({ bodyId: projId, parentRefId: null });
+    return { body, ref };
   }
 
   function replaceState(newState){          // GitHub取得などで状態を丸ごと差し替え（S参照は維持）
@@ -130,6 +141,6 @@ export function createStore(initial){
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
            siblings, prevSiblingRef, orderAfter, orderBefore, endOrder,
            saveView, updateView, deleteView, listViews,
-           createProject, listProjects, deleteProject,
+           createProject, listProjects, deleteProject, ensureProjectPage,
            replaceState, subscribe, toJSON, _state:S };
 }
