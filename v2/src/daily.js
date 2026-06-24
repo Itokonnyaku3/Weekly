@@ -634,9 +634,13 @@ function openMentionSearch(store, anchorEl, onPick){
     const ql = q.trim().toLowerCase(); const out = [];
     const ds = parseDateQuery(q);
     if (ds) out.push({ label: '📅 ' + ds, hint: '日付', run: () => onPick(store.ensureDayCard(ds).body.id) });
-    if (ql) store.queryBodies(b => (b.kind === 'task' || b.kind === 'memo' || b.kind === 'day') && (b.content || '').toLowerCase().includes(ql))
+    if (ql) store.queryBodies(b => (b.kind === 'task' || b.kind === 'memo' || b.kind === 'day' || b.kind === 'project') && (b.content || '').toLowerCase().includes(ql))
       .slice(0, 12)
-      .forEach(b => out.push({ label: (b.kind === 'day' ? '📅 ' : '') + (b.content || '(空)').slice(0, 30), hint: b.kind === 'task' ? 'タスク' : (b.kind === 'day' ? '日付' : 'メモ'), run: () => onPick(b.id) }));
+      .forEach(b => out.push({
+        label: (b.kind === 'day' ? '📅 ' : b.kind === 'project' ? '📁 ' : '') + (b.content || '(空)').slice(0, 30),
+        hint: b.kind === 'task' ? 'タスク' : b.kind === 'day' ? '日付' : b.kind === 'project' ? 'PJ' : 'メモ',
+        run: () => onPick(b.id),
+      }));
     return out;
   };
   const exec = (it) => { closeMention(); it.run(); };
