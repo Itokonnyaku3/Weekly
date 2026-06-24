@@ -2,14 +2,15 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, clearSelection } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, setMentionJump, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
+const { renderProjectView } = await import('./project.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.24.0';
+export const APP_VERSION = '0.25.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -17,6 +18,7 @@ window.__store = store;                          // preview 検証用ハンド�
 const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';
 const listState = { hideDone:false, dueFilter:'all', projFilter:'all', sort:'proj', columns: DEFAULT_COLUMNS.slice() };
+const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
 
 // 変更 → ローカル保存（デバウンス）＋ GitHub自動送信（有効時・デバウンス）
 let _ghTimer = null;
@@ -30,12 +32,16 @@ store.subscribe(() => { saveState(store); scheduleGhSync(); });
 function renderAll(){
   const dv = document.getElementById('view-daily');
   const lv = document.getElementById('view-list');
+  const pv = document.getElementById('view-project');
   if (dv) dv.hidden = currentView !== 'daily';
   if (lv) lv.hidden = currentView !== 'list';
+  if (pv) pv.hidden = currentView !== 'project';
   if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
   if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard);
+  if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
+  document.getElementById('view-proj-btn')?.classList.toggle('active', currentView === 'project');
 }
 function setView(v){ currentView = v; renderAll(); }
 
@@ -48,11 +54,11 @@ function addToday(){
 }
 function addProject(){
   const p = store.createProject('新規プロジェクト');
-  currentView = 'list';
-  listState._pmOpen = true;
+  projState.projId = p.id; projState.rootRef = null;
+  currentView = 'project';
   renderAll();
-  const el = document.querySelector(`.proj-manager-box input[data-proj="${p.id}"]`);
-  if (el){ el.focus(); el.select(); }
+  const t = document.querySelector('#view-project .zoom-title-txt');   // 名前を全選択して即リネーム
+  if (t){ t.focus(); const r = document.createRange(); r.selectNodeContents(t); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 }
 
 // Ctrl+K パレット: カードへジャンプ（祖先を展開＋ズーム解除＋フォーカス）
@@ -194,6 +200,8 @@ function boot(){
   if (ver) ver.textContent = 'v' + APP_VERSION;
   document.getElementById('view-daily-btn')?.addEventListener('click', () => setView('daily'));
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
+  document.getElementById('view-proj-btn')?.addEventListener('click', () => setView('project'));
+  setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
   document.addEventListener('keydown', (e) => {              // Alt+D=今日 / Ctrl/⌘+K=コマンド / Ctrl/⌘+E=検索

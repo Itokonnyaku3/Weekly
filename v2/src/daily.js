@@ -27,13 +27,13 @@ let _selAnchor = null, _selHead = null;
 export function renderDaily(store, mount, requestRender, onMentionJump){
   if (onMentionJump) _mentionJump = onMentionJump;
   mount.innerHTML = '';
-  _ctx = { rootRef: null, container: mount, requestRender };   // ページ文脈（全日＝rootRef:null）
+  _ctx = { rootRef: null, container: mount, requestRender, ...dailyZoomHandlers(store, requestRender) };  // 全日＝rootRef:null
 
   // ズーム中: フォーカスしたカードのサブツリーだけ表示
   if (_focusRef){
     const fref = store.getRef(_focusRef);
     const fbody = fref && store.getBody(fref.bodyId);
-    if (fref && fbody){ _ctx.rootRef = _focusRef; renderZoomed(store, mount, requestRender, fref, fbody); manageOutsideClose(requestRender); return; }
+    if (fref && fbody){ renderZoomed(store, mount, requestRender, fref, fbody); manageOutsideClose(requestRender); return; }
     _focusRef = null; // 無効になっていたら解除
   }
 
@@ -273,24 +273,40 @@ function zoomOut(store){
   _focusRef = (parent && store.getBody(parent.bodyId)?.kind !== 'day') ? parent.id : null;
 }
 function crumbSep(){ const s = document.createElement('span'); s.className = 'crumb-sep'; s.textContent = '›'; return s; }
+// デイリーのズーム操作（Alt+↓/↑）。_ctx 経由で onKey から呼ばれる。
+function dailyZoomHandlers(store, requestRender){
+  return {
+    onZoomIn: (refId) => zoomIn(store, refId, requestRender),
+    onZoomOut: (refId, pos) => { zoomOut(store); requestRender(); focusCard(refId, pos); },
+  };
+}
 function renderZoomed(store, mount, requestRender, fref, fbody){
-  const crumb = document.createElement('div'); crumb.className = 'zoom-crumb';
-  const home = document.createElement('span'); home.className = 'crumb-item'; home.textContent = '全体';
-  home.onclick = () => { _focusRef = null; requestRender(); };
-  crumb.appendChild(home);
+  const crumb = [{ label: '全体', onClick: () => { _focusRef = null; requestRender(); } }];
   const path = [];
   let p = fref.parentRefId ? store.getRef(fref.parentRefId) : null;
   while (p){ path.push(p); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
   path.reverse();
   for (const aref of path){
     const ab = store.getBody(aref.bodyId); if (!ab) continue;
-    crumb.appendChild(crumbSep());
-    const it = document.createElement('span'); it.className = 'crumb-item';
-    it.textContent = ab.kind === 'day' ? ab.content : (ab.content || '(空)');
-    it.onclick = () => { _focusRef = ab.kind === 'day' ? null : aref.id; requestRender(); };
-    crumb.appendChild(it);
+    crumb.push({ label: ab.kind === 'day' ? ab.content : (ab.content || '(空)'),
+                 onClick: () => { _focusRef = ab.kind === 'day' ? null : aref.id; requestRender(); } });
   }
-  mount.appendChild(crumb);
+  renderOutlinePage(store, mount, requestRender, fref, fbody, { crumb, ...dailyZoomHandlers(store, requestRender) });
+}
+// 1つのルート参照を「ページ」として描画（デイリーのズーム／プロジェクトノートで共用）。
+// opts: { crumb:[{label,onClick}], inheritProj, onZoomIn(refId), onZoomOut(refId,pos) }
+export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts){
+  opts = opts || {};
+  _ctx = { rootRef: fref.id, container: mount, requestRender, onZoomIn: opts.onZoomIn, onZoomOut: opts.onZoomOut };
+
+  const crumbEl = document.createElement('div'); crumbEl.className = 'zoom-crumb';
+  (opts.crumb || []).forEach((c, i) => {
+    if (i) crumbEl.appendChild(crumbSep());
+    const it = document.createElement('span'); it.className = 'crumb-item'; it.textContent = c.label;
+    it.onclick = c.onClick;
+    crumbEl.appendChild(it);
+  });
+  mount.appendChild(crumbEl);
 
   const title = document.createElement('div'); title.className = 'zoom-title';
   const tt = document.createElement('span');
@@ -304,11 +320,15 @@ function renderZoomed(store, mount, requestRender, fref, fbody){
   const wrap = document.createElement('div'); wrap.className = 'zoom-children';
   renderChildren(store, fref.id, wrap, 0, requestRender);
   const add = document.createElement('div'); add.className = 'card-add'; add.textContent = '＋ 追加';
-  add.onclick = () => { const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: fref.id }); requestRender(); focusCard(ref.id, 0); };
+  add.onclick = () => {
+    const attrs = { kind:'memo', content:'', parentRefId: fref.id };
+    if (opts.inheritProj) attrs.proj = opts.inheritProj;   // プロジェクトページで作るカードは所属PJを継承
+    const { ref } = store.createCard(attrs); requestRender(); focusCard(ref.id, 0);
+  };
   wrap.appendChild(add);
   mount.appendChild(wrap);
 
-  // バックリンク（このカードを ⟦id⟧ で参照しているカード）
+  // バックリンク（このカード/PJを ⟦id⟧ で参照しているカード）
   const backs = store.queryBodies(b => b.id !== fbody.id && (b.content || '').includes('⟦' + fbody.id + '⟧'));
   if (backs.length){
     const bl = document.createElement('div'); bl.className = 'backlinks';
@@ -364,8 +384,8 @@ function onKey(e, store, ref, body, requestRender){
   }
 
   // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
-  if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); zoomIn(store, ref.id, requestRender); return; }
-  if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); zoomOut(store); requestRender(); focusCard(ref.id, pos); return; }
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); if (_ctx.onZoomIn) _ctx.onZoomIn(ref.id); return; }
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, pos); return; }
   // Workflowy: 折りたたみ(Ctrl+↑) / 展開(Ctrl+↓)
   if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
     if (!store.childRefs(ref.id).length) return;
@@ -547,7 +567,8 @@ function setCaret(el, pos){            // pos: 直列化インデックス（<0 
   r.collapse(true); sel.removeAllRanges(); sel.addRange(r);
 }
 export function focusCard(refId, pos = 0){
-  const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);
+  const root = _ctx.container || document;
+  const el = root.querySelector(`.card-txt[data-ref="${refId}"]`) || document.querySelector(`.card-txt[data-ref="${refId}"]`);
   if (el) setCaret(el, pos);
 }
 // ↑↓ ナビ対象（描画順）= 日付見出し＋カード。折りたたみ/ズーム/日フォーカスは DOM が反映済み
@@ -581,6 +602,7 @@ function onDayHeadKey(e, store, day, requestRender){
 export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
 export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
 export function setZoom(refId){ _focusRef = refId; _focusDate = null; }   // 指定ノードにズーム（リスト↗用）
+export function setMentionJump(fn){ _mentionJump = fn; }   // @チップ/バックリンクのクリック先（app から設定）
 
 // ── @メンション検索ポップアップ ──
 function closeMention(){
