@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createStore } from '../src/store.js';
-import { serializeSubtree, encodeClipHtml, decodeClipHtml, parsePlainText, insertNodes } from '../src/clipboard.js';
+import { serializeSubtree, encodeClipHtml, decodeClipHtml, parsePlainText, insertNodes, looksLikeTsv, tsvToRows } from '../src/clipboard.js';
 
 // A > A1(task,done,prio3,due) > A2
 const s = createStore();
@@ -52,5 +52,12 @@ const A1Ref = s3.childRefs(ARef.id)[0];
 assert.equal(s3.getBody(A1Ref.bodyId).content, 'A1');
 assert.equal(s3.getBody(A1Ref.bodyId).prio, 3);
 assert.equal(s3.getBody(s3.childRefs(A1Ref.id)[0].bodyId).content, 'A2');
+
+// TSV 判定（セル区切りタブ=表 / 先頭インデントのみ=非表）とパース
+assert.equal(looksLikeTsv('a\tb\nc\td'), true, 'セル間タブ→TSV');
+assert.equal(looksLikeTsv('x\ty'), true, '1行でもセル間タブ→TSV');
+assert.equal(looksLikeTsv('A\n\tB\n\t\tC'), false, '先頭インデントのみ→非TSV(アウトライン)');
+assert.equal(looksLikeTsv('ただの一行'), false, 'タブ無し→非TSV');
+assert.deepEqual(tsvToRows('項目\t担当\n電波\t楽天'), [['項目','担当'],['電波','楽天']]);
 
 console.log('PASS clipboard');

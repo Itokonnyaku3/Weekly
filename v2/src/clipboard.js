@@ -47,6 +47,18 @@ export function parsePlainText(text){
   return out;
 }
 
+// ── TSV（Excel/スプレッドシート由来）判定とパース ──
+// 先頭インデント以外にタブを含む行が過半数なら「表」とみなす（コードのインデント貼付の誤検出を避ける）。
+export function looksLikeTsv(text){
+  const lines = String(text).split(/\r?\n/).filter(l => l.length);
+  if (!lines.length) return false;
+  const withTab = lines.filter(l => /\t/.test(l.replace(/^[\t ]+/, ''))).length;
+  return withTab >= 1 && withTab >= Math.ceil(lines.length / 2);
+}
+export function tsvToRows(text){
+  return String(text).split(/\r?\n/).filter(l => l.length).map(l => l.split('\t'));
+}
+
 // ── 挿入（ノード配列を currentRef の後ろへ・相対深さでツリー化）──
 export function insertNodes(store, currentRefId, nodes){
   const cur = store.getRef(currentRefId); if (!cur || !nodes || !nodes.length) return null;
@@ -136,7 +148,19 @@ export function installClipboard(store, requestRender, focusCard, clearSelection
     const html = e.clipboardData.getData('text/html');
     const plain = e.clipboardData.getData('text/plain');
     let nodes = decodeClipHtml(html);                      // ①アプリ内の構造
-    if (!nodes && plain && /\r?\n/.test(plain.trim())) nodes = parsePlainText(plain); // ②複数行テキスト
+    if (!nodes && plain && looksLikeTsv(plain)){           // ②Excel/Sheets の TSV → 表カード
+      e.preventDefault();
+      const refId = card.dataset.ref;
+      const cur = store.getRef(refId);
+      store.createCard({ kind:'table', content: JSON.stringify({ rows: tsvToRows(plain) }), parentRefId: cur.parentRefId, order: store.orderAfter(refId) });
+      const curBody = store.getBody(cur.bodyId);
+      if (curBody && !curBody.content && !store.childRefs(refId).length) store.deleteRef(refId);  // 空カードなら置換
+      if (clearSelection) clearSelection();
+      requestRender();
+      showToast('表として貼り付けました');
+      return;
+    }
+    if (!nodes && plain && /\r?\n/.test(plain.trim())) nodes = parsePlainText(plain); // ③複数行テキスト
     if (!nodes || !nodes.length) return;                   // ③1行など→標準貼り付け
     e.preventDefault();
     const refId = card.dataset.ref;
