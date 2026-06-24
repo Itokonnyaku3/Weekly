@@ -133,9 +133,9 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     row.appendChild(tog);
 
     if (body.kind === 'table'){
-      row.appendChild(buildTableWidget(store, ref, body, requestRender));   // 表ブロック（テキストではない葉）
+      row.appendChild(asBlock(buildTableWidget(store, ref, body, requestRender), store, ref, requestRender));   // 表ブロック
     } else if (body.kind === 'image'){
-      row.appendChild(buildImageWidget(store, ref, body));                  // 画像ブロック
+      row.appendChild(asBlock(buildImageWidget(store, ref, body), store, ref, requestRender));                  // 画像ブロック
     } else {
       // マーカー
       if (body.kind === 'task'){
@@ -611,8 +611,7 @@ function onKey(e, store, ref, body, requestRender){
     const target = els[idx + (e.key === 'ArrowUp' ? -1 : 1)];
     if (!target) return;
     e.preventDefault();
-    if (target.classList.contains('day-head')) target.focus();   // 日付見出しも選択対象に含める
-    else setCaret(target, pos);                                   // カードは桁位置を維持
+    focusNav(target, pos);   // card-txt→caret / 見出し・ブロック→focus
     return;
   }
 }
@@ -689,11 +688,59 @@ function setCaret(el, pos){            // pos: 直列化インデックス（<0 
 export function focusCard(refId, pos = 0){
   const root = _ctx.container || document;
   const el = root.querySelector(`.card-txt[data-ref="${refId}"]`) || document.querySelector(`.card-txt[data-ref="${refId}"]`);
-  if (el) setCaret(el, pos);
+  if (el){ setCaret(el, pos); return; }
+  const blk = root.querySelector(`.card-block[data-ref="${refId}"]`) || document.querySelector(`.card-block[data-ref="${refId}"]`);
+  if (blk) blk.focus();   // 画像/表ブロックはフォーカス（caretなし）
 }
-// ↑↓ ナビ対象（描画順）= 日付見出し＋カード。折りたたみ/ズーム/日フォーカスは DOM が反映済み
-function navEls(){ return [...(_ctx.container || document).querySelectorAll('.day-head, .card-txt')]; }
+// ↑↓ ナビ対象（描画順）= 日付見出し＋カード＋ブロック（画像/表）。折りたたみ/ズーム/日フォーカスは DOM が反映済み
+function navEls(){ return [...(_ctx.container || document).querySelectorAll('.day-head, .card-txt, .card-block')]; }
 function focusDayHead(date){ const el = document.querySelector(`#view-daily .day-head[data-date="${date}"]`); if (el) el.focus(); }
+// ナビ先へ移動: テキストは caret / 見出し・ブロックは focus()
+function focusNav(target, pos){ if (target.classList.contains('card-txt')) setCaret(target, pos); else target.focus(); }
+// 画像/表ブロックをフォーカス可能なノードにする（↑↓選択・Tab・移動・削除を有効化）
+function asBlock(wrap, store, ref, requestRender){
+  wrap.tabIndex = -1; wrap.classList.add('card-block'); wrap.dataset.ref = ref.id;
+  wrap.addEventListener('mousedown', (e) => { if (!e.target.closest('.ct-cell, button, a, input')) wrap.focus(); });
+  wrap.addEventListener('keydown', (e) => onBlockKey(e, store, ref, requestRender));
+  return wrap;
+}
+function onBlockKey(e, store, ref, requestRender){
+  if (e.target !== e.currentTarget) return;   // 表のセル等を編集中はブロック操作しない（ブロック自身にフォーカス時のみ）
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){
+    e.preventDefault();
+    const els = navEls(); const i = els.indexOf(e.currentTarget);
+    const t = els[i + (e.key === 'ArrowUp' ? -1 : 1)]; if (!t) return;
+    focusNav(t, e.key === 'ArrowDown' ? 0 : -1); return;
+  }
+  if (e.key === 'Tab'){                        // インデント / アウトデント
+    e.preventDefault();
+    if (e.shiftKey){
+      const parentRef = store.getRef(ref.parentRefId); if (!parentRef) return;
+      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
+      store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
+    } else {
+      const prev = store.prevSiblingRef(ref.id); if (!prev) return;
+      store.updateRef(ref.id, { parentRefId: prev.id, order: store.endOrder(prev.id) });
+    }
+    requestRender(); focusCard(ref.id); return;
+  }
+  if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){   // 兄弟内で上下移動
+    e.preventDefault();
+    const sibs = store.siblings(ref.id); const i = sibs.findIndex(x => x.id === ref.id);
+    const j = e.key === 'ArrowUp' ? i - 1 : i + 1; if (j < 0 || j >= sibs.length) return;
+    const oi = sibs[i].order, oj = sibs[j].order;
+    store.updateRef(sibs[i].id, { order: oj }); store.updateRef(sibs[j].id, { order: oi });
+    requestRender(); focusCard(ref.id); return;
+  }
+  if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, 0); return; }
+  if (e.key === 'Delete' || e.key === 'Backspace'){    // 削除（隣へフォーカス移動）
+    e.preventDefault();
+    const flat = visibleFlat(store); const idx = flat.indexOf(ref.id);
+    store.deleteRef(ref.id); requestRender();
+    const t = flat[idx - 1] || flat[idx + 1]; if (t) focusCard(t, -1);
+    return;
+  }
+}
 // 日付見出し上のキー操作: Alt+↓=この日にフォーカス / Alt+↑=解除 / ↑↓=隣のカード・見出しへ
 function onDayHeadKey(e, store, day, requestRender){
   if (e.isComposing) return;
@@ -714,8 +761,7 @@ function onDayHeadKey(e, store, day, requestRender){
     const idx = els.indexOf(e.currentTarget);
     const target = els[idx + (e.key === 'ArrowUp' ? -1 : 1)];
     if (!target) return;
-    if (target.classList.contains('day-head')) target.focus();
-    else setCaret(target, e.key === 'ArrowDown' ? 0 : -1);
+    focusNav(target, e.key === 'ArrowDown' ? 0 : -1);
     return;
   }
 }

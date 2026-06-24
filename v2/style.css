@@ -228,6 +228,9 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cardimg-wrap{margin:2px 0;max-width:100%}
 .cardimg{max-width:min(440px,100%);max-height:360px;border-radius:6px;border:1px solid var(--bd);display:block;background:var(--bg)}
 .cardimg.broken{min-width:160px;min-height:42px;border-style:dashed;color:var(--tx3);font-size:12px}
+/* 画像/表ブロックを選択（フォーカス）したときの枠 */
+.card-block{border-radius:6px}
+.card-block:focus{outline:none;box-shadow:0 0 0 2px var(--accent)}
 
 /* 行単位の修飾（太字・色・リンク）*/
 .card-txt.cd-bold{font-weight:700}
