@@ -224,6 +224,11 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .ct-btn{font:inherit;font-size:11px;padding:1px 9px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx3);cursor:pointer}
 .ct-btn:hover{border-color:var(--accent);color:var(--accent)}
 
+/* 画像ブロック（kind:'image'）*/
+.cardimg-wrap{margin:2px 0;max-width:100%}
+.cardimg{max-width:min(440px,100%);max-height:360px;border-radius:6px;border:1px solid var(--bd);display:block;background:var(--bg)}
+.cardimg.broken{min-width:160px;min-height:42px;border-style:dashed;color:var(--tx3);font-size:12px}
+
 /* GitHub同期: バッジ＋設定モーダル */
 .gh-badge{font-size:11px;color:var(--tx3);margin-right:8px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:50}

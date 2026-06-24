@@ -35,6 +35,12 @@ const decodeB64 = (b64) => {
   const binary = atob(b64.replace(/\n/g, ''));
   return new TextDecoder().decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
 };
+// バイナリ（画像）用 base64 変換
+const bytesToB64 = (bytes) => { let s = ''; const CH = 0x8000; for (let i = 0; i < bytes.length; i += CH) s += String.fromCharCode.apply(null, bytes.subarray(i, i + CH)); return btoa(s); };
+const b64ToBlob = (b64, type) => { const bin = atob(b64.replace(/\n/g, '')); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type }); };
+const _imgCache = new Map();   // repoパス → objectURL（取得結果をキャッシュ）
+const extOf = (t) => t === 'image/jpeg' ? 'jpg' : t === 'image/gif' ? 'gif' : t === 'image/webp' ? 'webp' : 'png';
+const typeOf = (p) => p.endsWith('.jpg') ? 'image/jpeg' : p.endsWith('.gif') ? 'image/gif' : p.endsWith('.webp') ? 'image/webp' : 'image/png';
 
 // Contents API: ファイル取得（SHA 記録・1MB超は Blobs API フォールバック）
 export async function ghFetchRaw(){
@@ -152,6 +158,35 @@ export async function ghBackupNow(store, { onStatus=()=>{}, keep=3 } = {}){
     onStatus('✓ バックアップ完了 (' + stamp() + ')');
     return true;
   } catch(e){ onStatus('❌ ' + e.message, true); return false; }
+}
+
+// ── 画像（非公開repoへアップロード／取得して表示）──
+// 同期ファイルと同じディレクトリの img/ に PUT。返り値=repo内パス（画像カードの content に保存）。
+export async function ghUploadImage(file){
+  const { token, repo, file: syncFile } = ghGetSettings();
+  if (!token || !repo) throw new Error('GitHub 設定（トークン・リポジトリ）が必要です');
+  const dir = syncFile.includes('/') ? syncFile.slice(0, syncFile.lastIndexOf('/')) : '';
+  const path = (dir ? dir + '/' : '') + 'img/img_' + Date.now() + '.' + extOf(file.type);
+  const content = bytesToB64(new Uint8Array(await file.arrayBuffer()));
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`,
+    { method:'PUT', headers:{ ...authHeaders(token), 'Content-Type':'application/json' }, body: JSON.stringify({ message:'image: ' + path, content }) });
+  if (!res.ok){ const e = await res.json().catch(()=>({message:'HTTP '+res.status})); throw new Error(e.message); }
+  return path;
+}
+// repo内パス → 表示用 objectURL（非公開のため Contents API 経由で取得）。キャッシュあり。
+export async function ghFetchImageURL(path){
+  if (_imgCache.has(path)) return _imgCache.get(path);
+  const { token, repo } = ghGetSettings();
+  if (!token || !repo) throw new Error('GitHub 設定が必要です');
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`, { headers: authHeaders(token) });
+  if (!res.ok){ const e = await res.json().catch(()=>({message:'HTTP '+res.status})); throw new Error(e.message); }
+  const data = await res.json();
+  let b64 = (data.content && data.encoding === 'base64') ? data.content : null;
+  if (!b64){ const br = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${data.sha}`, { headers: authHeaders(token) }); if (br.ok) b64 = (await br.json()).content; }
+  if (!b64) throw new Error('画像の取得に失敗しました');
+  const url = URL.createObjectURL(b64ToBlob(b64, typeOf(path)));
+  _imgCache.set(path, url);
+  return url;
 }
 
 // 起動時に1日1回だけ（GitHub設定時・ノンブロッキング）

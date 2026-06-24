@@ -58,6 +58,14 @@ export function looksLikeTsv(text){
 export function tsvToRows(text){
   return String(text).split(/\r?\n/).filter(l => l.length).map(l => l.split('\t'));
 }
+// クリップボードから画像ファイルを取り出す（貼り付け用）
+export function pickImageFile(dt){
+  if (!dt) return null;
+  const f = [...(dt.files || [])].find(x => x.type && x.type.startsWith('image/'));
+  if (f) return f;
+  for (const it of (dt.items || [])){ if (it.kind === 'file' && it.type && it.type.startsWith('image/')) return it.getAsFile(); }
+  return null;
+}
 
 // ── 挿入（ノード配列を currentRef の後ろへ・相対深さでツリー化）──
 export function insertNodes(store, currentRefId, nodes){
@@ -98,7 +106,7 @@ export function showToast(msg){
 }
 
 // ── DOM 配線（copy / cut / paste をシステムクリップボード経由で）──
-export function installClipboard(store, requestRender, focusCard, clearSelection){
+export function installClipboard(store, requestRender, focusCard, clearSelection, opts = {}){
   const activeCard = () => {
     const el = document.activeElement;
     return (el && el.classList && el.classList.contains('card-txt') && el.dataset.ref) ? el : null;
@@ -145,6 +153,22 @@ export function installClipboard(store, requestRender, focusCard, clearSelection
 
   document.addEventListener('paste', (e) => {
     const card = activeCard(); if (!card) return;
+    // 画像の貼り付け → 非公開repoへアップロードして画像カードを作成（テキストより優先）
+    const imgFile = pickImageFile(e.clipboardData);
+    if (imgFile){
+      e.preventDefault();
+      if (!opts.uploadImage){ showToast('画像の貼り付けは未対応です'); return; }
+      const refId = card.dataset.ref, cur = store.getRef(refId);
+      showToast('画像をアップロード中…');
+      opts.uploadImage(imgFile).then(path => {
+        store.createCard({ kind:'image', content: path, parentRefId: cur.parentRefId, order: store.orderAfter(refId) });
+        const curBody = store.getBody(cur.bodyId);
+        if (curBody && !curBody.content && !store.childRefs(refId).length) store.deleteRef(refId);   // 空カードなら置換
+        requestRender();
+        showToast('画像を貼り付けました');
+      }).catch(err => showToast('画像アップロード失敗: ' + err.message));
+      return;
+    }
     const html = e.clipboardData.getData('text/html');
     const plain = e.clipboardData.getData('text/plain');
     let nodes = decodeClipHtml(html);                      // ①アプリ内の構造

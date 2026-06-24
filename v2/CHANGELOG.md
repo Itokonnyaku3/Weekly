@@ -1,5 +1,13 @@
 # Tracker v2 — CHANGELOG
 
+## v0.29.0 — 画像の貼り付け（非公開repoへアップロード）（2026-06-24）
+
+- カードに画像を **Ctrl+V で貼り付け** → **非公開repoの `img/` にアップロード**し、**画像ブロックカード（`kind='image'`）**として表示。`content` には repo内パスを保存（データ本体は軽量なまま）。
+- 表示は Contents API で取得して objectURL 化（パス→URLをキャッシュ）。`data:`/`http(s):` のURLは直接表示。
+- `github.js`(`ghUploadImage`/`ghFetchImageURL`)、`daily.js`(画像描画＋`setImageLoader`＋葉ブロック扱い)、`clipboard.js`(画像ペースト検出＝テキストより優先・`pickImageFile`)、`app.js`で配線。
+- 画像は葉ブロック（⋯で削除・↑↓スキップ・リスト/＠検索に出ない・前後の行頭Backspace結合ガード）。
+- 検証: 単体緑＋ブラウザで 画像カード描画(dataURL)／削除メニュー／リスト非表示／ペースト検出→アップロード起動 を確認。**実アップロード・表示はGitHubトークンで要確認**（同期と同様）。**＝4機能バッチ ③表・④画像 完了**（残り②文字単位の修飾）。
+
 ## v0.28.0 — TSV貼り付けで表化（2026-06-24）
 
 - **Excel／スプレッドシートからの貼り付け（タブ区切り）を検出し、表カードとして貼り付け**（`clipboard.js` の paste 経路に `looksLikeTsv`/`tsvToRows` を追加・1行目＝見出し）。

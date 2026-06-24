@@ -2,7 +2,7 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, setMentionJump, clearSelection } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, setMentionJump, setImageLoader, clearSelection } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.28.0';
+export const APP_VERSION = '0.29.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -222,6 +222,7 @@ function boot(){
   document.getElementById('view-list-btn')?.addEventListener('click', () => setView('list'));
   document.getElementById('view-proj-btn')?.addEventListener('click', () => setView('project'));
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
+  setImageLoader(GH.ghFetchImageURL);            // 画像カード: repoパス→表示URL
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
   document.addEventListener('keydown', (e) => {              // Alt+D=今日 / Ctrl/⌘+K=コマンド / Ctrl/⌘+E=検索
@@ -251,7 +252,7 @@ function boot(){
   document.getElementById('gh-backup')?.addEventListener('click', () => GH.ghBackupNow(store, { onStatus: ghStatus }));
   document.getElementById('gh-close')?.addEventListener('click', () => { document.getElementById('gh-modal').hidden = true; });
 
-  installClipboard(store, renderAll, focusCard, clearSelection);   // コピー/カット/貼り付け
+  installClipboard(store, renderAll, focusCard, clearSelection, { uploadImage: GH.ghUploadImage });   // コピー/カット/貼り付け＋画像
   renderAll();
   refreshBadge();
 
