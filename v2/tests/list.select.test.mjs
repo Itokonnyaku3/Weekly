@@ -51,4 +51,13 @@ assert.deepEqual(selectTasks(pj2, { sort:'proj' }, today, order).map(t=>t.id), [
 // projOrder 未指定でも落ちない（全部同ランク→群内ソートのみ）
 assert.equal(selectTasks(pj2, { sort:'proj' }, today).length, 4);
 
+// 中項目(mid)でPJ内をサブグループ化（mid昇順・中項目なしは末尾）
+const pj3 = [
+  { id:'a', content:'A', proj:'p1', mid:'設計', createdAt:'2026-06-01T00:00:00Z' },
+  { id:'b', content:'B', proj:'p1', mid:'実装', createdAt:'2026-06-02T00:00:00Z' },
+  { id:'c', content:'C', proj:'p1',             createdAt:'2026-06-03T00:00:00Z' }, // 中項目なし→末尾
+  { id:'d', content:'D', proj:'p1', mid:'設計', createdAt:'2026-06-04T00:00:00Z' },
+];
+assert.deepEqual(selectTasks(pj3, { sort:'proj' }, today, { p1:0 }).map(t=>t.id), ['b','a','d','c']);
+
 console.log('PASS list.select');

@@ -41,10 +41,11 @@ function dueCmp(a, b){
   return cmpStr(a.due, b.due);
 }
 function sortCmp(sort, projOrder){
-  if (sort === 'proj'){                       // プロジェクト単位（群の順は projOrder・未割当は最後・群内は期限→優先度→名前）
+  if (sort === 'proj'){                       // プロジェクト→中項目→（期限→優先度→名前）。未割当/中項目なしは末尾
     projOrder = projOrder || {};
     const rank = (t) => !t.proj ? 1e9 : (projOrder[t.proj] != null ? projOrder[t.proj] : 1e9 - 1);
-    return (a,b) => rank(a) - rank(b) || dueCmp(a,b) || (b.prio||0) - (a.prio||0) || cmpStr(a.content, b.content);
+    const hasMid = (t) => t.mid ? 0 : 1;   // 中項目なしは群の末尾
+    return (a,b) => rank(a) - rank(b) || hasMid(a) - hasMid(b) || cmpStr(a.mid || '', b.mid || '') || dueCmp(a,b) || (b.prio||0) - (a.prio||0) || cmpStr(a.content, b.content);
   }
   if (sort === 'priority') return (a,b) => (b.prio||0) - (a.prio||0) || cmpStr(a.content, b.content);
   if (sort === 'created')  return (a,b) => cmpStr(a.createdAt, b.createdAt);
@@ -69,12 +70,13 @@ const COLUMNS = {
   status:   { label:'完了',       cls:'c-st',      render: cellStatus },
   title:    { label:'タイトル',   cls:'c-title',   render: cellTitle },
   project:  { label:'プロジェクト', cls:'c-proj',    render: cellProject },
+  mid:      { label:'中項目',     cls:'c-mid',     render: cellMid },
   priority: { label:'優先度',     cls:'c-prio',    render: cellPriority },
   due:      { label:'期限',       cls:'c-due',     render: cellDue },
   created:  { label:'作成日',     cls:'c-created', render: cellCreated },
 };
-const COLUMN_ORDER = ['project', 'status', 'title', 'priority', 'due', 'created'];
-export const DEFAULT_COLUMNS = ['project', 'status', 'title', 'priority', 'due'];
+const COLUMN_ORDER = ['project', 'mid', 'status', 'title', 'priority', 'due', 'created'];
+export const DEFAULT_COLUMNS = ['project', 'mid', 'status', 'title', 'priority', 'due'];
 
 function activeColumns(state){
   const stored = (state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS).filter(k => COLUMNS[k]);
@@ -97,6 +99,16 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle){
   td.appendChild(tog); td.appendChild(nm);
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
   td.onclick = onToggle;
+  tr.appendChild(td); return tr;
+}
+// 中項目の小見出し行（PJグループの中・インデント）
+function midRow(mid, span){
+  const tr = document.createElement('tr'); tr.className = 'list-submid';
+  const td = document.createElement('td'); td.colSpan = span;
+  const nm = document.createElement('span'); nm.className = 'list-submid-name';
+  nm.textContent = mid || '（中項目なし）';
+  if (!mid) nm.classList.add('none');
+  td.appendChild(nm);
   tr.appendChild(td); return tr;
 }
 
@@ -139,17 +151,21 @@ export function renderList(store, mount, requestRender, state, onJump){
   } else {
     const grouped = state.sort === 'proj';          // プロジェクト並べ替え時だけ区切りを入れる
     const collapsed = state._collapsedGroups || (state._collapsedGroups = {});
-    const counts = {};
-    if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; }
-    let curGroup, skip = false;
+    const counts = {}, projHasMid = {};
+    if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; if (t.mid) projHasMid[g] = true; }
+    let curGroup, curMid, skip = false;
     for (const t of rows){
       const g = t.proj || '';
       if (grouped && g !== curGroup){
-        curGroup = g; skip = !!collapsed[g];
+        curGroup = g; curMid = undefined; skip = !!collapsed[g];
         tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
           () => { collapsed[g] = !collapsed[g]; requestRender(); }));
       }
       if (grouped && skip) continue;                 // 折りたたみ中はタスク行を出さない
+      if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
+        const m = t.mid || '';
+        if (m !== curMid){ curMid = m; tb.appendChild(midRow(m, cols.length)); }
+      }
       const tr = document.createElement('tr');
       if (t.done) tr.classList.add('row-done');
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
@@ -158,6 +174,12 @@ export function renderList(store, mount, requestRender, state, onJump){
   }
   table.appendChild(tb);
   mount.appendChild(table);
+
+  // 中項目の入力サジェスト（既存の中項目を候補に）
+  const mids = [...new Set(all.map(t => t.mid).filter(Boolean))].sort();
+  const dl = document.createElement('datalist'); dl.id = 'pwt2-mids';
+  mids.forEach(m => { const o = document.createElement('option'); o.value = m; dl.appendChild(o); });
+  mount.appendChild(dl);
 
   if (refocus){ const el = mount.querySelector('[data-fkey="' + refocus + '"]'); if (el) el.focus(); }
 }
@@ -380,6 +402,14 @@ function projChip(store, requestRender, t){
   chip.addEventListener('click', edit);
   chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); edit(); } });
   return chip;
+}
+function cellMid(store, requestRender, t){          // 中項目（リストで直接指定・サジェスト付き）
+  const td = document.createElement('td'); td.className = 'c-mid';
+  const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'mid-input';
+  inp.value = t.mid || ''; inp.placeholder = '—'; inp.setAttribute('list', 'pwt2-mids');
+  inp.dataset.fkey = 'mid:' + t.id;
+  inp.addEventListener('change', () => { store.updateBody(t.id, { mid: inp.value.trim() || undefined }); requestRender(); });
+  td.appendChild(inp); return td;
 }
 function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';
