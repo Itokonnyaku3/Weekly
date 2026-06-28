@@ -32,9 +32,6 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-txt.done{text-decoration:line-through;opacity:.5}
 .card-row:focus-within{background:var(--accent-soft);border-radius:4px}
 .card-row.selected{background:var(--accent-soft);border-radius:4px;box-shadow:inset 3px 0 0 var(--accent)}
-/* 中項目（子を持つカード）を見出し風に＝プロジェクトビューのみ・番号なし・控えめ */
-.card-row.is-group{margin-top:8px;border-bottom:1px solid var(--bd2)}
-.card-row.is-group .card-dot{color:var(--accent)}
 
 /* 折りたたみ / 追加 / メモ→タスク / 主ボタン */
 .card-toggle{flex:none;width:20px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;user-select:none;border-radius:5px}

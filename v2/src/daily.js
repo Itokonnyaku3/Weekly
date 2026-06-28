@@ -101,7 +101,7 @@ function renderDaySection(store, day, requestRender, focusable){
   return sec;
 }
 
-function renderChildren(store, parentRefId, mountEl, depth, requestRender, groupStyle){
+function renderChildren(store, parentRefId, mountEl, depth, requestRender){
   for (const ref of store.childRefs(parentRefId)){
     const body = store.getBody(ref.bodyId);
     if (!body) continue;
@@ -111,7 +111,6 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender, group
     row.className = 'card-row';
     row.style.paddingLeft = (depth * 18) + 'px';
     if (_sel.has(ref.id)) row.classList.add('selected');
-    if (groupStyle && kids.length) row.classList.add('is-group');   // 中項目（子を持つカード）を見出し風に（番号なし）
     setupRowDrop(row, ref.id, store, requestRender);
 
     // ドラッグハンドル
@@ -192,7 +191,7 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender, group
       m.style.marginLeft = (depth * 18 + 30) + 'px';
       mountEl.appendChild(m);
     }
-    if (kids.length && !ref.collapsed) renderChildren(store, ref.id, mountEl, depth + 1, requestRender, groupStyle);
+    if (kids.length && !ref.collapsed) renderChildren(store, ref.id, mountEl, depth + 1, requestRender);
   }
 }
 
@@ -438,7 +437,7 @@ export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts
   mount.appendChild(title);
 
   const wrap = document.createElement('div'); wrap.className = 'zoom-children';
-  renderChildren(store, fref.id, wrap, 0, requestRender, opts.groupStyle);
+  renderChildren(store, fref.id, wrap, 0, requestRender);
   const add = document.createElement('div'); add.className = 'card-add'; add.textContent = '＋ 追加';
   add.onclick = () => {
     const attrs = { kind:'memo', content:'', parentRefId: fref.id };
