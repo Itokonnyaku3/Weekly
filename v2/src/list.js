@@ -98,17 +98,21 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle){
   else nm.textContent = '未割当';
   td.appendChild(tog); td.appendChild(nm);
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
+  td.tabIndex = -1; td.classList.add('nav-head'); td.dataset.fkey = 'g:' + (projId || '');
   td.onclick = onToggle;
+  td.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); onToggle(); } else navKey(e); });
   tr.appendChild(td); return tr;
 }
 // 中項目の小見出し行（PJグループの中・インデント）
-function midRow(mid, span){
+function midRow(projId, mid, span){
   const tr = document.createElement('tr'); tr.className = 'list-submid';
   const td = document.createElement('td'); td.colSpan = span;
+  td.tabIndex = -1; td.classList.add('nav-head'); td.dataset.fkey = 'm:' + (projId || '') + ':' + (mid || '');
   const nm = document.createElement('span'); nm.className = 'list-submid-name';
   nm.textContent = mid || '（中項目なし）';
   if (!mid) nm.classList.add('none');
   td.appendChild(nm);
+  td.addEventListener('keydown', navKey);
   tr.appendChild(td); return tr;
 }
 
@@ -164,7 +168,7 @@ export function renderList(store, mount, requestRender, state, onJump){
       if (grouped && skip) continue;                 // 折りたたみ中はタスク行を出さない
       if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
         const m = t.mid || '';
-        if (m !== curMid){ curMid = m; tb.appendChild(midRow(m, cols.length)); }
+        if (m !== curMid){ curMid = m; tb.appendChild(midRow(g, m, cols.length)); }
       }
       const tr = document.createElement('tr');
       if (t.done) tr.classList.add('row-done');
@@ -361,8 +365,9 @@ function buildColumnPicker(state, touch){
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!t.done;
-  cb.dataset.fkey = 'status:' + t.id;
+  cb.dataset.fkey = 'status:' + t.id; cb.dataset.col = 'status';
   cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); };
+  cb.addEventListener('keydown', navKey);
   td.appendChild(cb); return td;
 }
 function cellTitle(store, requestRender, t){
@@ -373,18 +378,19 @@ function cellTitle(store, requestRender, t){
   jump.onclick = () => { if (_onJump) _onJump(t.id); };
   const sp = document.createElement('span');
   sp.className = 'list-title'; sp.contentEditable = 'true'; sp.spellcheck = false;
-  sp.dataset.fkey = 'title:' + t.id;
+  sp.dataset.fkey = 'title:' + t.id; sp.dataset.col = 'title';
   sp.textContent = t.content || '';
   sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent }));
+  sp.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); } else navKey(e); });
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
   wrap.appendChild(jump); wrap.appendChild(sp);
   td.appendChild(wrap); return td;
 }
 // 編集セルのチップ: 通常はテキスト表示／クリック・Enterで編集ボックスに変身／Esc・離脱で戻る
-function editChip({ text, muted, color, cls, fkey, makeEditor }){
+function editChip({ text, muted, color, cls, fkey, col, makeEditor }){
   const chip = document.createElement('span');
   chip.className = 'cell-chip' + (muted ? ' none' : '') + (cls ? ' ' + cls : '');
-  chip.tabIndex = 0; if (fkey) chip.dataset.fkey = fkey;
+  chip.tabIndex = 0; if (fkey) chip.dataset.fkey = fkey; if (col) chip.dataset.col = col;
   chip.textContent = text;
   if (color) chip.style.color = color;
   const edit = () => {
@@ -394,7 +400,10 @@ function editChip({ text, muted, color, cls, fkey, makeEditor }){
     ed.addEventListener('blur', () => { if (ed.isConnected) ed.replaceWith(chip); });
   };
   chip.addEventListener('click', edit);
-  chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); edit(); } });
+  chip.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); edit(); }
+    else navKey(e);                          // 矢印キーはセルカーソル移動へ
+  });
   return chip;
 }
 function cellProject(store, requestRender, t){
@@ -402,7 +411,7 @@ function cellProject(store, requestRender, t){
   const p = t.proj && store.getBody(t.proj);
   td.appendChild(editChip({
     text: t.proj ? (p ? (p.content || '(無題)') : '(不明)') : '—',
-    muted: !t.proj, color: t.proj ? projColor(t.proj) : null, cls: 'proj', fkey: 'proj:' + t.id,
+    muted: !t.proj, color: t.proj ? projColor(t.proj) : null, cls: 'proj', fkey: 'proj:' + t.id, col: 'project',
     makeEditor: () => {
       const opts = [['', '—'], ...store.listProjects().map(pp => [pp.id, pp.content || '(無題)'])];
       const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
@@ -414,7 +423,7 @@ function cellProject(store, requestRender, t){
 function cellMid(store, requestRender, t){          // 中項目（チップ→入力・サジェスト付き）
   const td = document.createElement('td'); td.className = 'c-mid';
   td.appendChild(editChip({
-    text: t.mid || '—', muted: !t.mid, fkey: 'mid:' + t.id,
+    text: t.mid || '—', muted: !t.mid, fkey: 'mid:' + t.id, col: 'mid',
     makeEditor: () => {
       const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'cell-edit';
       inp.value = t.mid || ''; inp.setAttribute('list', 'pwt2-mids');
@@ -428,7 +437,7 @@ function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';
   const prio = t.prio || 0;
   td.appendChild(editChip({
-    text: PRIO_LABEL[prio], muted: !prio, cls: prio === 3 ? 'prio-3' : prio === 2 ? 'prio-2' : '', fkey: 'prio:' + t.id,
+    text: PRIO_LABEL[prio], muted: !prio, cls: prio === 3 ? 'prio-3' : prio === 2 ? 'prio-2' : '', fkey: 'prio:' + t.id, col: 'priority',
     makeEditor: () => {
       const sel = selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(prio), v => { store.updateBody(t.id, { prio: Number(v) }); requestRender(); }, 'prio:' + t.id);
       sel.classList.add('cell-edit'); return sel;
@@ -439,7 +448,7 @@ function cellPriority(store, requestRender, t){
 function cellDue(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-due';
   td.appendChild(editChip({
-    text: t.due || '—', muted: !t.due, fkey: 'due:' + t.id,
+    text: t.due || '—', muted: !t.due, fkey: 'due:' + t.id, col: 'due',
     makeEditor: () => {
       const d = document.createElement('input'); d.type = 'date'; d.className = 'cell-edit'; d.value = t.due || '';
       d.addEventListener('change', () => { store.updateBody(t.id, { due: d.value || '' }); requestRender(); });
@@ -473,4 +482,39 @@ function labelWrap(text, control){
   wrap.appendChild(document.createTextNode(text));
   wrap.appendChild(control);
   return wrap;
+}
+
+// ── セルカーソル（行×列・ヘッダ含む）のキーボード移動 ──
+function rowFocusables(tr){ return [...tr.querySelectorAll('[data-col], .nav-head')]; }
+function focusRowCol(rows, ri, col){
+  if (ri < 0 || ri >= rows.length) return;
+  const cells = rowFocusables(rows[ri]);
+  if (!cells.length) return;
+  const target = (col && cells.find(c => c.dataset.col === col)) || cells[0];   // 同列が無ければ先頭（見出し等）
+  target.focus();
+}
+function atTitleBoundary(el, key){      // タイトル内のキャレットが端にあるか（端でのみセル移動）
+  const sel = window.getSelection();
+  if (!sel.rangeCount || !sel.isCollapsed) return false;
+  const off = sel.getRangeAt(0).startOffset;
+  return key === 'ArrowLeft' ? off === 0 : off >= (el.textContent || '').length;
+}
+function navKey(e){
+  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;   // 修飾付きは別機能へ（#3 の Ctrl+↑ 等）
+  const el = e.currentTarget; const tr = el.closest && el.closest('tr');
+  const tbody = tr && tr.parentElement; if (!tbody) return;
+  const rows = [...tbody.children]; const ri = rows.indexOf(tr);
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
+    e.preventDefault();
+    focusRowCol(rows, ri + (e.key === 'ArrowUp' ? -1 : 1), el.dataset.col || null);
+    return;
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+    if (el.classList.contains('list-title') && !atTitleBoundary(el, e.key)) return;   // タイトル内はキャレット移動
+    e.preventDefault();
+    const cells = rowFocusables(tr); const idx = cells.indexOf(el);
+    const next = cells[idx + (e.key === 'ArrowLeft' ? -1 : 1)];
+    if (next) next.focus();
+    return;
+  }
 }

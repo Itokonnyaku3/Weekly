@@ -153,6 +153,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px}
 .list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
 .list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
+.list-table td:focus-within{box-shadow:inset 0 0 0 2px var(--accent)}   /* セルカーソルの強調 */
+.list-table .nav-head{cursor:pointer}
 .list-table .c-st{width:28px}
 .list-table .c-prio{width:84px}
 .list-table .c-due{width:150px}
