@@ -376,14 +376,30 @@ function cellTitle(store, requestRender, t){
   jump.type = 'button'; jump.className = 'list-jump'; jump.textContent = '↗'; jump.title = 'デイリーで開く';
   jump.onmousedown = (e) => e.preventDefault();
   jump.onclick = () => { if (_onJump) _onJump(t.id); };
-  const sp = document.createElement('span');
-  sp.className = 'list-title'; sp.contentEditable = 'true'; sp.spellcheck = false;
-  sp.dataset.fkey = 'title:' + t.id; sp.dataset.col = 'title';
-  sp.textContent = t.content || '';
-  sp.addEventListener('input', () => store.updateBody(t.id, { content: sp.textContent }));
-  sp.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); } else navKey(e); });
+  const chip = document.createElement('span');
+  chip.className = 'cell-chip title-chip'; chip.tabIndex = 0; chip.dataset.fkey = 'title:' + t.id; chip.dataset.col = 'title';
+  chip.textContent = t.content || '(無題)';
+  if (!t.content) chip.classList.add('none');
+  const revert = (ed, focus) => {
+    chip.textContent = ed.textContent || '(無題)';
+    chip.classList.toggle('none', !ed.textContent);
+    if (ed.isConnected) ed.replaceWith(chip);
+    if (focus) chip.focus();
+  };
+  const edit = () => {
+    const ed = document.createElement('span');
+    ed.className = 'list-title'; ed.contentEditable = 'true'; ed.spellcheck = false;
+    ed.textContent = t.content || '';
+    ed.addEventListener('input', () => store.updateBody(t.id, { content: ed.textContent }));
+    ed.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === 'Escape'){ e.preventDefault(); revert(ed, true); } });   // Enter/Escで編集を抜けてフォーカス維持
+    ed.addEventListener('blur', () => revert(ed, false));
+    chip.replaceWith(ed); ed.focus();
+    const r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  };
+  chip.addEventListener('click', edit);
+  chip.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); edit(); } else navKey(e); });
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
-  wrap.appendChild(jump); wrap.appendChild(sp);
+  wrap.appendChild(jump); wrap.appendChild(chip);
   td.appendChild(wrap); return td;
 }
 // 編集セルのチップ: 通常はテキスト表示／クリック・Enterで編集ボックスに変身／Esc・離脱で戻る
@@ -397,6 +413,7 @@ function editChip({ text, muted, color, cls, fkey, col, makeEditor }){
     const ed = makeEditor();
     chip.replaceWith(ed); ed.focus();
     try { ed.showPicker && ed.showPicker(); } catch (_){}              // 対応ブラウザは即ドロップダウン/ピッカー
+    ed.addEventListener('keydown', (ev) => { if (ev.key === 'Escape'){ ev.preventDefault(); if (ed.isConnected){ ed.replaceWith(chip); chip.focus(); } } });  // Escで戻る＋フォーカス維持
     ed.addEventListener('blur', () => { if (ed.isConnected) ed.replaceWith(chip); });
   };
   chip.addEventListener('click', edit);
