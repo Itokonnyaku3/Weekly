@@ -380,49 +380,73 @@ function cellTitle(store, requestRender, t){
   wrap.appendChild(jump); wrap.appendChild(sp);
   td.appendChild(wrap); return td;
 }
-function cellProject(store, requestRender, t){
-  const td = document.createElement('td'); td.className = 'c-proj';
-  td.appendChild(projChip(store, requestRender, t));
-  return td;
-}
-// 通常は色付き太字テキスト。クリック/Enter で select に変身して編集（フォーカス＋矢印だけでは変えない）
-function projChip(store, requestRender, t){
+// 編集セルのチップ: 通常はテキスト表示／クリック・Enterで編集ボックスに変身／Esc・離脱で戻る
+function editChip({ text, muted, color, cls, fkey, makeEditor }){
   const chip = document.createElement('span');
-  chip.className = 'proj-chip'; chip.tabIndex = 0; chip.dataset.fkey = 'proj:' + t.id;
-  if (t.proj){ const p = store.getBody(t.proj); chip.textContent = p ? (p.content || '(無題)') : '(不明)'; chip.style.color = projColor(t.proj); }
-  else { chip.textContent = '—'; chip.classList.add('none'); }
+  chip.className = 'cell-chip' + (muted ? ' none' : '') + (cls ? ' ' + cls : '');
+  chip.tabIndex = 0; if (fkey) chip.dataset.fkey = fkey;
+  chip.textContent = text;
+  if (color) chip.style.color = color;
   const edit = () => {
-    const opts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-    const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
-    sel.classList.add('proj-select');
-    chip.replaceWith(sel); sel.focus();
-    try { sel.showPicker && sel.showPicker(); } catch (_){}            // 対応ブラウザは即ドロップダウンを開く
-    sel.addEventListener('blur', () => { if (sel.isConnected) sel.replaceWith(chip); });   // 変更せず離脱→テキストに戻す
+    const ed = makeEditor();
+    chip.replaceWith(ed); ed.focus();
+    try { ed.showPicker && ed.showPicker(); } catch (_){}              // 対応ブラウザは即ドロップダウン/ピッカー
+    ed.addEventListener('blur', () => { if (ed.isConnected) ed.replaceWith(chip); });
   };
   chip.addEventListener('click', edit);
   chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); edit(); } });
   return chip;
 }
-function cellMid(store, requestRender, t){          // 中項目（リストで直接指定・サジェスト付き）
+function cellProject(store, requestRender, t){
+  const td = document.createElement('td'); td.className = 'c-proj';
+  const p = t.proj && store.getBody(t.proj);
+  td.appendChild(editChip({
+    text: t.proj ? (p ? (p.content || '(無題)') : '(不明)') : '—',
+    muted: !t.proj, color: t.proj ? projColor(t.proj) : null, cls: 'proj', fkey: 'proj:' + t.id,
+    makeEditor: () => {
+      const opts = [['', '—'], ...store.listProjects().map(pp => [pp.id, pp.content || '(無題)'])];
+      const sel = selectEl(opts, t.proj || '', v => { store.updateBody(t.id, { proj: v || undefined }); requestRender(); }, 'proj:' + t.id);
+      sel.classList.add('cell-edit'); return sel;
+    },
+  }));
+  return td;
+}
+function cellMid(store, requestRender, t){          // 中項目（チップ→入力・サジェスト付き）
   const td = document.createElement('td'); td.className = 'c-mid';
-  const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'mid-input';
-  inp.value = t.mid || ''; inp.placeholder = '—'; inp.setAttribute('list', 'pwt2-mids');
-  inp.dataset.fkey = 'mid:' + t.id;
-  inp.addEventListener('change', () => { store.updateBody(t.id, { mid: inp.value.trim() || undefined }); requestRender(); });
-  td.appendChild(inp); return td;
+  td.appendChild(editChip({
+    text: t.mid || '—', muted: !t.mid, fkey: 'mid:' + t.id,
+    makeEditor: () => {
+      const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'cell-edit';
+      inp.value = t.mid || ''; inp.setAttribute('list', 'pwt2-mids');
+      inp.addEventListener('change', () => { store.updateBody(t.id, { mid: inp.value.trim() || undefined }); requestRender(); });
+      return inp;
+    },
+  }));
+  return td;
 }
 function cellPriority(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-prio';
-  td.appendChild(selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(t.prio || 0),
-    v => { store.updateBody(t.id, { prio: Number(v) }); requestRender(); }, 'prio:' + t.id));
+  const prio = t.prio || 0;
+  td.appendChild(editChip({
+    text: PRIO_LABEL[prio], muted: !prio, cls: prio === 3 ? 'prio-3' : prio === 2 ? 'prio-2' : '', fkey: 'prio:' + t.id,
+    makeEditor: () => {
+      const sel = selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(prio), v => { store.updateBody(t.id, { prio: Number(v) }); requestRender(); }, 'prio:' + t.id);
+      sel.classList.add('cell-edit'); return sel;
+    },
+  }));
   return td;
 }
 function cellDue(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-due';
-  const d = document.createElement('input'); d.type = 'date'; d.value = t.due || '';
-  d.dataset.fkey = 'due:' + t.id;
-  d.onchange = () => { store.updateBody(t.id, { due: d.value || '' }); requestRender(); };
-  td.appendChild(d); return td;
+  td.appendChild(editChip({
+    text: t.due || '—', muted: !t.due, fkey: 'due:' + t.id,
+    makeEditor: () => {
+      const d = document.createElement('input'); d.type = 'date'; d.className = 'cell-edit'; d.value = t.due || '';
+      d.addEventListener('change', () => { store.updateBody(t.id, { due: d.value || '' }); requestRender(); });
+      return d;
+    },
+  }));
+  return td;
 }
 function cellCreated(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-created cell-muted';

@@ -189,11 +189,14 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .pm-row input[type=text]{flex:1;font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 .pm-row .btn{padding:2px 8px}
 /* プロジェクトセル: 通常は色付き太字テキスト（chip）。クリック/Enter で select に変身して編集 */
-.list-table .proj-chip{display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;font-weight:700;cursor:pointer;padding:2px 5px;border:1px solid transparent;border-radius:5px}
-.list-table .proj-chip:hover{border-color:var(--bd2)}
-.list-table .proj-chip:focus{outline:none;border-color:var(--accent);background:var(--accent-soft)}
-.list-table .proj-chip.none{font-weight:400;color:var(--tx3)}
-.list-table select.proj-select{max-width:150px;font-weight:700}
+.list-table .cell-chip{display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;cursor:pointer;padding:2px 5px;border:1px solid transparent;border-radius:5px}
+.list-table .cell-chip:hover{border-color:var(--bd2)}
+.list-table .cell-chip:focus{outline:none;border-color:var(--accent);background:var(--accent-soft)}
+.list-table .cell-chip.none{color:var(--tx3)}
+.list-table .cell-chip.proj{font-weight:700}
+.list-table .cell-chip.prio-3{color:#d9534f}
+.list-table .cell-chip.prio-2{color:#e08a00}
+.list-table select.cell-edit,.list-table input.cell-edit{font:inherit;font-size:12px;max-width:150px}
 /* プロジェクト区切り行（行自体に淡色＋折りたたみ）*/
 .list-table tr.list-group td{padding:9px 8px 4px;cursor:pointer;user-select:none}
 .list-group-tog{display:inline-block;width:14px;color:var(--tx3);font-size:10px;text-align:center}
@@ -206,9 +209,6 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-submid-name.none{font-weight:400;color:var(--tx3)}
 .list-submid-name.none::before{content:''}
 .list-table .c-mid{width:124px}
-.mid-input{font:inherit;font-size:12px;padding:1px 5px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--tx);width:112px}
-.mid-input:hover{border-color:var(--bd2)}
-.mid-input:focus{border-color:var(--accent);background:var(--panel);outline:none}
 
 /* プロジェクトビュー（ランディング一覧）*/
 .proj-landing{max-width:760px}
