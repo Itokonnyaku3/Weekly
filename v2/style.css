@@ -31,9 +31,10 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .day-head-clk:hover{color:var(--accent)}
 .day-head-clk:hover::after,.day-head-clk:focus::after{content:" ⤢";font-size:11px;font-weight:400}
 .day-head:focus{outline:none;color:var(--accent);background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent)}
-.card-row{display:flex;align-items:flex-start;gap:7px;padding:3px 0;font-size:13px;line-height:1.5}
-.card-row input[type=checkbox]{margin:3px 0 0;cursor:pointer;flex:none}
-.card-dot{color:var(--tx3);flex:none;width:14px;text-align:center}
+.card-row{display:flex;align-items:flex-start;gap:6px;padding:2px 0;font-size:13px;line-height:1.55;position:relative;z-index:0}
+.card-row::before{content:"";position:absolute;inset:0;background:var(--guides,none);pointer-events:none;z-index:0}  /* インデントのガイド線 */
+.card-row>*{position:relative;z-index:1}                                                                          /* 内容はガイド線より前面 */
+.card-cb{flex:none;margin:3px 0 0;cursor:pointer;width:13px;height:13px}
 .card-txt{white-space:pre-wrap;outline:none;flex:1;min-height:1.45em;cursor:text}
 .card-txt:empty::after{content:"\00a0";color:transparent}
 .card-txt.done{text-decoration:line-through;opacity:.5}
@@ -41,13 +42,18 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-row.selected{background:var(--accent-soft);border-radius:4px;box-shadow:inset 3px 0 0 var(--accent)}
 
 /* 折りたたみ / 追加 / メモ→タスク / 主ボタン */
-.card-toggle{flex:none;width:20px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;user-select:none;border-radius:5px}
-.card-toggle svg{width:15px;height:15px;display:block;transition:transform .13s ease}
+/* シェブロンは控えめ（小さめ・薄め、hoverで濃く）＝Workflowy風 */
+.card-toggle{flex:none;width:18px;height:1.55em;display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;user-select:none;border-radius:4px;opacity:.38}
+.card-toggle svg{width:10px;height:10px;display:block;transition:transform .12s ease}
 .card-toggle.expanded svg{transform:rotate(90deg)}
-.card-toggle:hover{color:var(--accent);background:var(--accent-soft)}
-.card-toggle.leaf{cursor:default}
-.card-dot{cursor:pointer}
-.card-dot:hover{color:var(--accent)}
+.card-row:hover .card-toggle{opacity:.8}
+.card-toggle:hover{color:var(--accent);opacity:1}
+.card-toggle.leaf{cursor:default;opacity:0}
+/* ドットは大きめの塗り円。子持ちで折りたたみ中はハロー（Workflowy風） */
+.card-dot{flex:none;width:18px;height:1.55em;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.card-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--tx3);transition:background .12s,box-shadow .12s}
+.card-dot:hover::before{background:var(--accent)}
+.card-dot.collapsed::before{box-shadow:0 0 0 5px rgba(128,128,128,.18)}
 .card-add{color:var(--tx3);font-size:12px;cursor:pointer;padding:4px 0 2px 34px;opacity:.7}
 .card-add:hover{opacity:1;color:var(--accent)}
 .btn-accent{border-color:var(--accent);background:var(--accent);color:#fff}

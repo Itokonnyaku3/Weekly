@@ -21,6 +21,11 @@ let _imageLoader = null;    // 画像カードの表示ローダ（repoパス→
 // 折りたたみアイコン（シェブロン）: 既定は右向き、展開時は .expanded で90°回転＝下向き
 const CHEVRON_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
+// インデント幅と、Workflowy風ガイド線を引くドット中心の左オフセット（＝ドラッグ＋トグル＋ドットまでの距離）。
+// 行の paddingLeft=depth*IND、ガイド線は各祖先のドット位置（i*IND+GUIDE_OFFSET）に縦線を引く。
+const IND = 18;
+const GUIDE_OFFSET = 53;
+
 // 複数選択（Shift+↑↓ / Shift+クリック）。選択中の ref.id 集合＋アンカー/ヘッド。
 const _sel = new Set();
 let _selAnchor = null, _selHead = null;
@@ -109,7 +114,12 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
 
     const row = document.createElement('div');
     row.className = 'card-row';
-    row.style.paddingLeft = (depth * 18) + 'px';
+    row.style.paddingLeft = (depth * IND) + 'px';
+    if (depth){                                          // 祖先のドット位置に縦のガイド線（::before の背景で描画）
+      const segs = [];
+      for (let i = 0; i < depth; i++){ const x = i * IND + GUIDE_OFFSET; segs.push(`linear-gradient(var(--bd),var(--bd)) ${x}px 0/1px 100% no-repeat`); }
+      row.style.setProperty('--guides', segs.join(','));
+    }
     if (_sel.has(ref.id)) row.classList.add('selected');
     setupRowDrop(row, ref.id, store, requestRender);
 
@@ -137,18 +147,21 @@ function renderChildren(store, parentRefId, mountEl, depth, requestRender){
     } else if (body.kind === 'image'){
       row.appendChild(asBlock(buildImageWidget(store, ref, body), store, ref, requestRender));                  // 画像ブロック
     } else {
-      // マーカー
-      if (body.kind === 'task'){
-        const cb = document.createElement('input');
-        cb.type = 'checkbox'; cb.checked = !!body.done;
-        cb.onchange = () => { store.updateBody(body.id, { done: cb.checked }); requestRender(); };
-        row.appendChild(cb);
-      } else {
-        const dot = document.createElement('span');
-        dot.className = 'card-dot'; dot.textContent = '•';
+      // マーカー（Workflowy準拠）: ドットは常に表示。タスクはドットの後にチェックボックス。
+      const dot = document.createElement('span');
+      dot.className = 'card-dot';
+      if (kids.length) dot.classList.add('has-kids');
+      if (kids.length && ref.collapsed) dot.classList.add('collapsed');   // 折りたたみ中はドットにハロー
+      if (body.kind !== 'task'){
         dot.title = 'クリックでタスク化';
         dot.onclick = () => { store.updateBody(body.id, { kind:'task' }); requestRender(); focusCard(ref.id, -1); };
-        row.appendChild(dot);
+      }
+      row.appendChild(dot);
+      if (body.kind === 'task'){
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.className = 'card-cb'; cb.checked = !!body.done;
+        cb.onchange = () => { store.updateBody(body.id, { done: cb.checked }); requestRender(); };
+        row.appendChild(cb);
       }
 
       // テキスト
