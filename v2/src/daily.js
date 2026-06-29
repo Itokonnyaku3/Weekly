@@ -287,10 +287,28 @@ function buildImageWidget(store, ref, body){
   return wrap;
 }
 
+// 行メニュー（⋯）をキーボードで開閉。Alt+Enter から呼ぶ。開いたら最初の操作へフォーカス、閉じたらカードへ戻る。
+function toggleCardMenu(refId, requestRender){
+  _openMenu = (_openMenu === refId ? null : refId);
+  requestRender();
+  if (_openMenu === refId){
+    const menu = (_ctx.container || document).querySelector('.card-menu') || document.querySelector('.card-menu');
+    const first = menu && menu.querySelector('button, select, input, [tabindex]');
+    if (first) first.focus();
+  } else {
+    focusCard(refId, -1);
+  }
+}
+
 function buildCardMenu(store, ref, body, requestRender){
   const menu = document.createElement('div');
   menu.className = 'card-menu';
-  menu.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ _openMenu = null; requestRender(); } });
+  // Esc / Alt+Enter で閉じてカードへ戻る
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey)){
+      e.preventDefault(); const id = ref.id; _openMenu = null; requestRender(); focusCard(id, -1);
+    }
+  });
 
   if (body.kind === 'table' || body.kind === 'image'){     // 表/画像は削除のみ
     const del = document.createElement('button');
@@ -527,6 +545,13 @@ function onKey(e, store, ref, body, requestRender){
     return;
   }
 
+  // Alt+Enter: 行メニュー（⋯）の開閉。開いたら最初の操作にフォーカス、閉じたらカードへ戻る
+  if (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){
+    e.preventDefault();
+    toggleCardMenu(ref.id, requestRender);
+    return;
+  }
+
   // Ctrl/⌘+Enter: メモ → タスク(未完) → 完了 → メモ の3状態サイクル
   // （完了の単純トグルはチェックボックスのクリックで可能）
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
@@ -746,6 +771,9 @@ function onBlockKey(e, store, ref, requestRender){
     requestRender(); focusCard(ref.id); return;
   }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, 0); return; }
+  if (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){   // 行メニュー（表/画像は削除のみ）
+    e.preventDefault(); toggleCardMenu(ref.id, requestRender); return;
+  }
   if (e.key === 'Delete' || e.key === 'Backspace'){    // 削除（隣へフォーカス移動）
     e.preventDefault();
     const flat = visibleFlat(store); const idx = flat.indexOf(ref.id);
