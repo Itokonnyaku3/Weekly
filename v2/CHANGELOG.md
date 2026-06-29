@@ -1,5 +1,14 @@
 # Tracker v2 — CHANGELOG
 
+## v0.38.0 — ビュー切替ショートカット＋フォーカス記憶＋分割の右ペイン切替（2026-06-30）
+
+- **ショートカット**: `Alt+1`=リスト / `Alt+2`=デイリー / `Alt+3`=プロジェクト / `Alt+0`=分割トグル（`e.code`判定でキーレイアウト非依存）。Ctrl+Kコマンドにもヒント表示。
+- **ビューごとのフォーカス記憶**: 各ビューを離れるとき現在のフォーカス（デイリー/PJ=カードref、リスト=セルの`data-fkey`）を記憶し、そのビューに戻ったとき復元（`captureFocus`/`restoreFocus`/`focusToken`、セッション内）。
+- **分割時の挙動**: 分割中に `Alt+1`/`Alt+2` は**分割を維持したまま**左リスト⇄右デイリーへフォーカス移動。`Alt+3`で**右ペインをプロジェクトに切替**、その状態で`Alt+2`を押すと**右ペインをデイリーに戻す**（右ペイン内容 `splitRight`=daily|project）。左ペインは常にリスト固定。
+- 状態（split / ratio / splitRight / currentView）を localStorage に保存しリロード復元。ツールバーの各ボタンも同じ`selectView`/`toggleSplit`に統一。`addToday`/`gotoDate`/`zoomToCard`/`openProject` 等は `showView` 経由で分割対応（分割中は適切な右ペインに反映）。
+- `style.css`: `#view-project` も分割の右スロット（order:3）に対応。
+- 検証: 非分割の Alt+1/2/3 切替・分割の s1〜s6 全シナリオ（右ペイン切替・分割維持・トグル）・フォーカス記憶（単一/分割の両方で復元）を実機eval確認。単体テスト緑。
+
 ## v0.37.0 — アウトライン表示をWorkflowy風に（2026-06-29）
 
 - **シェブロン（▾/▸）を控えめに**＝小さめ（10px）＋既定 opacity .38、行hoverで濃く。葉ノードは非表示。
