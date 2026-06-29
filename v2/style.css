@@ -14,6 +14,13 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 #ver{font-size:10px;color:var(--tx3);font-weight:400}
 .spacer{flex:1}
 #app{height:calc(100% - 40px);overflow:auto;padding:12px}
+/* 画面分割（左=リスト / 右=デイリー）。中央のディバイダをドラッグで幅調整 */
+#split-divider{display:none}
+#app.split{display:flex;flex-direction:row;align-items:stretch;overflow:hidden;padding:0}
+#app.split>#view-list{order:1;flex:0 0 var(--split-left,40%);min-width:180px;overflow:auto;padding:12px}
+#app.split>#split-divider{order:2;display:block;flex:0 0 6px;cursor:col-resize;background:var(--bd);touch-action:none}
+#app.split>#split-divider:hover,#app.split>#split-divider.dragging{background:var(--accent)}
+#app.split>#view-daily{order:3;flex:1 1 0;min-width:0;overflow:auto;padding:12px;border-left:1px solid var(--bd)}
 .btn{font:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);border-radius:6px;cursor:pointer}
 .btn:hover{border-color:var(--accent)}
 
