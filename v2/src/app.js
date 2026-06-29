@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.38.0';
+export const APP_VERSION = '0.39.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -64,6 +64,7 @@ function toggleSplit(){
 // ── フォーカス記憶/復元 ──
 function focusToken(el){
   if (!el) return null;
+  if (el.classList && el.classList.contains('proj-land-row')) return { kind:'proj', id: el.dataset.proj };
   if (el.dataset && el.dataset.ref) return { kind:'ref', id: el.dataset.ref };
   if (el.classList && el.classList.contains('day-head')) return { kind:'date', date: el.dataset.date };
   if (el.classList && el.classList.contains('zoom-title-txt')) return { kind:'title' };
@@ -88,7 +89,8 @@ function restoreFocus(v){
   const tok = v === 'project' ? focusMem.project : focusMem.daily;
   if (tok && tok.kind === 'ref' && document.querySelector(`${cont} [data-ref="${tok.id}"]`)){ focusCard(tok.id, -1); return; }
   if (tok && tok.kind === 'date'){ const d = document.querySelector(`${cont} .day-head[data-date="${tok.date}"]`); if (d){ d.focus(); return; } }
-  const el = document.querySelector(`${cont} .zoom-title-txt, ${cont} .card-txt, ${cont} .day-head, ${cont} .card-block`);
+  if (tok && tok.kind === 'proj'){ const r = document.querySelector(`${cont} .proj-land-row[data-proj="${tok.id}"]`); if (r){ r.focus(); return; } }
+  const el = document.querySelector(`${cont} .zoom-title-txt, ${cont} .card-txt, ${cont} .day-head, ${cont} .card-block, ${cont} .proj-land-row`);
   el && el.focus();
 }
 

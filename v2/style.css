@@ -230,8 +230,9 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .proj-landing{max-width:760px}
 .proj-landing-head{font-weight:700;font-size:13px;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 0;margin-bottom:6px}
 .proj-landing-empty{color:var(--tx3);font-size:13px;padding:8px 2px}
-.proj-land-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:14px}
+.proj-land-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:14px;outline:none}
 .proj-land-row:hover{background:var(--accent-soft)}
+.proj-land-row:focus{background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent)}
 .proj-land-name{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .proj-land-count{flex:none;font-size:11px;color:var(--tx3)}
 .proj-land-add{margin-top:10px}
