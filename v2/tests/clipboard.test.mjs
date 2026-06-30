@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createStore } from '../src/store.js';
-import { serializeSubtree, encodeClipHtml, decodeClipHtml, parsePlainText, insertNodes, looksLikeTsv, tsvToRows } from '../src/clipboard.js';
+import { serializeSubtree, encodeClipHtml, decodeClipHtml, parsePlainText, insertNodes, looksLikeTsv, tsvToRows, detectInlineFormat } from '../src/clipboard.js';
 
 // A > A1(task,done,prio3,due) > A2
 const s = createStore();
@@ -59,5 +59,12 @@ assert.equal(looksLikeTsv('x\ty'), true, '1行でもセル間タブ→TSV');
 assert.equal(looksLikeTsv('A\n\tB\n\t\tC'), false, '先頭インデントのみ→非TSV(アウトライン)');
 assert.equal(looksLikeTsv('ただの一行'), false, 'タブ無し→非TSV');
 assert.deepEqual(tsvToRows('項目\t担当\n電波\t楽天'), [['項目','担当'],['電波','楽天']]);
+
+// detectInlineFormat（DOM非依存の分岐: 裸URLは url を、普通のプレーンは書式なし）
+assert.equal(detectInlineFormat('', 'https://example.com/x').url, 'https://example.com/x', '裸URL→url');
+const f0 = detectInlineFormat('', 'ただのテキスト');
+assert.equal(f0.url, undefined); assert.equal(f0.bold, undefined); assert.equal(f0.color, undefined);
+assert.equal(detectInlineFormat('', 'これは https://a.com を含む文').url, undefined, '文中URLは単独でないので拾わない');
+assert.equal(detectInlineFormat('', '  https://b.com/y  ').url, 'https://b.com/y', '前後空白は許容');
 
 console.log('PASS clipboard');

@@ -58,6 +58,51 @@ export function looksLikeTsv(text){
 export function tsvToRows(text){
   return String(text).split(/\r?\n/).filter(l => l.length).map(l => l.split('\t'));
 }
+// ── 貼り付け書式の検出（カード単位）: リンク/太字/色をカード属性へマップ ──
+// html が無くても plain の裸URLは拾う。bold/color は「全体が一様」のときだけ採用（誤適用防止）。
+const _DEFAULT_COLORS = new Set(['', 'inherit', 'currentcolor', 'black', '#000', '#000000', 'rgb(0, 0, 0)', 'rgb(0,0,0)']);
+function analyzeFormatting(root){
+  const texts = [];
+  const walk = (node) => { for (const c of node.childNodes){ if (c.nodeType === 3){ if (c.textContent.trim()) texts.push(c); } else if (c.nodeType === 1) walk(c); } };
+  walk(root);
+  if (!texts.length) return { allBold:false, color:null };
+  const isBold = (tn) => {
+    let el = tn.parentElement;
+    while (el && el !== root.parentElement){
+      const tag = el.tagName;
+      if (tag === 'B' || tag === 'STRONG') return true;
+      const fw = el.style && el.style.fontWeight;
+      if (fw && (fw === 'bold' || fw === 'bolder' || parseInt(fw, 10) >= 600)) return true;
+      el = el.parentElement;
+    }
+    return false;
+  };
+  const colorOf = (tn) => { let el = tn.parentElement; while (el && el !== root.parentElement){ const c = el.style && el.style.color; if (c) return c.trim(); el = el.parentElement; } return ''; };
+  const allBold = texts.every(isBold);
+  const colors = [...new Set(texts.map(colorOf))];
+  let color = null;
+  if (colors.length === 1 && !_DEFAULT_COLORS.has(colors[0].toLowerCase())) color = colors[0];
+  return { allBold, color };
+}
+export function detectInlineFormat(html, plain){
+  const out = { text: (plain || '').replace(/\r/g, '') };
+  let url = null, bold = false, color = null;
+  if (html && typeof DOMParser !== 'undefined'){
+    const body = new DOMParser().parseFromString(html, 'text/html').body;
+    const a = body.querySelector('a[href]');
+    if (a && /^https?:/i.test(a.getAttribute('href') || '')) url = a.getAttribute('href');
+    const info = analyzeFormatting(body);
+    bold = info.allBold; color = info.color;
+    const t = body.textContent.replace(/ /g, ' ').replace(/\s+\n/g, '\n').trim();
+    if (t) out.text = t;
+  }
+  if (!url){ const m = out.text.trim().match(/^https?:\/\/\S+$/); if (m) url = m[0]; }
+  if (url) out.url = url;
+  if (bold) out.bold = true;
+  if (color) out.color = color;
+  return out;
+}
+
 // クリップボードから画像ファイルを取り出す（貼り付け用）
 export function pickImageFile(dt){
   if (!dt) return null;
@@ -185,7 +230,29 @@ export function installClipboard(store, requestRender, focusCard, clearSelection
       return;
     }
     if (!nodes && plain && /\r?\n/.test(plain.trim())) nodes = parsePlainText(plain); // ③複数行テキスト
-    if (!nodes || !nodes.length) return;                   // ③1行など→標準貼り付け
+    if (!nodes || !nodes.length){
+      // ③単一行: リンク/太字/色を検出してカード属性として保存（無ければ標準のプレーン貼り付け）
+      const fmt = detectInlineFormat(html, plain);
+      if (fmt && (fmt.url || fmt.bold || fmt.color) && opts.serializeEditable && opts.caretOffset){
+        e.preventDefault();
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount && !sel.isCollapsed && card.contains(sel.anchorNode)) sel.deleteFromDocument();
+        const text = opts.serializeEditable(card);
+        const pos = opts.caretOffset(card);
+        const ins = fmt.text || '';
+        const body = store.getBody(store.getRef(card.dataset.ref).bodyId);
+        const patch = { content: text.slice(0, pos) + ins + text.slice(pos) };
+        if (fmt.url) patch.url = fmt.url;
+        if (fmt.bold) patch.bold = true;
+        if (fmt.color) patch.color = fmt.color;
+        store.updateBody(body.id, patch);
+        if (clearSelection) clearSelection();
+        requestRender();
+        focusCard(card.dataset.ref, pos + ins.length);
+        showToast(fmt.url ? 'リンクを保存しました' : '書式を保存しました');
+      }
+      return;                                              // 書式なし＝標準のプレーン貼り付け
+    }
     e.preventDefault();
     const refId = card.dataset.ref;
     const curBody = store.getBody(store.getRef(refId).bodyId);

@@ -680,7 +680,7 @@ function fillEditable(el, content, store){
   }
   if (last < content.length) el.appendChild(document.createTextNode(content.slice(last)));
 }
-function serializeEditable(el){
+export function serializeEditable(el){
   let out = '';
   el.childNodes.forEach(n => {
     if (n.nodeType === 3) out += n.textContent;
@@ -689,7 +689,7 @@ function serializeEditable(el){
   });
   return out;
 }
-function caretOffset(el){              // 直列化文字列における caret 位置
+export function caretOffset(el){              // 直列化文字列における caret 位置
   const sel = window.getSelection();
   if (!sel.rangeCount) return 0;
   const r = sel.getRangeAt(0);
