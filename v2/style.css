@@ -252,9 +252,16 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .ct-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* 画像ブロック（kind:'image'）*/
-.cardimg-wrap{margin:2px 0;max-width:100%}
-.cardimg{max-width:min(440px,100%);max-height:360px;border-radius:6px;border:1px solid var(--bd);display:block;background:var(--bg)}
+.cardimg-wrap{position:relative;display:inline-block;vertical-align:top;margin:2px 0;max-width:100%}
+.cardimg{max-width:min(440px,100%);max-height:360px;height:auto;border-radius:6px;border:1px solid var(--bd);display:block;background:var(--bg);cursor:zoom-in}
+.cardimg-wrap.sized .cardimg{width:100%;max-width:100%;max-height:none}
 .cardimg.broken{min-width:160px;min-height:42px;border-style:dashed;color:var(--tx3);font-size:12px}
+/* リサイズハンドル（hover/フォーカス時に表示） */
+.cardimg-resize{position:absolute;right:3px;bottom:6px;width:14px;height:14px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 2px var(--panel);cursor:nwse-resize;opacity:0;touch-action:none}
+.cardimg-wrap:hover .cardimg-resize,.card-block:focus .cardimg-resize{opacity:.9}
+/* 全画面オーバーレイ（ライトボックス） */
+.img-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.img-overlay-img{max-width:96vw;max-height:96vh;object-fit:contain;border-radius:4px;box-shadow:0 10px 48px rgba(0,0,0,.55)}
 /* 画像/表ブロックを選択（フォーカス）したときの枠 */
 .card-block{border-radius:6px}
 .card-block:focus{outline:none;box-shadow:0 0 0 2px var(--accent)}

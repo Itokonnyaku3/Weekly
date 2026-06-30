@@ -279,11 +279,45 @@ function loadImg(img, src){
   if (_imageLoader){ _imageLoader(src).then(u => { img.src = u; }).catch(() => { img.alt = '画像を読み込めません'; img.classList.add('broken'); }); }
   else { img.alt = '画像（表示には GitHub 設定が必要）'; img.classList.add('broken'); }
 }
+// 画像を画面全体のオーバーレイ（ライトボックス）で拡大表示。クリック / Esc で閉じる。
+function openImageOverlay(src){
+  if (!src) return;
+  const ov = document.createElement('div'); ov.className = 'img-overlay';
+  const big = document.createElement('img'); big.className = 'img-overlay-img'; big.src = src; big.alt = '画像';
+  ov.appendChild(big);
+  const onKey = (e) => { if (e.key === 'Escape'){ e.preventDefault(); close(); } };
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey, true); };
+  ov.addEventListener('click', close);
+  document.addEventListener('keydown', onKey, true);
+  document.body.appendChild(ov);
+}
 function buildImageWidget(store, ref, body){
   const wrap = document.createElement('div'); wrap.className = 'cardimg-wrap';
+  if (body.width){ wrap.classList.add('sized'); wrap.style.width = body.width + 'px'; }   // 保存済みサイズを復元
   const img = document.createElement('img'); img.className = 'cardimg'; img.alt = '画像';
   loadImg(img, body.content || '');
+  img.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openImageOverlay(img.src); });   // クリックで全画面
   wrap.appendChild(img);
+
+  // リサイズハンドル（右下・幅をドラッグ、縦横比は height:auto で維持）
+  const handle = document.createElement('div'); handle.className = 'cardimg-resize'; handle.title = 'ドラッグでサイズ変更';
+  handle.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    try { handle.setPointerCapture(e.pointerId); } catch {}
+    const startX = e.clientX;
+    const startW = wrap.getBoundingClientRect().width;
+    const maxW = (wrap.parentElement ? wrap.parentElement.clientWidth : startW) || startW;
+    wrap.classList.add('sized');
+    const onMove = (ev) => { wrap.style.width = Math.max(80, Math.min(startW + (ev.clientX - startX), maxW)) + 'px'; };
+    const onUp = () => {
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      store.updateBody(body.id, { width: Math.round(wrap.getBoundingClientRect().width) });   // 保存（再描画は不要）
+    };
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+  });
+  wrap.appendChild(handle);
   return wrap;
 }
 
