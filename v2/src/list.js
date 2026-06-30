@@ -136,7 +136,8 @@ export function renderList(store, mount, requestRender, state, onJump){
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
   const projOrder = {}; store.listProjects().forEach((p, i) => { projOrder[p.id] = i; });
-  const rows = selectTasks(all, state, today, projOrder);
+  let rows = selectTasks(all, state, today, projOrder);
+  if (state._focusProj != null) rows = rows.filter(t => (t.proj || '') === state._focusProj);   // プロジェクトフォーカス＝他PJを隠す
   const grouped = state.sort === 'proj';                 // プロジェクト並べ替え時だけツリー（区切り＋インデント）
   let cols = activeColumns(state);
   if (grouped) cols = cols.filter(k => k !== 'project' && k !== 'mid');   // ツリー表示時は PJ/中項目を見出し行に一本化（列は隠す）
@@ -148,6 +149,7 @@ export function renderList(store, mount, requestRender, state, onJump){
   mount.innerHTML = '';
   mount.appendChild(buildViewBar(store, requestRender, state));
   mount.appendChild(buildControls(store, requestRender, state, rows.length, all.length));
+  if (state._focusProj != null) mount.appendChild(projFocusCrumb(store, requestRender, state));   // プロジェクトフォーカス中のパンくず
 
   const table = document.createElement('table');
   table.className = 'list-table';
@@ -208,6 +210,19 @@ export function renderList(store, mount, requestRender, state, onJump){
   mount.appendChild(dl);
 
   if (refocus){ const el = mount.querySelector('[data-fkey="' + refocus + '"]'); if (el) el.focus(); }
+}
+
+// プロジェクトフォーカス中のパンくず（全体に戻る）
+function projFocusCrumb(store, requestRender, state){
+  const crumb = document.createElement('div'); crumb.className = 'zoom-crumb';
+  const home = document.createElement('span'); home.className = 'crumb-item'; home.textContent = '全体';
+  home.onclick = () => { state._focusProj = null; requestRender(); };
+  const sep = document.createElement('span'); sep.className = 'crumb-sep'; sep.textContent = '›';
+  const cur = document.createElement('span'); cur.className = 'crumb-item crumb-cur';
+  const pid = state._focusProj;
+  cur.textContent = pid ? ((store.getBody(pid) || {}).content || '(無題PJ)') : '未割当';
+  crumb.appendChild(home); crumb.appendChild(sep); crumb.appendChild(cur);
+  return crumb;
 }
 
 // ── 保存ビュー バー（＋プロジェクト管理）──
@@ -418,7 +433,8 @@ function cellTitle(store, requestRender, t){
     chip.replaceWith(ed); ed.focus();
     const r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
   };
-  chip.addEventListener('click', edit);
+  chip.addEventListener('click', () => chip.focus());        // クリックは選択（カーソル）のみ。編集は Enter / ダブルクリック
+  chip.addEventListener('dblclick', edit);
   chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.altKey){ e.preventDefault(); edit(); } else navKey(e); });   // Alt+Enter は navKey→詳細へ
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
   wrap.appendChild(jump); wrap.appendChild(chip);
@@ -509,6 +525,20 @@ function navKey(e){
   if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.key === 'Enter'){   // Alt+Enter=タスク詳細ポップアップ
     const tr = e.currentTarget.closest && e.currentTarget.closest('tr');
     if (tr && tr.dataset.task && _listCtx){ e.preventDefault(); openTaskDetail(_listCtx.store, tr.dataset.task, _listCtx.requestRender); return; }
+  }
+  if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')){   // Alt+↓=PJにフォーカス / Alt+↑=全体へ
+    if (!_listCtx) return;
+    const st = _listCtx.state;
+    if (e.key === 'ArrowUp'){
+      if (st._focusProj != null){ e.preventDefault(); st._focusProj = null; _listCtx.requestRender(); }   // 解除（フォーカスは data-fkey で復元）
+      return;
+    }
+    const el = e.currentTarget;
+    let proj = null;
+    if (el.classList && el.classList.contains('nav-head')) proj = el.dataset.proj || '';
+    else { const tr = el.closest && el.closest('tr'); if (tr && tr.dataset.task) proj = tr.dataset.proj || ''; }
+    if (proj != null){ e.preventDefault(); st._focusProj = proj; _listCtx.requestRender(); }
+    return;
   }
   if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){ collapseKey(e); return; }   // #3 カスケード折りたたみ/展開
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;

@@ -610,6 +610,7 @@ function onKey(e, store, ref, body, requestRender){
   }
   if (e.key === 'Tab'){
     e.preventDefault();
+    if (ref.id === _ctx.rootRef) return;   // ズーム/ページのタイトル（ルート）はインデント・アウトデントしない
     if (e.shiftKey){
       const parentRef = store.getRef(ref.parentRefId);
       if (!parentRef) return;
