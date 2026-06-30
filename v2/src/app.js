@@ -7,10 +7,10 @@ const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
-const { installClipboard } = await import('./clipboard.js' + _q);
+const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.48.0';
+export const APP_VERSION = '0.49.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -353,6 +353,11 @@ function boot(){
       if (e.code === 'Digit3'){ e.preventDefault(); selectView('project'); return; }  // プロジェクト（分割中は右をプロジェクトに）
       if (e.code === 'Digit0'){ e.preventDefault(); toggleSplit(); return; }          // 分割 ON/OFF トグル
       if (e.key === 'd' || e.key === 'D'){ e.preventDefault(); gotoDate(todayStr()); return; }   // 今日のデイリーへ
+    }
+    if ((e.ctrlKey || e.metaKey) && !e.altKey){                 // Ctrl/⌘+Z=取り消し / Ctrl/⌘+Y・Shift+Z=やり直し
+      const kk = (e.key || '').toLowerCase();
+      if (kk === 'z' && !e.shiftKey){ e.preventDefault(); if (store.undo()){ renderAll(); showToast('取り消しました'); } return; }
+      if (kk === 'y' || (kk === 'z' && e.shiftKey)){ e.preventDefault(); if (store.redo()){ renderAll(); showToast('やり直しました'); } return; }
     }
     if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
     if (e.key === 'k' || e.key === 'K'){

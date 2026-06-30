@@ -4,7 +4,56 @@ export function createStore(initial){
   const S = initial || { v:1, seq:0, bodies:{}, refs:{}, views:[] };
   if (!S.views) S.views = [];          // 後方互換（古い保存に views が無い場合）
   const subs = new Set();
-  const emit = () => subs.forEach(fn => { try{ fn(); }catch(e){ console.error(e); } });
+
+  // ── 取り消し/やり直し（スナップショット方式・バースト coalescing）──
+  // 変更のたびにコミットを 500ms デバウンス＝連続入力や1操作内の複数変更を1ステップにまとめる。
+  const _clone = (typeof structuredClone === 'function') ? (o) => structuredClone(o) : (o) => JSON.parse(JSON.stringify(o));
+  const HIST_MAX = 40;
+  let _hist = [], _future = [], _baseline = _clone(S), _commitTimer = null, _dirty = false, _suspend = false;
+  function _commit(){
+    if (_commitTimer){ clearTimeout(_commitTimer); _commitTimer = null; }
+    if (!_dirty) return;
+    _hist.push(_baseline);                 // バースト前の状態を履歴へ
+    if (_hist.length > HIST_MAX) _hist.shift();
+    _future = [];                          // 新しい変更で redo は無効化
+    _baseline = _clone(S);
+    _dirty = false;
+  }
+  function _scheduleCommit(){
+    if (_suspend) return;
+    _dirty = true;
+    if (_commitTimer) clearTimeout(_commitTimer);
+    _commitTimer = setTimeout(_commit, 500);
+  }
+  function _applyState(st){                 // 履歴の状態を S に流し込む（履歴記録は抑止）
+    _suspend = true;
+    for (const k of Object.keys(S)) delete S[k];
+    Object.assign(S, _clone(st));
+    if (!S.views) S.views = [];
+    emit();
+    _suspend = false; _dirty = false;
+  }
+  function undo(){
+    if (_dirty) _commit();                  // 進行中バーストを確定
+    if (!_hist.length) return false;
+    _future.push(_clone(S));
+    _applyState(_hist.pop());
+    _baseline = _clone(S);
+    return true;
+  }
+  function redo(){
+    if (_dirty) _commit();
+    if (!_future.length) return false;
+    _hist.push(_clone(S));
+    _applyState(_future.pop());
+    _baseline = _clone(S);
+    return true;
+  }
+  function commitHistory(){ _commit(); }     // バースト境界を明示（テスト/ビュー切替などで使用可）
+  const canUndo = () => _hist.length > 0 || _dirty;
+  const canRedo = () => _future.length > 0;
+
+  const emit = () => { subs.forEach(fn => { try{ fn(); }catch(e){ console.error(e); } }); _scheduleCommit(); };
   const genId = (p) => p + (++S.seq);
 
   function createBody(attrs={}){
@@ -127,11 +176,14 @@ export function createStore(initial){
     return { body, ref };
   }
 
-  function replaceState(newState){          // GitHub取得などで状態を丸ごと差し替え（S参照は維持）
+  function replaceState(newState){          // GitHub取得などで状態を丸ごと差し替え（S参照は維持）。履歴はリセット
+    _suspend = true;
     for (const k of Object.keys(S)) delete S[k];
     Object.assign(S, newState);
     if (!S.views) S.views = [];
     emit();
+    _suspend = false;
+    _hist = []; _future = []; _baseline = _clone(S); _dirty = false;
   }
 
   function subscribe(fn){ subs.add(fn); return () => subs.delete(fn); }
@@ -142,5 +194,6 @@ export function createStore(initial){
            siblings, prevSiblingRef, orderAfter, orderBefore, endOrder,
            saveView, updateView, deleteView, listViews,
            createProject, listProjects, deleteProject, ensureProjectPage,
-           replaceState, subscribe, toJSON, _state:S };
+           replaceState, subscribe, toJSON,
+           undo, redo, canUndo, canRedo, commitHistory, _state:S };
 }
