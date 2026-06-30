@@ -698,6 +698,17 @@ function openTaskDetail(store, bodyId, listRequestRender){
   overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });   // 外側クリックで閉じる
   document.addEventListener('keydown', onKey, true);
 
+  // Tab フォーカスリング: ↗参照元 → 各項目(PJ/中項目/優先度/期限) → ノード見出し をぐるぐる。
+  // ミラーの子カードにフォーカスがあるときは通常の Tab（アウトラインのインデント）に任せる。
+  box.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const ring = [box.querySelector('.td-open'), ...box.querySelectorAll('.td-fields select, .td-fields input'), box.querySelector('.zoom-title-txt')].filter(Boolean);
+    const i = ring.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault(); e.stopPropagation();
+    ring[(i + (e.shiftKey ? -1 : 1) + ring.length) % ring.length].focus();
+  }, true);                                  // capture: ノード見出しの onKey より先に処理
+
   const render = () => {
     box.innerHTML = '';
     const head = document.createElement('div'); head.className = 'td-head';
