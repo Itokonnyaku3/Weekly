@@ -227,11 +227,35 @@ export function tableRows(body){
   rows.forEach(r => { while (r.length < ncol) r.push(''); });   // 矩形に正規化
   return rows;
 }
-function saveTable(store, body, rows){ store.updateBody(body.id, { content: JSON.stringify({ rows }) }); }
+function saveTable(store, body, rows, widths){ store.updateBody(body.id, { content: JSON.stringify(widths && widths.length ? { rows, widths } : { rows }) }); }
+function tableWidths(body, ncol){                         // 列幅(px)。未設定は 120。ncol に正規化
+  let o; try { o = JSON.parse(body.content || '{}'); } catch (_){ o = {}; }
+  const w = (Array.isArray(o.widths) ? o.widths : []).map(x => Math.max(40, parseInt(x, 10) || 120));
+  const out = w.slice(0, ncol);
+  while (out.length < ncol) out.push(120);
+  return out;
+}
+function caretToCell(cell){                               // 表セルへフォーカス＋キャレットを先頭へ
+  if (!cell) return;
+  cell.focus();
+  const r = document.createRange(); r.selectNodeContents(cell); r.collapse(true);
+  const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  cell.scrollIntoView({ block: 'nearest' });
+}
+const ROWDEL_W = 22;
 function buildTableWidget(store, ref, body, requestRender){
   const wrap = document.createElement('div'); wrap.className = 'cardtable-wrap';
   const rows = tableRows(body);
-  const tbl = document.createElement('table'); tbl.className = 'cardtable';
+  const ncol = rows[0].length;
+  const widths = tableWidths(body, ncol);
+  const tbl = document.createElement('table'); tbl.className = 'cardtable'; tbl.style.tableLayout = 'fixed';
+  const applyWidth = () => { tbl.style.width = (ROWDEL_W + widths.reduce((a, b) => a + (b || 120), 0)) + 'px'; };
+
+  // colgroup（先頭=行削除列／以降=各データ列）。列幅は col で制御
+  const cg = document.createElement('colgroup');
+  const c0 = document.createElement('col'); c0.style.width = ROWDEL_W + 'px'; cg.appendChild(c0);
+  const colEls = widths.map(w => { const col = document.createElement('col'); col.style.width = w + 'px'; cg.appendChild(col); return col; });
+  tbl.appendChild(cg);
 
   // 列削除コントロール行（× を各列の上に）
   const ctr = document.createElement('tr'); ctr.className = 'ct-ctrlrow';
@@ -239,7 +263,7 @@ function buildTableWidget(store, ref, body, requestRender){
   rows[0].forEach((_, c) => {
     const td = document.createElement('td'); td.className = 'ct-coldel';
     const b = document.createElement('button'); b.type = 'button'; b.textContent = '×'; b.title = '列を削除';
-    b.onclick = () => { if (rows[0].length > 1){ rows.forEach(rw => rw.splice(c, 1)); saveTable(store, body, rows); requestRender(); } };
+    b.onclick = () => { if (rows[0].length > 1){ rows.forEach(rw => rw.splice(c, 1)); widths.splice(c, 1); saveTable(store, body, rows, widths); requestRender(); } };
     td.appendChild(b); ctr.appendChild(td);
   });
   tbl.appendChild(ctr);
@@ -249,24 +273,51 @@ function buildTableWidget(store, ref, body, requestRender){
     const tr = document.createElement('tr');
     const delTd = document.createElement('td'); delTd.className = 'ct-rowdel';
     const delBtn = document.createElement('button'); delBtn.type = 'button'; delBtn.textContent = '×'; delBtn.title = '行を削除';
-    delBtn.onclick = () => { if (rows.length > 1){ rows.splice(r, 1); saveTable(store, body, rows); requestRender(); } };
+    delBtn.onclick = () => { if (rows.length > 1){ rows.splice(r, 1); saveTable(store, body, rows, widths); requestRender(); } };
     delTd.appendChild(delBtn); tr.appendChild(delTd);
     row.forEach((cell, c) => {
       const td = document.createElement('td'); td.className = 'ct-cell' + (r === 0 ? ' ct-head' : '');
       td.contentEditable = 'true'; td.spellcheck = false; td.textContent = cell;
-      td.addEventListener('input', () => { rows[r][c] = td.textContent; saveTable(store, body, rows); });
+      td.addEventListener('input', () => { rows[r][c] = td.textContent; saveTable(store, body, rows, widths); });
+      td.addEventListener('keydown', (e) => {                // Tab=次のセル（最終で新行）／Shift+Tab=前のセル
+        if (e.key !== 'Tab') return;
+        e.preventDefault();
+        const all = [...tbl.querySelectorAll('.ct-cell')];
+        const i = all.indexOf(td);
+        if (e.shiftKey){ if (i > 0) caretToCell(all[i - 1]); return; }
+        if (i < all.length - 1){ caretToCell(all[i + 1]); return; }
+        rows.push(new Array(ncol).fill('')); saveTable(store, body, rows, widths); requestRender();   // 最終セルで Tab → 行追加
+        const cells = (_ctx.container || document).querySelectorAll(`[data-ref="${ref.id}"] .ct-cell`);
+        caretToCell(cells[(rows.length - 1) * ncol]);
+      });
+      if (r === 0){                                          // 列幅リサイズ（ヘッダ右端をドラッグ）
+        td.style.position = 'relative';
+        const rz = document.createElement('div'); rz.className = 'ct-resize'; rz.contentEditable = 'false'; rz.title = 'ドラッグで列幅変更';
+        rz.addEventListener('pointerdown', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          try { rz.setPointerCapture(e.pointerId); } catch (_){}
+          const startX = e.clientX, startW = widths[c];
+          const onMove = (ev) => { const w = Math.max(40, startW + (ev.clientX - startX)); widths[c] = w; if (colEls[c]) colEls[c].style.width = w + 'px'; applyWidth(); };
+          const onUp = () => { rz.removeEventListener('pointermove', onMove); rz.removeEventListener('pointerup', onUp); saveTable(store, body, rows, widths); };
+          rz.addEventListener('pointermove', onMove); rz.addEventListener('pointerup', onUp);
+        });
+        td.appendChild(rz);
+      }
       tr.appendChild(td);
     });
     tbl.appendChild(tr);
   });
+  applyWidth();
   wrap.appendChild(tbl);
 
   const ctrl = document.createElement('div'); ctrl.className = 'ct-ctrl';
   const addRow = document.createElement('button'); addRow.type = 'button'; addRow.className = 'ct-btn'; addRow.textContent = '＋行';
-  addRow.onclick = () => { rows.push(new Array(rows[0].length).fill('')); saveTable(store, body, rows); requestRender(); };
+  addRow.onclick = () => { rows.push(new Array(ncol).fill('')); saveTable(store, body, rows, widths); requestRender(); };
   const addCol = document.createElement('button'); addCol.type = 'button'; addCol.className = 'ct-btn'; addCol.textContent = '＋列';
-  addCol.onclick = () => { rows.forEach(rw => rw.push('')); saveTable(store, body, rows); requestRender(); };
-  ctrl.appendChild(addRow); ctrl.appendChild(addCol);
+  addCol.onclick = () => { rows.forEach(rw => rw.push('')); widths.push(120); saveTable(store, body, rows, widths); requestRender(); };
+  const delTbl = document.createElement('button'); delTbl.type = 'button'; delTbl.className = 'ct-btn ct-del'; delTbl.textContent = '🗑 表を削除';
+  delTbl.onclick = () => { if (confirm('この表を削除しますか？')){ store.deleteRef(ref.id); requestRender(); } };
+  ctrl.appendChild(addRow); ctrl.appendChild(addCol); ctrl.appendChild(delTbl);
   wrap.appendChild(ctrl);
   return wrap;
 }
