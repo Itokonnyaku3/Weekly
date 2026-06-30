@@ -1,5 +1,14 @@
 # Tracker v2 — CHANGELOG
 
+## v0.47.0 — 詳細モード導線・リンクを開く・Escの取りこぼし修正（2026-06-30）
+
+- **リストのタイトルで Enter → 詳細モード（ポップアップ）**を開く（ダブルクリックは従来どおりその場リネーム）。
+- **詳細ポップアップに「↗ 参照元を開く」**ボタンを追加（デイリー/プロジェクトの元ノードへジャンプ）。
+- **カードのリンク(URL)を Shift+Enter で開く**（🔗 クリックの代替）。
+- **Esc の取りこぼしを修正**: ⋯ 行メニューはフォーカス位置に依らず Esc で閉じる（document capture）。リストのプロジェクト管理（▾）も Esc で閉じる。
+- 実装: `daily.js`（`manageOutsideClose` に Esc・onKey に Shift+Enter→URL）、`list.js`（タイトルEnter→`openTaskDetail`・ポップアップ `td-open`・プロジェクト管理 details の Esc）、`style.css`（`.td-open`）。
+- 検証: Enter→詳細・↗参照元でジャンプ・Shift+Enterでopen・⋯メニュー/プロジェクト管理のEsc を実機eval確認。
+
 ## v0.46.0 — 表の操作を強化（Tab移動・行追加・列幅・表削除）（2026-06-30）
 
 - **Tab / Shift+Tab でセル移動**。最終セルで Tab を押すと**新しい行を追加**して先頭セルへ（v1相当）。

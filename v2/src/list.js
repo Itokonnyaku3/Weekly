@@ -293,6 +293,7 @@ function buildProjectManager(store, requestRender, state){
   det.className = 'proj-manager';
   det.open = !!state._pmOpen;
   det.addEventListener('toggle', () => { state._pmOpen = det.open; });
+  det.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ e.preventDefault(); det.open = false; state._pmOpen = false; const su = det.querySelector('summary'); if (su) su.focus(); } });   // Esc で閉じる
   const sum = document.createElement('summary');
   sum.textContent = 'プロジェクト ▾';
   det.appendChild(sum);
@@ -433,9 +434,12 @@ function cellTitle(store, requestRender, t){
     chip.replaceWith(ed); ed.focus();
     const r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
   };
-  chip.addEventListener('click', () => chip.focus());        // クリックは選択（カーソル）のみ。編集は Enter / ダブルクリック
-  chip.addEventListener('dblclick', edit);
-  chip.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.altKey){ e.preventDefault(); edit(); } else navKey(e); });   // Alt+Enter は navKey→詳細へ
+  chip.addEventListener('click', () => chip.focus());        // クリックは選択（カーソル）のみ
+  chip.addEventListener('dblclick', edit);                   // ダブルクリックでその場編集（クイックリネーム）
+  chip.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.altKey && !e.shiftKey){ e.preventDefault(); if (_listCtx) openTaskDetail(_listCtx.store, t.id, _listCtx.requestRender); }   // Enter=詳細モード
+    else navKey(e);
+  });
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
   wrap.appendChild(jump); wrap.appendChild(chip);
   td.appendChild(wrap); return td;
@@ -651,8 +655,10 @@ function openTaskDetail(store, bodyId, listRequestRender){
     box.innerHTML = '';
     const head = document.createElement('div'); head.className = 'td-head';
     const ttl = document.createElement('span'); ttl.className = 'td-title'; ttl.textContent = 'カードの詳細';
+    const open = document.createElement('button'); open.type = 'button'; open.className = 'td-open'; open.textContent = '↗ 参照元を開く'; open.title = 'デイリー/プロジェクトの元ノードへ';
+    open.onclick = () => { close(); if (_onJump) _onJump(bodyId); };
     const x = document.createElement('button'); x.type = 'button'; x.className = 'td-close'; x.textContent = '×'; x.title = '閉じる (Esc)'; x.onclick = close;
-    head.appendChild(ttl); head.appendChild(x);
+    head.appendChild(ttl); head.appendChild(open); head.appendChild(x);
     box.appendChild(head);
     box.appendChild(buildDetailFields(store, body));
 

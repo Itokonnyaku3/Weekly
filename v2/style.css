@@ -227,6 +227,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .td-box{background:var(--panel);border:1px solid var(--bd);border-radius:10px;box-shadow:0 16px 48px rgba(0,0,0,.30);width:min(560px,94vw);max-height:84vh;overflow:auto;display:flex;flex-direction:column}
 .td-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bd)}
 .td-head .td-title{font-weight:700;font-size:13px;flex:1}
+.td-open{font:inherit;font-size:11px;padding:2px 9px;border:1px solid var(--bd2);border-radius:6px;background:var(--panel);color:var(--tx2,var(--tx));cursor:pointer}
+.td-open:hover{border-color:var(--accent);color:var(--accent)}
 .td-close{border:none;background:none;color:var(--tx3);font-size:18px;line-height:1;cursor:pointer;padding:0 4px}
 .td-close:hover{color:var(--accent)}
 .td-fields{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--bd)}

@@ -8,6 +8,7 @@
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
+let _menuKey = null;        // Esc で閉じる document リスナ（フォーカス位置に依らず効く）
 let _dragRef = null;        // ドラッグ中のカード ref.id
 let _focusRef = null;       // ズーム中のカード ref.id（null=全日表示）
 let _focusDate = null;      // 日フォーカス中の 'YYYY-MM-DD'（null=全日表示）
@@ -581,16 +582,19 @@ export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts
 }
 
 function manageOutsideClose(requestRender){
-  if (_menuCloser){ document.removeEventListener('mousedown', _menuCloser); _menuCloser = null; }
+  const cleanup = () => {
+    if (_menuCloser){ document.removeEventListener('mousedown', _menuCloser); _menuCloser = null; }
+    if (_menuKey){ document.removeEventListener('keydown', _menuKey, true); _menuKey = null; }
+  };
+  cleanup();
   if (!_openMenu) return;
   _menuCloser = (e) => {
-    if (!e.target.closest('.card-menu') && !e.target.closest('.card-menu-btn')){
-      _openMenu = null;
-      document.removeEventListener('mousedown', _menuCloser); _menuCloser = null;
-      requestRender();
-    }
+    if (!e.target.closest('.card-menu') && !e.target.closest('.card-menu-btn')){ _openMenu = null; cleanup(); requestRender(); }
   };
-  setTimeout(() => { if (_menuCloser) document.addEventListener('mousedown', _menuCloser); }, 0);
+  _menuKey = (e) => {                                  // Esc はフォーカス位置に依らず閉じる（capture）
+    if (e.key === 'Escape'){ const id = _openMenu; _openMenu = null; cleanup(); requestRender(); if (id) focusCard(id, -1); }
+  };
+  setTimeout(() => { if (_openMenu){ document.addEventListener('mousedown', _menuCloser); document.addEventListener('keydown', _menuKey, true); } }, 0);
 }
 
 function onKey(e, store, ref, body, requestRender){
@@ -636,6 +640,11 @@ function onKey(e, store, ref, body, requestRender){
     e.preventDefault();
     toggleCardMenu(ref.id, requestRender);
     return;
+  }
+
+  // Shift+Enter: このカードのリンク(URL)を開く（🔗 クリックの代替）
+  if (e.key === 'Enter' && e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey && body.url){
+    e.preventDefault(); window.open(body.url, '_blank', 'noopener'); return;
   }
 
   // Ctrl/⌘+Enter: メモ → タスク(未完) → 完了 → メモ の3状態サイクル
