@@ -295,6 +295,7 @@ function buildImageWidget(store, ref, body){
   const wrap = document.createElement('div'); wrap.className = 'cardimg-wrap';
   if (body.width){ wrap.classList.add('sized'); wrap.style.width = body.width + 'px'; }   // 保存済みサイズを復元
   const img = document.createElement('img'); img.className = 'cardimg'; img.alt = '画像';
+  img.addEventListener('load', ensureFocusedVisible);   // 遅延ロードで伸びてもカーソルを画面内に保つ
   loadImg(img, body.content || '');
   img.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openImageOverlay(img.src); });   // クリックで全画面
   wrap.appendChild(img);
@@ -757,6 +758,15 @@ function setCaret(el, pos){            // pos: 直列化インデックス（<0 
   }
   if (!nodes.length) r.setStart(el, 0); else r.setStartAfter(nodes[nodes.length - 1]);
   r.collapse(true); sel.removeAllRanges(); sel.addRange(r);
+}
+// 画像の遅延ロードでレイアウトが伸びても、編集中カードのカーソルが画面外に出たら見える位置へ戻す。
+function ensureFocusedVisible(){
+  const ae = document.activeElement;
+  if (!ae || !ae.classList) return;
+  if (!(ae.classList.contains('card-txt') || ae.classList.contains('card-block'))) return;   // 編集/選択中のカードのみ
+  const r = ae.getBoundingClientRect();
+  if (!r.height && !r.top) return;                              // 未レイアウト
+  if (r.top < 56 || r.bottom > window.innerHeight - 16) ae.scrollIntoView({ block: 'center' });
 }
 export function focusCard(refId, pos = 0){
   const root = _ctx.container || document;
