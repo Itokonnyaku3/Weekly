@@ -168,6 +168,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
 .list-table td:focus-within{background:var(--accent-soft)}   /* セルカーソル＝背景を少し濃く（枠は出さない）*/
 .list-table .nav-head{cursor:pointer}
+.list-table tr.row-sel>td{background:var(--accent-soft)}   /* 行選択ハイライト（複数行削除用）*/
 .list-table .c-st{width:28px}
 .list-table .c-prio{width:84px}
 .list-table .c-due{width:150px}

@@ -195,6 +195,7 @@ export function renderList(store, mount, requestRender, state, onJump){
       const tr = document.createElement('tr');
       tr.dataset.task = t.id; tr.dataset.proj = g; tr.dataset.mid = t.mid || '';
       if (t.done) tr.classList.add('row-done');
+      if (state._sel && state._sel.has(t.id)) tr.classList.add('row-sel');   // 行選択中のハイライト
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
       if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 34 : 18) + 'px';   // ツリーのインデント
       tb.appendChild(tr);
@@ -545,12 +546,34 @@ function navKey(e){
     return;
   }
   if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){ collapseKey(e); return; }   // #3 カスケード折りたたみ/展開
+  const el0 = e.currentTarget; const tr0 = el0.closest && el0.closest('tr');
+  // Shift+↑↓: 行選択を拡張（複数行削除のための選択）
+  if (e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
+    if (!_listCtx || !tr0 || !tr0.dataset.task) return;
+    e.preventDefault();
+    const sel = _listCtx.state._sel || (_listCtx.state._sel = new Set());
+    sel.add(tr0.dataset.task); tr0.classList.add('row-sel');
+    const rs = [...tr0.parentElement.children]; let j = rs.indexOf(tr0) + (e.key === 'ArrowUp' ? -1 : 1);
+    while (rs[j] && !rs[j].dataset.task) j += (e.key === 'ArrowUp' ? -1 : 1);
+    if (rs[j] && rs[j].dataset.task){ sel.add(rs[j].dataset.task); rs[j].classList.add('row-sel'); focusRowCol(rs, j, el0.dataset.col || null); }
+    return;
+  }
+  // Delete/Backspace: 選択行（無ければ現在行）を削除
+  if ((e.key === 'Delete' || e.key === 'Backspace') && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){
+    if (!_listCtx || !tr0 || !tr0.dataset.task) return;
+    if (el0.tagName === 'INPUT' && el0.type !== 'checkbox') return;        // 編集中の入力は対象外
+    if (el0.classList && el0.classList.contains('list-title')) return;     // タイトル編集中は対象外
+    e.preventDefault(); deleteListRows(tr0);
+    return;
+  }
+  if (e.key === 'Escape'){ clearListSel(tr0 && tr0.parentElement); return; }
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
   const el = e.currentTarget; const tr = el.closest && el.closest('tr');
   const tbody = tr && tr.parentElement; if (!tbody) return;
   const rows = [...tbody.children]; const ri = rows.indexOf(tr);
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
     e.preventDefault();
+    clearListSel(tbody);                                                   // 通常移動で選択解除
     focusRowCol(rows, ri + (e.key === 'ArrowUp' ? -1 : 1), el.dataset.col || null);
     return;
   }
@@ -562,6 +585,22 @@ function navKey(e){
     if (next) next.focus();
     return;
   }
+}
+
+// ── 行の選択と削除（複数行可）──
+function clearListSel(tbody){
+  if (_listCtx && _listCtx.state._sel) _listCtx.state._sel.clear();
+  if (tbody) tbody.querySelectorAll('tr.row-sel').forEach(r => r.classList.remove('row-sel'));
+}
+function deleteListRows(tr0){
+  if (!_listCtx) return;
+  const { store, state, requestRender } = _listCtx;
+  const ids = state._sel && state._sel.size ? [...state._sel] : [tr0.dataset.task];
+  const hasKids = ids.some(id => { const r = store.refsForBody(id)[0]; return r && store.childRefs(r.id).length; });
+  if ((ids.length > 1 || hasKids) && !confirm(`${ids.length}件のタスク${hasKids ? '（子を含む）' : ''}を削除しますか？`)) return;
+  for (const id of ids){ for (const r of store.refsForBody(id)) store.deleteRef(r.id); }
+  if (state._sel) state._sel.clear();
+  requestRender();
 }
 
 // ── #3 カスケード折りたたみ/展開（Ctrl+↑ 畳む / Ctrl+↓ 展開）──
