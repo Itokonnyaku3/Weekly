@@ -1,5 +1,12 @@
 # Tracker v2 — CHANGELOG
 
+## v0.50.0 — リストのプロジェクト並べ替え＋デイリー/PJの選択削除（2026-06-30）
+
+- **リストでプロジェクトを並べ替え**: プロジェクト見出しにフォーカスして **Alt+Shift+↑↓** で表示順を入れ替え。順序は各プロジェクトに保存（`body.order`）し永続。グループ並びとPJ列の並べ替えに反映。
+- **デイリー/プロジェクトでも選択削除**: カードを選択（Shift+↑↓ / Shift+クリック）して **Delete / Backspace** で削除（複数可・「根」だけ削除し子は連鎖・複数/子持ちは確認）。リストの行削除と同じ操作感に。
+- 実装: `store.js`（`listProjects` を order 優先ソート＋`moveProject`）、`list.js`（PJ見出しの Alt+Shift+↑↓）、`daily.js`（`deleteSelection`・onKey で選択時 Delete）。単体 `store.projects` に moveProject ケース追加。
+- 検証: 実機evalで PJ並べ替え（RP-C↑→順序変化）・デイリーで2件選択→Delete→1件残存 を確認。
+
 ## v0.49.0 — 取り消し / やり直し（Ctrl+Z / Ctrl+Y）（2026-06-30）
 
 - **Ctrl/⌘+Z で取り消し、Ctrl/⌘+Y（または Ctrl+Shift+Z）でやり直し**。全ビュー（デイリー/リスト/プロジェクト/表）の編集・追加・削除・並べ替え・属性変更に対応。

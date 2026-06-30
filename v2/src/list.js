@@ -531,6 +531,14 @@ function navKey(e){
     const tr = e.currentTarget.closest && e.currentTarget.closest('tr');
     if (tr && tr.dataset.task && _listCtx){ e.preventDefault(); openTaskDetail(_listCtx.store, tr.dataset.task, _listCtx.requestRender); return; }
   }
+  if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){   // Alt+Shift+↑↓=プロジェクト並べ替え（PJ見出し上で）
+    const el = e.currentTarget;
+    if (_listCtx && el.classList && el.classList.contains('nav-head') && el.dataset.proj && !('mid' in el.dataset)){
+      e.preventDefault();
+      if (_listCtx.store.moveProject(el.dataset.proj, e.key === 'ArrowUp' ? -1 : 1)) _listCtx.requestRender();
+    }
+    return;
+  }
   if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')){   // Alt+↓=PJにフォーカス / Alt+↑=全体へ
     if (!_listCtx) return;
     const st = _listCtx.state;

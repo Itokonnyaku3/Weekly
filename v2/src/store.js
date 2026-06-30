@@ -158,7 +158,23 @@ export function createStore(initial){
   function createProject(name){ return createBody({ kind:'project', content: name || '新規プロジェクト' }); }
   function listProjects(){
     return Object.values(S.bodies).filter(b => b.kind === 'project')
-      .sort((a,b) => (a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0));
+      .sort((a,b) => {                                   // 明示 order 優先・未設定は作成日順（末尾）
+        const ao = a.order == null ? Infinity : a.order, bo = b.order == null ? Infinity : b.order;
+        if (ao !== bo) return ao - bo;
+        return a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : 0;
+      });
+  }
+  function moveProject(projId, dir){     // dir: -1 上へ / +1 下へ。表示順の隣と入れ替え
+    const list = listProjects();
+    const i = list.findIndex(p => p.id === projId);
+    if (i < 0) return false;
+    const j = i + dir;
+    if (j < 0 || j >= list.length) return false;
+    list.forEach((p, idx) => { if (S.bodies[p.id].order !== idx) S.bodies[p.id].order = idx; });   // 連番を確定
+    const a = list[i].id, b = list[j].id;
+    const oa = S.bodies[a].order; S.bodies[a].order = S.bodies[b].order; S.bodies[b].order = oa;
+    emit();
+    return true;
   }
   function deleteProject(id){
     for (const b of Object.values(S.bodies)) if (b.proj === id) delete b.proj; // タスクの帰属を外す
@@ -193,7 +209,7 @@ export function createStore(initial){
            childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
            siblings, prevSiblingRef, orderAfter, orderBefore, endOrder,
            saveView, updateView, deleteView, listViews,
-           createProject, listProjects, deleteProject, ensureProjectPage,
+           createProject, listProjects, moveProject, deleteProject, ensureProjectPage,
            replaceState, subscribe, toJSON,
            undo, redo, canUndo, canRedo, commitHistory, _state:S };
 }

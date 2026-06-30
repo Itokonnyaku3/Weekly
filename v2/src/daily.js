@@ -604,6 +604,10 @@ function onKey(e, store, ref, body, requestRender){
   const text = serializeEditable(el);
   const pos = caretOffset(el);
 
+  // 選択中のカードを Delete/Backspace で削除（複数可）。リストの行削除と同じ操作感をデイリー/PJ/ポップアップでも
+  if ((e.key === 'Delete' || e.key === 'Backspace') && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && _sel.size > 0){
+    e.preventDefault(); deleteSelection(store, requestRender); return;
+  }
   // 複数選択: Shift+↑↓ で拡張 / それ以外のキーで解除（Ctrl系・修飾単独は維持）
   const _isShiftArrow = e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown');
   if (!_isShiftArrow && !e.ctrlKey && !e.metaKey && !['Shift','Control','Alt','Meta'].includes(e.key)) clearSelection();
@@ -993,6 +997,21 @@ export function clearSelection(){
   if (!_sel.size && !_selAnchor) return;
   _sel.clear(); _selAnchor = null; _selHead = null;
   document.querySelectorAll('.card-row.selected').forEach(rw => rw.classList.remove('selected'));
+}
+// 選択中カードを削除（子孫を含む「根」だけ削除・複数/子持ちは確認）。Delete/Backspace から呼ぶ。
+function deleteSelection(store, requestRender){
+  const sel = [..._sel]; if (!sel.length) return;
+  const set = new Set(sel);
+  const roots = sel.filter(id => { let p = store.getRef(id)?.parentRefId; while (p){ if (set.has(p)) return false; p = store.getRef(p)?.parentRefId; } return true; });
+  const hasKids = roots.some(id => store.childRefs(id).length);
+  if ((roots.length > 1 || hasKids) && !confirm(`${roots.length}件のカード${hasKids ? '（子を含む）' : ''}を削除しますか？`)) return;
+  const flat = visibleFlat(store);
+  const firstIdx = Math.min(...roots.map(id => flat.indexOf(id)).filter(i => i >= 0));
+  for (const id of roots) store.deleteRef(id);
+  clearSelection();
+  requestRender();
+  const t = flat[firstIdx - 1];
+  if (t && store.getRef(t)) focusCard(t, -1);
 }
 function rebuildSelRange(store){       // _sel = visible順で anchor..head を内包
   const flat = visibleFlat(store);
