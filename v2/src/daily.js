@@ -387,66 +387,83 @@ function toggleCardMenu(refId, requestRender){
   }
 }
 
+// 再描画後の⋯メニューで同じコントロールへフォーカスを戻す（値変更でフォーカスが消えないように）
+function refocusMenu(key){
+  const m = (_ctx.container || document).querySelector('.card-menu') || document.querySelector('.card-menu');
+  const el = m && m.querySelector('[data-mk="' + key + '"]');
+  if (el) el.focus();
+}
 function buildCardMenu(store, ref, body, requestRender){
   const menu = document.createElement('div');
   menu.className = 'card-menu';
   // Esc / Alt+Enter で閉じてカードへ戻る
   menu.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' || (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey)){
-      e.preventDefault(); const id = ref.id; _openMenu = null; requestRender(); focusCard(id, -1);
+      e.preventDefault(); const id = ref.id; _openMenu = null; requestRender(); focusCard(id, -1); return;
+    }
+    if (e.key === 'Tab'){                       // Tab フォーカスリング: メニュー内の各項目を巡回（外に出ない）
+      const items = [...menu.querySelectorAll('button, select, input, [tabindex]')];
+      const i = items.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault();
+      items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
     }
   });
 
   if (body.kind === 'table' || body.kind === 'image'){     // 表/画像は削除のみ
     const del = document.createElement('button');
-    del.type = 'button'; del.className = 'cm-btn cm-del'; del.textContent = body.kind === 'table' ? '表を削除' : '画像を削除';
+    del.type = 'button'; del.className = 'cm-btn cm-del'; del.dataset.mk = 'del'; del.textContent = body.kind === 'table' ? '表を削除' : '画像を削除';
     del.onclick = () => { store.deleteRef(ref.id); _openMenu = null; requestRender(); };
     menu.appendChild(del);
     return menu;
   }
 
   const kindBtn = document.createElement('button');
-  kindBtn.type = 'button'; kindBtn.className = 'cm-btn';
+  kindBtn.type = 'button'; kindBtn.className = 'cm-btn'; kindBtn.dataset.mk = 'kind';
   kindBtn.textContent = body.kind === 'task' ? '• メモにする' : '☐ タスクにする';
-  kindBtn.onclick = () => { store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' }); requestRender(); };
+  kindBtn.onclick = () => { store.updateBody(body.id, { kind: body.kind === 'task' ? 'memo' : 'task' }); requestRender(); refocusMenu('kind'); };
   menu.appendChild(kindBtn);
 
-  menu.appendChild(cmField('優先度', selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(body.prio || 0),
-    v => { store.updateBody(body.id, { prio: Number(v) }); requestRender(); })));
+  const prioSel = selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(body.prio || 0),
+    v => { store.updateBody(body.id, { prio: Number(v) }); requestRender(); refocusMenu('prio'); });
+  prioSel.dataset.mk = 'prio';
+  menu.appendChild(cmField('優先度', prioSel));
 
-  const due = document.createElement('input'); due.type = 'date'; due.value = body.due || '';
-  due.onchange = () => { store.updateBody(body.id, { due: due.value || '' }); requestRender(); };
+  const due = document.createElement('input'); due.type = 'date'; due.value = body.due || ''; due.dataset.mk = 'due';
+  due.onchange = () => { store.updateBody(body.id, { due: due.value || '' }); requestRender(); refocusMenu('due'); };
   menu.appendChild(cmField('期限', due));
 
   const projOpts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-  menu.appendChild(cmField('PJ', selectEl(projOpts, body.proj || '',
-    v => { store.updateBody(body.id, { proj: v || undefined }); requestRender(); })));
+  const projSel = selectEl(projOpts, body.proj || '',
+    v => { store.updateBody(body.id, { proj: v || undefined }); requestRender(); refocusMenu('proj'); });
+  projSel.dataset.mk = 'proj';
+  menu.appendChild(cmField('PJ', projSel));
 
   // 行単位の修飾: 太字
   const boldBtn = document.createElement('button');
-  boldBtn.type = 'button'; boldBtn.className = 'cm-btn' + (body.bold ? ' on' : '');
+  boldBtn.type = 'button'; boldBtn.className = 'cm-btn' + (body.bold ? ' on' : ''); boldBtn.dataset.mk = 'bold';
   boldBtn.textContent = body.bold ? '太字 ✓' : '太字';
-  boldBtn.onclick = () => { store.updateBody(body.id, { bold: !body.bold }); requestRender(); };
+  boldBtn.onclick = () => { store.updateBody(body.id, { bold: !body.bold }); requestRender(); refocusMenu('bold'); };
   menu.appendChild(boldBtn);
 
   // 文字色（スウォッチ・×でなし）
   const colorWrap = document.createElement('span'); colorWrap.className = 'cm-colors';
-  for (const [c, label] of [['', 'なし'], ['#d9534f','赤'], ['#e08a00','橙'], ['#3a9d3a','緑'], ['#2a8fbd','青'], ['#7a5cd0','紫']]){
+  [['', 'なし'], ['#d9534f','赤'], ['#e08a00','橙'], ['#3a9d3a','緑'], ['#2a8fbd','青'], ['#7a5cd0','紫']].forEach(([c, label], i) => {
     const sw = document.createElement('button');
-    sw.type = 'button'; sw.className = 'cm-swatch' + ((body.color || '') === c ? ' sel' : ''); sw.title = label;
+    sw.type = 'button'; sw.className = 'cm-swatch' + ((body.color || '') === c ? ' sel' : ''); sw.title = label; sw.dataset.mk = 'color' + i;
     if (c) sw.style.background = c; else sw.textContent = '×';
-    sw.onclick = () => { store.updateBody(body.id, { color: c || undefined }); requestRender(); };
+    sw.onclick = () => { store.updateBody(body.id, { color: c || undefined }); requestRender(); refocusMenu('color' + i); };
     colorWrap.appendChild(sw);
-  }
+  });
   menu.appendChild(cmField('色', colorWrap));
 
   // リンク（カードに URL を持たせる）
-  const url = document.createElement('input'); url.type = 'url'; url.className = 'cm-url'; url.placeholder = 'https://…'; url.value = body.url || '';
-  url.onchange = () => { store.updateBody(body.id, { url: url.value.trim() || undefined }); requestRender(); };
+  const url = document.createElement('input'); url.type = 'url'; url.className = 'cm-url'; url.placeholder = 'https://…'; url.value = body.url || ''; url.dataset.mk = 'url';
+  url.onchange = () => { store.updateBody(body.id, { url: url.value.trim() || undefined }); requestRender(); refocusMenu('url'); };
   menu.appendChild(cmField('リンク', url));
 
   const del = document.createElement('button');
-  del.type = 'button'; del.className = 'cm-btn cm-del'; del.textContent = '削除';
+  del.type = 'button'; del.className = 'cm-btn cm-del'; del.dataset.mk = 'del'; del.textContent = '削除';
   del.onclick = () => {
     const kids = store.childRefs(ref.id).length;
     if (kids && !confirm(`このカードには子が ${kids} 件あります。まとめて削除しますか？`)) return;
@@ -674,6 +691,11 @@ function onKey(e, store, ref, body, requestRender){
     return;
   }
   if (e.key === 'Tab'){
+    if (_openMenu === ref.id){              // この行の⋯メニューが開いている → Tab はメニューへフォーカス（インデントしない）
+      const m = (_ctx.container || document).querySelector('.card-menu');
+      const f = m && m.querySelector('button, select, input, [tabindex]');
+      if (f){ e.preventDefault(); f.focus(); return; }
+    }
     e.preventDefault();
     if (ref.id === _ctx.rootRef) return;   // ズーム/ページのタイトル（ルート）はインデント・アウトデントしない
     if (e.shiftKey){
