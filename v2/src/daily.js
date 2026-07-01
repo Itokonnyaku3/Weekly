@@ -118,14 +118,16 @@ function renderDaySection(store, day, requestRender, focusable){
   return sec;
 }
 
-function renderChildren(store, parentRefId, mountEl, depth, requestRender){
-  for (const ref of store.childRefs(parentRefId)){
+export function renderChildren(store, parentRefId, mountEl, depth, requestRender, opts){
+  const refs = (opts && opts.refs) ? opts.refs : store.childRefs(parentRefId);   // 明示 ref 指定（ミラー集約）にも対応
+  for (const ref of refs){
     const body = store.getBody(ref.bodyId);
     if (!body) continue;
     const kids = store.childRefs(ref.id);
 
     const row = document.createElement('div');
     row.className = 'card-row';
+    if (opts && opts.mirrorRoot) row.dataset.mirrorRoot = ref.id;   // ミラーのルート＝タイトル行（値=ref.id・構造編集を抑止）
     row.style.paddingLeft = (depth * IND) + 'px';
     if (depth){                                          // 祖先のドット位置に縦のガイド線（::before の背景で描画）
       const segs = [];
@@ -707,6 +709,10 @@ function onKey(e, store, ref, body, requestRender){
       const f = m && m.querySelector('button, select, input, [tabindex]');
       if (f){ e.preventDefault(); f.focus(); return; }
     }
+    const _row = el.closest && el.closest('.card-row');
+    if (_row && _row.dataset.mirrorRoot){ e.preventDefault(); return; }   // ミラーのタイトル行は構造を変えない
+    if (e.shiftKey && _ctx.container && ref.parentRefId &&                // ルート直下の子はアウトデントでルート同階層へ出さない
+        _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)){ e.preventDefault(); return; }
     e.preventDefault();
     if (ref.id === _ctx.rootRef) return;   // ズーム/ページのタイトル（ルート）はインデント・アウトデントしない
     if (e.shiftKey){
@@ -755,6 +761,8 @@ function onKey(e, store, ref, body, requestRender){
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
     e.preventDefault();                              // 兄弟内で上下に並べ替え
+    const _mr = el.closest && el.closest('.card-row');
+    if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行は移動しない（見えない実兄弟を動かさない）
     const sibs = store.siblings(ref.id);
     const i = sibs.findIndex(x => x.id === ref.id);
     const j = e.key === 'ArrowUp' ? i - 1 : i + 1;
@@ -894,6 +902,10 @@ function onBlockKey(e, store, ref, requestRender){
   }
   if (e.key === 'Tab'){                        // インデント / アウトデント
     e.preventDefault();
+    const _mr = e.currentTarget.closest && e.currentTarget.closest('.card-row');
+    if (_mr && _mr.dataset.mirrorRoot) return;   // ミラーのルート（ブロック）は構造を変えない
+    if (e.shiftKey && _ctx.container && ref.parentRefId &&
+        _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)) return;   // ルート直下は脱出させない
     if (e.shiftKey){
       const parentRef = store.getRef(ref.parentRefId); if (!parentRef) return;
       if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
@@ -906,6 +918,8 @@ function onBlockKey(e, store, ref, requestRender){
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){   // 兄弟内で上下移動
     e.preventDefault();
+    const _mr = e.currentTarget.closest && e.currentTarget.closest('.card-row');
+    if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行（ブロック）は移動しない
     const sibs = store.siblings(ref.id); const i = sibs.findIndex(x => x.id === ref.id);
     const j = e.key === 'ArrowUp' ? i - 1 : i + 1; if (j < 0 || j >= sibs.length) return;
     const oi = sibs[i].order, oj = sibs[j].order;

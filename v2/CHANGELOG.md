@@ -1,5 +1,13 @@
 # Tracker v2 — CHANGELOG
 
+## v0.54.0 — プロジェクトの割当カード集約（ミラー）（2026-07-01）
+
+- プロジェクトのノートページ下部に「📌 割当カード」セクションを追加。**そのPJタグ（`body.proj`）が付いたカードを出所の日付ごとに集約**し、**実体のフルミラー**（カード＋子ツリーを編集可能描画・編集は全ビューに反映）で列挙。各ルートに **↗（元の場所＝デイリーへ）**。
+- 仮想集約（描画時に計算・ref は作らない＝常に最新）。重複除外：そのPJのノートページ内のカード／別の対象カードの子孫は除外し、**最上位の対象カードだけ**を根に。
+- **編集境界**：各ミラーは「タイトル以下だけ」編集可能。タイトル行（ルート）で **Tab / Alt+Shift+↑↓ は構造を変えない**、ルート直下の子は **Shift+Tab でルートと同階層へ出られない**（サブツリーから脱出しない）。より深い子の整理は通常どおり。
+- 実装: `daily.js` `renderChildren` に `opts.refs`/`opts.mirrorRoot`（行に `data-mirror-root=ref.id`）＋`onKey`/`onBlockKey` の構造編集ガード、`project.js` `collectMirrorRoots`/`renderMirrorSection`、`app.js` が `jumpToCard` を渡す、`style.css` `.proj-mirror*`。仕様書 `docs/superpowers/specs/2026-07-01-project-mirror-aggregation.md`。
+- 検証: 単体 `project.mirror`（収集/重複除外/日付/day無し）＋実機evalで 表示・日付グループ・タイトル編集反映・ルートTab不変・直下子の脱出禁止・深い子の通常outdent・↗ジャンプ を確認。
+
 ## v0.53.0 — デイリーの日付区切りを強調＋日別に折りたたみ（2026-06-30）
 
 - 日付の区切りを**目立つバー**に（15px・左に4pxアクセント帯・枠＋角丸・上端に sticky で吸着）。

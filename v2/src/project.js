@@ -1,7 +1,31 @@
 // プロジェクトビュー: ランディング（PJ一覧）＋ 選択PJのノートページ。
 // ノートページは daily の renderOutlinePage を共用（編集・ナビ・@メンション・バックリンクをそのまま再利用）。
 const _q = new URL(import.meta.url).search;
-const { renderOutlinePage, focusCard } = await import('./daily.js' + _q);
+const { renderOutlinePage, renderChildren, focusCard } = await import('./daily.js' + _q);
+
+// このPJのタグが付いた「最上位」カードを出所の日付ごとに集める（ノートページ内・別対象の子孫は除外）
+export function collectMirrorRoots(store, projId, pageRootId){
+  const inPage = (refId) => { let p = refId; while (p){ if (p === pageRootId) return true; const r = store.getRef(p); p = r ? r.parentRefId : null; } return false; };
+  const hasProjAncestor = (ref) => { let p = ref.parentRefId; while (p){ const pr = store.getRef(p); if (!pr) break; const pb = store.getBody(pr.bodyId); if (pb && pb.proj === projId) return true; p = pr.parentRefId; } return false; };
+  const dayOf = (ref) => { let p = ref.id; while (p){ const r = store.getRef(p); if (!r) break; const b = store.getBody(r.bodyId); if (b && b.kind === 'day') return b.content; p = r.parentRefId; } return null; };
+  const roots = [];
+  for (const b of store.queryBodies(x => x.proj === projId && x.kind !== 'project')){
+    const ref = store.refsForBody(b.id)[0];
+    if (!ref || inPage(ref.id) || hasProjAncestor(ref)) continue;
+    roots.push({ ref, body: b, day: dayOf(ref) });
+  }
+  return roots;
+}
+// 出所の日付でグループ化（新しい日が上・出所不明は「その他」を末尾）
+function groupByDay(roots){
+  const groups = {};
+  for (const r of roots){ const k = r.day || 'その他'; (groups[k] = groups[k] || []).push(r); }
+  const keys = Object.keys(groups).sort((a, b) => {
+    if (a === 'その他') return 1; if (b === 'その他') return -1;
+    return a < b ? 1 : a > b ? -1 : 0;
+  });
+  return keys.map(k => ({ day: k, roots: groups[k] }));
+}
 
 function countDescendants(store, refId){
   let n = 0;
@@ -9,7 +33,7 @@ function countDescendants(store, refId){
   return n;
 }
 
-export function renderProjectView(store, mount, requestRender, projState){
+export function renderProjectView(store, mount, requestRender, projState, onJump){
   mount.innerHTML = '';
   const body = projState.projId ? store.getBody(projState.projId) : null;
   if (!projState.projId || !body || body.kind !== 'project'){   // 一覧（未選択／消えたPJ）
@@ -17,7 +41,7 @@ export function renderProjectView(store, mount, requestRender, projState){
     renderLanding(store, mount, requestRender, projState);
     return;
   }
-  renderPage(store, mount, requestRender, projState);
+  renderPage(store, mount, requestRender, projState, onJump);
 }
 
 function renderLanding(store, mount, requestRender, projState){
@@ -97,7 +121,7 @@ function projZoomHandlers(store, requestRender, projState, pageRootId, mount){
   };
 }
 
-function renderPage(store, mount, requestRender, projState){
+function renderPage(store, mount, requestRender, projState, onJump){
   const page = store.ensureProjectPage(projState.projId);
   const pageRootId = page.ref.id;
   let rootRefId = projState.rootRef || pageRootId;
@@ -122,5 +146,38 @@ function renderPage(store, mount, requestRender, projState){
     crumb,
     inheritProj: projState.projId,                          // ページで作るカードは所属PJを継承
     ...projZoomHandlers(store, requestRender, projState, pageRootId, mount),
+  });
+
+  // 📌 割当カード集約（PJルート表示時のみ・サブカードにズーム中は出さない）
+  if (rootRefId === pageRootId) renderMirrorSection(store, mount, requestRender, projState.projId, pageRootId, onJump);
+}
+// PJタグ付きカードのミラーを出所の日付ごとに列挙（実体を編集可能描画・全ビュー反映）
+function renderMirrorSection(store, mount, requestRender, projId, pageRootId, onJump){
+  const sec = document.createElement('div'); sec.className = 'proj-mirror';
+  const head = document.createElement('div'); head.className = 'proj-mirror-head'; head.textContent = '📌 割当カード';
+  sec.appendChild(head);
+  const roots = collectMirrorRoots(store, projId, pageRootId);
+  if (!roots.length){
+    const e = document.createElement('p'); e.className = 'proj-mirror-empty';
+    e.textContent = 'このプロジェクトのタグが付いたカードはまだありません（デイリー等で #このPJ を割り当てると集まります）。';
+    sec.appendChild(e); mount.appendChild(sec); return;
+  }
+  for (const { day, roots: rs } of groupByDay(roots)){
+    const g = document.createElement('div'); g.className = 'proj-mirror-group';
+    const dl = document.createElement('div'); dl.className = 'proj-mirror-day'; dl.textContent = day;
+    g.appendChild(dl);
+    renderChildren(store, null, g, 0, requestRender, { refs: rs.map(r => r.ref), mirrorRoot: true });
+    sec.appendChild(g);
+  }
+  mount.appendChild(sec);
+  // 各ミラールート行に「↗ 元の場所へ」
+  if (onJump) sec.querySelectorAll('.card-row[data-mirror-root]').forEach(row => {
+    const holder = row.querySelector('[data-ref]'); if (!holder) return;
+    const r = store.getRef(holder.dataset.ref); if (!r) return;
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'mirror-jump'; btn.textContent = '↗'; btn.title = '元の場所（デイリー）へ';
+    btn.addEventListener('mousedown', (e) => e.preventDefault());
+    btn.addEventListener('click', (e) => { e.stopPropagation(); onJump(r.bodyId); });
+    row.appendChild(btn);
   });
 }

@@ -257,6 +257,14 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .proj-land-name{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .proj-land-count{flex:none;font-size:11px;color:var(--tx3)}
 .proj-land-add{margin-top:10px}
+/* プロジェクトの割当カード集約（ミラー） */
+.proj-mirror{max-width:760px;margin-top:22px;border-top:2px solid var(--bd)}
+.proj-mirror-head{font-weight:700;font-size:14px;padding:10px 0 4px}
+.proj-mirror-empty{color:var(--tx3);font-size:13px;padding:4px 2px}
+.proj-mirror-day{font-size:11px;font-weight:700;color:var(--tx3);background:var(--accent-soft);border-radius:5px;padding:2px 8px;display:inline-block;margin:10px 0 2px}
+.mirror-jump{flex:none;border:none;background:none;color:var(--tx3);cursor:pointer;font-size:12px;padding:0 4px;opacity:0}
+.card-row:hover .mirror-jump,.card-row:focus-within .mirror-jump{opacity:.6}
+.mirror-jump:hover{opacity:1;color:var(--accent)}
 
 /* 表ブロック（kind:'table'）*/
 .cardtable-wrap{display:inline-block;max-width:100%;margin:2px 0}

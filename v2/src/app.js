@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.53.0';
+export const APP_VERSION = '0.54.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -115,7 +115,7 @@ function renderAll(){
     if (dv) dv.hidden = splitRight !== 'daily';
     if (pv) pv.hidden = splitRight !== 'project';
     if (lv) renderList(store, lv, renderAll, listState, zoomToCard);
-    if (splitRight === 'project' && pv) renderProjectView(store, pv, renderAll, projState);
+    if (splitRight === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
     else if (dv) renderDaily(store, dv, renderAll, jumpToMention);
     applySplitRatio();
   } else {
@@ -124,7 +124,7 @@ function renderAll(){
     if (pv) pv.hidden = currentView !== 'project';
     if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
     if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard);
-    if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState);
+    if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
   }
   document.getElementById('view-split-btn')?.classList.toggle('active', splitOn);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
