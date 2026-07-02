@@ -80,7 +80,14 @@ export function createStore(initial){
   }
   const getBody = id => S.bodies[id];
   const getRef  = id => S.refs[id];
-  function updateBody(id, patch){ const b=S.bodies[id]; if(b){ Object.assign(b, patch, {id}); emit(); } return b; }
+  function updateBody(id, patch){
+    const b = S.bodies[id]; if (!b) return b;
+    if ('done' in patch){
+      if (patch.done && !b.done) patch = { ...patch, doneAt: nowIso() };   // 未完了→完了: 完了日時を記録
+      else if (!patch.done) patch = { ...patch, doneAt: undefined };       // 完了→未完了: 記録を消去
+    }
+    Object.assign(b, patch, {id}); emit(); return b;
+  }
   function updateRef(id, patch){ const r=S.refs[id]; if(r){ Object.assign(r, patch, {id}); emit(); } return r; }
 
   function childRefs(parentRefId){

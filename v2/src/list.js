@@ -10,24 +10,37 @@ const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップア
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
 
-export function selectTasks(tasks, opts, today, projOrder){
-  const { hideDone=false, dueFilter='all', projFilter='all', sort='proj' } = opts || {};
-  let out = tasks.slice();
-  if (hideDone) out = out.filter(t => !t.done);
-  out = out.filter(t => dueMatch(t.due, dueFilter, today));
-  out = out.filter(t => projMatch(t.proj, projFilter));
-  out.sort(sortCmp(sort, projOrder || {}));
-  return out;
+// 1条件グループの既定値（全項目「すべて」＝絞り込みなし）。呼び出しごとに新しいオブジェクトを返す（状態間の共有を防ぐ）。
+function defaultGroup(){
+  return {
+    due:  { mode: 'any', from: null, to: null },
+    done: { mode: 'any', from: null, to: null },
+    proj: 'all',
+    mid:  '',
+    prio: 'all',
+  };
 }
-function dueMatch(due, filter, today){
-  if (filter === 'all')  return true;
-  if (filter === 'none') return !due;
-  if (filter === 'has')  return !!due;
-  if (!due) return false;
+function dayDiff(due, today){
+  return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
+}
+function dueGroupMatch(due, cond, today){
+  if (!cond || cond.mode === 'any') return true;
+  if (cond.mode === 'none') return !due;
+  if (!due) return false;                          // mode === 'range'
   const d = dayDiff(due, today);
-  if (filter === 'overdue') return d < 0;
-  if (filter === 'today')   return d <= 0;
-  if (filter === 'next3')   return d >= 0 && d <= 3;
+  if (cond.from != null && d < cond.from) return false;
+  if (cond.to   != null && d > cond.to)   return false;
+  return true;
+}
+function doneGroupMatch(t, cond, today){
+  if (!cond || cond.mode === 'any') return true;
+  if (cond.mode === 'notDone') return !t.done;
+  if (!t.done) return false;                       // mode === 'done'
+  if (cond.from == null && cond.to == null) return true;   // 完了日は問わない
+  if (!t.doneAt) return false;                      // 完了日時が未記録（過去に完了したタスク）
+  const d = dayDiff(t.doneAt.slice(0, 10), today);
+  if (cond.from != null && d < cond.from) return false;
+  if (cond.to   != null && d > cond.to)   return false;
   return true;
 }
 function projMatch(proj, filter){
@@ -35,8 +48,12 @@ function projMatch(proj, filter){
   if (filter === 'none') return !proj;
   return proj === filter;        // 特定PJのID
 }
-function dayDiff(due, today){
-  return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
+function groupMatch(t, g, today){
+  return dueGroupMatch(t.due, g.due, today)
+      && doneGroupMatch(t, g.done, today)
+      && projMatch(t.proj, g.proj)
+      && (!g.mid || (t.mid || '').toLowerCase().includes(g.mid.toLowerCase()))
+      && (g.prio === 'all' || String(t.prio || 0) === g.prio);
 }
 function cmpStr(x, y){ x = x||''; y = y||''; return x < y ? -1 : x > y ? 1 : 0; }
 function dueCmp(a, b){
@@ -66,6 +83,33 @@ function sortCmp(sort, projOrder){
     if (!b.due) return -1;
     return cmpStr(a.due, b.due) || (b.prio||0) - (a.prio||0);
   };
+}
+// 旧フィルタ形式（dueFilter プリセット）→ 新しい range 条件へのマッピング（保存済みビューの移行用）
+function legacyDueToGroup(dueFilter){
+  if (dueFilter === 'none')    return { mode:'none',  from:null, to:null };
+  if (dueFilter === 'has')     return { mode:'range', from:null, to:null };
+  if (dueFilter === 'overdue') return { mode:'range', from:null, to:-1 };
+  if (dueFilter === 'today')   return { mode:'range', from:null, to:0 };
+  if (dueFilter === 'next3')   return { mode:'range', from:0,    to:3 };
+  return { mode:'any', from:null, to:null };   // 'all' または未指定
+}
+// 保存済みビュー（新旧どちらの形式でも）→ 条件グループ配列。新形式はdefaultGroupで欠けたフィールドを補完するだけ。
+export function viewToGroups(v){
+  v = v || {};
+  if (v.groups && v.groups.length) return v.groups.map(g => ({ ...defaultGroup(), ...g }));
+  const g = defaultGroup();
+  g.due  = legacyDueToGroup(v.dueFilter);
+  g.done = v.hideDone ? { mode:'notDone', from:null, to:null } : { mode:'any', from:null, to:null };
+  g.proj = v.projFilter || 'all';
+  return [g];
+}
+export function selectTasks(tasks, opts, today, projOrder){
+  const groups = (opts && opts.groups && opts.groups.length) ? opts.groups : [defaultGroup()];
+  const sort = (opts && opts.sort) || 'proj';
+  const sortDir = (opts && opts.sortDir) || 'asc';
+  let cmp = sortCmp(sort, projOrder || {});
+  if (sortDir === 'desc' && sort !== 'proj'){ const base = cmp; cmp = (a, b) => -base(a, b); }
+  return tasks.filter(t => groups.some(g => groupMatch(t, g, today))).sort(cmp);
 }
 
 const PRIO_LABEL = ['なし', '低', '中', '高'];
@@ -136,7 +180,8 @@ export function renderList(store, mount, requestRender, state, onJump){
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
   const projOrder = {}; store.listProjects().forEach((p, i) => { projOrder[p.id] = i; });
-  let rows = selectTasks(all, state, today, projOrder);
+  const groups = ensureGroups(state);
+  let rows = selectTasks(all, { groups, sort: state.sort, sortDir: state.sortDir }, today, projOrder);
   if (state._focusProj != null) rows = rows.filter(t => (t.proj || '') === state._focusProj);   // プロジェクトフォーカス＝他PJを隠す
   const grouped = state.sort === 'proj';                 // プロジェクト並べ替え時だけツリー（区切り＋インデント）
   let cols = activeColumns(state);
@@ -261,8 +306,8 @@ function buildViewBar(store, requestRender, state){
     const nm = (state._draftName || '').trim();
     if (!nm){ name.focus(); return; }
     const v = store.saveView({
-      name: nm, hideDone: state.hideDone, dueFilter: state.dueFilter,
-      projFilter: state.projFilter || 'all', sort: state.sort, columns: activeColumns(state).slice(),
+      name: nm, groups: cloneGroups(ensureGroups(state)),
+      sort: state.sort, sortDir: state.sortDir || 'asc', columns: activeColumns(state).slice(),
     });
     state._viewId = v.id; state._draftName = '';
     requestRender();
@@ -280,10 +325,9 @@ function buildViewBar(store, requestRender, state){
   return bar;
 }
 function applyView(state, v){
-  state.hideDone = !!v.hideDone;
-  state.dueFilter = v.dueFilter || 'all';
-  state.projFilter = v.projFilter || 'all';
+  state.groups = cloneGroups(viewToGroups(v));   // 新旧どちらの保存形式でも読み込める（旧形式は自動でグループへ変換）
   state.sort = v.sort || 'proj';
+  state.sortDir = v.sortDir === 'desc' ? 'desc' : 'asc';
   state.columns = (v.columns && v.columns.length ? v.columns.slice() : DEFAULT_COLUMNS.slice());
   state._viewId = v.id;
 }
@@ -333,33 +377,102 @@ function buildProjectManager(store, requestRender, state){
   return det;
 }
 
+function ensureGroups(state){
+  if (!state.groups || !state.groups.length) state.groups = [defaultGroup()];
+  return state.groups;
+}
+function cloneGroups(groups){ return groups.map(g => JSON.parse(JSON.stringify(g))); }
+
+function dayRangeInputs(cond, touch, fkeyPrefix){
+  const wrap = document.createElement('span'); wrap.className = 'filter-range';
+  wrap.appendChild(document.createTextNode('今日から'));
+  const from = document.createElement('input');
+  from.type = 'number'; from.className = 'filter-range-input'; from.placeholder = '無制限';
+  from.dataset.fkey = fkeyPrefix + ':from';
+  from.value = cond.from == null ? '' : cond.from;
+  from.addEventListener('change', () => { cond.from = from.value === '' ? null : Number(from.value); touch(); });
+  wrap.appendChild(from);
+  wrap.appendChild(document.createTextNode('〜'));
+  const to = document.createElement('input');
+  to.type = 'number'; to.className = 'filter-range-input'; to.placeholder = '無制限';
+  to.dataset.fkey = fkeyPrefix + ':to';
+  to.value = cond.to == null ? '' : cond.to;
+  to.addEventListener('change', () => { cond.to = to.value === '' ? null : Number(to.value); touch(); });
+  wrap.appendChild(to);
+  wrap.appendChild(document.createTextNode('日'));
+  return wrap;
+}
+function buildGroupCard(store, groups, g, i, touch){
+  const card = document.createElement('div'); card.className = 'filter-group';
+
+  const dueRow = document.createElement('div'); dueRow.className = 'filter-group-row';
+  dueRow.appendChild(labelWrap('期限', selectEl([
+    ['any','すべて'], ['range','範囲指定'], ['none','期限なし'],
+  ], g.due.mode, v => { g.due.mode = v; touch(); }, 'g'+i+':duemode')));
+  if (g.due.mode === 'range') dueRow.appendChild(dayRangeInputs(g.due, touch, 'g'+i+':due'));
+  card.appendChild(dueRow);
+
+  const doneRow = document.createElement('div'); doneRow.className = 'filter-group-row';
+  doneRow.appendChild(labelWrap('完了', selectEl([
+    ['any','すべて'], ['notDone','未完了のみ'], ['done','完了のみ'],
+  ], g.done.mode, v => { g.done.mode = v; touch(); }, 'g'+i+':donemode')));
+  if (g.done.mode === 'done') doneRow.appendChild(dayRangeInputs(g.done, touch, 'g'+i+':done'));
+  card.appendChild(doneRow);
+
+  const row3 = document.createElement('div'); row3.className = 'filter-group-row';
+  const projOpts = [['all','すべて'], ['none','未割当'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
+  row3.appendChild(labelWrap('PJ', selectEl(projOpts, g.proj, v => { g.proj = v; touch(); }, 'g'+i+':proj')));
+  const midInp = document.createElement('input');
+  midInp.type = 'text'; midInp.placeholder = '中項目(部分一致)'; midInp.value = g.mid || ''; midInp.setAttribute('list', 'pwt2-mids');
+  midInp.dataset.fkey = 'g'+i+':mid';
+  midInp.addEventListener('change', () => { g.mid = midInp.value; touch(); });
+  row3.appendChild(midInp);
+  row3.appendChild(labelWrap('優先度', selectEl([
+    ['all','すべて'], ['0','なし'], ['1','低'], ['2','中'], ['3','高'],
+  ], g.prio, v => { g.prio = v; touch(); }, 'g'+i+':prio')));
+  card.appendChild(row3);
+
+  if (groups.length > 1){
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'filter-group-del'; del.textContent = '×'; del.title = 'この条件グループを削除';
+    del.onclick = () => { groups.splice(i, 1); touch(); };
+    card.appendChild(del);
+  }
+  return card;
+}
+function buildFilterGroups(store, state, touch){
+  const groups = ensureGroups(state);
+  const wrap = document.createElement('div'); wrap.className = 'filter-groups';
+  groups.forEach((g, i) => wrap.appendChild(buildGroupCard(store, groups, g, i, touch)));
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button'; addBtn.className = 'btn filter-add-group'; addBtn.dataset.fkey = 'addgroup';
+  addBtn.textContent = '＋ OR条件を追加';
+  addBtn.onclick = () => { groups.push(defaultGroup()); touch(); };
+  wrap.appendChild(addBtn);
+  return wrap;
+}
+
 // ── フィルタ/並べ替え/列 バー ──
 function buildControls(store, requestRender, state, shown, total){
-  const bar = document.createElement('div');
-  bar.className = 'list-controls';
+  const wrap = document.createElement('div'); wrap.className = 'list-controls-wrap';
   const touch = () => { state._viewId = null; requestRender(); };
 
-  bar.appendChild(labelWrap('期限', selectEl([
-    ['all','すべて'], ['next3','今後3日以内'], ['today','今日まで'],
-    ['overdue','期限切れ'], ['has','期限あり'], ['none','期限なし'],
-  ], state.dueFilter, v => { state.dueFilter = v; touch(); }, 'filter-due')));
+  wrap.appendChild(buildFilterGroups(store, state, touch));
 
-  const projOpts = [['all','すべて'], ['none','未割当'],
-    ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
-  bar.appendChild(labelWrap('PJ', selectEl(projOpts, state.projFilter || 'all', v => { state.projFilter = v; touch(); }, 'filter-proj')));
+  const bar = document.createElement('div');
+  bar.className = 'list-controls';
 
   bar.appendChild(labelWrap('並べ替え', selectEl([
     ['proj','プロジェクト'], ['due','期限'], ['priority','優先度'], ['created','作成日'], ['title','タイトル'],
   ], state.sort, v => { state.sort = v; touch(); }, 'sort')));
 
-  const cbWrap = document.createElement('label');
-  cbWrap.className = 'list-cb';
-  const cb = document.createElement('input');
-  cb.type = 'checkbox'; cb.checked = !!state.hideDone;
-  cb.dataset.fkey = 'hidedone';
-  cb.onchange = () => { state.hideDone = cb.checked; touch(); };
-  cbWrap.appendChild(cb); cbWrap.appendChild(document.createTextNode('完了を隠す'));
-  bar.appendChild(cbWrap);
+  const dirBtn = document.createElement('button');
+  dirBtn.type = 'button'; dirBtn.className = 'btn sort-dir-btn'; dirBtn.dataset.fkey = 'sortdir';
+  dirBtn.textContent = state.sortDir === 'desc' ? '▼ 降順' : '▲ 昇順';
+  dirBtn.disabled = state.sort === 'proj';
+  dirBtn.title = state.sort === 'proj' ? 'プロジェクト表示では階層順（昇降順の指定は不可）' : '';
+  dirBtn.onclick = () => { state.sortDir = state.sortDir === 'desc' ? 'asc' : 'desc'; touch(); };
+  bar.appendChild(dirBtn);
 
   bar.appendChild(buildColumnPicker(state, touch));
 
@@ -367,7 +480,9 @@ function buildControls(store, requestRender, state, shown, total){
   count.className = 'list-count';
   count.textContent = `${shown} / ${total} 件`;
   bar.appendChild(count);
-  return bar;
+
+  wrap.appendChild(bar);
+  return wrap;
 }
 function buildColumnPicker(state, touch){
   const det = document.createElement('details');

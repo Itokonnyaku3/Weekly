@@ -10,14 +10,14 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.54.0';
+export const APP_VERSION = '0.55.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';                            // 現在アクティブなビュー（非分割の単一表示／分割時はフォーカス中ペイン）
-const listState = { hideDone:false, dueFilter:'all', projFilter:'all', sort:'proj', columns: DEFAULT_COLUMNS.slice() };
+const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice() };
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
 
 // 画面分割（左=リスト / 右=デイリーまたはプロジェクト）。状態・幅比率・右ペイン内容・現ビューは localStorage に保存

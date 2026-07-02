@@ -166,7 +166,18 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-controls{display:flex;align-items:center;gap:14px;margin-bottom:10px;font-size:12px;flex-wrap:wrap}
 .list-field{display:flex;align-items:center;gap:5px;color:var(--tx3)}
 .list-field select,.list-table select,.list-table input[type=date]{font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
-.list-cb{display:flex;align-items:center;gap:5px;color:var(--tx3);cursor:pointer}
+/* 検索条件グループ（OR） */
+.filter-groups{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.filter-group{position:relative;display:flex;flex-direction:column;gap:6px;padding:8px 34px 8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--panel);font-size:12px}
+.filter-group-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filter-group-row input[type=text]{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx);width:140px}
+.filter-range{display:flex;align-items:center;gap:4px;color:var(--tx3)}
+.filter-range-input{width:52px;font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx)}
+.filter-group-del{position:absolute;top:6px;right:6px;width:20px;height:20px;line-height:18px;padding:0;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx3);cursor:pointer}
+.filter-group-del:hover{border-color:#d9534f;color:#d9534f}
+.filter-add-group{align-self:flex-start;font-size:12px}
+.sort-dir-btn{font-size:12px;padding:2px 9px}
+.sort-dir-btn:disabled{opacity:.4;cursor:default}
 .list-count{margin-left:auto;color:var(--tx3)}
 .list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px}
 .list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
