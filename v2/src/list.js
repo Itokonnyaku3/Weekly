@@ -203,10 +203,11 @@ function midRow(projId, mid, span, isCollapsed, onToggle){
 }
 
 // グループ末尾の「＋ タスク追加」行（proj/mid を継承して今日の日付に作成）
-function addRow(store, requestRender, proj, mid, span, today){
+function addRow(store, requestRender, proj, mid, span, today, indent){
   const tr = document.createElement('tr'); tr.className = 'list-addrow';
   const td = document.createElement('td'); td.colSpan = span;
   const btn = document.createElement('span'); btn.className = 'list-add-btn'; btn.textContent = '＋ タスク追加';
+  btn.style.marginLeft = (indent || 0) + 'px';
   btn.onclick = () => doAddTask(store, requestRender, { proj: proj || undefined, mid: mid || undefined }, today);
   td.appendChild(btn); tr.appendChild(td); return tr;
 }
@@ -265,7 +266,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         curGroup = g; curMid = undefined; skip = !!collapsed[g];
         tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
           () => { collapsed[g] = !collapsed[g]; requestRender(); }));
-        if (!skip && !projHasMid[g]) tb.appendChild(addRow(store, requestRender, g, '', cols.length, today));  // 中項目なしPJ: 見出し直下に追加行
+        if (!skip && !projHasMid[g]) tb.appendChild(addRow(store, requestRender, g, '', cols.length, today, 18));  // 中項目なしPJ: タスク行と同じ18px
       }
       if (grouped && skip) continue;                 // プロジェクト折りたたみ中はタスク行を出さない
       if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
@@ -273,7 +274,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         if (m !== curMid){
           curMid = m; midSkip = midIsColl(midColl, g, m);
           tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }));
-          if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today));  // 中項目見出し直下に追加行
+          if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today, 34));  // 中項目配下: タスク行と同じ34px
         }
       } else { midSkip = false; }
       if (midSkip) continue;                         // 中項目折りたたみ中はそのタスクを出さない
