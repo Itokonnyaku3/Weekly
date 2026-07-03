@@ -27,6 +27,13 @@ export function addTaskToday(store, { proj, mid } = {}, today){
   return store.createCard(attrs);
 }
 
+// D&Dで中項目を移動できる先か: 同一PJ内のみ許可（proj は変えない＝#1確定仕様）
+export function canDropTask(store, taskId, targetProj){
+  const b = store.getBody(taskId);
+  if (!b) return false;
+  return (b.proj || '') === (targetProj || '');
+}
+
 // 追加→再描画→新規タスクのタイトルへフォーカスして即編集。絞り込みで非表示ならトースト。
 function doAddTask(store, requestRender, ctx, today){
   const { body } = addTaskToday(store, ctx, today);
