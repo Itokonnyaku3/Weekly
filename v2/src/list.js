@@ -5,6 +5,7 @@
 
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用
+const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 
 // ── 純ロジック（テスト対象）──
 // 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
@@ -24,6 +25,15 @@ export function addTaskToday(store, { proj, mid } = {}, today){
   if (proj) attrs.proj = proj;
   if (mid)  attrs.mid  = mid;   // 明示mid＝親がdayなので#2継承は発生せずこの値が入る
   return store.createCard(attrs);
+}
+
+// 追加→再描画→新規タスクのタイトルへフォーカスして即編集。絞り込みで非表示ならトースト。
+function doAddTask(store, requestRender, ctx, today){
+  const { body } = addTaskToday(store, ctx, today);
+  requestRender();
+  const chip = document.querySelector('[data-fkey="title:' + body.id + '"]');
+  if (chip){ chip.focus(); chip.dispatchEvent(new MouseEvent('dblclick', { bubbles: true })); }
+  else showToast('タスクを追加しました（現在の絞り込みでは非表示）');
 }
 
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
@@ -192,6 +202,15 @@ function midRow(projId, mid, span, isCollapsed, onToggle){
   tr.appendChild(td); return tr;
 }
 
+// グループ末尾の「＋ タスク追加」行（proj/mid を継承して今日の日付に作成）
+function addRow(store, requestRender, proj, mid, span, today){
+  const tr = document.createElement('tr'); tr.className = 'list-addrow';
+  const td = document.createElement('td'); td.colSpan = span;
+  const btn = document.createElement('span'); btn.className = 'list-add-btn'; btn.textContent = '＋ タスク追加';
+  btn.onclick = () => doAddTask(store, requestRender, { proj: proj || undefined, mid: mid || undefined }, today);
+  td.appendChild(btn); tr.appendChild(td); return tr;
+}
+
 // ── 描画 ──
 export function renderList(store, mount, requestRender, state, onJump){
   if (onJump) _onJump = onJump;
@@ -246,6 +265,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         curGroup = g; curMid = undefined; skip = !!collapsed[g];
         tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
           () => { collapsed[g] = !collapsed[g]; requestRender(); }));
+        if (!skip && !projHasMid[g]) tb.appendChild(addRow(store, requestRender, g, '', cols.length, today));  // 中項目なしPJ: 見出し直下に追加行
       }
       if (grouped && skip) continue;                 // プロジェクト折りたたみ中はタスク行を出さない
       if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
@@ -253,6 +273,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         if (m !== curMid){
           curMid = m; midSkip = midIsColl(midColl, g, m);
           tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }));
+          if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today));  // 中項目見出し直下に追加行
         }
       } else { midSkip = false; }
       if (midSkip) continue;                         // 中項目折りたたみ中はそのタスクを出さない
@@ -266,6 +287,12 @@ export function renderList(store, mount, requestRender, state, onJump){
     }
   }
   table.appendChild(tb);
+  if (!grouped){                                     // ツリー以外の並べ替え: 上部に単一の追加バー（今日・PJ/中項目なし）
+    const bar = document.createElement('div'); bar.className = 'list-addbar';
+    const b = document.createElement('span'); b.className = 'list-add-btn'; b.textContent = '＋ タスク追加';
+    b.onclick = () => doAddTask(store, requestRender, {}, today);
+    bar.appendChild(b); mount.appendChild(bar);
+  }
   mount.appendChild(table);
 
   // 中項目の入力サジェスト（既存の中項目を候補に）
