@@ -55,6 +55,7 @@ function dropInfo(tr){
   if (tr.dataset && tr.dataset.task) return { proj: tr.dataset.proj || '', mid: tr.dataset.mid || '' };
   const head = tr.querySelector && tr.querySelector('td.nav-head');
   if (head){
+    // 見出しの種別は dataset.mid の有無で判定: midRow は必ず dataset.mid を持ち、groupRow は持たない（両者の実装がこの前提）
     if ('mid' in head.dataset) return { proj: head.dataset.proj || '', mid: head.dataset.mid || '' };  // 中項目見出し
     return { proj: head.dataset.proj || '', mid: '' };                                                 // PJ見出し(中項目なしPJ)
   }
@@ -314,22 +315,22 @@ export function renderList(store, mount, requestRender, state, onJump){
       tb.appendChild(tr);
     }
   }
-    tb.addEventListener('dragover', (e) => {
-      if (!_dragTask) return;
-      const info = dropInfo(e.target.closest && e.target.closest('tr'));
-      if (info && canDropTask(store, _dragTask.id, info.proj)){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; hiRow(e.target.closest('tr')); }
-      else { clearDropHi(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; }
-    });
-    tb.addEventListener('drop', (e) => {
-      if (!_dragTask) return;
-      const info = dropInfo(e.target.closest && e.target.closest('tr'));
-      if (info && canDropTask(store, _dragTask.id, info.proj)){
-        e.preventDefault();
-        const newMid = info.mid || undefined;
-        if ((store.getBody(_dragTask.id).mid || '') !== (newMid || '')){ store.updateBody(_dragTask.id, { mid: newMid }); requestRender(); }
-      }
-      clearDropHi();
-    });
+  tb.addEventListener('dragover', (e) => {
+    if (!_dragTask) return;
+    const info = dropInfo(e.target.closest && e.target.closest('tr'));
+    if (info && canDropTask(store, _dragTask.id, info.proj)){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; hiRow(e.target.closest('tr')); }
+    else { clearDropHi(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; }
+  });
+  tb.addEventListener('drop', (e) => {
+    if (!_dragTask) return;
+    const info = dropInfo(e.target.closest && e.target.closest('tr'));
+    if (info && canDropTask(store, _dragTask.id, info.proj)){
+      e.preventDefault();
+      const newMid = info.mid || undefined;
+      if ((store.getBody(_dragTask.id).mid || '') !== (newMid || '')){ store.updateBody(_dragTask.id, { mid: newMid }); requestRender(); }
+    }
+    clearDropHi();
+  });
   table.appendChild(tb);
   if (!grouped){                                     // ツリー以外の並べ替え: 上部に単一の追加バー（今日・PJ/中項目なし）
     const bar = document.createElement('div'); bar.className = 'list-addbar';
