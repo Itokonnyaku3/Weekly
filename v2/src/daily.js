@@ -695,13 +695,24 @@ function onKey(e, store, ref, body, requestRender){
   }
   if (e.key === 'Enter'){
     e.preventDefault();
-    store.updateBody(body.id, { content: text.slice(0, pos) });
-    const created = store.createCard({
-      kind: body.kind, content: text.slice(pos), proj: body.proj,
-      parentRefId: ref.parentRefId, order: store.orderAfter(ref.id),
-    });
-    requestRender();
-    focusCard(created.ref.id, 0);
+    const prefix = text.slice(0, pos), suffix = text.slice(pos);
+    if (!suffix){                                          // 行末: 従来どおり下に空ノードを作りそこへ（新規入力の継続）
+      store.updateBody(body.id, { content: prefix });
+      const created = store.createCard({
+        kind: body.kind, content: '', proj: body.proj,
+        parentRefId: ref.parentRefId, order: store.orderAfter(ref.id),
+      });
+      requestRender();
+      focusCard(created.ref.id, 0);
+    } else {                                               // 行頭/行中: カーソル前で新ノードを直前に作り、カーソル以降＋リンク/子は元ノードに残して下へ（Workflowy風）
+      store.updateBody(body.id, { content: suffix });
+      store.createCard({
+        kind: body.kind, content: prefix, proj: body.proj, mid: body.mid,
+        parentRefId: ref.parentRefId, order: store.orderBefore(ref.id),
+      });
+      requestRender();
+      focusCard(ref.id, 0);
+    }
     return;
   }
   if (e.key === 'Tab'){
