@@ -179,7 +179,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .sort-dir-btn{font-size:12px;padding:2px 9px}
 .sort-dir-btn:disabled{opacity:.4;cursor:default}
 .list-count{margin-left:auto;color:var(--tx3)}
-.list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px}
+.list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px;table-layout:fixed}   /* 列幅を固定（thead基準）＝タイトルが文字列で広がらない（#5）*/
 .list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
 .list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
 .list-table td:focus-within{background:var(--accent-soft)}   /* セルカーソル＝背景を少し濃く（枠は出さない）*/
@@ -225,7 +225,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table .cell-chip:hover{border-color:var(--bd2)}
 .list-table .cell-chip:focus{outline:none;border-color:var(--accent)}
 .list-table .cell-chip.none{color:var(--tx3)}
-.list-table .cell-chip.title-chip{flex:1;max-width:none;text-align:left}
+.list-table .cell-chip.title-chip{flex:1;min-width:0;max-width:100%;text-align:left}   /* 固定列内で省略表示（overflow/ellipsis は .cell-chip 継承）（#5）*/
 .row-done .title-chip{text-decoration:line-through;opacity:.5}
 .list-table .cell-chip.proj{font-weight:700}
 .list-table .cell-chip.prio-3{color:#d9534f}
