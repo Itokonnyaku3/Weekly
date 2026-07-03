@@ -34,6 +34,13 @@ export function canDropTask(store, taskId, targetProj){
   return (b.proj || '') === (targetProj || '');
 }
 
+// (proj,mid)ごとの件数マップ（#1 折りたたみ中の中項目に件数バッジを出すため）。キーは midKeyOf。
+export function midCounts(rows){
+  const m = {};
+  for (const t of rows){ const k = midKeyOf(t.proj || '', t.mid || ''); m[k] = (m[k] || 0) + 1; }
+  return m;
+}
+
 // 追加→再描画→新規タスクのタイトルへフォーカスして即編集。絞り込みで非表示ならトースト。
 function doAddTask(store, requestRender, ctx, today){
   const { body } = addTaskToday(store, ctx, today);
@@ -210,7 +217,7 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle){
   tr.appendChild(td); return tr;
 }
 // 中項目の小見出し行（PJグループの中・インデント・折りたたみトグル付き）
-function midRow(projId, mid, span, isCollapsed, onToggle){
+function midRow(projId, mid, span, isCollapsed, onToggle, count){
   const tr = document.createElement('tr'); tr.className = 'list-submid';
   const td = document.createElement('td'); td.colSpan = span;
   td.tabIndex = -1; td.classList.add('nav-head');
@@ -220,6 +227,10 @@ function midRow(projId, mid, span, isCollapsed, onToggle){
   nm.textContent = mid || '（中項目なし）';
   if (!mid) nm.classList.add('none');
   td.appendChild(tog); td.appendChild(nm);
+  if (isCollapsed && count){                       // 折りたたみ時のみ配下件数バッジ（#1）
+    const c = document.createElement('span'); c.className = 'list-submid-count'; c.textContent = '(' + count + ')';
+    td.appendChild(c);
+  }
   td.onclick = onToggle;
   td.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); onToggle(); } else navKey(e); });
   tr.appendChild(td); return tr;
@@ -281,6 +292,7 @@ export function renderList(store, mount, requestRender, state, onJump){
     const collapsed = state._collapsedGroups || (state._collapsedGroups = {});
     const counts = {}, projHasMid = {};
     if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; if (t.mid) projHasMid[g] = true; }
+    const midCnt = grouped ? midCounts(rows) : {};   // #1 中項目ごとの件数（折りたたみバッジ用）
     const midColl = state._midCollapsed || (state._midCollapsed = {});
     let curGroup, curMid, skip = false, midSkip = false;
     for (const t of rows){
@@ -296,7 +308,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         const m = t.mid || '';
         if (m !== curMid){
           curMid = m; midSkip = midIsColl(midColl, g, m);
-          tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }));
+          tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }, midCnt[midKeyOf(g, m)]));
           if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today, 34));  // 中項目配下: タスク行と同じ34px
         }
       } else { midSkip = false; }

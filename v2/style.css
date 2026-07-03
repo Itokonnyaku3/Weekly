@@ -256,6 +256,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-submid-tog{display:inline-block;width:13px;color:var(--tx3);font-size:10px;text-align:center}
 .list-submid-name{font-size:12px;font-weight:600;color:var(--tx)}
 .list-submid-name.none{font-weight:400;color:var(--tx3)}
+.list-submid-count{margin-left:6px;font-size:11px;color:var(--tx3)}
 .list-table .c-mid{width:124px}
 
 /* プロジェクトビュー（ランディング一覧）*/
