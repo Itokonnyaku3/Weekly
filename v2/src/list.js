@@ -373,6 +373,11 @@ function projFocusCrumb(store, requestRender, state){
 }
 
 // ── 保存ビュー バー（＋プロジェクト管理）──
+// リスト本体（テーブル内の先頭フォーカス可能要素）へフォーカス。#3/#4 で共用。
+export function focusListBody(){
+  const el = document.querySelector('#view-list .list-table .nav-head, #view-list .list-table .cell-chip, #view-list .list-table input, #view-list .list-table [tabindex]');
+  if (el) el.focus();
+}
 function buildViewBar(store, requestRender, state){
   const bar = document.createElement('div');
   bar.className = 'view-bar';
@@ -392,6 +397,7 @@ function buildViewBar(store, requestRender, state){
     const v = store.listViews().find(x => x.id === sel.value);
     if (v) applyView(state, v); else state._viewId = null;
     requestRender();
+    focusListBody();               // 選択後はリスト本体へフォーカスを戻す（#4）
   };
   bar.appendChild(labelWrap('ビュー', sel));
 
