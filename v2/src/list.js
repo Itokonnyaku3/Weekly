@@ -199,7 +199,13 @@ function activeColumns(state){
 }
 
 // プロジェクト区切り行（行自体に淡色＋左の色帯＋折りたたみトグル）
-function groupRow(store, projId, span, count, isCollapsed, onToggle){
+// 見出し行の右端に置く「＋ タスク追加」ボタン（行のトグルへ伝播させない）。カーソル移動の停止先にはならない。
+function addBtnInline(onAdd){
+  const btn = document.createElement('span'); btn.className = 'list-add-btn list-add-inline'; btn.textContent = '＋ タスク追加';
+  btn.onclick = (e) => { e.stopPropagation(); onAdd(); };
+  return btn;
+}
+function groupRow(store, projId, span, count, isCollapsed, onToggle, onAdd){
   const tr = document.createElement('tr'); tr.className = 'list-group';
   const td = document.createElement('td'); td.colSpan = span;
   const color = projId ? projColor(projId) : '#9aa0a6';
@@ -211,13 +217,14 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle){
   else nm.textContent = '未割当';
   td.appendChild(tog); td.appendChild(nm);
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
+  if (!isCollapsed && onAdd) td.appendChild(addBtnInline(onAdd));   // 中項目なしPJ: 見出し右端に追加ボタン
   td.tabIndex = -1; td.classList.add('nav-head'); td.dataset.fkey = 'g:' + (projId || ''); td.dataset.proj = projId || '';
   td.onclick = onToggle;
   td.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); onToggle(); } else navKey(e); });
   tr.appendChild(td); return tr;
 }
 // 中項目の小見出し行（PJグループの中・インデント・折りたたみトグル付き）
-function midRow(projId, mid, span, isCollapsed, onToggle, count){
+function midRow(projId, mid, span, isCollapsed, onToggle, count, onAdd){
   const tr = document.createElement('tr'); tr.className = 'list-submid';
   const td = document.createElement('td'); td.colSpan = span;
   td.tabIndex = -1; td.classList.add('nav-head');
@@ -231,19 +238,10 @@ function midRow(projId, mid, span, isCollapsed, onToggle, count){
     const c = document.createElement('span'); c.className = 'list-submid-count'; c.textContent = '(' + count + ')';
     td.appendChild(c);
   }
+  if (!isCollapsed && onAdd) td.appendChild(addBtnInline(onAdd));   // 見出し右端に追加ボタン（展開時のみ）
   td.onclick = onToggle;
   td.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); onToggle(); } else navKey(e); });
   tr.appendChild(td); return tr;
-}
-
-// グループ末尾の「＋ タスク追加」行（proj/mid を継承して今日の日付に作成）
-function addRow(store, requestRender, proj, mid, span, today, indent){
-  const tr = document.createElement('tr'); tr.className = 'list-addrow';
-  const td = document.createElement('td'); td.colSpan = span;
-  const btn = document.createElement('span'); btn.className = 'list-add-btn'; btn.textContent = '＋ タスク追加';
-  btn.style.marginLeft = (indent || 0) + 'px';
-  btn.onclick = () => doAddTask(store, requestRender, { proj: proj || undefined, mid: mid || undefined }, today);
-  td.appendChild(btn); tr.appendChild(td); return tr;
 }
 
 // ── 描画 ──
@@ -300,16 +298,16 @@ export function renderList(store, mount, requestRender, state, onJump){
       if (grouped && g !== curGroup){
         curGroup = g; curMid = undefined; skip = !!collapsed[g];
         tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
-          () => { collapsed[g] = !collapsed[g]; requestRender(); }));
-        if (!skip && !projHasMid[g]) tb.appendChild(addRow(store, requestRender, g, '', cols.length, today, 18));  // 中項目なしPJ: タスク行と同じ18px
+          () => { collapsed[g] = !collapsed[g]; requestRender(); },
+          !projHasMid[g] ? () => doAddTask(store, requestRender, { proj: g || undefined }, today) : null));   // 中項目なしPJのみ見出しに追加ボタン
       }
       if (grouped && skip) continue;                 // プロジェクト折りたたみ中はタスク行を出さない
       if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
         const m = t.mid || '';
         if (m !== curMid){
           curMid = m; midSkip = midIsColl(midColl, g, m);
-          tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }, midCnt[midKeyOf(g, m)]));
-          if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today, 34));  // 中項目配下: タスク行と同じ34px
+          tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }, midCnt[midKeyOf(g, m)],
+            () => doAddTask(store, requestRender, { proj: g || undefined, mid: m || undefined }, today)));   // 見出し右端に追加ボタン
         }
       } else { midSkip = false; }
       if (midSkip) continue;                         // 中項目折りたたみ中はそのタスクを出さない
