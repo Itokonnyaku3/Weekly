@@ -45,6 +45,21 @@ function doAddTask(store, requestRender, ctx, today){
 
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
+let _dragTask = null;   // D&D中のタスク {id, proj}
+let _dropHiEl = null;   // ドロップ候補のハイライト行
+function clearDropHi(){ if (_dropHiEl){ _dropHiEl.classList.remove('drop-hi'); _dropHiEl = null; } }
+function hiRow(tr){ if (_dropHiEl !== tr){ clearDropHi(); if (tr){ tr.classList.add('drop-hi'); _dropHiEl = tr; } } }
+// ドロップ先の行から所属PJ・中項目を判定（中項目見出し / PJ見出し(中項目なしPJ) / タスク行）。対象外は null。
+function dropInfo(tr){
+  if (!tr) return null;
+  if (tr.dataset && tr.dataset.task) return { proj: tr.dataset.proj || '', mid: tr.dataset.mid || '' };
+  const head = tr.querySelector && tr.querySelector('td.nav-head');
+  if (head){
+    if ('mid' in head.dataset) return { proj: head.dataset.proj || '', mid: head.dataset.mid || '' };  // 中項目見出し
+    return { proj: head.dataset.proj || '', mid: '' };                                                 // PJ見出し(中項目なしPJ)
+  }
+  return null;
+}
 
 // 1条件グループの既定値（全項目「すべて」＝絞り込みなし）。呼び出しごとに新しいオブジェクトを返す（状態間の共有を防ぐ）。
 function defaultGroup(){
@@ -291,9 +306,30 @@ export function renderList(store, mount, requestRender, state, onJump){
       if (state._sel && state._sel.has(t.id)) tr.classList.add('row-sel');   // 行選択中のハイライト
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
       if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 34 : 18) + 'px';   // ツリーのインデント
+      if (grouped){                                    // D&Dで中項目移動（同PJ内のみ）
+        tr.draggable = true;
+        tr.addEventListener('dragstart', (e) => { _dragTask = { id: t.id, proj: g }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch(_){} });
+        tr.addEventListener('dragend', () => { _dragTask = null; clearDropHi(); });
+      }
       tb.appendChild(tr);
     }
   }
+    tb.addEventListener('dragover', (e) => {
+      if (!_dragTask) return;
+      const info = dropInfo(e.target.closest && e.target.closest('tr'));
+      if (info && canDropTask(store, _dragTask.id, info.proj)){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; hiRow(e.target.closest('tr')); }
+      else { clearDropHi(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; }
+    });
+    tb.addEventListener('drop', (e) => {
+      if (!_dragTask) return;
+      const info = dropInfo(e.target.closest && e.target.closest('tr'));
+      if (info && canDropTask(store, _dragTask.id, info.proj)){
+        e.preventDefault();
+        const newMid = info.mid || undefined;
+        if ((store.getBody(_dragTask.id).mid || '') !== (newMid || '')){ store.updateBody(_dragTask.id, { mid: newMid }); requestRender(); }
+      }
+      clearDropHi();
+    });
   table.appendChild(tb);
   if (!grouped){                                     // ツリー以外の並べ替え: 上部に単一の追加バー（今日・PJ/中項目なし）
     const bar = document.createElement('div'); bar.className = 'list-addbar';

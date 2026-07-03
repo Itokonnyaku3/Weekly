@@ -343,3 +343,6 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-add-btn:hover { background: #eff6ff; }
 .list-addbar { padding: 4px 0 6px; }
 .list-addbar .list-add-btn { margin-left: 4px; }
+
+/* D&Dで中項目移動（#1） */
+.list-table tr.drop-hi > * { box-shadow: inset 0 -2px 0 #2563eb; background: #eff6ff; }
