@@ -188,10 +188,11 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
       if (body.kind === 'task' && body.done) txt.classList.add('done');
       if (body.bold) txt.classList.add('cd-bold');     // 行単位の修飾（カード全体）
       if (body.color) txt.style.color = body.color;
-      if (body.url) txt.classList.add('cd-link');
+      if (body.url){ txt.classList.add('cd-link'); txt.title = 'Ctrl+クリックで開く: ' + body.url; }
       txt.addEventListener('input', () => store.updateBody(body.id, { content: serializeEditable(txt) }));
       txt.addEventListener('keydown', (e) => onKey(e, store, ref, body, requestRender));
       txt.addEventListener('mousedown', (e) => { if (e.shiftKey){ e.preventDefault(); shiftClickSelect(store, ref.id); } else clearSelection(); });
+      txt.addEventListener('click', (e) => { if ((e.ctrlKey || e.metaKey) && body.url){ e.preventDefault(); window.open(body.url, '_blank', 'noopener'); } });   // #6 Ctrl/⌘+クリックでリンクを開く
       row.appendChild(txt);
 
       if (body.url){                                   // リンクを開く 🔗（本文は編集可のまま）
