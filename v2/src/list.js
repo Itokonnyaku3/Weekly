@@ -863,8 +863,9 @@ function collapseKey(e){
     if (kind === 'task'){
       if (hasMid(proj)){ midSetColl(midColl, proj, mid, true); requestRender(); focusHeader(proj, mid); }   // 同じ中項目を畳む→中項目見出しへ
       else { projColl[proj] = true; requestRender(); focusHeader(proj); }                            // 中項目なしPJ→PJを畳む
-    } else if (kind === 'mid'){
-      projColl[proj] = true; requestRender(); focusHeader(proj);                                     // PJ全体を畳む→PJ見出しへ
+    } else if (kind === 'mid'){                                                                      // 中項目見出し: 段階的（配下優先）
+      if (!midIsColl(midColl, proj, mid)){ midSetColl(midColl, proj, mid, true); requestRender(); focusHeader(proj, mid); }  // まず配下を畳む→中項目見出しに留まる
+      else { projColl[proj] = true; requestRender(); focusHeader(proj); }                            // 既に畳み済み→PJ全体を畳む→PJ見出しへ
     } else {                                                                                         // PJ見出し: 段階的
       if (projColl[proj]){ for (const p of allProjs()) projColl[p] = true; requestRender(); focusHeader(proj); }              // 全畳み済み→全PJ畳む
       else if (hasMid(proj) && taskVisible(proj)){ for (const m of midHeads(proj)) midSetColl(midColl, proj, m, true); requestRender(); focusHeader(proj); }  // タスク表示中→中項目のみに
