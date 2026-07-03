@@ -339,9 +339,9 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .gh-status{margin-top:10px;font-size:12px;color:var(--tx3);min-height:1.2em}
 
 /* リストからのタスク追加（#4） */
-.list-addrow > td { padding: 2px 0; }
 .list-add-btn { display: inline-block; padding: 2px 8px; font-size: 12px; color: #2563eb; cursor: pointer; border-radius: 4px; }
 .list-add-btn:hover { background: #eff6ff; }
+.list-add-inline { float: right; margin: 0 4px 0 8px; font-weight: 400; }   /* 見出し行の右端に配置（カーソル移動の停止先にはしない） */
 .list-addbar { padding: 4px 0 6px; }
 .list-addbar .list-add-btn { margin-left: 4px; }
 
