@@ -16,6 +16,16 @@ export function midsForProject(store, projId){
   )].sort();
 }
 
+// 今日の day カード直下に task を作成（グループの proj/mid を継承）。today 省略時は当日。
+export function addTaskToday(store, { proj, mid } = {}, today){
+  const date = today || new Date().toISOString().slice(0, 10);
+  const day = store.ensureDayCard(date);
+  const attrs = { kind:'task', content:'', parentRefId: day.ref.id };
+  if (proj) attrs.proj = proj;
+  if (mid)  attrs.mid  = mid;   // 明示mid＝親がdayなので#2継承は発生せずこの値が入る
+  return store.createCard(attrs);
+}
+
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
 
