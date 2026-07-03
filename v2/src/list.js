@@ -7,6 +7,15 @@ const _q = new URL(import.meta.url).search;
 const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用
 
 // ── 純ロジック（テスト対象）──
+// 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
+export function midsForProject(store, projId){
+  const want = projId || '';
+  return [...new Set(
+    store.queryBodies(b => b.kind === 'task' && (b.proj || '') === want)
+      .map(b => b.mid).filter(Boolean)
+  )].sort();
+}
+
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
 
@@ -790,9 +799,12 @@ function buildDetailFields(store, body){
   };
   const projOpts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   add('プロジェクト', selectEl(projOpts, body.proj || '', v => store.updateBody(body.id, { proj: v || undefined })));
-  const mid = document.createElement('input'); mid.type = 'text'; mid.className = 'td-input'; mid.value = body.mid || ''; mid.setAttribute('list', 'pwt2-mids');
+  const midDl = document.createElement('datalist'); midDl.id = 'pwt2-mids-' + body.id;
+  midsForProject(store, body.proj || '').forEach(m => { const o = document.createElement('option'); o.value = m; midDl.appendChild(o); });
+  const mid = document.createElement('input'); mid.type = 'text'; mid.className = 'td-input'; mid.value = body.mid || ''; mid.setAttribute('list', midDl.id);
   mid.addEventListener('change', () => store.updateBody(body.id, { mid: mid.value.trim() || undefined }));
   add('中項目', mid);
+  grid.appendChild(midDl);
   add('優先度', selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(body.prio || 0), v => store.updateBody(body.id, { prio: Number(v) })));
   const due = document.createElement('input'); due.type = 'date'; due.className = 'td-input'; due.value = body.due || '';
   due.addEventListener('change', () => store.updateBody(body.id, { due: due.value || '' }));
