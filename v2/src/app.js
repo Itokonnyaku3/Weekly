@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.58.0';
+export const APP_VERSION = '0.59.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -81,7 +81,8 @@ function restoreFocus(v){
   if (v === 'list'){
     const key = focusMem.list;
     let el = key ? document.querySelector(`#view-list [data-fkey="${(window.CSS && CSS.escape) ? CSS.escape(key) : key}"]`) : null;
-    if (!el) el = document.querySelector('#view-list .nav-head, #view-list .cell-chip, #view-list input, #view-list [tabindex]');
+    // 記憶が無い時はリスト本体（テーブル内の先頭行）にフォーカス。ビューバー/条件バーの入力は対象外（#3）
+    if (!el) el = document.querySelector('#view-list .list-table .nav-head, #view-list .list-table .cell-chip, #view-list .list-table input, #view-list .list-table [tabindex]');
     el && el.focus();
     return;
   }
