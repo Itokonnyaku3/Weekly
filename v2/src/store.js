@@ -71,6 +71,14 @@ export function createStore(initial){
     S.refs[id] = ref; emit(); return ref;
   }
   function createCard({ parentRefId=null, order=null, collapsed, gridWk, ...bodyAttrs }){
+    // 中項目の作成時継承: 明示 mid 指定が無く、親refのbodyがメモ(content非空)なら親メモ名をmidに（1回限り・以後追従しない）
+    if (bodyAttrs.mid === undefined && parentRefId){
+      const pref = S.refs[parentRefId];
+      const pbody = pref && S.bodies[pref.bodyId];
+      if (pbody && pbody.kind === 'memo' && (pbody.content || '').trim()){
+        bodyAttrs.mid = pbody.content.trim();
+      }
+    }
     const body = createBody(bodyAttrs);
     const refAttrs = { bodyId: body.id, parentRefId, order };
     if (collapsed !== undefined) refAttrs.collapsed = collapsed;

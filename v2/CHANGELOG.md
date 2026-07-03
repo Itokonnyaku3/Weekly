@@ -1,5 +1,15 @@
 # Tracker v2 — CHANGELOG
 
+## v0.56.0 — 中項目の絞込・継承／リスト追加・D&D／リンク保持コピー（2026-07-03）
+
+- **中項目候補をそのPJ内だけに限定**: 新ヘルパ `midsForProject(store, projId)` を追加し、詳細ポップアップの中項目欄（`buildDetailFields`）はそのタスクと同じPJの `mid` だけをローカル `<datalist>` で候補表示。フィルタ入力側は従来通り横断のまま。実装: `list.js`。
+- **メモ直下に作ったカードの中項目を親メモ名に**: `store.createCard` に中項目継承を一元化。明示の `mid` 指定が無く親が `kind:'memo'`（content非空）のときだけ、作成時に一度だけ `mid = 親メモのcontent` を設定（以後の編集・親のリネームには追従しない）。「＋追加」・Enterでの兄弟生成・貼り付け（`insertNodes`）の全経路が対象。実装: `store.js`。
+- **リストからタスク追加**: `addTaskToday` を追加し、各グループ末尾に「＋タスク追加」行、非ツリー時は上部バーからも追加可能。今日の日付のデイリー直下に作成し、追加直後にフォーカス。実装: `list.js`。
+- **リストでタスクをD&Dして中項目を移動**: タスク行のドラッグ＆ドロップで `mid` を変更。`canDropTask` ガードにより同一PJ内のみ許可し別PJへのドロップは拒否、「中項目なし」グループへ落とすと `mid` をクリア。実装: `list.js`。
+- **リンクを保ったコピー**: `serializeSubtree` がノードのurl等の書式を運び、`encodeClipHtml` が階層を保った入れ子 `<ul>`＋`<a href>` としてクリップボードHTMLを出力（`data-pwt2-clip` マーカーで内部貼り付け時は元データに往復復元）。`⟦id⟧` メンションは表示名に解決して出力し、`insertNodes` は貼り付け時に url/mid/bold/color を反映。実装: `clipboard.js`。
+- 仕様書 `docs/superpowers/specs/2026-07-03-tracker-v2-five-features.md`。
+- 検証: 単体テスト（`list.midsuggest` / `store.midinherit` / `list.addtask` / `list.dnd` / `clipboard.copy`）＋実機eval（#4のタスク追加とフォーカス、#1のD&D同PJ移動／別PJ拒否／mid解除）。
+
 ## v0.55.0 — リストの検索条件を拡張（条件グループ・OR）＋完了日時の記録（2026-07-01）
 
 - リストの絞り込みを**条件グループ（OR）**方式に刷新。各グループ内は**期限（今日から±N日の範囲）／完了状態＋完了日の範囲／プロジェクト／中項目（部分一致）／優先度**をAND条件として指定でき、**グループ間はOR**（どれか1つに一致すれば表示）。「＋OR条件を追加」で複数グループを組める。

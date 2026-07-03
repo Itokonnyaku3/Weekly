@@ -5,10 +5,62 @@
 
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用
+const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 
 // ── 純ロジック（テスト対象）──
+// 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
+export function midsForProject(store, projId){
+  const want = projId || '';
+  return [...new Set(
+    store.queryBodies(b => b.kind === 'task' && (b.proj || '') === want)
+      .map(b => b.mid).filter(Boolean)
+  )].sort();
+}
+
+// 今日の day カード直下に task を作成（グループの proj/mid を継承）。today 省略時は当日。
+export function addTaskToday(store, { proj, mid } = {}, today){
+  const date = today || new Date().toISOString().slice(0, 10);
+  const day = store.ensureDayCard(date);
+  const attrs = { kind:'task', content:'', parentRefId: day.ref.id };
+  if (proj) attrs.proj = proj;
+  if (mid)  attrs.mid  = mid;   // 明示mid＝親がdayなので#2継承は発生せずこの値が入る
+  return store.createCard(attrs);
+}
+
+// D&Dで中項目を移動できる先か: 同一PJ内のみ許可（proj は変えない＝#1確定仕様）
+export function canDropTask(store, taskId, targetProj){
+  const b = store.getBody(taskId);
+  if (!b) return false;
+  return (b.proj || '') === (targetProj || '');
+}
+
+// 追加→再描画→新規タスクのタイトルへフォーカスして即編集。絞り込みで非表示ならトースト。
+function doAddTask(store, requestRender, ctx, today){
+  const { body } = addTaskToday(store, ctx, today);
+  requestRender();
+  const chip = document.querySelector('[data-fkey="title:' + body.id + '"]');
+  if (chip){ chip.focus(); chip.dispatchEvent(new MouseEvent('dblclick', { bubbles: true })); }
+  else showToast('タスクを追加しました（現在の絞り込みでは非表示）');
+}
+
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
+let _dragTask = null;   // D&D中のタスク {id, proj}
+let _dropHiEl = null;   // ドロップ候補のハイライト行
+function clearDropHi(){ if (_dropHiEl){ _dropHiEl.classList.remove('drop-hi'); _dropHiEl = null; } }
+function hiRow(tr){ if (_dropHiEl !== tr){ clearDropHi(); if (tr){ tr.classList.add('drop-hi'); _dropHiEl = tr; } } }
+// ドロップ先の行から所属PJ・中項目を判定（中項目見出し / PJ見出し(中項目なしPJ) / タスク行）。対象外は null。
+function dropInfo(tr){
+  if (!tr) return null;
+  if (tr.dataset && tr.dataset.task) return { proj: tr.dataset.proj || '', mid: tr.dataset.mid || '' };
+  const head = tr.querySelector && tr.querySelector('td.nav-head');
+  if (head){
+    // 見出しの種別は dataset.mid の有無で判定: midRow は必ず dataset.mid を持ち、groupRow は持たない（両者の実装がこの前提）
+    if ('mid' in head.dataset) return { proj: head.dataset.proj || '', mid: head.dataset.mid || '' };  // 中項目見出し
+    return { proj: head.dataset.proj || '', mid: '' };                                                 // PJ見出し(中項目なしPJ)
+  }
+  return null;
+}
 
 // 1条件グループの既定値（全項目「すべて」＝絞り込みなし）。呼び出しごとに新しいオブジェクトを返す（状態間の共有を防ぐ）。
 function defaultGroup(){
@@ -173,6 +225,16 @@ function midRow(projId, mid, span, isCollapsed, onToggle){
   tr.appendChild(td); return tr;
 }
 
+// グループ末尾の「＋ タスク追加」行（proj/mid を継承して今日の日付に作成）
+function addRow(store, requestRender, proj, mid, span, today, indent){
+  const tr = document.createElement('tr'); tr.className = 'list-addrow';
+  const td = document.createElement('td'); td.colSpan = span;
+  const btn = document.createElement('span'); btn.className = 'list-add-btn'; btn.textContent = '＋ タスク追加';
+  btn.style.marginLeft = (indent || 0) + 'px';
+  btn.onclick = () => doAddTask(store, requestRender, { proj: proj || undefined, mid: mid || undefined }, today);
+  td.appendChild(btn); tr.appendChild(td); return tr;
+}
+
 // ── 描画 ──
 export function renderList(store, mount, requestRender, state, onJump){
   if (onJump) _onJump = onJump;
@@ -227,6 +289,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         curGroup = g; curMid = undefined; skip = !!collapsed[g];
         tb.appendChild(groupRow(store, g, cols.length, counts[g], !!collapsed[g],
           () => { collapsed[g] = !collapsed[g]; requestRender(); }));
+        if (!skip && !projHasMid[g]) tb.appendChild(addRow(store, requestRender, g, '', cols.length, today, 18));  // 中項目なしPJ: タスク行と同じ18px
       }
       if (grouped && skip) continue;                 // プロジェクト折りたたみ中はタスク行を出さない
       if (grouped && projHasMid[g]){                 // 中項目の小見出し（中項目を使うPJのみ）
@@ -234,6 +297,7 @@ export function renderList(store, mount, requestRender, state, onJump){
         if (m !== curMid){
           curMid = m; midSkip = midIsColl(midColl, g, m);
           tb.appendChild(midRow(g, m, cols.length, midSkip, () => { midSetColl(midColl, g, m, !midIsColl(midColl, g, m)); requestRender(); }));
+          if (!midSkip) tb.appendChild(addRow(store, requestRender, g, m, cols.length, today, 34));  // 中項目配下: タスク行と同じ34px
         }
       } else { midSkip = false; }
       if (midSkip) continue;                         // 中項目折りたたみ中はそのタスクを出さない
@@ -243,10 +307,37 @@ export function renderList(store, mount, requestRender, state, onJump){
       if (state._sel && state._sel.has(t.id)) tr.classList.add('row-sel');   // 行選択中のハイライト
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
       if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 34 : 18) + 'px';   // ツリーのインデント
+      if (grouped){                                    // D&Dで中項目移動（同PJ内のみ）
+        tr.draggable = true;
+        tr.addEventListener('dragstart', (e) => { _dragTask = { id: t.id, proj: g }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch(_){} });
+        tr.addEventListener('dragend', () => { _dragTask = null; clearDropHi(); });
+      }
       tb.appendChild(tr);
     }
   }
+  tb.addEventListener('dragover', (e) => {
+    if (!_dragTask) return;
+    const info = dropInfo(e.target.closest && e.target.closest('tr'));
+    if (info && canDropTask(store, _dragTask.id, info.proj)){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; hiRow(e.target.closest('tr')); }
+    else { clearDropHi(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'none'; }
+  });
+  tb.addEventListener('drop', (e) => {
+    if (!_dragTask) return;
+    const info = dropInfo(e.target.closest && e.target.closest('tr'));
+    if (info && canDropTask(store, _dragTask.id, info.proj)){
+      e.preventDefault();
+      const newMid = info.mid || undefined;
+      if ((store.getBody(_dragTask.id).mid || '') !== (newMid || '')){ store.updateBody(_dragTask.id, { mid: newMid }); requestRender(); }
+    }
+    clearDropHi();
+  });
   table.appendChild(tb);
+  if (!grouped){                                     // ツリー以外の並べ替え: 上部に単一の追加バー（今日・PJ/中項目なし）
+    const bar = document.createElement('div'); bar.className = 'list-addbar';
+    const b = document.createElement('span'); b.className = 'list-add-btn'; b.textContent = '＋ タスク追加';
+    b.onclick = () => doAddTask(store, requestRender, {}, today);
+    bar.appendChild(b); mount.appendChild(bar);
+  }
   mount.appendChild(table);
 
   // 中項目の入力サジェスト（既存の中項目を候補に）
@@ -790,9 +881,12 @@ function buildDetailFields(store, body){
   };
   const projOpts = [['', '—'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   add('プロジェクト', selectEl(projOpts, body.proj || '', v => store.updateBody(body.id, { proj: v || undefined })));
-  const mid = document.createElement('input'); mid.type = 'text'; mid.className = 'td-input'; mid.value = body.mid || ''; mid.setAttribute('list', 'pwt2-mids');
+  const midDl = document.createElement('datalist'); midDl.id = 'pwt2-mids-' + body.id;
+  midsForProject(store, body.proj || '').forEach(m => { const o = document.createElement('option'); o.value = m; midDl.appendChild(o); });
+  const mid = document.createElement('input'); mid.type = 'text'; mid.className = 'td-input'; mid.value = body.mid || ''; mid.setAttribute('list', midDl.id);
   mid.addEventListener('change', () => store.updateBody(body.id, { mid: mid.value.trim() || undefined }));
   add('中項目', mid);
+  grid.appendChild(midDl);
   add('優先度', selectEl(PRIO_LABEL.map((l, i) => [String(i), l]), String(body.prio || 0), v => store.updateBody(body.id, { prio: Number(v) })));
   const due = document.createElement('input'); due.type = 'date'; due.className = 'td-input'; due.value = body.due || '';
   due.addEventListener('change', () => store.updateBody(body.id, { due: due.value || '' }));

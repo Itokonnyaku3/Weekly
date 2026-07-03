@@ -7,6 +7,37 @@
 const b64enc = (s) => btoa(Array.from(new TextEncoder().encode(s), b => String.fromCharCode(b)).join(''));
 const b64dec = (b) => new TextDecoder().decode(Uint8Array.from(atob(b), c => c.charCodeAt(0)));
 const escHtml = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escAttr = (s) => escHtml(String(s)).replace(/"/g,'&quot;');
+const MENTION_RE = /⟦([^⟧]+)⟧/g;
+// ⟦id⟧ を「@表示名」に解決（day は日付・その他は content 先頭24字・不明は @?）
+function resolveMentions(store, content){
+  return String(content || '').replace(MENTION_RE, (_, id) => {
+    const b = store.getBody(id);
+    if (!b) return '@?';
+    return '@' + (b.kind === 'day' ? b.content : [...(b.content || '無題')].slice(0, 24).join(''));
+  });
+}
+// フラットな depth 列を木に組み直す
+function nodesToTree(nodes){
+  const roots = [], stack = [];
+  for (const n of nodes){
+    const item = { node: n, children: [] };
+    const d = Math.max(0, n.depth | 0);
+    if (d === 0 || !stack[d - 1]) roots.push(item); else stack[d - 1].children.push(item);
+    stack[d] = item; stack.length = d + 1;
+  }
+  return roots;
+}
+// 木を入れ子 <ul><li> に（url は <a href> 化）
+function renderItems(items){
+  let out = '<ul>';
+  for (const it of items){
+    const n = it.node, t = escHtml(n.text != null ? n.text : (n.content || ''));
+    const label = n.url ? `<a href="${escAttr(n.url)}">${t}</a>` : t;
+    out += '<li>' + label + (it.children.length ? renderItems(it.children) : '') + '</li>';
+  }
+  return out + '</ul>';
+}
 
 // ── 直列化（カード＋配下 → ノード配列＋プレーンテキスト）──
 export function serializeSubtree(store, rootRefId){
@@ -14,17 +45,25 @@ export function serializeSubtree(store, rootRefId){
   const collect = (refId, depth) => {
     const ref = store.getRef(refId); if (!ref) return;
     const b = store.getBody(ref.bodyId); if (!b) return;
-    nodes.push({ content:b.content||'', kind:b.kind||'memo', done:!!b.done, prio:b.prio||0, due:b.due||'', proj:b.proj||'', depth });
+    const node = { content:b.content||'', text: resolveMentions(store, b.content||''),
+      kind:b.kind||'memo', done:!!b.done, prio:b.prio||0, due:b.due||'', proj:b.proj||'', depth };
+    if (b.url)   node.url   = b.url;      // リンク保持（メール/アプリ内往復）
+    if (b.mid)   node.mid   = b.mid;
+    if (b.bold)  node.bold  = true;
+    if (b.color) node.color = b.color;
+    nodes.push(node);
     for (const c of store.childRefs(refId)) collect(c.id, depth + 1);
   };
   collect(rootRefId, 0);
-  const plain = nodes.map(n => '\t'.repeat(n.depth) + n.content).join('\n');
+  const plain = nodes.map(n => '\t'.repeat(n.depth) + (n.text != null ? n.text : n.content)).join('\n');
   return { nodes, plain };
 }
 
 export function encodeClipHtml(nodes, plain){
-  const b64 = b64enc(JSON.stringify(nodes));
-  return `<div data-pwt2-clip="${b64}">${escHtml(plain).replace(/\n/g,'<br>')}</div>`;
+  const b64 = b64enc(JSON.stringify(nodes));                 // マーカー=アプリ内の完全復元用（生content含む）
+  const body = nodes && nodes.length ? renderItems(nodesToTree(nodes))   // メール等=リンク/階層を保った入れ子リスト
+                                     : escHtml(plain || '').replace(/\n/g, '<br>');
+  return `<div data-pwt2-clip="${b64}">${body}</div>`;
 }
 
 // ── 解析（クリップボード → ノード配列）──
@@ -127,10 +166,14 @@ export function insertNodes(store, currentRefId, nodes){
       parentRefId = lastAtDepth[d - 1]; order = store.endOrder(parentRefId);
     }
     const attrs = { kind: n.kind || 'memo', content: n.content || '', parentRefId, order };
-    if (n.done) attrs.done = true;
-    if (n.prio) attrs.prio = n.prio;
-    if (n.due)  attrs.due  = n.due;
-    if (n.proj) attrs.proj = n.proj;
+    if (n.done)  attrs.done  = true;
+    if (n.prio)  attrs.prio  = n.prio;
+    if (n.due)   attrs.due   = n.due;
+    if (n.proj)  attrs.proj  = n.proj;
+    if (n.url)   attrs.url   = n.url;     // リンク保持
+    if (n.mid)   attrs.mid   = n.mid;     // 明示mid（#2継承より優先）
+    if (n.bold)  attrs.bold  = true;
+    if (n.color) attrs.color = n.color;
     const { ref } = store.createCard(attrs);
     if (!firstRef) firstRef = ref.id;
     lastAtDepth[d] = ref.id; lastAtDepth.length = d + 1;    // より深い層は捨てる
