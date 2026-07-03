@@ -163,6 +163,12 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 
 /* リストビュー */
+.cond-collapse{margin-bottom:8px}
+.cond-summary{cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--tx3);padding:2px 0}
+.cond-summary::-webkit-details-marker{display:none}
+.cond-summary::before{content:'▸';display:inline-block;font-size:10px;transition:transform .1s}
+.cond-collapse[open] .cond-summary::before{content:'▾'}
+.cond-summary .cond-count{color:var(--tx3)}
 .list-controls{display:flex;align-items:center;gap:14px;margin-bottom:10px;font-size:12px;flex-wrap:wrap}
 .list-field{display:flex;align-items:center;gap:5px;color:var(--tx3)}
 .list-field select,.list-table select,.list-table input[type=date]{font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}

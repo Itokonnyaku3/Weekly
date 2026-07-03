@@ -564,7 +564,17 @@ function buildControls(store, requestRender, state, shown, total){
   const wrap = document.createElement('div'); wrap.className = 'list-controls-wrap';
   const touch = () => { state._viewId = null; requestRender(); };
 
-  wrap.appendChild(buildFilterGroups(store, state, touch));
+  // 条件バー全体を折りたたみ可能に（#7）。既定は開。件数はサマリに出し、折りたたみ時も見える。
+  const det = document.createElement('details'); det.className = 'cond-collapse';
+  det.open = state._condOpen !== false;
+  det.addEventListener('toggle', () => { state._condOpen = det.open; });
+  const sum = document.createElement('summary'); sum.className = 'cond-summary';
+  sum.appendChild(document.createTextNode('条件'));
+  const count = document.createElement('span'); count.className = 'list-count cond-count'; count.textContent = `${shown} / ${total} 件`;
+  sum.appendChild(count);
+  det.appendChild(sum);
+
+  det.appendChild(buildFilterGroups(store, state, touch));
 
   const bar = document.createElement('div');
   bar.className = 'list-controls';
@@ -583,12 +593,8 @@ function buildControls(store, requestRender, state, shown, total){
 
   bar.appendChild(buildColumnPicker(state, touch));
 
-  const count = document.createElement('span');
-  count.className = 'list-count';
-  count.textContent = `${shown} / ${total} 件`;
-  bar.appendChild(count);
-
-  wrap.appendChild(bar);
+  det.appendChild(bar);
+  wrap.appendChild(det);
   return wrap;
 }
 function buildColumnPicker(state, touch){
