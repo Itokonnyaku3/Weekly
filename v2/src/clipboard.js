@@ -7,14 +7,14 @@
 const b64enc = (s) => btoa(Array.from(new TextEncoder().encode(s), b => String.fromCharCode(b)).join(''));
 const b64dec = (b) => new TextDecoder().decode(Uint8Array.from(atob(b), c => c.charCodeAt(0)));
 const escHtml = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const escAttr = (s) => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escAttr = (s) => escHtml(String(s)).replace(/"/g,'&quot;');
 const MENTION_RE = /⟦([^⟧]+)⟧/g;
 // ⟦id⟧ を「@表示名」に解決（day は日付・その他は content 先頭24字・不明は @?）
 function resolveMentions(store, content){
   return String(content || '').replace(MENTION_RE, (_, id) => {
     const b = store.getBody(id);
     if (!b) return '@?';
-    return '@' + (b.kind === 'day' ? b.content : (b.content || '無題').slice(0, 24));
+    return '@' + (b.kind === 'day' ? b.content : [...(b.content || '無題')].slice(0, 24).join(''));
   });
 }
 // フラットな depth 列を木に組み直す
