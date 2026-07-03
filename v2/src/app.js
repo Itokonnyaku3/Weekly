@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.59.0';
+export const APP_VERSION = '0.60.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -354,6 +354,10 @@ function boot(){
       if (e.code === 'Digit3'){ e.preventDefault(); selectView('project'); return; }  // プロジェクト（分割中は右をプロジェクトに）
       if (e.code === 'Digit0'){ e.preventDefault(); toggleSplit(); return; }          // 分割 ON/OFF トグル
       if (e.key === 'd' || e.key === 'D'){ e.preventDefault(); gotoDate(todayStr()); return; }   // 今日のデイリーへ
+      if (e.key === 'v' || e.key === 'V'){                                                       // リスト表示中: 保存ビュー選択欄へ（#4・選択後はリスト本体へ復帰）
+        const sel = document.querySelector('#view-list .view-select');
+        if (sel && sel.offsetParent !== null){ e.preventDefault(); sel.focus(); return; }
+      }
     }
     if ((e.ctrlKey || e.metaKey) && !e.altKey){                 // Ctrl/⌘+Z=取り消し / Ctrl/⌘+Y・Shift+Z=やり直し
       const kk = (e.key || '').toLowerCase();
