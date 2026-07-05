@@ -268,7 +268,7 @@ export function renderList(store, mount, requestRender, state, onJump){
   if (state._focusProj != null) mount.appendChild(projFocusCrumb(store, requestRender, state));   // プロジェクトフォーカス中のパンくず
 
   const table = document.createElement('table');
-  table.className = 'list-table';
+  table.className = 'list-table' + (grouped ? ' list-tree' : '');   // ツリー表示は状態列を広げてインデント分を確保（#5 重なり解消）
   const thead = document.createElement('thead');
   const htr = document.createElement('tr');
   for (const k of cols){
