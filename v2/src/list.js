@@ -51,6 +51,7 @@ function doAddTask(store, requestRender, ctx, today){
 }
 
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
+let _onOpenProject = null;   // PJ見出しで Enter → そのプロジェクトを開く（#3・app から設定）
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
 let _dragTask = null;   // D&D中のタスク {id, proj}
 let _dropHiEl = null;   // ドロップ候補のハイライト行
@@ -212,6 +213,7 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle, onAdd){
   td.style.background = color + '22';                  // 8桁hex=淡い背景
   td.style.boxShadow = 'inset 3px 0 0 ' + color;        // 左に色帯
   const tog = document.createElement('span'); tog.className = 'list-group-tog'; tog.textContent = isCollapsed ? '▸' : '▾';
+  tog.onclick = (e) => { e.stopPropagation(); onToggle(); };       // #3 折りたたみは▸/▾トグルのみ
   const nm = document.createElement('span'); nm.className = 'list-group-name';
   if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; nm.style.color = color; }
   else nm.textContent = '未割当';
@@ -219,8 +221,11 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle, onAdd){
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
   if (!isCollapsed && onAdd) td.appendChild(addBtnInline(onAdd));   // 中項目なしPJ: 見出し右端に追加ボタン
   td.tabIndex = -1; td.classList.add('nav-head'); td.dataset.fkey = 'g:' + (projId || ''); td.dataset.proj = projId || '';
-  td.onclick = onToggle;
-  td.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); onToggle(); } else navKey(e); });
+  td.onclick = () => td.focus();                                   // #3 クリックは選択（折りたたまない）
+  td.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); if (projId && _onOpenProject) _onOpenProject(projId); }   // #3 Enter=そのPJを開く
+    else navKey(e);
+  });
   tr.appendChild(td); return tr;
 }
 // 中項目の小見出し行（PJグループの中・インデント・折りたたみトグル付き）
@@ -245,8 +250,9 @@ function midRow(projId, mid, span, isCollapsed, onToggle, count, onAdd){
 }
 
 // ── 描画 ──
-export function renderList(store, mount, requestRender, state, onJump){
+export function renderList(store, mount, requestRender, state, onJump, onOpenProject){
   if (onJump) _onJump = onJump;
+  if (onOpenProject) _onOpenProject = onOpenProject;
   _listCtx = { store, requestRender, state };
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
