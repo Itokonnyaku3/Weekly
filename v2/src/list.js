@@ -329,6 +329,11 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
         tr.addEventListener('dragstart', (e) => { _dragTask = { id: t.id, proj: g }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch(_){} });
         tr.addEventListener('dragend', () => { _dragTask = null; clearDropHi(); });
       }
+      tr.addEventListener('click', () => {             // #4 クリックで行全体を選択（個別要素でなく行を選択・操作系は各自動作）
+        const sel = state._sel || (state._sel = new Set());
+        tb.querySelectorAll('tr.row-sel').forEach(r => r.classList.remove('row-sel'));
+        sel.clear(); sel.add(t.id); tr.classList.add('row-sel');
+      });
       tb.appendChild(tr);
     }
   }
