@@ -3,6 +3,30 @@
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, renderChildren, focusCard } = await import('./daily.js' + _q);
 
+// 割当カード（📌）の簡易フィルタ状態（セッション内・#6）
+let _mirrorFilter = { kw: '', hideDone: false, due: 'all' };
+let _restoreKw = false;   // キーワード入力の再フォーカス（1入力ごと）
+
+// 割当カードのルート群をフィルタ（キーワード=content部分一致 / 完了を隠す / 期限）。純ロジック（テスト対象）。
+export function filterMirrorRoots(roots, f, today){
+  const kw = (f && f.kw || '').trim().toLowerCase();
+  const due = (f && f.due) || 'all';
+  const hideDone = !!(f && f.hideDone);
+  return roots.filter(({ body }) => {
+    if (kw && !(body.content || '').toLowerCase().includes(kw)) return false;
+    if (hideDone && body.done) return false;
+    if (due !== 'all'){
+      const d = body.due || '';
+      if (due === 'has') return !!d;
+      if (!d) return false;
+      const diff = Math.round((Date.parse(d + 'T00:00:00') - Date.parse(today + 'T00:00:00')) / 86400000);
+      if (due === 'overdue' && diff >= 0) return false;
+      if (due === 'soon' && !(diff >= 0 && diff <= 7)) return false;
+    }
+    return true;
+  });
+}
+
 // このPJのタグが付いた「最上位」カードを出所の日付ごとに集める（ノートページ内・別対象の子孫は除外）
 export function collectMirrorRoots(store, projId, pageRootId){
   const inPage = (refId) => { let p = refId; while (p){ if (p === pageRootId) return true; const r = store.getRef(p); p = r ? r.parentRefId : null; } return false; };
@@ -151,15 +175,44 @@ function renderPage(store, mount, requestRender, projState, onJump){
   // 📌 割当カード集約（PJルート表示時のみ・サブカードにズーム中は出さない）
   if (rootRefId === pageRootId) renderMirrorSection(store, mount, requestRender, projState.projId, pageRootId, onJump);
 }
+// 割当カードの簡易フィルタUI（#6）。キーワードは1入力ごとにフォーカスを戻す。
+function buildMirrorFilter(requestRender){
+  const bar = document.createElement('div'); bar.className = 'proj-mirror-filter';
+  const kw = document.createElement('input');
+  kw.type = 'text'; kw.className = 'pm-filter-kw'; kw.placeholder = 'キーワード'; kw.value = _mirrorFilter.kw;
+  kw.addEventListener('input', () => { _mirrorFilter.kw = kw.value; _restoreKw = true; requestRender(); });
+  bar.appendChild(kw);
+  const chk = document.createElement('label'); chk.className = 'pm-filter-chk';
+  const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = _mirrorFilter.hideDone;
+  cb.addEventListener('change', () => { _mirrorFilter.hideDone = cb.checked; requestRender(); });
+  chk.appendChild(cb); chk.appendChild(document.createTextNode(' 完了を隠す'));
+  bar.appendChild(chk);
+  const due = document.createElement('select'); due.className = 'pm-filter-due';
+  [['all','期限:すべて'], ['has','期限あり'], ['overdue','期限切れ'], ['soon','今後7日']].forEach(([v, t]) => {
+    const o = document.createElement('option'); o.value = v; o.textContent = t; if (_mirrorFilter.due === v) o.selected = true; due.appendChild(o);
+  });
+  due.addEventListener('change', () => { _mirrorFilter.due = due.value; requestRender(); });
+  bar.appendChild(due);
+  if (_restoreKw){ _restoreKw = false; setTimeout(() => { kw.focus(); kw.selectionStart = kw.selectionEnd = kw.value.length; }, 0); }   // 入力後にフォーカスを戻す
+  return bar;
+}
 // PJタグ付きカードのミラーを出所の日付ごとに列挙（実体を編集可能描画・全ビュー反映）
 function renderMirrorSection(store, mount, requestRender, projId, pageRootId, onJump){
   const sec = document.createElement('div'); sec.className = 'proj-mirror';
   const head = document.createElement('div'); head.className = 'proj-mirror-head'; head.textContent = '📌 割当カード';
   sec.appendChild(head);
-  const roots = collectMirrorRoots(store, projId, pageRootId);
-  if (!roots.length){
+  const allRoots = collectMirrorRoots(store, projId, pageRootId);
+  if (!allRoots.length){
     const e = document.createElement('p'); e.className = 'proj-mirror-empty';
     e.textContent = 'このプロジェクトのタグが付いたカードはまだありません（デイリー等で #このPJ を割り当てると集まります）。';
+    sec.appendChild(e); mount.appendChild(sec); return;
+  }
+  sec.appendChild(buildMirrorFilter(requestRender));          // #6 簡易フィルタ（キーワード/完了を隠す/期限）
+  const today = new Date().toISOString().slice(0, 10);
+  const roots = filterMirrorRoots(allRoots, _mirrorFilter, today);
+  if (!roots.length){
+    const e = document.createElement('p'); e.className = 'proj-mirror-empty';
+    e.textContent = '条件に一致する割当カードがありません。';
     sec.appendChild(e); mount.appendChild(sec); return;
   }
   for (const { day, roots: rs } of groupByDay(roots)){

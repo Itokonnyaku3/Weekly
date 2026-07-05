@@ -280,6 +280,10 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .proj-mirror{max-width:760px;margin-top:22px;border-top:2px solid var(--bd)}
 .proj-mirror-head{font-weight:700;font-size:14px;padding:10px 0 4px}
 .proj-mirror-empty{color:var(--tx3);font-size:13px;padding:4px 2px}
+.proj-mirror-filter{display:flex;gap:12px;align-items:center;margin:2px 0 6px;font-size:12px;color:var(--tx3);flex-wrap:wrap}
+.proj-mirror-filter .pm-filter-kw{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx);min-width:140px}
+.proj-mirror-filter .pm-filter-chk{display:flex;align-items:center;gap:4px;cursor:pointer}
+.proj-mirror-filter .pm-filter-due{font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 .proj-mirror-day{font-size:11px;font-weight:700;color:var(--tx3);background:var(--accent-soft);border-radius:5px;padding:2px 8px;display:inline-block;margin:10px 0 2px}
 .mirror-jump{flex:none;border:none;background:none;color:var(--tx3);cursor:pointer;font-size:12px;padding:0 4px;opacity:0}
 .card-row:hover .mirror-jump,.card-row:focus-within .mirror-jump{opacity:.6}
