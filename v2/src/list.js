@@ -289,7 +289,8 @@ export function renderList(store, mount, requestRender, state, onJump){
   } else {
     const collapsed = state._collapsedGroups || (state._collapsedGroups = {});
     const counts = {}, projHasMid = {};
-    if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; if (t.mid) projHasMid[g] = true; }
+    // #5 中項目が全く無いPJでも「（中項目なし）」見出しを出してインデントを統一（全グループを mid あり扱い）
+    if (grouped) for (const t of rows){ const g = t.proj || ''; counts[g] = (counts[g] || 0) + 1; projHasMid[g] = true; }
     const midCnt = grouped ? midCounts(rows) : {};   // #1 中項目ごとの件数（折りたたみバッジ用）
     const midColl = state._midCollapsed || (state._midCollapsed = {});
     let curGroup, curMid, skip = false, midSkip = false;
