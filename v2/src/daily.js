@@ -629,15 +629,16 @@ function manageOutsideClose(requestRender){
 }
 
 function onKey(e, store, ref, body, requestRender){
-  // Ctrl+/ : カーソル位置に今日の日付(YYMMDD 例 260704)を挿入。IME変換中でも効くよう IMEガードより前で処理。
+  // Ctrl+/ : カーソル位置に今日の日付を【📅YYMMDD】＋半角スペースで挿入。IME変換中でも効くよう IMEガードより前で処理。
   if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key === '/'){
     e.preventDefault();
     const el0 = e.target, t = serializeEditable(el0), p = caretOffset(el0);
     const d = new Date();
     const ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
-    store.updateBody(body.id, { content: t.slice(0, p) + ymd + t.slice(p) });
+    const ins = '【📅' + ymd + '】 ';
+    store.updateBody(body.id, { content: t.slice(0, p) + ins + t.slice(p) });
     requestRender();
-    focusCard(ref.id, p + ymd.length);
+    focusCard(ref.id, p + ins.length);
     return;
   }
   if (e.isComposing || e.keyCode === 229) return; // IME変換中は素通り
@@ -994,6 +995,9 @@ function onDayHeadKey(e, store, day, requestRender){
 export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
 export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
 export function setZoom(refId){ _focusRef = refId; _focusDate = null; }   // 指定ノードにズーム（リスト↗用）
+export function getZoom(){ return _focusRef; }         // 現在のズーム根（ナビ履歴の記録用・#1）
+export function getDayFocus(){ return _focusDate; }    // 現在の日フォーカス（ナビ履歴の記録用・#1）
+export function setDayFocus(date){ _focusDate = date; _focusRef = null; }   // 日フォーカスを復元（ナビ履歴の戻る/進む・#1）
 export function setMentionJump(fn){ _mentionJump = fn; }   // @チップ/バックリンクのクリック先（app から設定）
 
 // ── @メンション検索ポップアップ ──
