@@ -628,6 +628,31 @@ function manageOutsideClose(requestRender){
   setTimeout(() => { if (_openMenu){ document.addEventListener('mousedown', _menuCloser); document.addEventListener('keydown', _menuKey, true); } }, 0);
 }
 
+// 段階的カスケード折りたたみ（#8）用: R とその子孫を {id,depth,collapsed,hasKids} で収集（R=depth0）。
+function collectSubtree(store, refId){
+  const root = store.getRef(refId);
+  const out = [{ id: refId, depth: 0, collapsed: !!(root && root.collapsed), hasKids: store.childRefs(refId).length > 0 }];
+  const walk = (rid, depth) => { for (const c of store.childRefs(rid)){ out.push({ id: c.id, depth, collapsed: !!c.collapsed, hasKids: store.childRefs(c.id).length > 0 }); walk(c.id, depth + 1); } };
+  walk(refId, 1);
+  return out;
+}
+// 「展開中で子を持つ」最深ノードを畳む（深い所から段階的に）。畳めるものが無ければ false。
+export function cascadeCollapse(store, refId){
+  const open = collectSubtree(store, refId).filter(n => n.hasKids && !n.collapsed);
+  if (!open.length) return false;
+  const maxD = Math.max(...open.map(n => n.depth));
+  for (const n of open) if (n.depth === maxD) store.updateRef(n.id, { collapsed: true });
+  return true;
+}
+// 「折りたたみ中で子を持つ」最浅ノードを開く（浅い所から段階的に）。開けるものが無ければ false。
+export function cascadeExpand(store, refId){
+  const closed = collectSubtree(store, refId).filter(n => n.hasKids && n.collapsed);
+  if (!closed.length) return false;
+  const minD = Math.min(...closed.map(n => n.depth));
+  for (const n of closed) if (n.depth === minD) store.updateRef(n.id, { collapsed: false });
+  return true;
+}
+
 function onKey(e, store, ref, body, requestRender){
   // Ctrl+/ : カーソル位置に今日の日付を【📅YYMMDD】＋半角スペースで挿入。IME変換中でも効くよう IMEガードより前で処理。
   if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key === '/'){
@@ -673,12 +698,19 @@ function onKey(e, store, ref, body, requestRender){
   // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
   if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); if (_ctx.onZoomIn) _ctx.onZoomIn(ref.id); return; }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, pos); return; }
-  // Workflowy: 折りたたみ(Ctrl+↑) / 展開(Ctrl+↓)
+  // 段階的カスケード折りたたみ(Ctrl+↑) / 展開(Ctrl+↓)（#8・リスト相当の思想をアウトラインに適用）
   if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
-    if (!store.childRefs(ref.id).length) return;
     e.preventDefault();
-    store.updateRef(ref.id, { collapsed: e.key === 'ArrowUp' });   // ↑=折りたたみ / ↓=展開
-    requestRender(); focusCard(ref.id, pos);
+    if (e.key === 'ArrowUp'){
+      if (cascadeCollapse(store, ref.id)){ requestRender(); focusCard(ref.id, pos); }
+      else {                                          // 配下を畳み切った → 親を畳んで親へフォーカス（day/PJルート直下は出ない）
+        const parent = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
+        const pb = parent && store.getBody(parent.bodyId);
+        if (parent && pb && pb.kind !== 'day' && pb.kind !== 'project'){ store.updateRef(parent.id, { collapsed: true }); requestRender(); focusCard(parent.id, -1); }
+      }
+    } else {
+      if (cascadeExpand(store, ref.id)){ requestRender(); focusCard(ref.id, pos); }
+    }
     return;
   }
 
