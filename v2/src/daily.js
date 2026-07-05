@@ -995,6 +995,9 @@ function onDayHeadKey(e, store, day, requestRender){
 export function resetZoom(){ _focusRef = null; }       // カードズーム解除（パレットからのジャンプ用）
 export function clearDayFocus(){ _focusDate = null; }  // 日フォーカス解除（ジャンプ/カレンダー用）
 export function setZoom(refId){ _focusRef = refId; _focusDate = null; }   // 指定ノードにズーム（リスト↗用）
+export function getZoom(){ return _focusRef; }         // 現在のズーム根（ナビ履歴の記録用・#1）
+export function getDayFocus(){ return _focusDate; }    // 現在の日フォーカス（ナビ履歴の記録用・#1）
+export function setDayFocus(date){ _focusDate = date; _focusRef = null; }   // 日フォーカスを復元（ナビ履歴の戻る/進む・#1）
 export function setMentionJump(fn){ _mentionJump = fn; }   // @チップ/バックリンクのクリック先（app から設定）
 
 // ── @メンション検索ポップアップ ──
