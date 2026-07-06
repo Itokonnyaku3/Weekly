@@ -323,7 +323,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
       if (t.done) tr.classList.add('row-done');
       if (state._sel && state._sel.has(t.id)) tr.classList.add('row-sel');   // 行選択中のハイライト
       for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
-      if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 34 : 18) + 'px';   // ツリーのインデント
+      if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 48 : 18) + 'px';   // ツリーのインデント（中項目より明確に深く・#3）
       if (grouped){                                    // D&Dで中項目移動（同PJ内のみ）
         tr.draggable = true;
         tr.addEventListener('dragstart', (e) => { _dragTask = { id: t.id, proj: g }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch(_){} });
