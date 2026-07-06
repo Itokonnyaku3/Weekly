@@ -81,6 +81,19 @@ function toggleDay(date, requestRender){    // 日別の折りたたみトグル
   requestRender(); focusDayHead(date);
 }
 // 1日分のセクション（日付見出し＋カード＋「＋追加」）。focusable=true で見出しクリック→その日にフォーカス
+const _WD = ['日', '月', '火', '水', '木', '金', '土'];
+// YYYY-MM-DD → 曜日サフィックス「（月）」（ローカル日付・不正な文字列は空）。#1
+function weekdaySuffix(dateStr){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || ''); if (!m) return '';
+  const d = new Date(+m[1], +m[2] - 1, +m[3]);
+  return isNaN(d) ? '' : '（' + _WD[d.getDay()] + '）';
+}
+// YYYY-MM-DD に日数を加減（ローカル日付・toISOStringのタイムゾーンずれを避けて手動整形）。#2
+function shiftDate(dateStr, delta){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || ''); if (!m) return dateStr;
+  const d = new Date(+m[1], +m[2] - 1, +m[3]); d.setDate(d.getDate() + delta);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
 function renderDaySection(store, day, requestRender, focusable){
   const dayRef = store.refsForBody(day.id).find(r => r.parentRefId === null);
   const collapsed = _collapsedDays.has(day.content);
@@ -95,7 +108,7 @@ function renderDaySection(store, day, requestRender, focusable){
   tog.className = 'day-tog'; tog.textContent = collapsed ? '▸' : '▾'; tog.title = collapsed ? '展開' : '折りたたみ';
   tog.onclick = (e) => { e.stopPropagation(); toggleDay(day.content, requestRender); };
   head.appendChild(tog);
-  const label = document.createElement('span'); label.className = 'day-head-label'; label.textContent = day.content;
+  const label = document.createElement('span'); label.className = 'day-head-label'; label.textContent = day.content + weekdaySuffix(day.content);
   head.appendChild(label);
   head.addEventListener('keydown', (e) => onDayHeadKey(e, store, day, requestRender));
   if (focusable){
@@ -1001,6 +1014,14 @@ function onDayHeadKey(e, store, day, requestRender){
     e.preventDefault();
     if (e.key === 'ArrowUp') _collapsedDays.add(day.content); else _collapsedDays.delete(day.content);
     requestRender(); focusDayHead(day.content);
+    return;
+  }
+  if (e.altKey && !e.shiftKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')){   // #2 前日/翌日へ（グローバルの履歴戻る/進むより優先）
+    e.preventDefault(); e.stopPropagation();
+    const nd = shiftDate(day.content, e.key === 'ArrowLeft' ? -1 : 1);
+    store.ensureDayCard(nd);
+    if (_focusDate) _focusDate = nd;                 // 単日フォーカス中はその日に切替
+    requestRender(); focusDayHead(nd);
     return;
   }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){
