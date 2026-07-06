@@ -1016,8 +1016,8 @@ function onDayHeadKey(e, store, day, requestRender){
     requestRender(); focusDayHead(day.content);
     return;
   }
-  if (e.altKey && !e.shiftKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')){   // #2 前日/翌日へ（グローバルの履歴戻る/進むより優先）
-    e.preventDefault(); e.stopPropagation();
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')){   // Ctrl+←/→ 前日/翌日へ（Alt+←/→ は履歴なので別キーに）
+    e.preventDefault();
     const nd = shiftDate(day.content, e.key === 'ArrowLeft' ? -1 : 1);
     store.ensureDayCard(nd);
     if (_focusDate) _focusDate = nd;                 // 単日フォーカス中はその日に切替
