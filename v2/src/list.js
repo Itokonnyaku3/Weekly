@@ -329,10 +329,10 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
         tr.addEventListener('dragstart', (e) => { _dragTask = { id: t.id, proj: g }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', t.id); } catch(_){} });
         tr.addEventListener('dragend', () => { _dragTask = null; clearDropHi(); });
       }
-      tr.addEventListener('click', () => {             // #4 クリックで行全体を選択（個別要素でなく行を選択・操作系は各自動作）
-        const sel = state._sel || (state._sel = new Set());
-        tb.querySelectorAll('tr.row-sel').forEach(r => r.classList.remove('row-sel'));
-        sel.clear(); sel.add(t.id); tr.classList.add('row-sel');
+      tr.addEventListener('click', (e) => {            // クリックで行を選択（タイトルにフォーカス→ tr:focus-within で行全体ハイライト）
+        if (e.target.closest('.list-title')) return;   // 編集中の入力からはフォーカスを奪わない
+        clearListSel(tb);                              // 明示的な複数選択は解除
+        const chip = tr.querySelector('.title-chip'); if (chip) chip.focus();
       });
       tb.appendChild(tr);
     }
@@ -685,16 +685,12 @@ function cellTitle(store, requestRender, t){
   wrap.appendChild(jump); wrap.appendChild(chip);
   td.appendChild(wrap); return td;
 }
-// 表示専用チップ: クリック / Alt+Enter で詳細ポップアップを開く（直接編集はしない）。矢印はセルカーソル移動。
-function displayChip({ text, muted, color, cls, fkey, col, taskId }){
+// 表示専用チップ（#行選択: 個別フォーカス/クリック選択なし・純粋な表示）。優先度/期限等の編集は行を選択して Enter→詳細で。
+function displayChip({ text, muted, color, cls }){
   const chip = document.createElement('span');
-  chip.className = 'cell-chip cell-open' + (muted ? ' none' : '') + (cls ? ' ' + cls : '');
-  chip.tabIndex = 0; if (fkey) chip.dataset.fkey = fkey; if (col) chip.dataset.col = col;
+  chip.className = 'cell-chip' + (muted ? ' none' : '') + (cls ? ' ' + cls : '');
   chip.textContent = text;
   if (color) chip.style.color = color;
-  chip.title = 'クリック / Alt+Enter で詳細';
-  chip.addEventListener('click', () => { if (_listCtx) openTaskDetail(_listCtx.store, taskId, _listCtx.requestRender); });
-  chip.addEventListener('keydown', navKey);     // Alt+Enter=詳細 / 矢印=カーソル移動（navKey 内で処理）
   return chip;
 }
 function cellProject(store, requestRender, t){

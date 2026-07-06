@@ -10,7 +10,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.75.0';
+export const APP_VERSION = '0.76.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -168,6 +168,20 @@ function renderAll(){
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
   document.getElementById('view-proj-btn')?.classList.toggle('active', currentView === 'project');
   persistView();
+  ensureViewFocus();               // どのビューでもキー操作用フォーカスを失わない安全網
+}
+// フォーカスが app 外（body等）へ落ちていたら、現在ビューの先頭要素へ戻す。編集中など app 内に在れば何もしない。
+function focusActiveViewFirst(){
+  const id = currentView === 'list' ? 'view-list' : (currentView === 'project' ? 'view-project' : 'view-daily');
+  const cont = document.getElementById(id); if (!cont || cont.hidden) return;
+  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .card-add, .proj-land-add, button, [tabindex]');
+  if (el) el.focus();
+}
+function ensureViewFocus(){
+  setTimeout(() => {
+    const ae = document.activeElement;
+    if (!ae || ae === document.body || !(ae.closest && ae.closest('#app'))) focusActiveViewFirst();
+  }, 0);
 }
 
 function addToday(){
