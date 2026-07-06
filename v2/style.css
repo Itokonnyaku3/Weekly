@@ -192,7 +192,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table .nav-head{cursor:pointer}
 .list-table tr.row-sel>td{background:var(--accent-soft)}   /* 行選択ハイライト（複数行削除用）*/
 .list-table .c-st{width:28px}
-.list-table.list-tree .c-st{width:56px}   /* ツリー表示: 中項目インデント(34px)＋チェックボックスが列内に収まる幅（#5 重なり解消）*/
+.list-table.list-tree .c-st{width:70px}   /* ツリー表示: タスクインデント(48px)＋チェックボックスが列内に収まる幅（#5/#3）*/
 .list-table .c-prio{width:84px}
 .list-table .c-due{width:150px}
 .c-title-wrap{display:flex;align-items:center;gap:4px}
@@ -245,7 +245,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-group-name{font-weight:700;font-size:12px}
 .list-group-count{color:var(--tx3);font-size:11px;margin-left:7px}
 /* 中項目（WBSの中間レベル）小見出し＋入力 */
-.list-table tr.list-submid td{padding:5px 8px 2px 22px}
+.list-table tr.list-submid td{padding:5px 8px 2px 26px}   /* 中項目見出しはプロジェクトより右・タスクより左（#3）*/
 .cell-chip.cell-open{cursor:pointer}
 /* タスク詳細ポップアップ（属性編集＋本文ミラー） */
 .td-overlay{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.34);display:flex;align-items:flex-start;justify-content:center;padding:7vh 16px}
