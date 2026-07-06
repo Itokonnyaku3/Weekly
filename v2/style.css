@@ -188,7 +188,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px;table-layout:fixed}   /* 列幅を固定（thead基準）＝タイトルが文字列で広がらない（#5）*/
 .list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
 .list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
-.list-table td:focus-within{background:var(--accent-soft)}   /* セルカーソル＝背景を少し濃く（枠は出さない）*/
+.list-table tbody tr:focus-within > td{background:var(--accent-soft)}   /* 行選択＝行全体を反転（タイトルにフォーカスが乗ると行全体）*/
 .list-table .nav-head{cursor:pointer}
 .list-table tr.row-sel>td{background:var(--accent-soft)}   /* 行選択ハイライト（複数行削除用）*/
 .list-table .c-st{width:28px}
@@ -230,7 +230,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 /* プロジェクトセル: 通常は色付き太字テキスト（chip）。クリック/Enter で select に変身して編集 */
 .list-table .cell-chip{display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;cursor:pointer;padding:2px 5px;border:1px solid transparent;border-radius:5px}
 .list-table .cell-chip:hover{border-color:var(--bd2)}
-.list-table .cell-chip:focus{outline:none;border-color:var(--accent)}
+.list-table .cell-chip:focus{outline:none;border-color:transparent}   /* 行選択なのでチップ枠は出さない（行全体ハイライトで示す）*/
 .list-table .cell-chip.none{color:var(--tx3)}
 .list-table .cell-chip.title-chip{flex:1;min-width:0;max-width:100%;text-align:left}   /* 固定列内で省略表示（overflow/ellipsis は .cell-chip 継承）（#5）*/
 .row-done .title-chip{text-decoration:line-through;opacity:.5}
