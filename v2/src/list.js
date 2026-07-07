@@ -83,7 +83,7 @@ function defaultGroup(){
 function dayDiff(due, today){
   return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
 }
-function dueGroupMatch(due, cond, today){
+export function dueGroupMatch(due, cond, today){
   if (!cond || cond.mode === 'any') return true;
   if (cond.mode === 'none') return !due;
   if (!due) return false;                          // mode === 'range'
@@ -103,7 +103,7 @@ function doneGroupMatch(t, cond, today){
   if (cond.to   != null && d > cond.to)   return false;
   return true;
 }
-function projMatch(proj, filter){
+export function projMatch(proj, filter){
   if (filter === 'all')  return true;
   if (filter === 'none') return !proj;
   return proj === filter;        // 特定PJのID
