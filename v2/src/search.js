@@ -64,6 +64,7 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
   bar.appendChild(labelWrap('完了', selectEl([['any','すべて'], ['notDone','未完了'], ['done','完了']], (q.done && q.done.mode) || 'any', v => { q.done = { mode: v }; requestRender(); })));
   bar.appendChild(labelWrap('優先度', selectEl([['all','すべて'], ['3','高'], ['2','中'], ['1','低'], ['0','なし']], q.prio || 'all', v => { q.prio = v; requestRender(); })));
   mount.appendChild(bar);
+  mount.appendChild(buildSavedBar(store, requestRender, state));   // 保存検索（保存/読込/上書き/削除）
 
   const roots = runQuery(store, q, today);
   const cnt = document.createElement('div'); cnt.className = 'search-count'; cnt.textContent = roots.length + ' 件';
@@ -93,6 +94,40 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
   }
   if (state._refocus){ const el = mount.querySelector(state._refocus === 'kw' ? '.search-kw' : '.search-tags'); state._refocus = null; if (el){ el.focus(); el.selectionStart = el.selectionEnd = el.value.length; } }
 }
+// 保存検索バー: 読込 select ＋ 名前＋保存／（選択中は）上書き・削除
+function buildSavedBar(store, requestRender, state){
+  const bar = document.createElement('div'); bar.className = 'search-saved';
+  const saved = store.listViews().filter(v => v.kind === 'search');
+  const sel = document.createElement('select'); sel.className = 'search-load';
+  const cur = document.createElement('option'); cur.value = ''; cur.textContent = '（保存した検索）'; sel.appendChild(cur);
+  saved.forEach(v => { const o = document.createElement('option'); o.value = v.id; o.textContent = v.name; if (state._savedId === v.id) o.selected = true; sel.appendChild(o); });
+  sel.addEventListener('change', () => {
+    const v = saved.find(x => x.id === sel.value);
+    if (v){ state.query = cloneQuery(v.query); state._savedId = v.id; } else { state._savedId = null; }
+    requestRender();
+  });
+  bar.appendChild(sel);
+  const name = document.createElement('input'); name.type = 'text'; name.className = 'search-name'; name.placeholder = '検索名'; name.value = state._draftName || '';
+  name.addEventListener('input', () => { state._draftName = name.value; });
+  bar.appendChild(name);
+  const save = document.createElement('button'); save.type = 'button'; save.className = 'btn'; save.textContent = '保存';
+  save.onclick = () => {
+    const nm = (state._draftName || '').trim(); if (!nm){ name.focus(); return; }
+    const v = store.saveView({ kind:'search', name: nm, query: cloneQuery(state.query) });
+    state._savedId = v.id; state._draftName = ''; requestRender();
+  };
+  bar.appendChild(save);
+  if (state._savedId){
+    const over = document.createElement('button'); over.type = 'button'; over.className = 'btn'; over.textContent = '上書き';
+    over.onclick = () => { store.updateView(state._savedId, { query: cloneQuery(state.query) }); requestRender(); };
+    bar.appendChild(over);
+    const del = document.createElement('button'); del.type = 'button'; del.className = 'btn'; del.textContent = '削除';
+    del.onclick = () => { store.deleteView(state._savedId); state._savedId = null; requestRender(); };
+    bar.appendChild(del);
+  }
+  return bar;
+}
+function cloneQuery(q){ return JSON.parse(JSON.stringify(q || {})); }
 function labelWrap(label, control){ const f = document.createElement('label'); f.className = 'search-field'; f.appendChild(document.createTextNode(label)); f.appendChild(control); return f; }
 function selectEl(opts, val, onChange){ const s = document.createElement('select'); opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if (v === val) o.selected = true; s.appendChild(o); }); s.addEventListener('change', () => onChange(s.value)); return s; }
 function duePreset(due){ if (!due || due.mode === 'any') return 'any'; if (due.mode === 'none') return 'none'; if (due.to === -1 && due.from == null) return 'overdue'; if (due.from === 0 && due.to === 0) return 'today'; if (due.from === 0 && due.to === 7) return 'soon'; return 'any'; }
