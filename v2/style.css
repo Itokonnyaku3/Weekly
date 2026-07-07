@@ -187,7 +187,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-field select,.list-table select,.list-table input[type=date]{font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 /* 検索条件グループ（OR） */
 .filter-groups{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
-.filter-group{position:relative;display:flex;flex-direction:column;gap:6px;padding:8px 34px 8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--panel);font-size:12px}
+.filter-group{position:relative;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:6px 34px 6px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--panel);font-size:12px}
 .filter-group-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .filter-group-row input[type=text]{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx);width:140px}
 .filter-range{display:flex;align-items:center;gap:4px;color:var(--tx3)}
@@ -221,6 +221,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .view-bar .view-select{min-width:150px}
 .view-bar .view-name{width:120px}
 .view-bar .btn{padding:2px 9px}
+.view-subtask-toggle{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--tx3);cursor:pointer;white-space:nowrap}
+.title-subcount{margin-left:3px;font-size:11px;color:var(--tx3);user-select:none}
 /* 列ピッカー */
 .col-picker{position:relative}
 .col-picker>summary{cursor:pointer;list-style:none;border:1px solid var(--bd2);border-radius:5px;padding:2px 8px;color:var(--tx3)}

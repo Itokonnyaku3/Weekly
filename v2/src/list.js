@@ -34,6 +34,56 @@ export function canDropTask(store, taskId, targetProj){
   return (b.proj || '') === (targetProj || '');
 }
 
+// サブタスク索引を全ref 1パス（＋メモ化した部分木走査）で構築。
+//  subtaskIds: 祖先のどこかにタスクを持つ task カードの bodyId 集合（＝サブタスク）。
+//  descCount : 各カード bodyId → 配下（子孫）の task カード総数（重複bodyは1回）。> 0 のみ格納。
+// カードは複数refを持ちうるため、いずれかのrefが条件を満たせば subtask 扱い（bodyId で集約）。
+export function subtaskIndex(store){
+  const refs = store.allRefs();
+  const childrenByParent = new Map();        // parentRefId(null=ルート) -> [ref]
+  const refsByBody = new Map();              // bodyId -> [ref]
+  for (const r of refs){
+    const k = r.parentRefId || null;
+    if (!childrenByParent.has(k)) childrenByParent.set(k, []);
+    childrenByParent.get(k).push(r);
+    if (!refsByBody.has(r.bodyId)) refsByBody.set(r.bodyId, []);
+    refsByBody.get(r.bodyId).push(r);
+  }
+  const isTaskRef = (r) => { const b = store.getBody(r.bodyId); return !!b && b.kind === 'task'; };
+
+  // subtaskIds: ルートから辿り「祖先にタスクがあるか」を伝播（祖先タスク＋自分がタスク＝サブタスク）
+  const subtaskIds = new Set();
+  const markDown = (parentRefId, ancestorHasTask) => {
+    for (const r of (childrenByParent.get(parentRefId) || [])){
+      const thisIsTask = isTaskRef(r);
+      if (ancestorHasTask && thisIsTask) subtaskIds.add(r.bodyId);
+      markDown(r.id, ancestorHasTask || thisIsTask);
+    }
+  };
+  markDown(null, false);
+
+  // 各refの配下子孫タスク bodyId 集合（メモ化）→ body 単位に集約して件数化
+  const memo = new Map();
+  const subtreeTasks = (refId) => {
+    if (memo.has(refId)) return memo.get(refId);
+    const acc = new Set();
+    for (const r of (childrenByParent.get(refId) || [])){
+      if (isTaskRef(r)) acc.add(r.bodyId);
+      for (const b of subtreeTasks(r.id)) acc.add(b);
+    }
+    memo.set(refId, acc);
+    return acc;
+  };
+  const descCount = new Map();
+  for (const [bodyId, rs] of refsByBody){
+    const acc = new Set();
+    for (const r of rs) for (const b of subtreeTasks(r.id)) acc.add(b);
+    acc.delete(bodyId);                      // 念のため自分自身は除外
+    if (acc.size) descCount.set(bodyId, acc.size);
+  }
+  return { subtaskIds, descCount };
+}
+
 // (proj,mid)ごとの件数マップ（#1 折りたたみ中の中項目に件数バッジを出すため）。キーは midKeyOf。
 export function midCounts(rows){
   const m = {};
@@ -256,9 +306,12 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   _listCtx = { store, requestRender, state };
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
+  const { subtaskIds, descCount } = subtaskIndex(store);   // サブタスク判定＋配下タスク数（バッジ用）
+  _listCtx.descCount = descCount;                          // cellTitle が （n）表示に参照
   const projOrder = {}; store.listProjects().forEach((p, i) => { projOrder[p.id] = i; });
   const groups = ensureGroups(state);
   let rows = selectTasks(all, { groups, sort: state.sort, sortDir: state.sortDir }, today, projOrder);
+  if (!state._showSubtasks) rows = rows.filter(t => !subtaskIds.has(t.id));   // 既定=サブタスク非表示
   if (state._focusProj != null) rows = rows.filter(t => (t.proj || '') === state._focusProj);   // プロジェクトフォーカス＝他PJを隠す
   const grouped = state.sort === 'proj';                 // プロジェクト並べ替え時だけツリー（区切り＋インデント）
   let cols = activeColumns(state);
@@ -427,6 +480,7 @@ function buildViewBar(store, requestRender, state){
     const v = store.saveView({
       name: nm, groups: cloneGroups(ensureGroups(state)),
       sort: state.sort, sortDir: state.sortDir || 'asc', columns: activeColumns(state).slice(),
+      showSubtasks: !!state._showSubtasks,
     });
     state._viewId = v.id; state._draftName = '';
     requestRender();
@@ -441,6 +495,16 @@ function buildViewBar(store, requestRender, state){
   }
 
   bar.appendChild(buildProjectManager(store, requestRender, state));
+
+  // サブタスク表示トグル（バー右端・既定=非表示）。件数はタイトルの（n）バッジで常に分かる。
+  const subLab = document.createElement('label');
+  subLab.className = 'view-subtask-toggle';
+  const subCb = document.createElement('input');
+  subCb.type = 'checkbox'; subCb.checked = !!state._showSubtasks; subCb.dataset.fkey = 'showsubtasks';
+  subCb.onchange = () => { state._showSubtasks = subCb.checked; state._viewId = null; requestRender(); };
+  subLab.appendChild(subCb);
+  subLab.appendChild(document.createTextNode(' サブタスクを表示'));
+  bar.appendChild(subLab);
   return bar;
 }
 function applyView(state, v){
@@ -448,6 +512,7 @@ function applyView(state, v){
   state.sort = v.sort || 'proj';
   state.sortDir = v.sortDir === 'desc' ? 'desc' : 'asc';
   state.columns = (v.columns && v.columns.length ? v.columns.slice() : DEFAULT_COLUMNS.slice());
+  state._showSubtasks = !!v.showSubtasks;   // 旧ビューは未定義→false（非表示）＝望ましい既定
   state._viewId = v.id;
 }
 
@@ -683,6 +748,8 @@ function cellTitle(store, requestRender, t){
   });
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
   wrap.appendChild(jump); wrap.appendChild(chip);
+  const sub = _listCtx && _listCtx.descCount && _listCtx.descCount.get(t.id);   // 配下タスク数（>0のとき常に表示・編集不可）
+  if (sub){ const badge = document.createElement('span'); badge.className = 'title-subcount'; badge.textContent = '（' + sub + '）'; badge.title = 'サブタスク ' + sub + ' 件'; wrap.appendChild(badge); }
   td.appendChild(wrap); return td;
 }
 // 表示専用チップ（#行選択: 個別フォーカス/クリック選択なし・純粋な表示）。優先度/期限等の編集は行を選択して Enter→詳細で。
