@@ -770,6 +770,19 @@ function onKey(e, store, ref, body, requestRender){
     return;
   }
 
+  if (e.key === '#' && !e.ctrlKey && !e.metaKey && !e.altKey){   // # で既存タグをインクリメンタル候補（Escは # をそのまま入力）
+    e.preventDefault();
+    const at = pos;
+    openTagSearch(store, el, (tag) => {
+      const cur = store.getBody(body.id).content || '';
+      const ins = tag ? '#' + tag + ' ' : '#';
+      store.updateBody(body.id, { content: cur.slice(0, at) + ins + cur.slice(at) });
+      requestRender();
+      focusCard(ref.id, at + ins.length);
+    });
+    return;
+  }
+
   // ズーム: Alt+↓ で潜る / Alt+↑ で出る（出たあとも同じカードにフォーカスを残す）
   if (e.altKey && !e.shiftKey && e.key === 'ArrowDown'){ e.preventDefault(); if (_ctx.onZoomIn) _ctx.onZoomIn(ref.id); return; }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, pos); return; }
@@ -942,15 +955,42 @@ function makeChip(targetId, store){
   sp.addEventListener('mousedown', (e) => { e.preventDefault(); if (_mentionJump) _mentionJump(targetId); });
   return sp;
 }
+// タグ: 本文中の #語（空白まで・日本語可）を色チップ表示。textContent は "#語" のままなので直列化/caret は既存機構で正しく往復。
+const TAG_RE = /#([^\s#⟦⟧]+)/g;
+function makeTagChip(tag){
+  const sp = document.createElement('span');
+  sp.className = 'tag'; sp.contentEditable = 'false'; sp.dataset.tag = tag;
+  sp.textContent = '#' + tag;
+  return sp;
+}
+// メンション間のテキストを #タグ で分割し、テキストノード＋タグチップとして追加
+function appendTextWithTags(el, text){
+  let last = 0, m; TAG_RE.lastIndex = 0;
+  while ((m = TAG_RE.exec(text))){
+    if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+    el.appendChild(makeTagChip(m[1]));
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+}
 function fillEditable(el, content, store){
   el.textContent = '';
   let last = 0, m; MENTION_RE.lastIndex = 0;
   while ((m = MENTION_RE.exec(content))){
-    if (m.index > last) el.appendChild(document.createTextNode(content.slice(last, m.index)));
+    if (m.index > last) appendTextWithTags(el, content.slice(last, m.index));
     el.appendChild(makeChip(m[1], store));
     last = m.index + m[0].length;
   }
-  if (last < content.length) el.appendChild(document.createTextNode(content.slice(last)));
+  if (last < content.length) appendTextWithTags(el, content.slice(last));
+}
+// 今存在するタグ（全カード本文を走査したユニーク集合）。0件になったタグは自然に出ない。
+function collectTags(store){
+  const set = new Set();
+  for (const b of store.queryBodies(() => true)){
+    const c = b.content || ''; let m; TAG_RE.lastIndex = 0;
+    while ((m = TAG_RE.exec(c))) set.add(m[1]);
+  }
+  return [...set].sort((a, b) => a.localeCompare(b, 'ja'));
 }
 export function serializeEditable(el){
   let out = '';
@@ -1158,6 +1198,54 @@ function openMentionSearch(store, anchorEl, onPick){
   const render = () => {
     list.innerHTML = '';
     if (!items.length){ const e = document.createElement('div'); e.className = 'mention-empty'; e.textContent = 'カード名 / 2026-06-25 / 6/25 / 今日'; list.appendChild(e); return; }
+    items.forEach((it, i) => {
+      const el = document.createElement('div'); el.className = 'mention-item' + (i === si ? ' sel' : '');
+      const lab = document.createElement('span'); lab.textContent = it.label; el.appendChild(lab);
+      if (it.hint){ const h = document.createElement('span'); h.className = 'mention-hint'; h.textContent = it.hint; el.appendChild(h); }
+      el.onmousedown = (ev) => { ev.preventDefault(); exec(it); };
+      list.appendChild(el);
+    });
+    const s = list.querySelector('.mention-item.sel'); if (s) s.scrollIntoView({ block: 'nearest' });
+  };
+  const update = () => { items = compute(input.value); si = 0; render(); };
+  input.addEventListener('input', update);
+  input.addEventListener('keydown', (e) => {
+    if (e.isComposing) return;
+    if (e.key === 'ArrowDown'){ e.preventDefault(); si = Math.min(si + 1, items.length - 1); render(); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); si = Math.max(si - 1, 0); render(); }
+    else if (e.key === 'Enter'){ e.preventDefault(); if (items[si]) exec(items[si]); }
+    else if (e.key === 'Escape'){ e.preventDefault(); closeMention(); onPick(null); }
+  });
+  update(); input.focus();
+  _mCloser = (e) => { if (!e.target.closest('.mention-pop')) closeMention(); };
+  setTimeout(() => { if (_mCloser) document.addEventListener('mousedown', _mCloser); }, 0);
+}
+// ── #タグ検索ポップアップ（既存タグをインクリメンタル候補・無ければ新規挿入）──
+function openTagSearch(store, anchorEl, onPick){
+  closeMention();
+  const panel = document.createElement('div'); panel.className = 'mention-pop';
+  const input = document.createElement('input'); input.className = 'mention-input'; input.type = 'text'; input.placeholder = '# タグ'; input.spellcheck = false;
+  const list = document.createElement('div'); list.className = 'mention-list';
+  panel.appendChild(input); panel.appendChild(list); document.body.appendChild(panel); _mPanel = panel;
+  const sel = window.getSelection();
+  let rect = sel.rangeCount ? sel.getRangeAt(0).getBoundingClientRect() : null;
+  if (!rect || (!rect.top && !rect.left)) rect = anchorEl.getBoundingClientRect();
+  panel.style.left = Math.round(rect.left) + 'px'; panel.style.top = Math.round(rect.bottom + 4) + 'px';
+
+  const allTags = collectTags(store);
+  let items = [], si = 0;
+  const compute = (q) => {
+    const clean = q.trim().replace(/[\s#⟦⟧]/g, '');
+    const ql = clean.toLowerCase();
+    const out = allTags.filter(t => !ql || t.toLowerCase().includes(ql)).slice(0, 20)
+      .map(t => ({ label: '#' + t, run: () => onPick(t) }));
+    if (clean && !allTags.some(t => t.toLowerCase() === ql)) out.unshift({ label: '＋ 新規: #' + clean, hint: '新規', run: () => onPick(clean) });
+    return out;
+  };
+  const exec = (it) => { closeMention(); it.run(); };
+  const render = () => {
+    list.innerHTML = '';
+    if (!items.length){ const e = document.createElement('div'); e.className = 'mention-empty'; e.textContent = allTags.length ? 'タグを絞り込み' : 'タグ名を入力して新規作成'; list.appendChild(e); return; }
     items.forEach((it, i) => {
       const el = document.createElement('div'); el.className = 'mention-item' + (i === si ? ' sel' : '');
       const lab = document.createElement('span'); lab.textContent = it.label; el.appendChild(lab);
