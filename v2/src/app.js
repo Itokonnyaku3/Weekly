@@ -5,12 +5,13 @@ const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setImageLoader, clearSelection, serializeEditable, caretOffset } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
+const { renderSearchView } = await import('./search.js' + _q);
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.79.0';
+export const APP_VERSION = '0.80.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -19,6 +20,7 @@ const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';                            // 現在アクティブなビュー（非分割の単一表示／分割時はフォーカス中ペイン）
 const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice() };
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
+const searchState = { query: { keyword:'', tags:[], proj:'all', due:{mode:'any'}, done:{mode:'any'}, prio:'all' } };   // 検索ビューのクエリ（セッション）
 
 // 画面分割（左=リスト / 右=デイリーまたはプロジェクト）。状態・幅比率・右ペイン内容・現ビューは localStorage に保存
 let splitOn = false, splitRatio = 0.4;
@@ -145,12 +147,14 @@ function renderAll(){
   const dv = document.getElementById('view-daily');
   const lv = document.getElementById('view-list');
   const pv = document.getElementById('view-project');
+  const sv = document.getElementById('view-search');
   app?.classList.toggle('split', splitOn);
   if (splitOn){
     // 左=リスト固定 / 右=デイリー or プロジェクト（splitRight）。両ペインを毎回再描画＝片側の変更がもう片側へ反映
     if (lv) lv.hidden = false;
     if (dv) dv.hidden = splitRight !== 'daily';
     if (pv) pv.hidden = splitRight !== 'project';
+    if (sv) sv.hidden = true;                 // 検索は単独ビュー（分割対象外）
     if (lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
     if (splitRight === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
     else if (dv) renderDaily(store, dv, renderAll, jumpToMention);
@@ -159,22 +163,25 @@ function renderAll(){
     if (dv) dv.hidden = currentView !== 'daily';
     if (lv) lv.hidden = currentView !== 'list';
     if (pv) pv.hidden = currentView !== 'project';
+    if (sv) sv.hidden = currentView !== 'search';
     if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
     if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
+    if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
   }
   document.getElementById('view-split-btn')?.classList.toggle('active', splitOn);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
   document.getElementById('view-proj-btn')?.classList.toggle('active', currentView === 'project');
+  document.getElementById('view-search-btn')?.classList.toggle('active', currentView === 'search');
   persistView();
   ensureViewFocus();               // どのビューでもキー操作用フォーカスを失わない安全網
 }
 // フォーカスが app 外（body等）へ落ちていたら、現在ビューの先頭要素へ戻す。編集中など app 内に在れば何もしない。
 function focusActiveViewFirst(){
-  const id = currentView === 'list' ? 'view-list' : (currentView === 'project' ? 'view-project' : 'view-daily');
+  const id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : 'view-daily';
   const cont = document.getElementById(id); if (!cont || cont.hidden) return;
-  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .card-add, .proj-land-add, button, [tabindex]');
+  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add, input, select, button, [tabindex]');
   if (el) el.focus();
 }
 function ensureViewFocus(){
@@ -395,6 +402,7 @@ function boot(){
   document.getElementById('view-daily-btn')?.addEventListener('click', () => selectView('daily'));
   document.getElementById('view-list-btn')?.addEventListener('click', () => selectView('list'));
   document.getElementById('view-proj-btn')?.addEventListener('click', () => selectView('project'));
+  document.getElementById('view-search-btn')?.addEventListener('click', () => selectView('search'));
   document.getElementById('view-split-btn')?.addEventListener('click', toggleSplit);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
