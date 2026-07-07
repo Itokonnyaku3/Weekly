@@ -139,6 +139,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .mention{color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 5px;cursor:pointer;white-space:nowrap;font-size:.92em}
 .mention:hover{text-decoration:underline}
 .mention.broken{color:#d9534f;background:none}
+.mention.search-link{color:#7a5cd0;background:rgba(122,92,208,.12)}
 .tag{color:#3a9d3a;background:rgba(58,157,58,.12);border-radius:4px;padding:0 5px;white-space:nowrap;font-size:.92em}
 /* 検索ビュー */
 #view-search{max-width:860px}

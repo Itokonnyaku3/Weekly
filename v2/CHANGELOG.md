@@ -1,5 +1,12 @@
 # Tracker v2 — CHANGELOG
 
+## v0.82.0 — 検索: 保存検索へのリンク（Phase 3）（2026-07-05）
+
+- カード本文で `@` を押すと候補に**保存検索**も表示。選択で `⟦s:<viewId>⟧` を挿入し、**🔍チップ**で強調（紫）。**クリックで検索ビューを開きその保存検索を実行**（`app.openSavedSearch`）。
+- チップは `⟦...⟧` マーカー機構で既存の直列化/caret とそのまま往復（`makeChip` を `s:` 接頭辞対応に拡張・`serialize`/`mlen` 無改変）。削除済み検索は「🔍 検索」表示＋broken。
+- 実装: `daily.js`（`@`候補に保存検索・`makeChip` 拡張・`setSavedSearchOpener`）、`app.js`（`openSavedSearch` 配線）、`style.css` `.mention.search-link`。
+- 検証: 実機evalで @→保存検索選択→`⟦s:id⟧`挿入→チップ描画→クリックで検索ビュー遷移＆条件適用、往復を確認。これで検索機能（Phase 1〜3）完了。
+
 ## v0.81.0 — 検索: 保存検索（Phase 2）（2026-07-05）
 
 - 検索ビューに**保存検索バー**を追加。現在の条件に**名前を付けて保存**（`store.saveView({kind:'search', name, query})`）、保存検索の**読込**（select で復元）、選択中の**上書き**／**削除**。
