@@ -23,3 +23,22 @@ export function matchCard(body, query, today){
   if (q.prio && q.prio !== 'all'){ if (String(body.prio || 0) !== q.prio) return false; }
   return true;
 }
+// 一致カードのうち「祖先も一致するもの」は除外し、最上位の一致だけを {ref, body} で返す（ミラー重複除外）。
+export function runQuery(store, query, today){
+  const matched = store.queryBodies(b => matchCard(b, query, today));
+  const ids = new Set(matched.map(b => b.id));
+  const out = [];
+  for (const b of matched){
+    const ref = store.refsForBody(b.id)[0];
+    if (!ref) continue;
+    let p = ref.parentRefId, skip = false;
+    while (p){ const pr = store.getRef(p); if (!pr) break; if (ids.has(pr.bodyId)){ skip = true; break; } p = pr.parentRefId; }
+    if (!skip) out.push({ ref, body: b });
+  }
+  return out;
+}
+// 出所の日付（親をたどって最初の day）。無ければ null。
+export function sourceDay(store, refId){
+  let p = refId; while (p){ const r = store.getRef(p); if (!r) break; const b = store.getBody(r.bodyId); if (b && b.kind === 'day') return b.content; p = r.parentRefId; }
+  return null;
+}
