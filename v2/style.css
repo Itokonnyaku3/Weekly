@@ -21,11 +21,6 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 #app.split>#split-divider{order:2;display:block;flex:0 0 6px;cursor:col-resize;background:var(--bd);touch-action:none}
 #app.split>#split-divider:hover,#app.split>#split-divider.dragging{background:var(--accent)}
 #app.split>#view-daily,#app.split>#view-project{order:3;flex:1 1 0;min-width:0;overflow:auto;padding:12px;border-left:1px solid var(--bd)}
-#app.split>#view-embed{order:3;flex:1 1 0;min-width:0;overflow:hidden;border-left:1px solid var(--bd);display:flex;flex-direction:column}
-.embed-bar{display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid var(--bd);font-size:12px;flex-wrap:nowrap}
-.embed-bar .embed-url{color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-.embed-frame{flex:1;width:100%;border:none}
-.embed-empty{padding:16px;color:var(--tx3);font-size:13px}
 .btn{font:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);border-radius:6px;cursor:pointer}
 .btn:hover{border-color:var(--accent)}
 
