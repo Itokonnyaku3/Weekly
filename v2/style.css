@@ -149,6 +149,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .search-count{font-size:12px;color:var(--tx3);margin-bottom:6px}
 .search-empty{color:var(--tx3);font-size:13px}
 .search-day{font-size:11px;font-weight:700;color:var(--tx3);background:var(--accent-soft);border-radius:5px;padding:2px 8px;display:inline-block;margin:10px 0 2px}
+.search-saved{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.search-saved .search-load,.search-saved .search-name{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
 /* @メンション検索ポップアップ */
 .mention-pop{position:fixed;z-index:65;background:var(--panel);border:1px solid var(--bd);border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.22);width:280px;max-height:300px;overflow:hidden;display:flex;flex-direction:column}
 .mention-input{font:inherit;font-size:13px;padding:7px 10px;border:none;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);outline:none}
