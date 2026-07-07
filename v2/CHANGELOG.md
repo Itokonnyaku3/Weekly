@@ -1,5 +1,13 @@
 # Tracker v2 — CHANGELOG
 
+## v0.77.0 — 表の右クリックメニュー＋行移動（2026-07-05）
+
+- **表を右クリック**で行/列メニュー（V1相当）: 上/下に行を追加・行を上/下へ移動・この行を削除・左/右に列を追加・この列を削除・**ヘッダー色**（カラーピッカー）。クリックしたセルの行・列を基準に挿入/削除。
+- **記入済み行の上下移動**: 右クリックメニュー、または セル内で **Alt+Shift+↑/↓**（ヘッダ行は動かさない）。
+- ヘッダー色は表データ（`{rows,widths,headerColor}`）に保存し再描画後も維持。既存の ×行/列削除・＋行/＋列・列幅ドラッグ・Tab移動は維持。
+- 実装: `daily.js` `buildTableWidget`（`openTableMenu`/`closeTableMenu`・`save()` で headerColor 保持・セルの contextmenu と Alt+Shift+↑↓）、`saveTable` に headerColor、`style.css` `.ct-menu*`。
+- 検証: 実機evalで 上下挿入・行移動（メニュー/キーボード）・列挿入・行/列削除・ヘッダー色の保存反映 を確認。
+
 ## v0.72.0 — リスト/デイリー UX 改善バッチ3（2026-07-05）
 
 各項目を1つずつ実装・検証し、都度 main にマージ（v0.65.0〜0.72.0）。仕様書 `docs/superpowers/specs/2026-07-04-list-ux-batch3-design.md`。
