@@ -113,6 +113,7 @@ export function createStore(initial){
     emit();
   }
   function queryBodies(pred){ return Object.values(S.bodies).filter(pred); }
+  function allRefs(pred){ const rs = Object.values(S.refs); return pred ? rs.filter(pred) : rs; }   // queryBodies の ref 版（サブタスク索引などで全ref走査に使う）
   function ensureDayCard(date){
     let body = Object.values(S.bodies).find(b => b.kind==='day' && b.content===date);
     if (body){
@@ -221,7 +222,7 @@ export function createStore(initial){
   const toJSON = () => S;
 
   return { createBody, createRef, createCard, getBody, getRef, updateBody, updateRef,
-           childRefs, refsForBody, deleteRef, queryBodies, ensureDayCard,
+           childRefs, refsForBody, deleteRef, queryBodies, allRefs, ensureDayCard,
            siblings, prevSiblingRef, orderAfter, orderBefore, endOrder,
            saveView, updateView, deleteView, listViews,
            createProject, listProjects, moveProject, deleteProject, ensureProjectPage,
