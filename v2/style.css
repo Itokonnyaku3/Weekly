@@ -222,7 +222,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .view-bar .view-name{width:120px}
 .view-bar .btn{padding:2px 9px}
 .view-subtask-toggle{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--tx3);cursor:pointer;white-space:nowrap}
-.title-subcount{margin-left:3px;font-size:11px;color:var(--tx3);user-select:none}
+.title-subcount{margin-left:3px;font-size:12px;font-weight:700;color:var(--tx2,var(--tx3));user-select:none}
 /* 列ピッカー */
 .col-picker{position:relative}
 .col-picker>summary{cursor:pointer;list-style:none;border:1px solid var(--bd2);border-radius:5px;padding:2px 8px;color:var(--tx3)}
