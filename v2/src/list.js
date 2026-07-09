@@ -75,13 +75,19 @@ export function subtaskIndex(store){
     return acc;
   };
   const descCount = new Map();
+  const descIncomplete = new Map();
   for (const [bodyId, rs] of refsByBody){
     const acc = new Set();
     for (const r of rs) for (const b of subtreeTasks(r.id)) acc.add(b);
     acc.delete(bodyId);                      // 念のため自分自身は除外
-    if (acc.size) descCount.set(bodyId, acc.size);
+    if (acc.size){
+      descCount.set(bodyId, acc.size);
+      let inc = 0;
+      for (const b of acc){ const body = store.getBody(b); if (body && !body.done) inc++; }
+      descIncomplete.set(bodyId, inc);
+    }
   }
-  return { subtaskIds, descCount };
+  return { subtaskIds, descCount, descIncomplete };
 }
 
 // (proj,mid)ごとの件数マップ（#1 折りたたみ中の中項目に件数バッジを出すため）。キーは midKeyOf。
@@ -284,6 +290,7 @@ function midRow(projId, mid, span, isCollapsed, onToggle, count, onAdd){
   const td = document.createElement('td'); td.colSpan = span;
   td.tabIndex = -1; td.classList.add('nav-head');
   td.dataset.fkey = 'm:' + (projId || '') + ':' + (mid || ''); td.dataset.proj = projId || ''; td.dataset.mid = mid || '';
+  td.style.borderBottom = '2px solid ' + (projId ? projColor(projId) : '#9aa0a6');   // 中項目見出しの下線はプロジェクトカラーに合わせる
   const tog = document.createElement('span'); tog.className = 'list-submid-tog'; tog.textContent = isCollapsed ? '▸' : '▾';
   const nm = document.createElement('span'); nm.className = 'list-submid-name';
   nm.textContent = mid || '（中項目なし）';
@@ -306,8 +313,9 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   _listCtx = { store, requestRender, state };
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
-  const { subtaskIds, descCount } = subtaskIndex(store);   // サブタスク判定＋配下タスク数（バッジ用）
-  _listCtx.descCount = descCount;                          // cellTitle が （n）表示に参照
+  const { subtaskIds, descCount, descIncomplete } = subtaskIndex(store);   // サブタスク判定＋配下タスク数（バッジ用）
+  _listCtx.descCount = descCount;                          // cellTitle が （未完了/全体）表示に参照
+  _listCtx.descIncomplete = descIncomplete;
   const projOrder = {}; store.listProjects().forEach((p, i) => { projOrder[p.id] = i; });
   const groups = ensureGroups(state);
   let rows = selectTasks(all, { groups, sort: state.sort, sortDir: state.sortDir }, today, projOrder);
@@ -749,7 +757,13 @@ function cellTitle(store, requestRender, t){
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
   wrap.appendChild(jump); wrap.appendChild(chip);
   const sub = _listCtx && _listCtx.descCount && _listCtx.descCount.get(t.id);   // 配下タスク数（>0のとき常に表示・編集不可）
-  if (sub){ const badge = document.createElement('span'); badge.className = 'title-subcount'; badge.textContent = '（' + sub + '）'; badge.title = 'サブタスク ' + sub + ' 件'; wrap.appendChild(badge); }
+  if (sub){
+    const inc = (_listCtx.descIncomplete && _listCtx.descIncomplete.get(t.id)) || 0;
+    const badge = document.createElement('span'); badge.className = 'title-subcount';
+    badge.textContent = '（' + inc + '/' + sub + '）';
+    badge.title = 'サブタスク 未完了' + inc + ' / 全体' + sub + ' 件';
+    wrap.appendChild(badge);
+  }
   td.appendChild(wrap); return td;
 }
 // 表示専用チップ（#行選択: 個別フォーカス/クリック選択なし・純粋な表示）。優先度/期限等の編集は行を選択して Enter→詳細で。
