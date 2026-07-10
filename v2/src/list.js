@@ -4,7 +4,7 @@
 // 列選択／カスタムビュー保存／プロジェクト（フィルタ＋割当＋管理）に対応。
 
 const _q = new URL(import.meta.url).search;
-const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用
+const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 
 // ── 純ロジック（テスト対象）──
@@ -320,6 +320,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   const groups = ensureGroups(state);
   let rows = selectTasks(all, { groups, sort: state.sort, sortDir: state.sortDir }, today, projOrder);
   if (!state._showSubtasks) rows = rows.filter(t => !subtaskIds.has(t.id));   // 既定=サブタスク非表示
+  if (getHideDone()) rows = rows.filter(t => !t.done);   // 完了非表示（全ビュー共通トグル・Alt+H）
   if (state._focusProj != null) rows = rows.filter(t => (t.proj || '') === state._focusProj);   // プロジェクトフォーカス＝他PJを隠す
   const grouped = state.sort === 'proj';                 // プロジェクト並べ替え時だけツリー（区切り＋インデント）
   let cols = activeColumns(state);

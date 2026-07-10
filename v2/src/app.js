@@ -2,7 +2,7 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.84.0';
+export const APP_VERSION = '0.85.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -99,6 +99,15 @@ function toggleSplit(){
   restoreFocus(currentView);
 }
 
+// 完了カードの表示/非表示トグル（全ビュー共通）。フォーカスを保ったまま切替→再描画。
+function toggleDone(){
+  captureFocus();
+  const hidden = toggleHideDone();
+  renderAll();
+  restoreFocus(currentView);
+  showToast(hidden ? '完了を非表示にしました' : '完了を表示しました');
+}
+
 // ── フォーカス記憶/復元 ──
 function focusToken(el){
   if (!el) return null;
@@ -168,6 +177,13 @@ function renderAll(){
     if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
     if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
+  }
+  const doneBtn = document.getElementById('toggle-done-btn');
+  if (doneBtn){
+    const hidden = getHideDone();
+    doneBtn.classList.toggle('active', hidden);
+    doneBtn.textContent = hidden ? '✓ 完了を表示' : '✓ 完了を隠す';
+    doneBtn.title = (hidden ? '完了カードを表示' : '完了カードを隠す') + '（Alt+H）';
   }
   document.getElementById('view-split-btn')?.classList.toggle('active', splitOn);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
@@ -321,6 +337,7 @@ function buildCommands(cardRef){
     { cat:'表示', label:'リストを表示', hint:'Alt+1', run: () => selectView('list') },
     { cat:'表示', label:'プロジェクトを表示', hint:'Alt+3', run: () => selectView('project') },
     { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', run: toggleSplit },
+    { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', run: toggleDone },
     { cat:'表示', label:'今日へ移動', hint:'Alt+D', run: () => gotoDate(todayStr()) },
     { cat:'表示', label:'日付へ移動（カレンダー）', run: () => openCalendar({ store, onPick: gotoDate }) },
     { cat:'追加', label:'今日に追加', run: addToday },
@@ -413,6 +430,7 @@ function boot(){
   document.getElementById('view-proj-btn')?.addEventListener('click', () => selectView('project'));
   document.getElementById('view-search-btn')?.addEventListener('click', () => selectView('search'));
   document.getElementById('view-split-btn')?.addEventListener('click', toggleSplit);
+  document.getElementById('toggle-done-btn')?.addEventListener('click', toggleDone);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
   setSavedSearchOpener(openSavedSearch);         // ⟦s:id⟧ チップ→保存検索を開く
@@ -425,6 +443,7 @@ function boot(){
       if (e.code === 'Digit2'){ e.preventDefault(); selectView('daily'); return; }    // デイリー（分割中は右をデイリーに）
       if (e.code === 'Digit3'){ e.preventDefault(); selectView('project'); return; }  // プロジェクト（分割中は右をプロジェクトに）
       if (e.code === 'Digit0'){ e.preventDefault(); toggleSplit(); return; }          // 分割 ON/OFF トグル
+      if (e.key === 'h' || e.key === 'H'){ e.preventDefault(); toggleDone(); return; }   // 完了の表示/非表示トグル（全ビュー共通）
       if (e.key === 'ArrowLeft'){ e.preventDefault(); navBack(); return; }            // 前の画面に戻る（#1・ブラウザ戻る抑止）
       if (e.key === 'ArrowRight'){ e.preventDefault(); navForward(); return; }        // 次の画面へ進む（#1）
       if (e.key === 'd' || e.key === 'D'){ e.preventDefault(); gotoDate(todayStr()); return; }   // 今日のデイリーへ
