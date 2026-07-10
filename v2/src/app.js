@@ -2,7 +2,7 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone, setAgendaJump } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.85.0';
+export const APP_VERSION = '0.86.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -433,6 +433,7 @@ function boot(){
   document.getElementById('toggle-done-btn')?.addEventListener('click', toggleDone);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
+  setAgendaJump(jumpToCard);                      // アジェンダ↗（元の場所へ）＝該当カードへジャンプ
   setSavedSearchOpener(openSavedSearch);         // ⟦s:id⟧ チップ→保存検索を開く
   setImageLoader(GH.ghFetchImageURL);            // 画像カード: repoパス→表示URL
   document.getElementById('add-today')?.addEventListener('click', addToday);

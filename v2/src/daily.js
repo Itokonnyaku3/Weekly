@@ -62,6 +62,88 @@ export function isDoneHidden(store, refId){
   return isHiddenByDone(store, ref, store.getBody(ref.bodyId));
 }
 
+// ── デイリーのアジェンダ／リマインダ（日フォーカス＝その日にズーム中だけ最下部に表示）──
+// 表示日 D を基準に、未完タスク（当日以前）＋当日期限のメモ（リマインダ）を4グループに集約。
+// すべて表示日 D 基準で判定（今日に限らず過去・未来日にフォーカスしても表示）。
+// 表示は検索と同じ編集可能ミラー（renderChildren の mirrorRoot）＝実体編集で全ビューに反映。
+const _agendaCollapsed = new Set(['nodue']);   // 折りたたみ中のグループ（既定=「期限なし」だけ畳む）
+const AGENDA_GROUPS = [
+  { key: 'memo',    label: 'メモ' },
+  { key: 'due',     label: '本日期限' },
+  { key: 'overdue', label: '期限切れ' },
+  { key: 'nodue',   label: '期限なし' },
+];
+let _agendaJump = null;                          // ↗（元の場所へ）ジャンプ先（app から設定）
+export function setAgendaJump(fn){ _agendaJump = fn; }
+// 表示日 dayStr（YYYY-MM-DD）の各グループの「最上位一致」{ref, body} を返す純ロジック（テスト対象）。
+// すべて表示日 dayStr 基準（今日に限らず過去・未来日でも同じ判定）。
+export function dayAgenda(store, dayStr){
+  const groups = { memo: [], due: [], overdue: [], nodue: [] };
+  if (!dayStr) return groups;
+  const cat = (b) => {
+    if (b.kind === 'memo') return (b.due && b.due === dayStr) ? 'memo' : null;   // 当日期限のメモ＝リマインダ
+    if (b.kind === 'task'){
+      if (b.done) return null;                                                    // 未完のみ
+      if (b.due){
+        if (b.due === dayStr) return 'due';
+        if (b.due < dayStr) return 'overdue';                                     // 期限切れ＝当日以前（表示日基準）
+        return null;                                                              // 未来期限は対象外
+      }
+      return 'nodue';                                                             // 期限なし未完はどの表示日でも
+    }
+    return null;
+  };
+  const matched = [];
+  for (const b of store.queryBodies(x => x.kind === 'task' || x.kind === 'memo')){
+    const c = cat(b); if (!c) continue;
+    const ref = store.refsForBody(b.id)[0]; if (!ref) continue;
+    matched.push({ ref, body: b, cat: c });
+  }
+  const ids = new Set(matched.map(m => m.body.id));
+  for (const m of matched){                                    // 祖先も一致集合にいれば最上位のみ（検索と同様の重複除外）
+    let p = m.ref.parentRefId, skip = false;
+    while (p){ const pr = store.getRef(p); if (!pr) break; if (ids.has(pr.bodyId)){ skip = true; break; } p = pr.parentRefId; }
+    if (!skip) groups[m.cat].push({ ref: m.ref, body: m.body });
+  }
+  return groups;
+}
+// アジェンダ節を mount に描画（一致が無ければ何もしない）。各グループは折りたたみ可能・件数付き。
+function renderDayAgenda(store, mount, dayStr, requestRender){
+  const groups = dayAgenda(store, dayStr);
+  const total = AGENDA_GROUPS.reduce((n, g) => n + groups[g.key].length, 0);
+  if (!total) return;
+  const sec = document.createElement('div'); sec.className = 'day-agenda';
+  const title = document.createElement('div'); title.className = 'day-agenda-title'; title.textContent = '📌 アジェンダ / リマインダ';
+  sec.appendChild(title);
+  for (const g of AGENDA_GROUPS){
+    const items = groups[g.key];
+    if (!items.length) continue;
+    const collapsed = _agendaCollapsed.has(g.key);
+    const head = document.createElement('div'); head.className = 'day-agenda-head' + (collapsed ? ' collapsed' : '');
+    const caret = document.createElement('span'); caret.className = 'day-agenda-caret'; caret.textContent = collapsed ? '▶' : '▼';
+    head.appendChild(caret);
+    head.appendChild(document.createTextNode(' ' + g.label + ' '));
+    const cnt = document.createElement('span'); cnt.className = 'day-agenda-count'; cnt.textContent = '(' + items.length + ')';
+    head.appendChild(cnt);
+    head.title = 'クリックで展開/折りたたみ';
+    head.onclick = () => { if (_agendaCollapsed.has(g.key)) _agendaCollapsed.delete(g.key); else _agendaCollapsed.add(g.key); requestRender(); };
+    sec.appendChild(head);
+    if (collapsed) continue;
+    const wrap = document.createElement('div'); wrap.className = 'day-agenda-items';
+    renderChildren(store, null, wrap, 0, requestRender, { refs: items.map(i => i.ref), mirrorRoot: true });
+    if (_agendaJump) wrap.querySelectorAll('.card-row[data-mirror-root]').forEach(row => {
+      const holder = row.querySelector('[data-ref]'); if (!holder) return;
+      const r = store.getRef(holder.dataset.ref); if (!r) return;
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'mirror-jump'; btn.textContent = '↗'; btn.title = '元の場所へ';
+      btn.addEventListener('mousedown', (e) => e.preventDefault());
+      btn.addEventListener('click', (e) => { e.stopPropagation(); _agendaJump(r.bodyId); });
+      row.appendChild(btn);
+    });
+    sec.appendChild(wrap);
+  }
+  mount.appendChild(sec);
+}
+
 export function renderDaily(store, mount, requestRender, onMentionJump){
   if (onMentionJump) _mentionJump = onMentionJump;
   mount.innerHTML = '';
@@ -94,6 +176,7 @@ export function renderDaily(store, mount, requestRender, onMentionJump){
       crumb.appendChild(cur);
       mount.appendChild(crumb);
       mount.appendChild(renderDaySection(store, day, requestRender, false));
+      renderDayAgenda(store, mount, _focusDate, requestRender);   // ズーム中の日だけ最下部にアジェンダ/リマインダ
       manageOutsideClose(requestRender);
       return;
     }
