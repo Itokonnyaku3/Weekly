@@ -30,6 +30,7 @@ export function createStore(initial){
     for (const k of Object.keys(S)) delete S[k];
     Object.assign(S, _clone(st));
     if (!S.views) S.views = [];
+    _rebuildIndex();                        // ref の同一性が変わるので索引を作り直す
     emit();
     _suspend = false; _dirty = false;
   }
@@ -56,6 +57,28 @@ export function createStore(initial){
   const emit = () => { subs.forEach(fn => { try{ fn(); }catch(e){ console.error(e); } }); _scheduleCommit(); };
   const genId = (p) => p + (++S.seq);
 
+  // ── 索引（親→子ref / body→ref）──
+  // childRefs/refsForBody は描画のたびにノード数ぶん呼ばれる。全 refs 走査だと O(N²) になるため、
+  // ref オブジェクトを直接持つ Set の索引を createRef/updateRef/deleteRef で増分更新し、参照は O(1)。
+  // 状態を丸ごと差し替える箇所（初期化・replaceState・undo/redo）では作り直す（ref の同一性が変わるため）。
+  let _byParent = new Map();   // parentRefId（null 可）-> Set<ref>
+  let _byBody   = new Map();   // bodyId -> Set<ref>
+  const _pkey = (p) => (p == null ? null : p);
+  function _idxAdd(ref){
+    const pk = _pkey(ref.parentRefId);
+    let ps = _byParent.get(pk); if (!ps){ ps = new Set(); _byParent.set(pk, ps); } ps.add(ref);
+    let bs = _byBody.get(ref.bodyId); if (!bs){ bs = new Set(); _byBody.set(ref.bodyId, bs); } bs.add(ref);
+  }
+  function _idxDelAt(ref, pk, bodyId){   // 旧キーを明示（parent/body 変更時に旧位置から外す用）
+    const ps = _byParent.get(pk); if (ps){ ps.delete(ref); if (!ps.size) _byParent.delete(pk); }
+    const bs = _byBody.get(bodyId); if (bs){ bs.delete(ref); if (!bs.size) _byBody.delete(bodyId); }
+  }
+  function _rebuildIndex(){
+    _byParent = new Map(); _byBody = new Map();
+    for (const ref of Object.values(S.refs)) _idxAdd(ref);
+  }
+  _rebuildIndex();   // 読み込み済み state から初期索引を構築
+
   function createBody(attrs={}){
     const id = genId('b');
     const body = { kind:'memo', content:'', createdAt: nowIso(), ...attrs, id };
@@ -68,7 +91,7 @@ export function createStore(initial){
   function createRef({ bodyId, parentRefId=null, order=null, ...rest }){
     const id = genId('r');
     const ref = { id, bodyId, parentRefId, order: order==null ? nextOrder(parentRefId) : order, ...rest };
-    S.refs[id] = ref; emit(); return ref;
+    S.refs[id] = ref; _idxAdd(ref); emit(); return ref;
   }
   function createCard({ parentRefId=null, order=null, collapsed, gridWk, ...bodyAttrs }){
     // 中項目の作成時継承: 明示 mid 指定が無く、親refのbodyがメモ(content非空)なら親メモ名をmidに（1回限り・以後追従しない）
@@ -96,18 +119,32 @@ export function createStore(initial){
     }
     Object.assign(b, patch, {id}); emit(); return b;
   }
-  function updateRef(id, patch){ const r=S.refs[id]; if(r){ Object.assign(r, patch, {id}); emit(); } return r; }
+  function updateRef(id, patch){
+    const r=S.refs[id];
+    if(r){
+      const opk = _pkey(r.parentRefId), obody = r.bodyId;
+      Object.assign(r, patch, {id});
+      if (_pkey(r.parentRefId) !== opk || r.bodyId !== obody){   // 索引メンバーシップ変化→張り替え
+        _idxDelAt(r, opk, obody); _idxAdd(r);
+      }
+      emit();
+    }
+    return r;
+  }
 
   function childRefs(parentRefId){
-    return Object.values(S.refs).filter(r => r.parentRefId === parentRefId).sort((a,b)=>a.order-b.order);
+    const set = _byParent.get(_pkey(parentRefId));
+    return set ? [...set].sort((a,b)=>a.order-b.order) : [];
   }
   function refsForBody(bodyId){
-    return Object.values(S.refs).filter(r => r.bodyId === bodyId);
+    const set = _byBody.get(bodyId);
+    return set ? [...set] : [];
   }
   function deleteRef(refId){
     const ref = S.refs[refId];
     if (!ref) return;
     for (const child of childRefs(refId)) deleteRef(child.id); // 子付箋を連鎖削除
+    _idxDelAt(ref, _pkey(ref.parentRefId), ref.bodyId);
     delete S.refs[refId];
     if (refsForBody(ref.bodyId).length === 0) delete S.bodies[ref.bodyId]; // 参照ゼロ→GC
     emit();
@@ -213,6 +250,7 @@ export function createStore(initial){
     for (const k of Object.keys(S)) delete S[k];
     Object.assign(S, newState);
     if (!S.views) S.views = [];
+    _rebuildIndex();                        // 差し替え後の refs から索引を再構築
     emit();
     _suspend = false;
     _hist = []; _future = []; _baseline = _clone(S); _dirty = false;
