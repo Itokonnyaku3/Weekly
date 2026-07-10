@@ -112,6 +112,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cmdk-overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:flex-start;justify-content:center;z-index:70;padding-top:12vh}
 .cmdk-box{background:var(--panel);border:1px solid var(--bd);border-radius:10px;box-shadow:0 16px 48px rgba(0,0,0,.28);width:min(520px,92vw);max-height:60vh;overflow:hidden;display:flex;flex-direction:column}
 .cmdk-input{font:inherit;font-size:15px;padding:12px 14px;border:none;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);outline:none}
+.cmdk-input.cmdk-ime-off{ime-mode:disabled}
 .cmdk-list{overflow-y:auto}
 .cmdk-empty{padding:10px 14px;color:var(--tx3);font-size:13px}
 .cmdk-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;font-size:13px}
@@ -123,6 +124,9 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .cmdk-cat{padding:7px 14px 2px;font-size:11px;color:var(--tx3);font-weight:700}
 .cmdk-item .cmdk-key{flex:none;font-size:11px;color:var(--tx3);border:1px solid var(--bd);border-radius:4px;padding:0 6px;margin-left:8px;white-space:nowrap}
 .cmdk-item.sel .cmdk-key{color:var(--accent);border-color:var(--accent)}
+.cmdk-item .cmdk-chev{flex:none;font-size:15px;color:var(--tx3);margin-left:8px;line-height:1}
+.cmdk-item.sel .cmdk-chev{color:var(--accent)}
+.cmdk-item.cmdk-back .cmdk-label{color:var(--tx3);font-size:12px}
 
 /* カレンダー */
 .cal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:flex-start;justify-content:center;z-index:75;padding-top:12vh}
