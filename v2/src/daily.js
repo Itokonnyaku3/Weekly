@@ -33,6 +33,35 @@ const GUIDE_OFFSET = 53;
 const _sel = new Set();
 let _selAnchor = null, _selHead = null;
 
+// ── 完了カードの表示/非表示（全ビュー共通の1状態・セッションをまたいで保持）──
+// この状態は renderChildren / visibleFlat が参照し、デイリー・プロジェクトのノート/割当カードに反映。
+// リストは getHideDone() を読んで行を絞り込む。ツールバーのボタン／Alt+H で app.js から切り替える。
+let _hideDone = false;
+try { _hideDone = localStorage.getItem('pwt2_hideDone') === '1'; } catch {}
+export function getHideDone(){ return _hideDone; }
+export function setHideDone(v){ _hideDone = !!v; try { localStorage.setItem('pwt2_hideDone', _hideDone ? '1' : '0'); } catch {} }
+export function toggleHideDone(){ setHideDone(!_hideDone); return _hideDone; }
+// サブツリーに「未完了タスク」が1つでも残っているか（完了済みでも未完の子を持つ親は隠さない安全策）。
+function hasIncompleteDesc(store, refId){
+  for (const c of store.childRefs(refId)){
+    const b = store.getBody(c.bodyId);
+    if (b && b.kind === 'task' && !b.done) return true;
+    if (hasIncompleteDesc(store, c.id)) return true;
+  }
+  return false;
+}
+// 完了非表示中に、この ref を隠すべきか。完了タスクで、かつ配下に未完了タスクが無いものだけ隠す。
+function isHiddenByDone(store, ref, body){
+  if (!_hideDone) return false;
+  if (!body || body.kind !== 'task' || !body.done) return false;
+  return !hasIncompleteDesc(store, ref.id);
+}
+// 外部（プロジェクトの割当カード集約など）から同じ判定を使うための公開版（完了非表示OFF時は常に false）。
+export function isDoneHidden(store, refId){
+  const ref = store.getRef(refId); if (!ref) return false;
+  return isHiddenByDone(store, ref, store.getBody(ref.bodyId));
+}
+
 export function renderDaily(store, mount, requestRender, onMentionJump){
   if (onMentionJump) _mentionJump = onMentionJump;
   mount.innerHTML = '';
@@ -137,6 +166,7 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
   for (const ref of refs){
     const body = store.getBody(ref.bodyId);
     if (!body) continue;
+    if (isHiddenByDone(store, ref, body)) continue;   // 完了非表示中: 完了カード（未完の子を持たないもの）を省く
     const kids = store.childRefs(ref.id);
 
     const row = document.createElement('div');
@@ -1338,7 +1368,7 @@ function shiftClickSelect(store, refId){
 }
 function visibleFlat(store){
   const out = [];
-  const walk = (refId) => { for (const r of store.childRefs(refId)){ out.push(r.id); if (!r.collapsed) walk(r.id); } };
+  const walk = (refId) => { for (const r of store.childRefs(refId)){ if (isHiddenByDone(store, r, store.getBody(r.bodyId))) continue; out.push(r.id); if (!r.collapsed) walk(r.id); } };
   if (_ctx.rootRef && store.getRef(_ctx.rootRef)){ out.push(_ctx.rootRef); walk(_ctx.rootRef); return out; }   // ページ（ズーム/PJ）はルート＋サブツリー
   let days = store.queryBodies(b => b.kind === 'day').sort((a, b) => (a.content < b.content ? 1 : -1));
   if (_focusDate) days = days.filter(d => d.content === _focusDate);   // 日フォーカス中はその日だけ
