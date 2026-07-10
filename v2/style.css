@@ -61,6 +61,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-dot.collapsed::before{box-shadow:0 0 0 5px rgba(128,128,128,.18)}
 .card-add{color:var(--tx3);font-size:12px;cursor:pointer;padding:4px 0 2px 34px;opacity:.7}
 .card-add:hover{opacity:1;color:var(--accent)}
+.day-load-more{display:block;width:100%;max-width:760px;margin:8px 0 20px;padding:8px 12px;font-size:13px;color:var(--tx2);background:var(--panel);border:1px dashed var(--bd);border-radius:7px;cursor:pointer}
+.day-load-more:hover{color:var(--accent);border-color:var(--accent)}
 .btn-accent{border-color:var(--accent);background:var(--accent);color:#fff}
 .btn-accent:hover{filter:brightness(1.07)}
 

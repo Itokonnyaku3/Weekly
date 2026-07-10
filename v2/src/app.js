@@ -2,7 +2,7 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone, setAgendaJump } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, revealDay, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone, setAgendaJump } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.86.0';
+export const APP_VERSION = '0.87.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -231,7 +231,10 @@ function jumpToCard(bodyId){
   const ref = refs[0];
   let p = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
   while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
+  let top = ref; while (top.parentRefId){ const pr = store.getRef(top.parentRefId); if (!pr) break; top = pr; }   // 所属の日を特定
+  const dayBody = store.getBody(top.bodyId);
   resetZoom(); clearDayFocus();
+  if (dayBody && dayBody.kind === 'day') revealDay(store, dayBody.content);   // 窓表示の外/折りたたみでも確実に描画
   showView('daily');
   renderAll();
   focusCard(ref.id, -1);
@@ -281,6 +284,7 @@ function gotoDate(date){                  // カレンダー/コマンドから�
   navPush();                        // 遷移前の状態を履歴へ（#1）
   store.ensureDayCard(date);
   resetZoom(); clearDayFocus();
+  revealDay(store, date);          // 窓表示の外/折りたたみでも、その日を展開して描画対象に含める
   showView('daily');
   renderAll();
   const sec = document.querySelector(`.day-sec[data-date="${date}"]`);
