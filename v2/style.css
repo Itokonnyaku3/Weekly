@@ -305,6 +305,15 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .card-row:hover .mirror-jump,.card-row:focus-within .mirror-jump{opacity:.6}
 .mirror-jump:hover{opacity:1;color:var(--accent)}
 
+/* デイリーのアジェンダ／リマインダ（日フォーカス時に最下部） */
+.day-agenda{max-width:760px;margin-top:24px;border-top:2px solid var(--bd)}
+.day-agenda-title{font-weight:700;font-size:14px;padding:10px 0 2px;color:var(--tx2)}
+.day-agenda-head{font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer;user-select:none;padding:6px 0 2px;display:flex;align-items:center;gap:2px}
+.day-agenda-head:hover{color:var(--accent)}
+.day-agenda-caret{display:inline-block;width:12px;font-size:10px;color:var(--tx3)}
+.day-agenda-count{color:var(--tx3);font-weight:600}
+.day-agenda-items{margin:0 0 4px}
+
 /* 表ブロック（kind:'table'）*/
 .cardtable-wrap{display:inline-block;max-width:100%;margin:2px 0}
 .cardtable{border-collapse:collapse;font-size:13px}
