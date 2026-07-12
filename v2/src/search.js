@@ -49,10 +49,16 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
   const today = new Date().toISOString().slice(0, 10);
   const q = state.query;
 
+  const head = document.createElement('div'); head.className = 'search-title'; head.textContent = '🔍 検索';
+  mount.appendChild(head);
+  const hint = document.createElement('div'); hint.className = 'search-hint';
+  hint.textContent = '下の条件を指定すると全カード（メモ/タスク）から絞り込み（AND）。結果は下に出て、その場で編集できます。条件を組んだら右の「名前」→「保存」で保存検索に。';
+  mount.appendChild(hint);
+
   const bar = document.createElement('div'); bar.className = 'search-bar';
-  const kw = document.createElement('input'); kw.type = 'text'; kw.className = 'search-kw'; kw.placeholder = 'キーワード'; kw.value = q.keyword || '';
+  const kw = document.createElement('input'); kw.type = 'text'; kw.className = 'search-kw'; kw.placeholder = 'キーワード（本文）'; kw.value = q.keyword || '';
   kw.addEventListener('input', () => { q.keyword = kw.value; state._refocus = 'kw'; requestRender(); });
-  bar.appendChild(labelWrap('語', kw));
+  bar.appendChild(labelWrap('キーワード', kw));
   const tg = document.createElement('input'); tg.type = 'text'; tg.className = 'search-tags'; tg.placeholder = 'タグ（#無し・空白区切り）'; tg.value = (q.tags || []).join(' ');
   tg.addEventListener('input', () => { q.tags = tg.value.split(/[\s,]+/).map(s => s.replace(/^#/, '')).filter(Boolean); state._refocus = 'tg'; requestRender(); });
   bar.appendChild(labelWrap('タグ', tg));
@@ -97,6 +103,7 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
 // 保存検索バー: 読込 select ＋ 名前＋保存／（選択中は）上書き・削除
 function buildSavedBar(store, requestRender, state){
   const bar = document.createElement('div'); bar.className = 'search-saved';
+  const lab = document.createElement('span'); lab.className = 'search-saved-label'; lab.textContent = '保存検索:'; bar.appendChild(lab);
   const saved = store.listViews().filter(v => v.kind === 'search');
   const sel = document.createElement('select'); sel.className = 'search-load';
   const cur = document.createElement('option'); cur.value = ''; cur.textContent = '（保存した検索）'; sel.appendChild(cur);
@@ -107,7 +114,7 @@ function buildSavedBar(store, requestRender, state){
     requestRender();
   });
   bar.appendChild(sel);
-  const name = document.createElement('input'); name.type = 'text'; name.className = 'search-name'; name.placeholder = '検索名'; name.value = state._draftName || '';
+  const name = document.createElement('input'); name.type = 'text'; name.className = 'search-name'; name.placeholder = '名前を付けて保存'; name.value = state._draftName || '';
   name.addEventListener('input', () => { state._draftName = name.value; });
   bar.appendChild(name);
   const save = document.createElement('button'); save.type = 'button'; save.className = 'btn'; save.textContent = '保存';
