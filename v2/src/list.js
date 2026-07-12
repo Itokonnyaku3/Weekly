@@ -4,7 +4,7 @@
 // 列選択／カスタムビュー保存／プロジェクト（フィルタ＋割当＋管理）に対応。
 
 const _q = new URL(import.meta.url).search;
-const { renderOutlinePage } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用
+const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 
 // ── 純ロジック（テスト対象）──
@@ -266,12 +266,12 @@ function groupRow(store, projId, span, count, isCollapsed, onToggle, onAdd){
   const tr = document.createElement('tr'); tr.className = 'list-group';
   const td = document.createElement('td'); td.colSpan = span;
   const color = projId ? projColor(projId) : '#9aa0a6';
-  td.style.background = color + '22';                  // 8桁hex=淡い背景
-  td.style.boxShadow = 'inset 3px 0 0 ' + color;        // 左に色帯
+  td.style.background = color;                          // タイトルの文字色と背景色を入替＝色地＋明色文字で見出しを強調
+  td.classList.add('list-group-solid');                // 文字/トグル/件数の色はCSS側で明色に
   const tog = document.createElement('span'); tog.className = 'list-group-tog'; tog.textContent = isCollapsed ? '▸' : '▾';
   tog.onclick = (e) => { e.stopPropagation(); onToggle(); };       // #3 折りたたみは▸/▾トグルのみ
   const nm = document.createElement('span'); nm.className = 'list-group-name';
-  if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; nm.style.color = color; }
+  if (projId){ const p = store.getBody(projId); nm.textContent = p ? (p.content || '(無題PJ)') : '(不明なPJ)'; }
   else nm.textContent = '未割当';
   td.appendChild(tog); td.appendChild(nm);
   if (count){ const c = document.createElement('span'); c.className = 'list-group-count'; c.textContent = count; td.appendChild(c); }
@@ -320,6 +320,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   const groups = ensureGroups(state);
   let rows = selectTasks(all, { groups, sort: state.sort, sortDir: state.sortDir }, today, projOrder);
   if (!state._showSubtasks) rows = rows.filter(t => !subtaskIds.has(t.id));   // 既定=サブタスク非表示
+  if (getHideDone()) rows = rows.filter(t => !t.done);   // 完了非表示（全ビュー共通トグル・Alt+H）
   if (state._focusProj != null) rows = rows.filter(t => (t.proj || '') === state._focusProj);   // プロジェクトフォーカス＝他PJを隠す
   const grouped = state.sort === 'proj';                 // プロジェクト並べ替え時だけツリー（区切り＋インデント）
   let cols = activeColumns(state);
@@ -714,20 +715,18 @@ function buildColumnPicker(state, touch){
 }
 
 // ── セル ──
+// 行タイトル（＝行の代表フォーカス先）へフォーカスを移す。チェック切替やスペーストグル後の復帰に使う。
+function esc(s){ return (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s); }
+function focusTitle(id){ const el = document.querySelector('#view-list [data-fkey="title:' + esc(id) + '"]'); if (el) el.focus(); }
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!t.done;
-  cb.dataset.fkey = 'status:' + t.id; cb.dataset.col = 'status';
-  cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); };
-  cb.addEventListener('keydown', navKey);
+  cb.tabIndex = -1;                                // 個別フォーカス廃止＝行のタイトルに集約（切替はタイトルフォーカス中のスペース／マウスクリック）
+  cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); focusTitle(t.id); };   // マウス切替後はタイトルへフォーカスを戻す
   td.appendChild(cb); return td;
 }
 function cellTitle(store, requestRender, t){
   const td = document.createElement('td');
-  const jump = document.createElement('button');
-  jump.type = 'button'; jump.className = 'list-jump'; jump.textContent = '↗'; jump.title = 'デイリーで開く';
-  jump.onmousedown = (e) => e.preventDefault();
-  jump.onclick = () => { if (_onJump) _onJump(t.id); };
   const chip = document.createElement('span');
   chip.className = 'cell-chip title-chip'; chip.tabIndex = 0; chip.dataset.fkey = 'title:' + t.id; chip.dataset.col = 'title';
   chip.textContent = t.content || '(無題)';
@@ -752,10 +751,15 @@ function cellTitle(store, requestRender, t){
   chip.addEventListener('dblclick', edit);                   // ダブルクリックでその場編集（クイックリネーム）
   chip.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.altKey && !e.shiftKey){ e.preventDefault(); if (_listCtx) openTaskDetail(_listCtx.store, t.id, _listCtx.requestRender); }   // Enter=詳細モード
+    else if ((e.key === ' ' || e.key === 'Spacebar') && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){   // スペース=完了トグル（行フォーカス中）
+      e.preventDefault();
+      const cur = store.getBody(t.id) || t;
+      store.updateBody(t.id, { done: !cur.done }); requestRender(); focusTitle(t.id);
+    }
     else navKey(e);
   });
   const wrap = document.createElement('div'); wrap.className = 'c-title-wrap';
-  wrap.appendChild(jump); wrap.appendChild(chip);
+  wrap.appendChild(chip);
   const sub = _listCtx && _listCtx.descCount && _listCtx.descCount.get(t.id);   // 配下タスク数（>0のとき常に表示・編集不可）
   if (sub){
     const inc = (_listCtx.descIncomplete && _listCtx.descIncomplete.get(t.id)) || 0;
@@ -837,12 +841,6 @@ function focusRowCol(rows, ri, col){
   const target = (col && cells.find(c => c.dataset.col === col)) || cells[0];   // 同列が無ければ先頭（見出し等）
   target.focus();
 }
-function atTitleBoundary(el, key){      // タイトル内のキャレットが端にあるか（端でのみセル移動）
-  const sel = window.getSelection();
-  if (!sel.rangeCount || !sel.isCollapsed) return false;
-  const off = sel.getRangeAt(0).startOffset;
-  return key === 'ArrowLeft' ? off === 0 : off >= (el.textContent || '').length;
-}
 function navKey(e){
   if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.key === 'Enter'){   // Alt+Enter=タスク詳細ポップアップ
     const tr = e.currentTarget.closest && e.currentTarget.closest('tr');
@@ -902,14 +900,7 @@ function navKey(e){
     focusRowCol(rows, ri + (e.key === 'ArrowUp' ? -1 : 1), el.dataset.col || null);
     return;
   }
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
-    if (el.classList.contains('list-title') && !atTitleBoundary(el, e.key)) return;   // タイトル内はキャレット移動
-    e.preventDefault();
-    const cells = rowFocusables(tr); const idx = cells.indexOf(el);
-    const next = cells[idx + (e.key === 'ArrowLeft' ? -1 : 1)];
-    if (next) next.focus();
-    return;
-  }
+  // ←/→ は無効（個別セルフォーカス廃止＝移動は↑↓に一本化）。タイトル編集中のキャレット移動は編集要素側で処理。
 }
 
 // ── 行の選択と削除（複数行可）──
@@ -1014,7 +1005,8 @@ function openTaskDetail(store, bodyId, listRequestRender){
   const overlay = document.createElement('div'); overlay.className = 'td-overlay';
   const box = document.createElement('div'); box.className = 'td-box';
   overlay.appendChild(box);
-  const close = () => { overlay.remove(); document.removeEventListener('keydown', onKey, true); if (listRequestRender) listRequestRender(); };
+  // 閉じたら開いた元の行（タイトル）へフォーカスを戻す（#4 変更後にフォーカスが別ビューへ飛ぶのを防ぐ）
+  const close = () => { overlay.remove(); document.removeEventListener('keydown', onKey, true); if (listRequestRender) listRequestRender(); focusTitle(bodyId); };
   const onKey = (e) => { if (e.key === 'Escape'){ e.preventDefault(); close(); } };
   overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });   // 外側クリックで閉じる
   document.addEventListener('keydown', onKey, true);

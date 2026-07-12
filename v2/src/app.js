@@ -2,7 +2,7 @@
 const _q = new URL(import.meta.url).search;
 const { createStore } = await import('./store.js' + _q);
 const { loadState, saveState } = await import('./persist.js' + _q);
-const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset } = await import('./daily.js' + _q);
+const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, revealDay, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone, setAgendaJump } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.85.0';
+export const APP_VERSION = '0.90.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -99,6 +99,15 @@ function toggleSplit(){
   restoreFocus(currentView);
 }
 
+// 完了カードの表示/非表示トグル（全ビュー共通）。フォーカスを保ったまま切替→再描画。
+function toggleDone(){
+  captureFocus();
+  const hidden = toggleHideDone();
+  renderAll();
+  restoreFocus(currentView);
+  showToast(hidden ? '完了を非表示にしました' : '完了を表示しました');
+}
+
 // ── フォーカス記憶/復元 ──
 function focusToken(el){
   if (!el) return null;
@@ -169,6 +178,13 @@ function renderAll(){
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
     if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
   }
+  const doneBtn = document.getElementById('toggle-done-btn');
+  if (doneBtn){
+    const hidden = getHideDone();
+    doneBtn.classList.toggle('active', hidden);
+    doneBtn.textContent = hidden ? '✓ 完了を表示' : '✓ 完了を隠す';
+    doneBtn.title = (hidden ? '完了カードを表示' : '完了カードを隠す') + '（Alt+H）';
+  }
   document.getElementById('view-split-btn')?.classList.toggle('active', splitOn);
   document.getElementById('view-daily-btn')?.classList.toggle('active', currentView === 'daily');
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
@@ -178,8 +194,11 @@ function renderAll(){
   ensureViewFocus();               // どのビューでもキー操作用フォーカスを失わない安全網
 }
 // フォーカスが app 外（body等）へ落ちていたら、現在ビューの先頭要素へ戻す。編集中など app 内に在れば何もしない。
+// 分割中は「最後に触れていたペイン」を優先＝片方の操作後にもう片方へフォーカスが飛ぶのを防ぐ（#4）。
+let _lastPane = null;   // 直近でフォーカスがあったビュー container id（focusin で更新）
 function focusActiveViewFirst(){
-  const id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : 'view-daily';
+  let id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : 'view-daily';
+  if (splitOn && _lastPane){ const lp = document.getElementById(_lastPane); if (lp && !lp.hidden) id = _lastPane; }
   const cont = document.getElementById(id); if (!cont || cont.hidden) return;
   const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add, input, select, button, [tabindex]');
   if (el) el.focus();
@@ -215,7 +234,10 @@ function jumpToCard(bodyId){
   const ref = refs[0];
   let p = ref.parentRefId ? store.getRef(ref.parentRefId) : null;
   while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
+  let top = ref; while (top.parentRefId){ const pr = store.getRef(top.parentRefId); if (!pr) break; top = pr; }   // 所属の日を特定
+  const dayBody = store.getBody(top.bodyId);
   resetZoom(); clearDayFocus();
+  if (dayBody && dayBody.kind === 'day') revealDay(store, dayBody.content);   // 窓表示の外/折りたたみでも確実に描画
   showView('daily');
   renderAll();
   focusCard(ref.id, -1);
@@ -265,6 +287,7 @@ function gotoDate(date){                  // カレンダー/コマンドから�
   navPush();                        // 遷移前の状態を履歴へ（#1）
   store.ensureDayCard(date);
   resetZoom(); clearDayFocus();
+  revealDay(store, date);          // 窓表示の外/折りたたみでも、その日を展開して描画対象に含める
   showView('daily');
   renderAll();
   const sec = document.querySelector(`.day-sec[data-date="${date}"]`);
@@ -273,6 +296,25 @@ function gotoDate(date){                  // カレンダー/コマンドから�
     const fc = sec.querySelector('.card-txt');
     if (fc) focusCard(fc.dataset.ref, 0);
   }
+}
+// Alt+D: 今日の日にズーム（単日フォーカス）。トグル＝既に今日をズーム中なら全体表示へ戻す。
+// ズーム中は renderDaily が単日を forceExpand で描画＝配下が折りたたまれていても一段階展開して見せる。
+// 折りたたみ状態そのものは書き換えないので、ズームアウトすると元の状態に戻る。
+function zoomTodayToggle(){
+  const today = todayStr();
+  navPush();                        // 遷移前の状態を履歴へ（#1）
+  captureFocus();
+  const zoomedToday = getDayFocus() === today && (currentView === 'daily' || (splitOn && splitRight === 'daily'));
+  if (zoomedToday){
+    clearDayFocus();                // ズームアウト（一時展開を解除＝元の折りたたみ状態へ）
+  } else {
+    store.ensureDayCard(today);
+    setDayFocus(today);             // 今日にズーム（_focusRef も解除される）
+  }
+  showView('daily');
+  renderAll();
+  const dh = document.querySelector(`#view-daily .day-head[data-date="${today}"]`);
+  if (dh) dh.focus(); else restoreFocus('daily');
 }
 function insertTable(cardRef){            // 表ブロックを挿入（フォーカス中カードの次／無ければ今日）
   const rows = [['', '', ''], ['', '', '']];   // 3列×2行（1行目＝見出し）
@@ -317,43 +359,45 @@ function installDividerDrag(){            // ディバイダのドラッグで�
 
 function buildCommands(cardRef){
   const cmds = [
-    { cat:'表示', label:'デイリーを表示', hint:'Alt+2', run: () => selectView('daily') },
-    { cat:'表示', label:'リストを表示', hint:'Alt+1', run: () => selectView('list') },
-    { cat:'表示', label:'プロジェクトを表示', hint:'Alt+3', run: () => selectView('project') },
-    { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', run: toggleSplit },
-    { cat:'表示', label:'今日へ移動', hint:'Alt+D', run: () => gotoDate(todayStr()) },
-    { cat:'表示', label:'日付へ移動（カレンダー）', run: () => openCalendar({ store, onPick: gotoDate }) },
-    { cat:'追加', label:'今日に追加', run: addToday },
-    { cat:'追加', label:'プロジェクトを追加', run: addProject },
-    { cat:'追加', label:'表を挿入', run: () => insertTable(cardRef) },
-    { cat:'設定', label:'GitHub同期設定', run: openSettings },
+    { cat:'表示', label:'デイリーを表示', hint:'Alt+2', roma:'deiri hyouji daily', run: () => selectView('daily') },
+    { cat:'表示', label:'リストを表示', hint:'Alt+1', roma:'risuto hyouji list', run: () => selectView('list') },
+    { cat:'表示', label:'プロジェクトを表示', hint:'Alt+3', roma:'purojekuto hyouji project', run: () => selectView('project') },
+    { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', roma:'bunkatsu hyouji kirikae split', run: toggleSplit },
+    { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', roma:'kanryou hyouji kakusu done hide show', run: toggleDone },
+    { cat:'表示', label:'今日の日にズーム', hint:'Alt+D', roma:'kyou zumu today zoom', run: zoomTodayToggle },
+    { cat:'表示', label:'今日へ移動（全体表示）', roma:'kyou idou today', run: () => gotoDate(todayStr()) },
+    { cat:'表示', label:'日付へ移動（カレンダー）', roma:'hiduke idou karenda- calendar', run: () => openCalendar({ store, onPick: gotoDate }) },
+    { cat:'追加', label:'今日に追加', roma:'kyou tsuika today add', run: addToday },
+    { cat:'追加', label:'プロジェクトを追加', roma:'purojekuto tsuika project add', run: addProject },
+    { cat:'追加', label:'表を挿入', roma:'hyou sounyuu table insert', run: () => insertTable(cardRef) },
+    { cat:'設定', label:'GitHub同期設定', roma:'github douki settei sync setting', run: openSettings },
   ];
   const body = cardRef && store.getBody(store.getRef(cardRef)?.bodyId);
   if (cardRef && body){
     const id = body.id;
     cmds.push(
-      { cat:'カード', label:'行メニューを開く', hint:'Alt+Enter', run: () => dispatchCardKey(cardRef, { key:'Enter', altKey:true }) },
-      { cat:'カード', label: body.kind === 'task' ? 'メモにする' : 'タスクにする', run: () => setCardAttr(id, { kind: body.kind === 'task' ? 'memo' : 'task' }, cardRef) },
-      { cat:'カード', label:'完了の切替', hint:'Ctrl+Enter', run: () => dispatchCardKey(cardRef, { key:'Enter', ctrlKey:true }) },
-      { cat:'カード', label:'インデント', hint:'Tab', run: () => dispatchCardKey(cardRef, { key:'Tab' }) },
-      { cat:'カード', label:'アウトデント', hint:'Shift+Tab', run: () => dispatchCardKey(cardRef, { key:'Tab', shiftKey:true }) },
-      { cat:'カード', label:'上へ移動', hint:'Alt+Shift+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true, shiftKey:true }) },
-      { cat:'カード', label:'下へ移動', hint:'Alt+Shift+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true, shiftKey:true }) },
-      { cat:'カード', label:'折りたたみ', hint:'Ctrl+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', ctrlKey:true }) },
-      { cat:'カード', label:'展開', hint:'Ctrl+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', ctrlKey:true }) },
-      { cat:'カード', label:'ズームイン', hint:'Alt+↓', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true }) },
-      { cat:'カード', label:'ズームアウト', hint:'Alt+↑', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true }) },
-      { cat:'カード', label:'削除', hint:'Ctrl+Shift+Backspace', run: () => dispatchCardKey(cardRef, { key:'Backspace', ctrlKey:true, shiftKey:true }) },
-      { cat:'優先度', label:'高', run: () => setCardAttr(id, { prio:3 }, cardRef) },
-      { cat:'優先度', label:'中', run: () => setCardAttr(id, { prio:2 }, cardRef) },
-      { cat:'優先度', label:'低', run: () => setCardAttr(id, { prio:1 }, cardRef) },
-      { cat:'優先度', label:'なし', run: () => setCardAttr(id, { prio:0 }, cardRef) },
-      { cat:'期限', label:'今日', run: () => setCardAttr(id, { due: todayStr() }, cardRef) },
-      { cat:'期限', label:'明日', run: () => setCardAttr(id, { due: addDays(1) }, cardRef) },
-      { cat:'期限', label:'来週', run: () => setCardAttr(id, { due: addDays(7) }, cardRef) },
-      { cat:'期限', label:'なし', run: () => setCardAttr(id, { due: '' }, cardRef) },
-      ...store.listProjects().map(p => ({ cat:'プロジェクト割当', label: p.content || 'PJ', run: () => setCardAttr(id, { proj: p.id }, cardRef) })),
-      { cat:'プロジェクト割当', label:'割当なし', run: () => setCardAttr(id, { proj: undefined }, cardRef) },
+      { cat:'カード', label:'行メニューを開く', hint:'Alt+Enter', roma:'gyou menyu hiraku row menu open', run: () => dispatchCardKey(cardRef, { key:'Enter', altKey:true }) },
+      { cat:'カード', label: body.kind === 'task' ? 'メモにする' : 'タスクにする', roma:'tasuku memo task', run: () => setCardAttr(id, { kind: body.kind === 'task' ? 'memo' : 'task' }, cardRef) },
+      { cat:'カード', label:'完了の切替', hint:'Ctrl+Enter', roma:'kanryou kirikae done toggle', run: () => dispatchCardKey(cardRef, { key:'Enter', ctrlKey:true }) },
+      { cat:'カード', label:'インデント', hint:'Tab', roma:'indento indent', run: () => dispatchCardKey(cardRef, { key:'Tab' }) },
+      { cat:'カード', label:'アウトデント', hint:'Shift+Tab', roma:'autodento outdent', run: () => dispatchCardKey(cardRef, { key:'Tab', shiftKey:true }) },
+      { cat:'カード', label:'上へ移動', hint:'Alt+Shift+↑', roma:'ue idou up move', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true, shiftKey:true }) },
+      { cat:'カード', label:'下へ移動', hint:'Alt+Shift+↓', roma:'shita idou down move', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true, shiftKey:true }) },
+      { cat:'カード', label:'折りたたみ', hint:'Ctrl+↑', roma:'oritatami collapse fold', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', ctrlKey:true }) },
+      { cat:'カード', label:'展開', hint:'Ctrl+↓', roma:'tenkai expand', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', ctrlKey:true }) },
+      { cat:'カード', label:'ズームイン', hint:'Alt+↓', roma:'zumu in zoom', run: () => dispatchCardKey(cardRef, { key:'ArrowDown', altKey:true }) },
+      { cat:'カード', label:'ズームアウト', hint:'Alt+↑', roma:'zumu auto zoom out', run: () => dispatchCardKey(cardRef, { key:'ArrowUp', altKey:true }) },
+      { cat:'カード', label:'削除', hint:'Ctrl+Shift+Backspace', roma:'sakujo delete', run: () => dispatchCardKey(cardRef, { key:'Backspace', ctrlKey:true, shiftKey:true }) },
+      { cat:'優先度', label:'高', roma:'takai kou high priority', run: () => setCardAttr(id, { prio:3 }, cardRef) },
+      { cat:'優先度', label:'中', roma:'chuu naka mid medium priority', run: () => setCardAttr(id, { prio:2 }, cardRef) },
+      { cat:'優先度', label:'低', roma:'hikui tei low priority', run: () => setCardAttr(id, { prio:1 }, cardRef) },
+      { cat:'優先度', label:'なし', roma:'nashi none priority', run: () => setCardAttr(id, { prio:0 }, cardRef) },
+      { cat:'期限', label:'今日', roma:'kyou today due', run: () => setCardAttr(id, { due: todayStr() }, cardRef) },
+      { cat:'期限', label:'明日', roma:'ashita asu tomorrow due', run: () => setCardAttr(id, { due: addDays(1) }, cardRef) },
+      { cat:'期限', label:'来週', roma:'raishuu nextweek due', run: () => setCardAttr(id, { due: addDays(7) }, cardRef) },
+      { cat:'期限', label:'なし', roma:'nashi none due', run: () => setCardAttr(id, { due: '' }, cardRef) },
+      ...store.listProjects().map(p => ({ cat:'プロジェクト割当', label: p.content || 'PJ', roma: (p.content || 'pj').toLowerCase() + ' wariate assign', run: () => setCardAttr(id, { proj: p.id }, cardRef) })),
+      { cat:'プロジェクト割当', label:'割当なし', roma:'wariate nashi none assign', run: () => setCardAttr(id, { proj: undefined }, cardRef) },
     );
   }
   return cmds;
@@ -413,21 +457,28 @@ function boot(){
   document.getElementById('view-proj-btn')?.addEventListener('click', () => selectView('project'));
   document.getElementById('view-search-btn')?.addEventListener('click', () => selectView('search'));
   document.getElementById('view-split-btn')?.addEventListener('click', toggleSplit);
+  document.getElementById('toggle-done-btn')?.addEventListener('click', toggleDone);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
+  setAgendaJump(jumpToCard);                      // アジェンダ↗（元の場所へ）＝該当カードへジャンプ
   setSavedSearchOpener(openSavedSearch);         // ⟦s:id⟧ チップ→保存検索を開く
   setImageLoader(GH.ghFetchImageURL);            // 画像カード: repoパス→表示URL
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
+  document.addEventListener('focusin', (e) => {             // 直近に触れたペインを記録（分割時のフォーカス復帰先・#4）
+    const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search');
+    if (c) _lastPane = c.id;
+  });
   document.addEventListener('keydown', (e) => {              // Alt+1/2/3=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E
     if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){
       if (e.code === 'Digit1'){ e.preventDefault(); selectView('list'); return; }     // リスト（分割中は左へフォーカス）
       if (e.code === 'Digit2'){ e.preventDefault(); selectView('daily'); return; }    // デイリー（分割中は右をデイリーに）
       if (e.code === 'Digit3'){ e.preventDefault(); selectView('project'); return; }  // プロジェクト（分割中は右をプロジェクトに）
       if (e.code === 'Digit0'){ e.preventDefault(); toggleSplit(); return; }          // 分割 ON/OFF トグル
+      if (e.key === 'h' || e.key === 'H'){ e.preventDefault(); toggleDone(); return; }   // 完了の表示/非表示トグル（全ビュー共通）
       if (e.key === 'ArrowLeft'){ e.preventDefault(); navBack(); return; }            // 前の画面に戻る（#1・ブラウザ戻る抑止）
       if (e.key === 'ArrowRight'){ e.preventDefault(); navForward(); return; }        // 次の画面へ進む（#1）
-      if (e.key === 'd' || e.key === 'D'){ e.preventDefault(); gotoDate(todayStr()); return; }   // 今日のデイリーへ
+      if (e.key === 'd' || e.key === 'D'){ e.preventDefault(); zoomTodayToggle(); return; }   // 今日の日にズーム（トグル）
       if (e.key === 'v' || e.key === 'V'){                                                       // リスト表示中: 保存ビュー選択欄へ（#4・選択後はリスト本体へ復帰）
         const sel = document.querySelector('#view-list .view-select');
         if (sel && sel.offsetParent !== null){ e.preventDefault(); sel.focus(); return; }
