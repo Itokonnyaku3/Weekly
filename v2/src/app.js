@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.90.0';
+export const APP_VERSION = '0.90.1';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -200,7 +200,9 @@ function focusActiveViewFirst(){
   let id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : 'view-daily';
   if (splitOn && _lastPane){ const lp = document.getElementById(_lastPane); if (lp && !lp.hidden) id = _lastPane; }
   const cont = document.getElementById(id); if (!cont || cont.hidden) return;
-  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add, input, select, button, [tabindex]');
+  // 本文コンテンツを最優先（querySelectorは記述順でなくDOM出現順で返すため、ビューバーのselectを先に掴まないよう2段構え）
+  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add')
+          || cont.querySelector('input, select, button, [tabindex]');
   if (el) el.focus();
 }
 function ensureViewFocus(){

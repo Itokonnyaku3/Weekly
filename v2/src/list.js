@@ -715,14 +715,32 @@ function buildColumnPicker(state, touch){
 }
 
 // ── セル ──
-// 行タイトル（＝行の代表フォーカス先）へフォーカスを移す。チェック切替やスペーストグル後の復帰に使う。
+// 行タイトル（＝行の代表フォーカス先）へフォーカスを移す。チェック切替やスペーストグル後の復帰に使う。成否を返す。
 function esc(s){ return (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s); }
-function focusTitle(id){ const el = document.querySelector('#view-list [data-fkey="title:' + esc(id) + '"]'); if (el) el.focus(); }
+function focusTitle(id){ const el = document.querySelector('#view-list [data-fkey="title:' + esc(id) + '"]'); if (el){ el.focus(); return true; } return false; }
+// 与えた行の前後で最も近い「残存するタスク行」のIDを返す（完了非表示で行が消えたときの復帰先）。見出し行(data-taskなし)は飛ばす。
+function siblingTaskId(tr){
+  if (!tr) return null;
+  let n = tr.nextElementSibling;
+  while (n && !(n.dataset && n.dataset.task)) n = n.nextElementSibling;
+  if (!n){ n = tr.previousElementSibling; while (n && !(n.dataset && n.dataset.task)) n = n.previousElementSibling; }
+  return (n && n.dataset && n.dataset.task) || null;
+}
+// 完了トグルの共通処理。完了非表示中に完了すると行が消えるため、消える前に隣の行を控え、
+// 再描画後は「そのタイトル→隣のタイトル→リスト本体」の順で復帰する（現在の条件selへ飛ばさない）。
+function toggleDone(store, requestRender, t, tr, nextDone){
+  const neighbor = (getHideDone() && nextDone) ? siblingTaskId(tr) : null;   // 完了で行が消える時だけ隣を控える
+  store.updateBody(t.id, { done: nextDone });
+  requestRender();
+  if (focusTitle(t.id)) return;                  // 通常＝行が残る（完了非表示OFF/未完了へ戻す）
+  if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ
+  focusListBody();                               // 最後の砦もリスト本体に限定
+}
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!t.done;
   cb.tabIndex = -1;                                // 個別フォーカス廃止＝行のタイトルに集約（切替はタイトルフォーカス中のスペース／マウスクリック）
-  cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); focusTitle(t.id); };   // マウス切替後はタイトルへフォーカスを戻す
+  cb.onchange = () => toggleDone(store, requestRender, t, cb.closest('tr'), cb.checked);   // 切替後は残存行へフォーカスを戻す
   td.appendChild(cb); return td;
 }
 function cellTitle(store, requestRender, t){
@@ -754,7 +772,7 @@ function cellTitle(store, requestRender, t){
     else if ((e.key === ' ' || e.key === 'Spacebar') && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){   // スペース=完了トグル（行フォーカス中）
       e.preventDefault();
       const cur = store.getBody(t.id) || t;
-      store.updateBody(t.id, { done: !cur.done }); requestRender(); focusTitle(t.id);
+      toggleDone(store, requestRender, t, chip.closest('tr'), !cur.done);
     }
     else navKey(e);
   });
