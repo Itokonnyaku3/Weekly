@@ -208,7 +208,13 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .sort-dir-btn:disabled{opacity:.4;cursor:default}
 .list-count{margin-left:auto;color:var(--tx3)}
 .list-table{border-collapse:collapse;width:100%;max-width:860px;font-size:13px;table-layout:fixed}   /* 列幅を固定（thead基準）＝タイトルが文字列で広がらない（#5）*/
-.list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px}
+/* プロパティ列あり: 固定幅列の合計が860pxを超えタイトルが潰れるため、上限を外しタイトルに既定幅。あふれは .list-scroll で横スクロール */
+.list-table.has-props{max-width:none}
+.list-table.has-props .c-title{width:280px}
+.list-scroll{overflow-x:auto}
+.list-table th{text-align:left;font-weight:600;color:var(--tx3);border-bottom:1px solid var(--bd);padding:4px 8px;position:relative}   /* relative=列幅リサイズハンドルの基準 */
+.col-resize{position:absolute;top:0;right:0;width:6px;height:100%;cursor:col-resize;user-select:none}   /* 列幅リサイズのドラッグハンドル（th右端）*/
+.col-resize:hover{background:var(--accent-soft)}
 .list-table td{border-bottom:1px solid var(--bd);padding:3px 8px;vertical-align:middle}
 /* フォーカス中の行/見出し＝アクセント色のはっきりした囲み枠（マウス/キーボード/ビュー切替のどれでも同じ・#1）。
    複数セル行は上下＋両端の inset で連続した枠に、colspan の見出し行(:only-child)は四辺で囲む。*/
@@ -242,9 +248,14 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .col-picker>summary::-webkit-details-marker{display:none}
 .col-picker-box{position:absolute;z-index:5;margin-top:4px;background:var(--panel);border:1px solid var(--bd);border-radius:6px;padding:6px 10px;box-shadow:0 6px 18px rgba(0,0,0,.14);display:flex;flex-direction:column;gap:4px;white-space:nowrap}
 .col-picker-box label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--tx)}
+.col-picker-tag{margin-top:4px;padding-top:4px;border-top:1px solid var(--bd);font-size:11px;font-weight:600;color:var(--tx3)}   /* タグプロパティ列の小見出し */
 /* 追加列 */
 .list-table .c-proj{width:140px}
 .list-table .c-created{width:96px}
+/* タグプロパティ列（動的列）。幅を狭めてもはみ出さないようセル内で省略 */
+.list-table .c-prop{width:110px}
+.list-table td.c-prop{overflow:hidden;white-space:nowrap}
+.list-table .c-prop .cell-chip{max-width:100%}
 .cell-muted{color:var(--tx3)}
 
 /* プロジェクト（管理＋割当セレクト）*/
