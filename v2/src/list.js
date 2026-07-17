@@ -6,6 +6,7 @@
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
+const { cardTags, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
 
 // ── 純ロジック（テスト対象）──
 // 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
@@ -134,6 +135,7 @@ function defaultGroup(){
     proj: 'all',
     mid:  '',
     prio: 'all',
+    tags: [],
   };
 }
 function dayDiff(due, today){
@@ -164,12 +166,19 @@ export function projMatch(proj, filter){
   if (filter === 'none') return !proj;
   return proj === filter;        // 特定PJのID
 }
+// タグ条件: 指定タグをすべて含む（AND）。空/未定義は条件なし。OR は条件グループの追加で表現。
+function tagsGroupMatch(content, tags){
+  if (!tags || !tags.length) return true;
+  const set = cardTags(content);
+  return tags.every(x => set.has(x));
+}
 function groupMatch(t, g, today){
   return dueGroupMatch(t.due, g.due, today)
       && doneGroupMatch(t, g.done, today)
       && projMatch(t.proj, g.proj)
       && (!g.mid || (t.mid || '').toLowerCase().includes(g.mid.toLowerCase()))
-      && (g.prio === 'all' || String(t.prio || 0) === g.prio);
+      && (g.prio === 'all' || String(t.prio || 0) === g.prio)
+      && tagsGroupMatch(t.content, g.tags);
 }
 function cmpStr(x, y){ x = x||''; y = y||''; return x < y ? -1 : x > y ? 1 : 0; }
 function dueCmp(a, b){
@@ -248,11 +257,37 @@ const COLUMNS = {
 const COLUMN_ORDER = ['project', 'mid', 'status', 'title', 'priority', 'due', 'created'];
 export const DEFAULT_COLUMNS = ['project', 'mid', 'status', 'title', 'priority', 'due'];
 
+// 表示列キーの合成（純ロジック・テスト対象）: stored=保存された列キー、schemaTags=条件グループ中のスキーマ持ちタグ。
+// 静的列は COLUMN_ORDER の順を維持し、プロパティ列（'p:タグ:キー'）は期限の後・作成日の前に
+// schemaTags の順→スキーマ定義順で挿入。schemaTags に現存しないタグの 'p:' キーは無視（古い残骸）。
+export function composeColumns(stored, schemaTags){
+  const set = new Set(stored && stored.length ? stored : DEFAULT_COLUMNS);
+  set.add('title');                                   // タイトルは必須
+  const out = [];
+  for (const k of COLUMN_ORDER){
+    if (k === 'created'){                             // 作成日の直前＝プロパティ列の挿入位置（作成日が非表示でも末尾に入る）
+      for (const tag of schemaTags || []){
+        const s = TAG_SCHEMAS[tag]; if (!s) continue;
+        for (const p of s.props){ const ck = propColKey(tag, p.key); if (set.has(ck)) out.push(ck); }
+      }
+    }
+    if (set.has(k)) out.push(k);
+  }
+  return out;
+}
+// 列キー→列定義。静的キーは COLUMNS、'p:' キーはスキーマから動的に生成（無効キーは null）。
+function colDef(k){
+  if (COLUMNS[k]) return COLUMNS[k];
+  const pk = parsePropColKey(k);
+  const def = pk && propDef(pk.tag, pk.key);
+  if (!def) return null;
+  return {
+    label: def.label, cls: 'c-prop c-prop-' + def.type, tag: pk.tag,
+    render: (store, requestRender, t) => cellProp(store, requestRender, t, pk.tag, def),
+  };
+}
 function activeColumns(state){
-  const stored = (state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS).filter(k => COLUMNS[k]);
-  const set = new Set(stored.length ? stored : DEFAULT_COLUMNS);
-  set.add('title');                                  // タイトルは必須
-  return COLUMN_ORDER.filter(k => set.has(k));        // 常にこの順（プロジェクトが左端）
+  return composeColumns(state.columns, schemaTagsInGroups(ensureGroups(state)));
 }
 
 // プロジェクト区切り行（行自体に淡色＋左の色帯＋折りたたみトグル）
@@ -336,13 +371,20 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   if (state._focusProj != null) mount.appendChild(projFocusCrumb(store, requestRender, state));   // プロジェクトフォーカス中のパンくず
 
   const table = document.createElement('table');
-  table.className = 'list-table' + (grouped ? ' list-tree' : '');   // ツリー表示は状態列を広げてインデント分を確保（#5 重なり解消）
+  table.className = 'list-table' + (grouped ? ' list-tree' : '')
+    + (cols.some(k => k.startsWith('p:')) ? ' has-props' : '');   // ツリー表示は状態列を広げてインデント分を確保（#5）／プロパティ列ありは幅上限を外す（タイトル潰れ防止）
   const thead = document.createElement('thead');
   const htr = document.createElement('tr');
+  const colW = state.colWidths || (state.colWidths = {});
+  const touchW = () => { state._viewId = null; requestRender(); };   // 幅の確定は「現在の条件」化（他コントロールと同じ扱い）
   for (const k of cols){
+    const d = colDef(k);
     const th = document.createElement('th');
-    th.className = COLUMNS[k].cls;
-    th.textContent = k === 'status' ? '' : COLUMNS[k].label;
+    th.className = d.cls;
+    th.textContent = k === 'status' ? '' : d.label;
+    if (d.tag) th.title = d.tag;                       // 動的列はどのタグ由来かを補足
+    if (colW[k] != null) th.style.width = colW[k] + 'px';
+    th.appendChild(colResizer(th, k, colW, touchW));
     htr.appendChild(th);
   }
   thead.appendChild(htr);
@@ -384,7 +426,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
       tr.dataset.task = t.id; tr.dataset.proj = g; tr.dataset.mid = t.mid || '';
       if (t.done) tr.classList.add('row-done');
       if (state._sel && state._sel.has(t.id)) tr.classList.add('row-sel');   // 行選択中のハイライト
-      for (const k of cols) tr.appendChild(COLUMNS[k].render(store, requestRender, t));
+      for (const k of cols) tr.appendChild(colDef(k).render(store, requestRender, t));
       if (grouped && tr.firstChild) tr.firstChild.style.paddingLeft = (projHasMid[g] ? 48 : 18) + 'px';   // ツリーのインデント（中項目より明確に深く・#3）
       if (grouped){                                    // D&Dで中項目移動（同PJ内のみ）
         tr.draggable = true;
@@ -392,7 +434,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
         tr.addEventListener('dragend', () => { _dragTask = null; clearDropHi(); });
       }
       tr.addEventListener('click', (e) => {            // クリックで行を選択（タイトルにフォーカス→ tr:focus-within で行全体ハイライト）
-        if (e.target.closest('.list-title')) return;   // 編集中の入力からはフォーカスを奪わない
+        if (e.target.closest('.list-title, .cell-edit')) return;   // 編集中の入力からはフォーカスを奪わない
         clearListSel(tb);                              // 明示的な複数選択は解除
         const chip = tr.querySelector('.title-chip'); if (chip) chip.focus();
       });
@@ -422,7 +464,9 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
     b.onclick = () => doAddTask(store, requestRender, {}, today);
     bar.appendChild(b); mount.appendChild(bar);
   }
-  mount.appendChild(table);
+  const scroll = document.createElement('div'); scroll.className = 'list-scroll';   // プロパティ列で横に伸びた分はテーブル単位でスクロール
+  scroll.appendChild(table);
+  mount.appendChild(scroll);
 
   // 中項目の入力サジェスト（既存の中項目を候補に）
   const mids = [...new Set(all.map(t => t.mid).filter(Boolean))].sort();
@@ -430,7 +474,35 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   mids.forEach(m => { const o = document.createElement('option'); o.value = m; dl.appendChild(o); });
   mount.appendChild(dl);
 
+  // タグ条件の入力サジェスト（全タスクの #タグ を候補に）
+  const tagSet = new Set();
+  for (const t of all) for (const x of cardTags(t.content)) tagSet.add(x);
+  const tdl = document.createElement('datalist'); tdl.id = 'pwt2-tags';
+  [...tagSet].sort().forEach(x => { const o = document.createElement('option'); o.value = x; tdl.appendChild(o); });
+  mount.appendChild(tdl);
+
   if (refocus){ const el = mount.querySelector('[data-fkey="' + refocus + '"]'); if (el) el.focus(); }
+}
+
+// 列幅リサイズのドラッグハンドル（th 右端）。ドラッグ中は th.style.width の直更新のみ（再描画しない）、
+// mouseup で colW[k] に確定して touch（ビュー保存対象）。最小幅40px。
+function colResizer(th, k, colW, touch){
+  const h = document.createElement('span'); h.className = 'col-resize';
+  h.addEventListener('mousedown', (e) => {
+    e.preventDefault(); e.stopPropagation();          // 見出し側のクリック処理と干渉させない
+    const startX = e.clientX, startW = th.getBoundingClientRect().width;
+    const width = (ev) => Math.max(40, Math.round(startW + ev.clientX - startX));
+    const move = (ev) => { th.style.width = width(ev) + 'px'; };
+    const up = (ev) => {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', up);
+      colW[k] = width(ev);
+      touch();
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  });
+  return h;
 }
 
 // プロジェクトフォーカス中のパンくず（全体に戻る）
@@ -490,6 +562,7 @@ function buildViewBar(store, requestRender, state){
       name: nm, groups: cloneGroups(ensureGroups(state)),
       sort: state.sort, sortDir: state.sortDir || 'asc', columns: activeColumns(state).slice(),
       showSubtasks: !!state._showSubtasks,
+      colWidths: { ...(state.colWidths || {}) },
     });
     state._viewId = v.id; state._draftName = '';
     requestRender();
@@ -522,6 +595,7 @@ function applyView(state, v){
   state.sortDir = v.sortDir === 'desc' ? 'desc' : 'asc';
   state.columns = (v.columns && v.columns.length ? v.columns.slice() : DEFAULT_COLUMNS.slice());
   state._showSubtasks = !!v.showSubtasks;   // 旧ビューは未定義→false（非表示）＝望ましい既定
+  state.colWidths = v.colWidths ? { ...v.colWidths } : {};   // 旧ビューは未定義→既定幅
   state._viewId = v.id;
 }
 
@@ -595,7 +669,7 @@ function dayRangeInputs(cond, touch, fkeyPrefix){
   wrap.appendChild(document.createTextNode('日'));
   return wrap;
 }
-function buildGroupCard(store, groups, g, i, touch){
+function buildGroupCard(store, state, groups, g, i, touch){
   const card = document.createElement('div'); card.className = 'filter-group';
 
   const dueRow = document.createElement('div'); dueRow.className = 'filter-group-row';
@@ -623,6 +697,24 @@ function buildGroupCard(store, groups, g, i, touch){
   row3.appendChild(labelWrap('優先度', selectEl([
     ['all','すべて'], ['0','なし'], ['1','低'], ['2','中'], ['3','高'],
   ], g.prio, v => { g.prio = v; touch(); }, 'g'+i+':prio')));
+  const tagInp = document.createElement('input');
+  tagInp.type = 'text'; tagInp.placeholder = 'タグ(#無し・空白区切り)'; tagInp.value = (g.tags || []).join(' ');
+  tagInp.setAttribute('list', 'pwt2-tags');
+  tagInp.dataset.fkey = 'g'+i+':tags';
+  tagInp.addEventListener('change', () => {
+    const prev = g.tags || [];
+    g.tags = tagInp.value.split(/[\s,]+/).map(s => s.replace(/^#/, '')).filter(Boolean);
+    // 新たに指定したスキーマ持ちタグのプロパティ列は自動で表示に追加（既定ON）。既にある列は重複させない。
+    const cur = new Set(state.columns && state.columns.length ? state.columns : DEFAULT_COLUMNS);
+    for (const tag of g.tags){
+      if (prev.includes(tag)) continue;
+      const s = TAG_SCHEMAS[tag]; if (!s) continue;
+      for (const p of s.props) cur.add(propColKey(tag, p.key));
+    }
+    state.columns = [...cur];
+    touch();
+  });
+  row3.appendChild(tagInp);
   card.appendChild(row3);
 
   if (groups.length > 1){
@@ -636,7 +728,7 @@ function buildGroupCard(store, groups, g, i, touch){
 function buildFilterGroups(store, state, touch){
   const groups = ensureGroups(state);
   const wrap = document.createElement('div'); wrap.className = 'filter-groups';
-  groups.forEach((g, i) => wrap.appendChild(buildGroupCard(store, groups, g, i, touch)));
+  groups.forEach((g, i) => wrap.appendChild(buildGroupCard(store, state, groups, g, i, touch)));
   const addBtn = document.createElement('button');
   addBtn.type = 'button'; addBtn.className = 'btn filter-add-group'; addBtn.dataset.fkey = 'addgroup';
   addBtn.textContent = '＋ OR条件を追加';
@@ -694,35 +786,70 @@ function buildColumnPicker(state, touch){
   const box = document.createElement('div');
   box.className = 'col-picker-box';
   const cur = new Set(activeColumns(state));
+  // チェック操作の共通処理: 現在の表示列に加減して composeColumns の全順序で再構成
+  const toggleCol = (key, on) => {
+    const set = new Set(activeColumns(state));
+    if (on) set.add(key); else set.delete(key);
+    set.add('title');
+    state.columns = composeColumns([...set], schemaTagsInGroups(ensureGroups(state)));
+    touch();
+  };
   for (const k of COLUMN_ORDER){
     const lab = document.createElement('label');
     const cb = document.createElement('input');
     cb.type = 'checkbox'; cb.checked = cur.has(k);
     if (k === 'title'){ cb.checked = true; cb.disabled = true; }
-    cb.onchange = () => {
-      const set = new Set(activeColumns(state));
-      if (cb.checked) set.add(k); else set.delete(k);
-      set.add('title');
-      state.columns = COLUMN_ORDER.filter(x => set.has(x));
-      touch();
-    };
+    cb.onchange = () => toggleCol(k, cb.checked);
     lab.appendChild(cb);
     lab.appendChild(document.createTextNode(' ' + COLUMNS[k].label));
     box.appendChild(lab);
+  }
+  // 条件グループにスキーマ持ちタグがある時だけ、タグ名の小見出し＋プロパティ列のチェックを追加
+  for (const tag of schemaTagsInGroups(ensureGroups(state))){
+    const h = document.createElement('div'); h.className = 'col-picker-tag'; h.textContent = tag;
+    box.appendChild(h);
+    for (const p of TAG_SCHEMAS[tag].props){
+      const ck = propColKey(tag, p.key);
+      const lab = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = cur.has(ck);
+      cb.onchange = () => toggleCol(ck, cb.checked);
+      lab.appendChild(cb);
+      lab.appendChild(document.createTextNode(' ' + p.label));
+      box.appendChild(lab);
+    }
   }
   det.appendChild(box);
   return det;
 }
 
 // ── セル ──
-// 行タイトル（＝行の代表フォーカス先）へフォーカスを移す。チェック切替やスペーストグル後の復帰に使う。
+// 行タイトル（＝行の代表フォーカス先）へフォーカスを移す。チェック切替やスペーストグル後の復帰に使う。成否を返す。
 function esc(s){ return (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s); }
-function focusTitle(id){ const el = document.querySelector('#view-list [data-fkey="title:' + esc(id) + '"]'); if (el) el.focus(); }
+function focusTitle(id){ const el = document.querySelector('#view-list [data-fkey="title:' + esc(id) + '"]'); if (el){ el.focus(); return true; } return false; }
+// 与えた行の前後で最も近い「残存するタスク行」のIDを返す（完了非表示で行が消えたときの復帰先）。見出し行(data-taskなし)は飛ばす。
+function siblingTaskId(tr){
+  if (!tr) return null;
+  let n = tr.nextElementSibling;
+  while (n && !(n.dataset && n.dataset.task)) n = n.nextElementSibling;
+  if (!n){ n = tr.previousElementSibling; while (n && !(n.dataset && n.dataset.task)) n = n.previousElementSibling; }
+  return (n && n.dataset && n.dataset.task) || null;
+}
+// 完了トグルの共通処理。完了非表示中に完了すると行が消えるため、消える前に隣の行を控え、
+// 再描画後は「そのタイトル→隣のタイトル→リスト本体」の順で復帰する（現在の条件selへ飛ばさない）。
+function toggleDone(store, requestRender, t, tr, nextDone){
+  const neighbor = (getHideDone() && nextDone) ? siblingTaskId(tr) : null;   // 完了で行が消える時だけ隣を控える
+  store.updateBody(t.id, { done: nextDone });
+  requestRender();
+  if (focusTitle(t.id)) return;                  // 通常＝行が残る（完了非表示OFF/未完了へ戻す）
+  if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ
+  focusListBody();                               // 最後の砦もリスト本体に限定
+}
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!t.done;
   cb.tabIndex = -1;                                // 個別フォーカス廃止＝行のタイトルに集約（切替はタイトルフォーカス中のスペース／マウスクリック）
-  cb.onchange = () => { store.updateBody(t.id, { done: cb.checked }); requestRender(); focusTitle(t.id); };   // マウス切替後はタイトルへフォーカスを戻す
+  cb.onchange = () => toggleDone(store, requestRender, t, cb.closest('tr'), cb.checked);   // 切替後は残存行へフォーカスを戻す
   td.appendChild(cb); return td;
 }
 function cellTitle(store, requestRender, t){
@@ -754,7 +881,7 @@ function cellTitle(store, requestRender, t){
     else if ((e.key === ' ' || e.key === 'Spacebar') && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){   // スペース=完了トグル（行フォーカス中）
       e.preventDefault();
       const cur = store.getBody(t.id) || t;
-      store.updateBody(t.id, { done: !cur.done }); requestRender(); focusTitle(t.id);
+      toggleDone(store, requestRender, t, chip.closest('tr'), !cur.done);
     }
     else navKey(e);
   });
@@ -808,6 +935,32 @@ function cellDue(store, requestRender, t){
 function cellCreated(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-created cell-muted';
   td.textContent = (t.createdAt || '').slice(0, 10) || '—';
+  return td;
+}
+// プロパティ列セル（タグスキーマ由来）。表示はチップ、ダブルクリックでその場編集（date/select）。
+// 行フォーカスはタイトルに集約したまま＝ data-col / tabIndex は付けない（↑↓ナビを壊さない）。
+function cellProp(store, requestRender, t, tag, def){
+  const td = document.createElement('td'); td.className = 'c-prop c-prop-' + def.type;
+  const val = () => (((store.getBody(t.id) || t).props) || {})[def.key] || '';
+  const chip = displayChip({ text: val() || '—', muted: !val() });
+  const revert = (ed) => { if (ed.isConnected) ed.replaceWith(chip); };
+  const edit = () => {
+    if (!chip.isConnected) return;                    // 既に編集中は開き直さない
+    const commit = (v) => { store.updateBody(t.id, propsPatch(store.getBody(t.id), def.key, v)); requestRender(); };
+    let ed;
+    if (def.type === 'select'){
+      ed = selectEl([['', '—'], ...def.options.map(o => [o, o])], val(), commit);
+    } else {
+      ed = document.createElement('input'); ed.type = 'date'; ed.value = val();
+      ed.addEventListener('change', () => commit(ed.value));
+    }
+    ed.classList.add('cell-edit');
+    ed.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ e.preventDefault(); revert(ed); } });   // Esc=破棄して表示へ
+    ed.addEventListener('blur', () => revert(ed));    // date は change が先に確定済み／select は表示へ戻すだけ
+    chip.replaceWith(ed); ed.focus();
+  };
+  td.addEventListener('dblclick', edit);
+  td.appendChild(chip);
   return td;
 }
 

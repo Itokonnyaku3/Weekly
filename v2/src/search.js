@@ -2,14 +2,8 @@
 const _q = new URL(import.meta.url).search;
 const { dueGroupMatch, projMatch } = await import('./list.js' + _q);
 const { renderChildren } = await import('./daily.js' + _q);
-
-const TAG_RE = /#([^\s#⟦⟧]+)/g;
-// 本文中の #タグ 名の集合
-export function cardTags(content){
-  const set = new Set(); let m; TAG_RE.lastIndex = 0;
-  while ((m = TAG_RE.exec(content || ''))) set.add(m[1]);
-  return set;
-}
+const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
+export { cardTags };                                     // 既存の利用元（テスト等）との互換
 // カードが query に AND で一致するか。対象は memo/task のみ。
 export function matchCard(body, query, today){
   if (!body || (body.kind !== 'memo' && body.kind !== 'task')) return false;
