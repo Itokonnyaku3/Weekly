@@ -6,7 +6,7 @@
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
-const { cardTags, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
+const { cardTags, TAG_RE, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
 
 // ── 純ロジック（テスト対象）──
 // 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
@@ -546,6 +546,7 @@ function buildViewBar(store, requestRender, state){
     focusListBody();               // 選択後はリスト本体へフォーカスを戻す（#4）
   };
   bar.appendChild(labelWrap('ビュー', sel));
+  bar.appendChild(buildQuickViews(store, requestRender, state));   // 保存ビューをワンタッチ適用するスロットボタン＋割当
 
   const name = document.createElement('input');
   name.type = 'text'; name.className = 'view-name'; name.placeholder = 'ビュー名';
@@ -597,6 +598,62 @@ function applyView(state, v){
   state._showSubtasks = !!v.showSubtasks;   // 旧ビューは未定義→false（非表示）＝望ましい既定
   state.colWidths = v.colWidths ? { ...v.colWidths } : {};   // 旧ビューは未定義→既定幅
   state._viewId = v.id;
+}
+
+// ── ビュー切り替えの固定スロット（保存ビューをワンタッチ適用）──
+// 割り当ては個人的なナビの近道＝localStorage（現在ビュー/分割比と同じUI設定扱い）。undo履歴やGitHub同期には乗せない。
+const QV_KEY = 'pwt2_quickViews';
+const QV_SLOTS = 5;
+function loadQuickViews(){
+  try { const a = JSON.parse(localStorage.getItem(QV_KEY) || '[]'); return Array.isArray(a) ? a : []; }
+  catch(_){ return []; }
+}
+function saveQuickViews(arr){
+  try { localStorage.setItem(QV_KEY, JSON.stringify(arr.slice(0, QV_SLOTS))); } catch(_){}
+}
+function buildQuickViews(store, requestRender, state){
+  const wrap = document.createElement('span'); wrap.className = 'quick-views';
+  const slots = loadQuickViews();
+  const views = store.listViews();
+  slots.forEach((vid, i) => {
+    if (!vid) return;
+    const v = views.find(x => x.id === vid);
+    if (!v) return;                                 // 割当先ビューが削除済みならボタンは出さない（設定に残っても無害）
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn quick-view' + (state._viewId === v.id ? ' active' : '');
+    b.textContent = v.name; b.title = 'スロット' + (i + 1) + '：「' + v.name + '」を適用';
+    b.dataset.fkey = 'quick:' + i;
+    b.onclick = () => { applyView(state, v); requestRender(); focusListBody(); };
+    wrap.appendChild(b);
+  });
+  wrap.appendChild(buildQuickAssign(store, requestRender, state, slots, views));
+  return wrap;
+}
+// スロットへの割り当てUI（各スロット＝保存ビューのプルダウン）。歯車で開閉。
+function buildQuickAssign(store, requestRender, state, slots, views){
+  const det = document.createElement('details'); det.className = 'quick-assign';
+  det.open = !!state._qaOpen;
+  det.addEventListener('toggle', () => { state._qaOpen = det.open; });
+  det.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ e.preventDefault(); det.open = false; state._qaOpen = false; const s = det.querySelector('summary'); if (s) s.focus(); } });
+  const sum = document.createElement('summary'); sum.className = 'quick-assign-sum'; sum.textContent = '⚙'; sum.title = 'ボタンに保存ビューを割り当て';
+  det.appendChild(sum);
+  const box = document.createElement('div'); box.className = 'quick-assign-box';
+  if (!views.length){
+    const e = document.createElement('div'); e.className = 'qa-empty'; e.textContent = '先に条件を「保存」してビューを作成してください';
+    box.appendChild(e); det.appendChild(box); return det;
+  }
+  const opts = [['', '（未割当）'], ...views.map(v => [v.id, v.name])];
+  for (let i = 0; i < QV_SLOTS; i++){
+    const row = document.createElement('label'); row.className = 'qa-row';
+    row.appendChild(document.createTextNode('ボタン' + (i + 1)));
+    const sel = selectEl(opts, slots[i] || '', (val) => {
+      const cur = loadQuickViews(); cur[i] = val || null; saveQuickViews(cur); requestRender();
+    }, 'qa:' + i);
+    row.appendChild(sel);
+    box.appendChild(row);
+  }
+  det.appendChild(box);
+  return det;
 }
 
 // ── プロジェクト管理（作成・改名・削除）──
@@ -856,10 +913,10 @@ function cellTitle(store, requestRender, t){
   const td = document.createElement('td');
   const chip = document.createElement('span');
   chip.className = 'cell-chip title-chip'; chip.tabIndex = 0; chip.dataset.fkey = 'title:' + t.id; chip.dataset.col = 'title';
-  chip.textContent = t.content || '(無題)';
+  fillTitleDisplay(chip, t.content);                          // #タグは緑ラベル表示（ノードと同じ .tag）
   if (!t.content) chip.classList.add('none');
   const revert = (ed, focus) => {
-    chip.textContent = ed.textContent || '(無題)';
+    fillTitleDisplay(chip, ed.textContent);
     chip.classList.toggle('none', !ed.textContent);
     if (ed.isConnected) ed.replaceWith(chip);
     if (focus) chip.focus();
@@ -896,6 +953,19 @@ function cellTitle(store, requestRender, t){
     wrap.appendChild(badge);
   }
   td.appendChild(wrap); return td;
+}
+// タイトル表示チップに本文を流し込む: #タグ は緑ラベル（.tag）、それ以外はテキスト。編集時は生テキストへ戻すので直列化は不変。
+function fillTitleDisplay(chip, content){
+  chip.textContent = '';
+  if (!content){ chip.textContent = '(無題)'; return; }
+  let last = 0, m; TAG_RE.lastIndex = 0;
+  while ((m = TAG_RE.exec(content))){
+    if (m.index > last) chip.appendChild(document.createTextNode(content.slice(last, m.index)));
+    const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = '#' + m[1];
+    chip.appendChild(tag);
+    last = m.index + m[0].length;
+  }
+  if (last < content.length) chip.appendChild(document.createTextNode(content.slice(last)));
 }
 // 表示専用チップ（#行選択: 個別フォーカス/クリック選択なし・純粋な表示）。優先度/期限等の編集は行を選択して Enter→詳細で。
 function displayChip({ text, muted, color, cls }){
