@@ -52,10 +52,14 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
 
   const bar = document.createElement('div'); bar.className = 'search-bar';
   const kw = document.createElement('input'); kw.type = 'text'; kw.className = 'search-kw'; kw.placeholder = 'キーワード（本文）'; kw.value = q.keyword || '';
-  kw.addEventListener('input', () => { q.keyword = kw.value; state._refocus = 'kw'; requestRender(); });
+  const applyKw = () => { q.keyword = kw.value; state._refocus = 'kw'; requestRender(); };
+  kw.addEventListener('input', (e) => { if (e.isComposing) return; applyKw(); });   // IME変換中は再描画しない（入力欄の作り直しで変換が途中確定するのを防ぐ）
+  kw.addEventListener('compositionend', applyKw);                                     // 変換確定時にまとめて検索
   bar.appendChild(labelWrap('キーワード', kw));
   const tg = document.createElement('input'); tg.type = 'text'; tg.className = 'search-tags'; tg.placeholder = 'タグ（#無し・空白区切り）'; tg.value = (q.tags || []).join(' ');
-  tg.addEventListener('input', () => { q.tags = tg.value.split(/[\s,]+/).map(s => s.replace(/^#/, '')).filter(Boolean); state._refocus = 'tg'; requestRender(); });
+  const applyTg = () => { q.tags = tg.value.split(/[\s,]+/).map(s => s.replace(/^#/, '')).filter(Boolean); state._refocus = 'tg'; requestRender(); };
+  tg.addEventListener('input', (e) => { if (e.isComposing) return; applyTg(); });
+  tg.addEventListener('compositionend', applyTg);
   bar.appendChild(labelWrap('タグ', tg));
   const projOpts = [['all', 'すべて'], ['none', '未割当'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   bar.appendChild(labelWrap('PJ', selectEl(projOpts, q.proj || 'all', v => { q.proj = v; requestRender(); })));
