@@ -180,7 +180,9 @@ function buildMirrorFilter(requestRender){
   const bar = document.createElement('div'); bar.className = 'proj-mirror-filter';
   const kw = document.createElement('input');
   kw.type = 'text'; kw.className = 'pm-filter-kw'; kw.placeholder = 'キーワード'; kw.value = _mirrorFilter.kw;
-  kw.addEventListener('input', () => { _mirrorFilter.kw = kw.value; _restoreKw = true; requestRender(); });
+  const applyKw = () => { _mirrorFilter.kw = kw.value; _restoreKw = true; requestRender(); };
+  kw.addEventListener('input', (e) => { if (e.isComposing) return; applyKw(); });   // IME変換中は再描画しない（入力欄の作り直しで変換が途中確定するのを防ぐ）
+  kw.addEventListener('compositionend', applyKw);                                     // 変換確定時にまとめて反映
   bar.appendChild(kw);
   const chk = document.createElement('label'); chk.className = 'pm-filter-chk';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = _mirrorFilter.hideDone;
