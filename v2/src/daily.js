@@ -1065,6 +1065,12 @@ function onKey(e, store, ref, body, requestRender){
     focusCard(ref.id, pos);
     return;
   }
+  // ←→ がリンク(@チップ/検索チップ)をまたいで一気に飛び越えてしまう問題: またぐ直前でリンクへフォーカスを止める。
+  // フォーカスしたリンクは即ジャンプ（チップ側の focus リスナ）＝クリックと同じ挙動。
+  if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && window.getSelection().isCollapsed){
+    const chip = adjacentMentionChip(el, e.key === 'ArrowRight' ? 1 : -1);
+    if (chip){ e.preventDefault(); chip.focus(); return; }
+  }
   if (e.key === 'ArrowLeft' && pos === 0 && window.getSelection().isCollapsed){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
@@ -1095,21 +1101,25 @@ const mlen = (n) => n.nodeType === 3 ? n.textContent.length
 
 function makeChip(targetId, store){
   const sp = document.createElement('span');
-  sp.contentEditable = 'false'; sp.dataset.ref = targetId;
+  sp.contentEditable = 'false'; sp.dataset.ref = targetId; sp.tabIndex = 0;   // Tab/矢印キーでフォーカス可能に
   if (String(targetId).startsWith('s:')){                 // 保存検索リンク ⟦s:id⟧
     const vid = targetId.slice(2);
     const v = store.listViews().find(x => x.id === vid);
     sp.className = 'mention search-link';
     sp.textContent = '🔍 ' + (v ? v.name : '検索');
     if (!v) sp.classList.add('broken');
-    sp.addEventListener('mousedown', (e) => { e.preventDefault(); if (_openSavedSearch) _openSavedSearch(vid); });
+    const go = () => { if (_openSavedSearch) _openSavedSearch(vid); };
+    sp.addEventListener('mousedown', (e) => { e.preventDefault(); go(); });
+    sp.addEventListener('focus', go);   // フォーカス＝クリックと同じ挙動（キー操作でリンクへ到達→即ジャンプ）
     return sp;
   }
   sp.className = 'mention';
   const b = store.getBody(targetId);
   sp.textContent = '@' + (b ? (b.kind === 'day' ? b.content : (b.content || '無題').slice(0, 24)) : '?');
   if (!b) sp.classList.add('broken');
-  sp.addEventListener('mousedown', (e) => { e.preventDefault(); if (_mentionJump) _mentionJump(targetId); });
+  const go = () => { if (_mentionJump) _mentionJump(targetId); };
+  sp.addEventListener('mousedown', (e) => { e.preventDefault(); go(); });
+  sp.addEventListener('focus', go);
   return sp;
 }
 // タグ: 本文中の #語（空白まで・日本語可）を色チップ表示。textContent は "#語" のままなので直列化/caret は既存機構で正しく往復。
@@ -1157,6 +1167,24 @@ export function serializeEditable(el){
     else if (n.nodeType === 1) out += n.textContent;
   });
   return out;
+}
+// caret の直後(dir=1)/直前(dir=-1)に隣接する @チップ/検索チップがあれば返す（無ければ null）。
+// 通常の矢印キーは非編集スパンを一気にまたいで隣へ移ってしまうため、その直前で捕まえてフォーカスを止める用。
+function adjacentMentionChip(el, dir){
+  const sel = window.getSelection();
+  if (!sel.rangeCount || !sel.isCollapsed) return null;
+  const r = sel.getRangeAt(0);
+  if (r.startContainer === el){
+    const node = el.childNodes[r.startOffset + (dir > 0 ? 0 : -1)];
+    return (node && node.nodeType === 1 && node.classList.contains('mention')) ? node : null;
+  }
+  if (r.startContainer.nodeType === 3 && el.contains(r.startContainer)){
+    const atEdge = dir > 0 ? r.startOffset === r.startContainer.length : r.startOffset === 0;
+    if (!atEdge) return null;
+    const sib = dir > 0 ? r.startContainer.nextSibling : r.startContainer.previousSibling;
+    return (sib && sib.nodeType === 1 && sib.classList.contains('mention')) ? sib : null;
+  }
+  return null;
 }
 export function caretOffset(el){              // 直列化文字列における caret 位置
   const sel = window.getSelection();
@@ -1323,6 +1351,9 @@ export function revealDay(store, date){
 }
 export function setMentionJump(fn){ _mentionJump = fn; }   // @チップ/バックリンクのクリック先（app から設定）
 export function setSavedSearchOpener(fn){ _openSavedSearch = fn; }   // ⟦s:id⟧ チップのクリック先（保存検索を開く・app から設定）
+// renderDaily/renderOutlinePage を経由しないビュー（検索結果ミラー等）が renderChildren を直接呼ぶ場合、
+// ↑↓・Tab・Ctrl+←→等が正しいコンテナ内で機能するよう nav コンテキストを同期する。
+export function setNavContainer(container, requestRender){ _ctx = { rootRef: null, container, requestRender }; }
 
 // ── @メンション検索ポップアップ ──
 function closeMention(){

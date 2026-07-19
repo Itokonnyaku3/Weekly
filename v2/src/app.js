@@ -11,7 +11,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.92.0';
+export const APP_VERSION = '0.93.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -22,16 +22,16 @@ const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice()
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
 const searchState = { query: { keyword:'', tags:[], proj:'all', due:{mode:'any'}, done:{mode:'any'}, prio:'all' } };   // 検索ビューのクエリ（セッション）
 
-// 画面分割（左=リスト / 右=デイリーまたはプロジェクト）。状態・幅比率・右ペイン内容・現ビューは localStorage に保存
+// 画面分割（左=リスト / 右=デイリー・プロジェクトまたは検索）。状態・幅比率・右ペイン内容・現ビューは localStorage に保存
 let splitOn = false, splitRatio = 0.4;
-let splitRight = 'daily';                             // 分割時の右ペイン内容: 'daily' | 'project'
+let splitRight = 'daily';                             // 分割時の右ペイン内容: 'daily' | 'project' | 'search'
 const focusMem = { daily:null, list:null, project:null };   // ビューごとのフォーカス記憶（セッション内）
 try {
   splitOn = localStorage.getItem('pwt2_split') === '1';
   const r = parseFloat(localStorage.getItem('pwt2_splitRatio'));
   if (r >= 0.15 && r <= 0.85) splitRatio = r;
-  const sr = localStorage.getItem('pwt2_splitRight'); if (sr === 'daily' || sr === 'project') splitRight = sr;
-  const cv = localStorage.getItem('pwt2_view'); if (cv === 'daily' || cv === 'list' || cv === 'project') currentView = cv;
+  const sr = localStorage.getItem('pwt2_splitRight'); if (sr === 'daily' || sr === 'project' || sr === 'search') splitRight = sr;
+  const cv = localStorage.getItem('pwt2_view'); if (cv === 'daily' || cv === 'list' || cv === 'project' || cv === 'search') currentView = cv;
 } catch {}
 function persistView(){ try {
   localStorage.setItem('pwt2_split', splitOn ? '1' : '0');
@@ -44,7 +44,7 @@ function applySplitRatio(){ document.getElementById('app')?.style.setProperty('-
 
 // ビューを選択（分割対応）。状態だけ更新し描画はしない（呼び出し側で renderAll）。
 function showView(v){
-  if (splitOn && (v === 'daily' || v === 'project')) splitRight = v;   // 分割中はリスト以外＝右ペインの内容
+  if (splitOn && (v === 'daily' || v === 'project' || v === 'search')) splitRight = v;   // 分割中はリスト以外＝右ペインの内容
   currentView = v;
 }
 
@@ -94,7 +94,7 @@ function selectView(v){
 function toggleSplit(){
   captureFocus();
   splitOn = !splitOn;
-  if (splitOn && (currentView === 'daily' || currentView === 'project')) splitRight = currentView;
+  if (splitOn && (currentView === 'daily' || currentView === 'project' || currentView === 'search')) splitRight = currentView;
   renderAll();
   restoreFocus(currentView);
 }
@@ -159,13 +159,14 @@ function renderAll(){
   const sv = document.getElementById('view-search');
   app?.classList.toggle('split', splitOn);
   if (splitOn){
-    // 左=リスト固定 / 右=デイリー or プロジェクト（splitRight）。両ペインを毎回再描画＝片側の変更がもう片側へ反映
+    // 左=リスト固定 / 右=デイリー・プロジェクトまたは検索（splitRight）。両ペインを毎回再描画＝片側の変更がもう片側へ反映
     if (lv) lv.hidden = false;
     if (dv) dv.hidden = splitRight !== 'daily';
     if (pv) pv.hidden = splitRight !== 'project';
-    if (sv) sv.hidden = true;                 // 検索は単独ビュー（分割対象外）
+    if (sv) sv.hidden = splitRight !== 'search';
     if (lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
     if (splitRight === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
+    else if (splitRight === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
     else if (dv) renderDaily(store, dv, renderAll, jumpToMention);
     applySplitRatio();
   } else {

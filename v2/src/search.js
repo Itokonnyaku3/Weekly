@@ -1,7 +1,7 @@
 // 検索/ライブクエリ: 純ロジック（テスト対象）＋ 検索ビュー描画。
 const _q = new URL(import.meta.url).search;
 const { dueGroupMatch, projMatch } = await import('./list.js' + _q);
-const { renderChildren } = await import('./daily.js' + _q);
+const { renderChildren, setNavContainer } = await import('./daily.js' + _q);
 const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
 export { cardTags };                                     // 既存の利用元（テスト等）との互換
 // カードが query に AND で一致するか。対象は memo/task のみ。
@@ -40,6 +40,7 @@ export function sourceDay(store, refId){
 // ── 検索ビュー描画（クエリビルダ＋編集可能ミラー結果・ライブ）──
 export function renderSearchView(store, mount, requestRender, state, onJump){
   mount.innerHTML = '';
+  setNavContainer(mount, requestRender);   // ↑↓等の nav がこのビューのコンテナ内で機能するように同期
   const today = new Date().toISOString().slice(0, 10);
   const q = state.query;
 
