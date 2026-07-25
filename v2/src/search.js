@@ -1,21 +1,14 @@
 // 検索/ライブクエリ: 純ロジック（テスト対象）＋ 検索ビュー描画。
 const _q = new URL(import.meta.url).search;
-const { dueGroupMatch, projMatch } = await import('./list.js' + _q);
+const { matchQuery } = await import('./query.js' + _q);   // 照合はリスト（表）と共通の query.js に一本化
 const { renderChildren, setNavContainer } = await import('./daily.js' + _q);
 const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
 export { cardTags };                                     // 既存の利用元（テスト等）との互換
 // カードが query に AND で一致するか。対象は memo/task のみ。
+// query は単一のフラット条件（= 1グループ）。グループ配列との差は query.js の toGroups が吸収する。
 export function matchCard(body, query, today){
   if (!body || (body.kind !== 'memo' && body.kind !== 'task')) return false;
-  const q = query || {};
-  if (q.keyword){ if (!(body.content || '').toLowerCase().includes(q.keyword.toLowerCase())) return false; }
-  if (q.tags && q.tags.length){ const tags = cardTags(body.content); for (const t of q.tags) if (!tags.has(t)) return false; }
-  if (q.proj && q.proj !== 'all'){ if (!projMatch(body.proj, q.proj)) return false; }
-  if (q.due && q.due.mode && q.due.mode !== 'any'){ if (!dueGroupMatch(body.due, q.due, today)) return false; }
-  if (q.done && q.done.mode === 'done'  && !body.done) return false;
-  if (q.done && q.done.mode === 'notDone' && body.done) return false;
-  if (q.prio && q.prio !== 'all'){ if (String(body.prio || 0) !== q.prio) return false; }
-  return true;
+  return matchQuery(body, query, today);
 }
 // 一致カードのうち「祖先も一致するもの」は除外し、最上位の一致だけを {ref, body} で返す（ミラー重複除外）。
 export function runQuery(store, query, today){
@@ -38,7 +31,7 @@ export function sourceDay(store, refId){
 }
 
 // ── 検索ビュー描画（クエリビルダ＋編集可能ミラー結果・ライブ）──
-export function renderSearchView(store, mount, requestRender, state, onJump){
+export function renderSearchView(store, mount, requestRender, state, onJump, onOpenAsTable){
   mount.innerHTML = '';
   setNavContainer(mount, requestRender);   // ↑↓等の nav がこのビューのコンテナ内で機能するように同期
   const today = new Date().toISOString().slice(0, 10);
@@ -68,6 +61,12 @@ export function renderSearchView(store, mount, requestRender, state, onJump){
   ], duePreset(q.due), v => { q.due = presetToDue(v); requestRender(); })));
   bar.appendChild(labelWrap('完了', selectEl([['any','すべて'], ['notDone','未完了'], ['done','完了']], (q.done && q.done.mode) || 'any', v => { q.done = { mode: v }; requestRender(); })));
   bar.appendChild(labelWrap('優先度', selectEl([['all','すべて'], ['3','高'], ['2','中'], ['1','低'], ['0','なし']], q.prio || 'all', v => { q.prio = v; requestRender(); })));
+  // 同じ条件のままリスト（表）へ。変換と画面遷移は呼び出し側（app.js）の責務。
+  const toTable = document.createElement('button'); toTable.type = 'button'; toTable.className = 'btn'; toTable.textContent = '▤ 表で表示';
+  toTable.title = '今の条件のままリスト（表）で開く';
+  if (onOpenAsTable) toTable.onclick = () => onOpenAsTable(state.query);
+  else toTable.disabled = true;
+  bar.appendChild(toTable);
   mount.appendChild(bar);
   mount.appendChild(buildSavedBar(store, requestRender, state));   // 保存検索（保存/読込/上書き/削除）
 

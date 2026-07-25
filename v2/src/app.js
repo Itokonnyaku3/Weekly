@@ -6,12 +6,13 @@ const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getD
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
+const { groupToFlatQuery, flatQueryToGroup } = await import('./query.js' + _q);   // 表⇄アウトラインの条件受け渡し
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.93.1';
+export const APP_VERSION = '0.94.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -164,9 +165,9 @@ function renderAll(){
     if (dv) dv.hidden = splitRight !== 'daily';
     if (pv) pv.hidden = splitRight !== 'project';
     if (sv) sv.hidden = splitRight !== 'search';
-    if (lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
+    if (lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject, openAsOutline);
     if (splitRight === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
-    else if (splitRight === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
+    else if (splitRight === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard, openAsTable);
     else if (dv) renderDaily(store, dv, renderAll, jumpToMention);
     applySplitRatio();
   } else {
@@ -175,9 +176,9 @@ function renderAll(){
     if (pv) pv.hidden = currentView !== 'project';
     if (sv) sv.hidden = currentView !== 'search';
     if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
-    if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject);
+    if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject, openAsOutline);
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
-    if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard);
+    if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard, openAsTable);
   }
   const doneBtn = document.getElementById('toggle-done-btn');
   if (doneBtn){
@@ -286,6 +287,22 @@ function openSavedSearch(viewId){         // ⟦s:id⟧ チップ→ 検索ビ�
   showView('search');
   renderAll();
 }
+// ── 表 ⇄ アウトラインの切替（条件はそのまま持ち越し）──
+// リストの条件グループ → 検索ビュー（単一AND）。検索バーに中項目欄が無いので mid は落ちる＝落ちたら通知する。
+function openAsOutline(group){
+  const { query, dropped } = groupToFlatQuery(group);
+  searchState.query = query;
+  searchState._savedId = null;            // 保存検索の選択状態は引き継がない（別条件になりうるため）
+  selectView('search');
+  if (dropped.includes('mid')) showToast('中項目の条件は検索ビューでは扱えないため外しました');
+}
+// 検索ビューの条件 → リスト（表）の単一グループ。
+function openAsTable(query){
+  listState.groups = [flatQueryToGroup(query)];
+  listState._viewId = null;               // 保存ビューの選択状態は引き継がない
+  selectView('list');
+}
+
 function gotoDate(date){                  // カレンダー/コマンドからその日へ（全体表示でスクロール）
   navPush();                        // 遷移前の状態を履歴へ（#1）
   store.ensureDayCard(date);

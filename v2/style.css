@@ -199,6 +199,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .filter-group{position:relative;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:6px 34px 6px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--panel);font-size:12px}
 .filter-group-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .filter-group-row input[type=text]{font:inherit;font-size:12px;padding:2px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx);width:140px}
+.filter-group-row input.filter-kw{width:180px}   /* キーワードは主条件なので他のテキスト欄より広め */
 .filter-range{display:flex;align-items:center;gap:4px;color:var(--tx3)}
 .filter-range-input{width:52px;font:inherit;font-size:12px;padding:2px 4px;border:1px solid var(--bd2);border-radius:5px;background:var(--bg);color:var(--tx)}
 .filter-group-del{position:absolute;top:6px;right:6px;width:20px;height:20px;line-height:18px;padding:0;border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx3);cursor:pointer}
