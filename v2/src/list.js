@@ -7,6 +7,8 @@ const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 const { cardTags, TAG_RE, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
+const { defaultGroup, matchGroup, dueGroupMatch, projMatch } = await import('./query.js' + _q);   // 絞り込みの照合は共通クエリ基盤に委譲（表/アウトラインで同一ロジック）
+export { dueGroupMatch, projMatch };   // 既存テスト・search.js からの参照互換のため再エクスポート（実体は query.js）
 
 // ── 純ロジック（テスト対象）──
 // 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
@@ -109,6 +111,7 @@ function doAddTask(store, requestRender, ctx, today){
 
 let _onJump = null;    // 行の「↗」→デイリーで該当カードを開くコールバック
 let _onOpenProject = null;   // PJ見出しで Enter → そのプロジェクトを開く（#3・app から設定）
+let _onOpenAsOutline = null;   // 現在の条件をアウトライン（検索ビュー）で開く。未配線なら該当ボタンは無効のまま
 let _listCtx = null;   // { store, requestRender, state } 折りたたみ(Ctrl+↑↓)・ポップアップ用
 let _dragTask = null;   // D&D中のタスク {id, proj}
 let _dropHiEl = null;   // ドロップ候補のハイライト行
@@ -127,59 +130,6 @@ function dropInfo(tr){
   return null;
 }
 
-// 1条件グループの既定値（全項目「すべて」＝絞り込みなし）。呼び出しごとに新しいオブジェクトを返す（状態間の共有を防ぐ）。
-function defaultGroup(){
-  return {
-    due:  { mode: 'any', from: null, to: null },
-    done: { mode: 'any', from: null, to: null },
-    proj: 'all',
-    mid:  '',
-    prio: 'all',
-    tags: [],
-  };
-}
-function dayDiff(due, today){
-  return Math.round((Date.parse(due+'T00:00:00') - Date.parse(today+'T00:00:00')) / 86400000);
-}
-export function dueGroupMatch(due, cond, today){
-  if (!cond || cond.mode === 'any') return true;
-  if (cond.mode === 'none') return !due;
-  if (!due) return false;                          // mode === 'range'
-  const d = dayDiff(due, today);
-  if (cond.from != null && d < cond.from) return false;
-  if (cond.to   != null && d > cond.to)   return false;
-  return true;
-}
-function doneGroupMatch(t, cond, today){
-  if (!cond || cond.mode === 'any') return true;
-  if (cond.mode === 'notDone') return !t.done;
-  if (!t.done) return false;                       // mode === 'done'
-  if (cond.from == null && cond.to == null) return true;   // 完了日は問わない
-  if (!t.doneAt) return false;                      // 完了日時が未記録（過去に完了したタスク）
-  const d = dayDiff(t.doneAt.slice(0, 10), today);
-  if (cond.from != null && d < cond.from) return false;
-  if (cond.to   != null && d > cond.to)   return false;
-  return true;
-}
-export function projMatch(proj, filter){
-  if (filter === 'all')  return true;
-  if (filter === 'none') return !proj;
-  return proj === filter;        // 特定PJのID
-}
-// タグ条件: 指定タグをすべて含む（AND）。空/未定義は条件なし。OR は条件グループの追加で表現。
-function tagsGroupMatch(content, tags){
-  if (!tags || !tags.length) return true;
-  const set = cardTags(content);
-  return tags.every(x => set.has(x));
-}
-function groupMatch(t, g, today){
-  return dueGroupMatch(t.due, g.due, today)
-      && doneGroupMatch(t, g.done, today)
-      && projMatch(t.proj, g.proj)
-      && (!g.mid || (t.mid || '').toLowerCase().includes(g.mid.toLowerCase()))
-      && (g.prio === 'all' || String(t.prio || 0) === g.prio)
-      && tagsGroupMatch(t.content, g.tags);
-}
 function cmpStr(x, y){ x = x||''; y = y||''; return x < y ? -1 : x > y ? 1 : 0; }
 function dueCmp(a, b){
   if (!a.due && !b.due) return 0;
@@ -234,7 +184,7 @@ export function selectTasks(tasks, opts, today, projOrder){
   const sortDir = (opts && opts.sortDir) || 'asc';
   let cmp = sortCmp(sort, projOrder || {});
   if (sortDir === 'desc' && sort !== 'proj'){ const base = cmp; cmp = (a, b) => -base(a, b); }
-  return tasks.filter(t => groups.some(g => groupMatch(t, g, today))).sort(cmp);
+  return tasks.filter(t => groups.some(g => matchGroup(t, g, today))).sort(cmp);
 }
 
 const PRIO_LABEL = ['なし', '低', '中', '高'];
@@ -342,9 +292,10 @@ function midRow(projId, mid, span, isCollapsed, onToggle, count, onAdd){
 }
 
 // ── 描画 ──
-export function renderList(store, mount, requestRender, state, onJump, onOpenProject){
+export function renderList(store, mount, requestRender, state, onJump, onOpenProject, onOpenAsOutline){
   if (onJump) _onJump = onJump;
   if (onOpenProject) _onOpenProject = onOpenProject;
+  if (onOpenAsOutline) _onOpenAsOutline = onOpenAsOutline;
   _listCtx = { store, requestRender, state };
   const today = new Date().toISOString().slice(0, 10);
   const all = store.queryBodies(b => b.kind === 'task');
@@ -744,6 +695,13 @@ function buildGroupCard(store, state, groups, g, i, touch){
   card.appendChild(doneRow);
 
   const row3 = document.createElement('div'); row3.className = 'filter-group-row';
+  // キーワード（本文の部分一致・大文字小文字無視）。反映は change＝blur/Enterのみ（input だと再描画でIMEが途中確定するため中項目欄と同じ流儀）。
+  const kwInp = document.createElement('input');
+  kwInp.type = 'text'; kwInp.className = 'filter-kw';   // 幅だけ他のテキスト欄より広め（style.css）
+  kwInp.placeholder = 'キーワード(本文)'; kwInp.value = g.keyword || '';
+  kwInp.dataset.fkey = 'g'+i+':kw';
+  kwInp.addEventListener('change', () => { g.keyword = kwInp.value; touch(); });
+  row3.appendChild(kwInp);
   const projOpts = [['all','すべて'], ['none','未割当'], ...store.listProjects().map(p => [p.id, p.content || '(無題)'])];
   row3.appendChild(labelWrap('PJ', selectEl(projOpts, g.proj, v => { g.proj = v; touch(); }, 'g'+i+':proj')));
   const midInp = document.createElement('input');
@@ -827,6 +785,23 @@ function buildControls(store, requestRender, state, shown, total){
   bar.appendChild(dirBtn);
 
   bar.appendChild(buildColumnPicker(state, touch));
+
+  // 同じ条件をアウトライン（検索ビュー）で見る。変換と画面遷移は呼び出し側の責務＝ここは条件を渡すだけ。
+  // 検索バーは単一AND条件しか表現できないため、OR（複数グループ）のときは無効化して理由を出す。
+  const asOutline = document.createElement('button');
+  asOutline.type = 'button'; asOutline.className = 'btn'; asOutline.dataset.fkey = 'asoutline';
+  asOutline.textContent = '🔍 アウトラインで表示';
+  const condGroups = ensureGroups(state);
+  if (!_onOpenAsOutline){
+    asOutline.disabled = true;
+    asOutline.title = 'アウトライン表示は利用できません';
+  } else if (condGroups.length !== 1){
+    asOutline.disabled = true;
+    asOutline.title = 'OR条件（複数グループ）はアウトライン表示に変換できません（検索ビューは単一条件のため）';
+  } else {
+    asOutline.onclick = () => _onOpenAsOutline(ensureGroups(state)[0]);
+  }
+  bar.appendChild(asOutline);
 
   det.appendChild(bar);
   wrap.appendChild(det);

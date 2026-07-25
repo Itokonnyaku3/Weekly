@@ -52,9 +52,10 @@ export function prioMatch(prio, filter){
   return String(prio || 0) === String(filter);
 }
 export function dueGroupMatch(due, cond, today){
-  if (!cond || cond.mode === 'any') return true;
+  if (!cond || !cond.mode || cond.mode === 'any') return true;   // mode 未指定/未知は「条件なし」（壊れた保存データで全件消えるのを防ぐ）
   if (cond.mode === 'none') return !due;
-  if (!due) return false;                          // mode === 'range'
+  if (cond.mode !== 'range') return true;
+  if (!due) return false;
   const d = dayDiff(due, today);
   if (cond.from != null && d < cond.from) return false;
   if (cond.to   != null && d > cond.to)   return false;
@@ -62,9 +63,10 @@ export function dueGroupMatch(due, cond, today){
 }
 // 完了条件。メモ（done を持たない）は notDone 扱い＝done 指定では非該当。range は完了日（doneAt）基準。
 export function doneGroupMatch(body, cond, today){
-  if (!cond || cond.mode === 'any') return true;
+  if (!cond || !cond.mode || cond.mode === 'any') return true;   // mode 未指定/未知は「条件なし」
   if (cond.mode === 'notDone') return !body.done;
-  if (!body.done) return false;                    // mode === 'done'
+  if (cond.mode !== 'done') return true;
+  if (!body.done) return false;
   if (cond.from == null && cond.to == null) return true;   // 完了日は問わない
   if (!body.doneAt) return false;                   // 完了日時が未記録（過去に完了したカード）
   const d = dayDiff(body.doneAt.slice(0, 10), today);
