@@ -12,6 +12,7 @@ const { buildWeeklyGrid, weeksFor, weekLabel, weekAdd, weekStart, moveCursor,
         toggleMsContent, buildWeekReport, FIRST_WEEK_COL, MS_TAG } = await import('./week.js' + _q);
 const { renderChildren, setNavContainer, focusCard, getHideDone } = await import('./daily.js' + _q);
 const { showToast, copyRichText } = await import('./clipboard.js' + _q);
+const { projColor, tintRgba } = await import('./colors.js' + _q);   // リストと共通のプロジェクト色
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
 const cssEsc = (s) => (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s);
@@ -229,10 +230,18 @@ function buildHead(grid, state){
 }
 
 // ── 1プロジェクト行 ──
+// 行の色: リストのPJ見出しと同じプロジェクト色を、薄く（半透明で重ねて）行の背景にする。
+// PJ列は少し濃め＋左端に色帯＝リストの色地と視覚的に対応づける。
+const TINT_ALPHA = 0.10, TINT_ALPHA_PROJ = 0.18;
+
 function buildRow(store, requestRender, state, row, grid){
   const tr = document.createElement('tr');
   tr.className = 'wk-row' + (row.projId ? '' : ' wk-row-none');
   tr.dataset.row = row.projId || '__none';
+  const color = projColor(row.projId);                       // 未割当は PROJ_NONE_COLOR（グレー）
+  tr.style.setProperty('--pjc', color);
+  tr.style.setProperty('--wk-tint', tintRgba(color, TINT_ALPHA));
+  tr.style.setProperty('--wk-tint2', tintRgba(color, TINT_ALPHA_PROJ));
   tr.appendChild(buildProjCell(store, requestRender, row));
   tr.appendChild(buildLinkCell(row));
   for (const w of grid.weeks) tr.appendChild(buildWeekCell(store, requestRender, state, row, w));

@@ -1,10 +1,12 @@
 :root{
   --bg:#f7f8fa; --panel:#fff; --tx:#1c2530; --tx3:#8a96a3;
   --bd:#e3e7ec; --bd2:#cfd6de; --pc:#2c3e50; --accent:#2c6df0; --accent-soft:#eaf1fe;
+  --wk-now:rgba(44,109,240,.09);      /* 週次ビュー: 今週列の重ね色（半透明＝PJカラーの上に乗せる） */
 }
 :root.dark{
   --bg:#11151a; --panel:#171c23; --tx:#e6eaef; --tx3:#7e8a98;
   --bd:#252c35; --bd2:#333c47; --pc:#9fb3c8; --accent:#5b8cff; --accent-soft:#1b2740;
+  --wk-now:rgba(91,140,255,.16);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -301,6 +303,19 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-group-solid .list-group-count{color:rgba(255,255,255,.85)}
 .list-group-solid .list-add-inline{color:#fff}
 .list-group-solid .list-add-inline:hover{background:rgba(255,255,255,.18)}
+.list-group-solid{background:var(--pjc,#9aa0a6)}
+/* フォーカス時は反転（PJ色の地＋白文字 → 明色地＋PJ色の文字＋太枠）。
+   彩度の高い色地の上ではリングだけでは判別できないため、地と文字を入れ替えて示す。
+   行フォーカス指定（.list-table tbody tr:focus-within > td …）と詳細度が同じなので、必ずそれより後に置く。 */
+.list-table tbody tr:focus-within > td.list-group-solid{
+  background:var(--panel);
+  box-shadow:inset 0 0 0 3px var(--pjc,#9aa0a6);
+}
+.list-table tbody tr:focus-within > td.list-group-solid .list-group-name{color:var(--pjc,#9aa0a6);text-shadow:none}
+.list-table tbody tr:focus-within > td.list-group-solid .list-group-tog,
+.list-table tbody tr:focus-within > td.list-group-solid .list-group-count,
+.list-table tbody tr:focus-within > td.list-group-solid .list-add-inline{color:var(--pjc,#9aa0a6)}
+.list-table tbody tr:focus-within > td.list-group-solid .list-add-inline:hover{background:var(--accent-soft)}
 /* 中項目（WBSの中間レベル）小見出し＋入力 */
 .list-table tr.list-submid td{padding:5px 8px 2px 26px}   /* 中項目見出しはプロジェクトより右・タスクより左（#3）*/
 .cell-chip.cell-open{cursor:pointer}
@@ -450,8 +465,11 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .wk-table{--wk-w-proj:200px;--wk-w-link:160px;--wk-w-week:240px;border-collapse:separate;border-spacing:0;table-layout:fixed}
 
 /* 共通（position は下の sticky 指定より前に置く＝2クラス指定で上書きされる側） */
+/* 行の背景＝PJカラーを薄くした色（--wk-tint）を下地の上に重ねる。半透明で重ねるのでライト/ダーク両テーマで馴染む。
+   セル自身は不透明を保つ（sticky列の下を他の列が通り抜けて見えないようにするため）。 */
 .wk-th,.wk-cell{border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:4px}
-.wk-cell{position:relative;vertical-align:top;background:var(--bg)}
+.wk-cell{position:relative;vertical-align:top;
+  background:linear-gradient(var(--wk-tint,transparent),var(--wk-tint,transparent)),var(--bg)}
 .wk-th{position:sticky;top:0;z-index:3;background:var(--panel);border-bottom:1px solid var(--bd2);font-size:11px;font-weight:700;color:var(--tx3);text-align:left}
 .wk-th-label{color:var(--tx)}
 .wk-th-now{font-size:10px;font-weight:400;color:var(--accent)}
@@ -463,7 +481,14 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .wk-cell.wk-c-proj,.wk-th.wk-c-proj{position:sticky;left:0;z-index:2;background:var(--panel)}
 .wk-cell.wk-c-link,.wk-th.wk-c-link{position:sticky;left:var(--wk-w-proj);z-index:2;background:var(--panel);border-right:1px solid var(--bd2)}
 .wk-th.wk-c-proj,.wk-th.wk-c-link{z-index:4}
-.wk-th.wk-current,.wk-cell.wk-current{background:var(--accent-soft)}
+/* 左固定列は下地を --panel に。PJ列はリストの色地と対応づけて左端に色帯を出す */
+.wk-cell.wk-c-proj{background:linear-gradient(var(--wk-tint2,transparent),var(--wk-tint2,transparent)),var(--panel);
+  border-left:3px solid var(--pjc,transparent)}
+.wk-cell.wk-c-link{background:linear-gradient(var(--wk-tint,transparent),var(--wk-tint,transparent)),var(--panel)}
+/* 今週列は半透明のアクセントを行の色の上に重ねる（不透明色だとPJカラーが隠れてしまう） */
+.wk-th.wk-current{background:var(--accent-soft)}
+.wk-cell.wk-current{background:linear-gradient(var(--wk-now),var(--wk-now)),
+  linear-gradient(var(--wk-tint,transparent),var(--wk-tint,transparent)),var(--bg)}
 
 /* 列幅のドラッグハンドル（ヘッダ右端） */
 .wk-resize{position:absolute;top:0;right:-3px;width:7px;height:100%;cursor:col-resize;z-index:5;touch-action:none}

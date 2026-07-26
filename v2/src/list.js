@@ -8,6 +8,7 @@ const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   //
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
 const { cardTags, TAG_RE, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
 const { defaultGroup, matchGroup, dueGroupMatch, projMatch } = await import('./query.js' + _q);   // 絞り込みの照合は共通クエリ基盤に委譲（表/アウトラインで同一ロジック）
+const { projColor } = await import('./colors.js' + _q);   // プロジェクト色（週次ビューと共通）
 export { dueGroupMatch, projMatch };   // 既存テスト・search.js からの参照互換のため再エクスポート（実体は query.js）
 
 // ── 純ロジック（テスト対象）──
@@ -188,13 +189,7 @@ export function selectTasks(tasks, opts, today, projOrder){
 }
 
 const PRIO_LABEL = ['なし', '低', '中', '高'];
-// プロジェクト色: id から安定したパレット色を引く（並べ替えに依らず一定）
-const PROJ_PALETTE = ['#e0524d','#e08a00','#c9a227','#3a9d3a','#0a9b8a','#2a8fbd','#5b6ee0','#7a5cd0','#c0568f','#b5683a'];
-export function projColor(id){
-  let h = 0; const s = String(id || '');
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  return PROJ_PALETTE[h % PROJ_PALETTE.length];
-}
+export { projColor };   // 互換: 実体は colors.js（週次ビューと同じ色を使う）
 const COLUMNS = {
   status:   { label:'完了',       cls:'c-st',      render: cellStatus },
   title:    { label:'タイトル',   cls:'c-title',   render: cellTitle },
@@ -250,9 +245,9 @@ function addBtnInline(onAdd){
 function groupRow(store, projId, span, count, isCollapsed, onToggle, onAdd){
   const tr = document.createElement('tr'); tr.className = 'list-group';
   const td = document.createElement('td'); td.colSpan = span;
-  const color = projId ? projColor(projId) : '#9aa0a6';
-  td.style.background = color;                          // タイトルの文字色と背景色を入替＝色地＋明色文字で見出しを強調
-  td.classList.add('list-group-solid');                // 文字/トグル/件数の色はCSS側で明色に
+  // PJ色は CSS 変数で渡す（インライン background にするとフォーカス時の反転がCSSで上書きできない）
+  td.style.setProperty('--pjc', projColor(projId));
+  td.classList.add('list-group-solid');                // 色地＋明色文字はCSS側。フォーカス時は反転（明色地＋PJ色文字）
   const tog = document.createElement('span'); tog.className = 'list-group-tog'; tog.textContent = isCollapsed ? '▸' : '▾';
   tog.onclick = (e) => { e.stopPropagation(); onToggle(); };       // #3 折りたたみは▸/▾トグルのみ
   const nm = document.createElement('span'); nm.className = 'list-group-name';
