@@ -182,6 +182,28 @@ export function insertNodes(store, currentRefId, nodes){
   return firstRef;
 }
 
+// ── ボタン操作からのリッチコピー（週報コピー用）──
+// copy イベント経由ではない書き込み。非同期APIが使えない/拒否された環境ではテキストのみで代替する。
+export async function copyRichText(html, plain){
+  try {
+    if (navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({
+        'text/html':  new Blob([html],  { type:'text/html' }),
+        'text/plain': new Blob([plain], { type:'text/plain' }),
+      })]);
+      return true;
+    }
+  } catch(_){}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = plain; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch(_){ return false; }
+}
+
 // ── トースト通知 ──
 let _toastTimer = null;
 export function showToast(msg){

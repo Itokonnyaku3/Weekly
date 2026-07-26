@@ -6,13 +6,14 @@ const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getD
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
+const { renderWeeklyView, loadWeeklyPrefs, setWeeklyHandlers, pageWeeks, gotoThisWeek, onWeeklyKey } = await import('./weekly.js' + _q);
 const { groupToFlatQuery, flatQueryToGroup } = await import('./query.js' + _q);   // 表⇄アウトラインの条件受け渡し
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.94.0';
+export const APP_VERSION = '0.95.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -22,6 +23,7 @@ let currentView = 'daily';                            // 現在アクティブ�
 const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice() };
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
 const searchState = { query: { keyword:'', tags:[], proj:'all', due:{mode:'any'}, done:{mode:'any'}, prio:'all' } };   // 検索ビューのクエリ（セッション）
+const weeklyState = loadWeeklyPrefs();               // 週次ビュー: { wkOff, hideEmpty, expanded }
 
 // 画面分割（左=リスト / 右=デイリー・プロジェクトまたは検索）。状態・幅比率・右ペイン内容・現ビューは localStorage に保存
 let splitOn = false, splitRatio = 0.4;
@@ -32,7 +34,7 @@ try {
   const r = parseFloat(localStorage.getItem('pwt2_splitRatio'));
   if (r >= 0.15 && r <= 0.85) splitRatio = r;
   const sr = localStorage.getItem('pwt2_splitRight'); if (sr === 'daily' || sr === 'project' || sr === 'search') splitRight = sr;
-  const cv = localStorage.getItem('pwt2_view'); if (cv === 'daily' || cv === 'list' || cv === 'project' || cv === 'search') currentView = cv;
+  const cv = localStorage.getItem('pwt2_view'); if (cv === 'daily' || cv === 'list' || cv === 'project' || cv === 'search' || cv === 'weekly') currentView = cv;
 } catch {}
 function persistView(){ try {
   localStorage.setItem('pwt2_split', splitOn ? '1' : '0');
@@ -45,6 +47,7 @@ function applySplitRatio(){ document.getElementById('app')?.style.setProperty('-
 
 // ビューを選択（分割対応）。状態だけ更新し描画はしない（呼び出し側で renderAll）。
 function showView(v){
+  if (v === 'weekly') splitOn = false;                                                   // 週次は全幅で使う（分割を解除）
   if (splitOn && (v === 'daily' || v === 'project' || v === 'search')) splitRight = v;   // 分割中はリスト以外＝右ペインの内容
   currentView = v;
 }
@@ -54,9 +57,9 @@ function showView(v){
 let navHist = [], navFuture = [];
 const NAV_MAX = 50;
 function navSnapshot(){
-  return { view: currentView, splitRight, projId: projState.projId, projRoot: projState.rootRef, zoom: getZoom(), dayFocus: getDayFocus() };
+  return { view: currentView, splitRight, projId: projState.projId, projRoot: projState.rootRef, zoom: getZoom(), dayFocus: getDayFocus(), wkOff: weeklyState.wkOff };
 }
-function navEq(a, b){ return !!a && !!b && a.view===b.view && a.splitRight===b.splitRight && a.projId===b.projId && a.projRoot===b.projRoot && a.zoom===b.zoom && a.dayFocus===b.dayFocus; }
+function navEq(a, b){ return !!a && !!b && a.view===b.view && a.splitRight===b.splitRight && a.projId===b.projId && a.projRoot===b.projRoot && a.zoom===b.zoom && a.dayFocus===b.dayFocus && a.wkOff===b.wkOff; }
 function navPush(){                                       // 遷移直前の状態を履歴へ（連続同一はまとめる・進む履歴は破棄）
   const cur = navSnapshot();
   if (navHist.length && navEq(navHist[navHist.length - 1], cur)) return;
@@ -65,6 +68,7 @@ function navPush(){                                       // 遷移直前の状�
 }
 function navRestore(snap){                                // スナップショットの状態を復元して再描画
   currentView = snap.view; splitRight = snap.splitRight;
+  if (snap.wkOff != null) weeklyState.wkOff = snap.wkOff;
   projState.projId = snap.projId; projState.rootRef = snap.projRoot;
   if (snap.zoom && store.getRef(snap.zoom)) setZoom(snap.zoom);
   else if (snap.dayFocus) setDayFocus(snap.dayFocus);
@@ -126,6 +130,7 @@ function captureFocus(){
   else if (ae.closest('#view-project')) focusMem.project = focusToken(ae);
 }
 function restoreFocus(v){
+  if (v === 'weekly') return;      // 週次は weekly.js が自前のカーソル（_cursor）でフォーカスを復帰する
   if (v === 'list'){
     const key = focusMem.list;
     let el = key ? document.querySelector(`#view-list [data-fkey="${(window.CSS && CSS.escape) ? CSS.escape(key) : key}"]`) : null;
@@ -158,8 +163,11 @@ function renderAll(){
   const lv = document.getElementById('view-list');
   const pv = document.getElementById('view-project');
   const sv = document.getElementById('view-search');
+  const wv = document.getElementById('view-weekly');
   app?.classList.toggle('split', splitOn);
+  app?.classList.toggle('weekly', !splitOn && currentView === 'weekly');   // 週次は #app 自体をスクロールさせない（表の内側でスクロール）
   if (splitOn){
+    if (wv) wv.hidden = true;                        // 週次は分割に参加しない（全幅で使う）
     // 左=リスト固定 / 右=デイリー・プロジェクトまたは検索（splitRight）。両ペインを毎回再描画＝片側の変更がもう片側へ反映
     if (lv) lv.hidden = false;
     if (dv) dv.hidden = splitRight !== 'daily';
@@ -175,6 +183,8 @@ function renderAll(){
     if (lv) lv.hidden = currentView !== 'list';
     if (pv) pv.hidden = currentView !== 'project';
     if (sv) sv.hidden = currentView !== 'search';
+    if (wv) wv.hidden = currentView !== 'weekly';
+    if (currentView === 'weekly' && wv) renderWeeklyView(store, wv, renderAll, weeklyState);
     if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
     if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject, openAsOutline);
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
@@ -192,6 +202,7 @@ function renderAll(){
   document.getElementById('view-list-btn')?.classList.toggle('active', currentView === 'list');
   document.getElementById('view-proj-btn')?.classList.toggle('active', currentView === 'project');
   document.getElementById('view-search-btn')?.classList.toggle('active', currentView === 'search');
+  document.getElementById('view-weekly-btn')?.classList.toggle('active', currentView === 'weekly');
   persistView();
   ensureViewFocus();               // どのビューでもキー操作用フォーカスを失わない安全網
 }
@@ -199,11 +210,11 @@ function renderAll(){
 // 分割中は「最後に触れていたペイン」を優先＝片方の操作後にもう片方へフォーカスが飛ぶのを防ぐ（#4）。
 let _lastPane = null;   // 直近でフォーカスがあったビュー container id（focusin で更新）
 function focusActiveViewFirst(){
-  let id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : 'view-daily';
+  let id = currentView === 'list' ? 'view-list' : currentView === 'project' ? 'view-project' : currentView === 'search' ? 'view-search' : currentView === 'weekly' ? 'view-weekly' : 'view-daily';
   if (splitOn && _lastPane){ const lp = document.getElementById(_lastPane); if (lp && !lp.hidden) id = _lastPane; }
   const cont = document.getElementById(id); if (!cont || cont.hidden) return;
   // 本文コンテンツを最優先（querySelectorは記述順でなくDOM出現順で返すため、ビューバーのselectを先に掴まないよう2段構え）
-  const el = cont.querySelector('.list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add')
+  const el = cont.querySelector('.wk-item, .list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add')
           || cont.querySelector('input, select, button, [tabindex]');
   if (el) el.focus();
 }
@@ -275,6 +286,13 @@ function jumpToMention(bodyId){           // @チップのクリック先（日�
 function openProject(projId){             // プロジェクトのノートページを開く（分割中は右ペインをプロジェクトに）
   navPush();                        // 遷移前の状態を履歴へ（#1）
   projState.projId = projId; projState.rootRef = null;
+  showView('project');
+  renderAll();
+}
+// PJページをそのノードにズームして開く（週次ビューの直下ノード/リンクのクリック先）
+function openProjectAt(projId, refId){
+  navPush();
+  projState.projId = projId; projState.rootRef = refId || null;
   showView('project');
   renderAll();
 }
@@ -382,6 +400,10 @@ function buildCommands(cardRef){
     { cat:'表示', label:'デイリーを表示', hint:'Alt+2', roma:'deiri hyouji daily', run: () => selectView('daily') },
     { cat:'表示', label:'リストを表示', hint:'Alt+1', roma:'risuto hyouji list', run: () => selectView('list') },
     { cat:'表示', label:'プロジェクトを表示', hint:'Alt+3', roma:'purojekuto hyouji project', run: () => selectView('project') },
+    { cat:'表示', label:'週次を表示（PJ×週）', hint:'Alt+4', roma:'shuuji hyouji weekly matrix', run: () => selectView('weekly') },
+    { cat:'週次', label:'前の週へ', hint:'Alt+Shift+←', roma:'zenshuu mae week prev', run: () => { showView('weekly'); pageWeeks(weeklyState, renderAll, -1); } },
+    { cat:'週次', label:'次の週へ', hint:'Alt+Shift+→', roma:'jishuu tsugi week next', run: () => { showView('weekly'); pageWeeks(weeklyState, renderAll, 1); } },
+    { cat:'週次', label:'今週へ', hint:'Alt+0', roma:'konshuu ima week today', run: () => { selectView('weekly'); gotoThisWeek(weeklyState, renderAll); } },
     { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', roma:'bunkatsu hyouji kirikae split', run: toggleSplit },
     { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', roma:'kanryou hyouji kakusu done hide show', run: toggleDone },
     { cat:'表示', label:'今日の日にズーム', hint:'Alt+D', roma:'kyou zumu today zoom', run: zoomTodayToggle },
@@ -476,25 +498,39 @@ function boot(){
   document.getElementById('view-list-btn')?.addEventListener('click', () => selectView('list'));
   document.getElementById('view-proj-btn')?.addEventListener('click', () => selectView('project'));
   document.getElementById('view-search-btn')?.addEventListener('click', () => selectView('search'));
+  document.getElementById('view-weekly-btn')?.addEventListener('click', () => selectView('weekly'));
   document.getElementById('view-split-btn')?.addEventListener('click', toggleSplit);
   document.getElementById('toggle-done-btn')?.addEventListener('click', toggleDone);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
+  setWeeklyHandlers({ openProject, openProjectAt, jump: jumpToCard, navPush });   // 週次ビューの遷移先＋週送りのナビ履歴
   setAgendaJump(jumpToCard);                      // アジェンダ↗（元の場所へ）＝該当カードへジャンプ
   setSavedSearchOpener(openSavedSearch);         // ⟦s:id⟧ チップ→保存検索を開く
   setImageLoader(GH.ghFetchImageURL);            // 画像カード: repoパス→表示URL
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
   document.addEventListener('focusin', (e) => {             // 直近に触れたペインを記録（分割時のフォーカス復帰先・#4）
-    const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search');
+    const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search,#view-weekly');
     if (c) _lastPane = c.id;
   });
-  document.addEventListener('keydown', (e) => {              // Alt+1/2/3=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E
+  document.addEventListener('keydown', (e) => {              // Alt+1/2/3/4=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E
+    if (currentView === 'weekly' && !splitOn){               // 週次のグリッド操作（矢印/Enter/Space等）を先に処理
+      if (onWeeklyKey(e)){ e.preventDefault(); return; }
+    }
+    if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && currentView === 'weekly'){   // 週送り
+      if (e.key === 'ArrowLeft'){ e.preventDefault(); pageWeeks(weeklyState, renderAll, -1); return; }
+      if (e.key === 'ArrowRight'){ e.preventDefault(); pageWeeks(weeklyState, renderAll, 1); return; }
+    }
     if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey){
       if (e.code === 'Digit1'){ e.preventDefault(); selectView('list'); return; }     // リスト（分割中は左へフォーカス）
       if (e.code === 'Digit2'){ e.preventDefault(); selectView('daily'); return; }    // デイリー（分割中は右をデイリーに）
       if (e.code === 'Digit3'){ e.preventDefault(); selectView('project'); return; }  // プロジェクト（分割中は右をプロジェクトに）
-      if (e.code === 'Digit0'){ e.preventDefault(); toggleSplit(); return; }          // 分割 ON/OFF トグル
+      if (e.code === 'Digit4'){ e.preventDefault(); selectView('weekly'); return; }   // 週次（PJ×週マトリクス）
+      if (e.code === 'Digit0'){                                                       // 週次=今週へ / 他=分割トグル
+        e.preventDefault();
+        if (currentView === 'weekly') gotoThisWeek(weeklyState, renderAll); else toggleSplit();
+        return;
+      }
       if (e.key === 'h' || e.key === 'H'){ e.preventDefault(); toggleDone(); return; }   // 完了の表示/非表示トグル（全ビュー共通）
       if (e.key === 'ArrowLeft'){ e.preventDefault(); navBack(); return; }            // 前の画面に戻る（#1・ブラウザ戻る抑止）
       if (e.key === 'ArrowRight'){ e.preventDefault(); navForward(); return; }        // 次の画面へ進む（#1）
