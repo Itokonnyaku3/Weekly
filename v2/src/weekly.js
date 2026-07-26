@@ -435,7 +435,7 @@ function buildItem(store, requestRender, e, B, rowId, w){
   if (_onJump){                                       // ↗ 元の場所（デイリー）へ
     const jb = document.createElement('button');
     jb.type = 'button'; jb.className = 'wk-jump'; jb.textContent = '↗';
-    jb.title = '元の場所（デイリー）へ';
+    jb.title = '元の場所（デイリー）へ（Alt+Enter）';
     jb.onmousedown = (ev) => ev.preventDefault();
     jb.onclick = (ev) => { ev.stopPropagation(); _onJump(e.body.id); };
     it.appendChild(jb);
@@ -646,6 +646,7 @@ export function onWeeklyKey(e){
   if (plain && !e.shiftKey && e.key === ' '){ toggleDoneAt(el); return true; }
   if (e.ctrlKey && !e.altKey && !e.shiftKey && e.key === 'Enter'){ toggleDoneAt(el); return true; }
   if (e.altKey && !e.ctrlKey && !e.shiftKey && (e.key === 'm' || e.key === 'M')){ toggleMsAt(el); return true; }
+  if (e.altKey && !e.ctrlKey && !e.shiftKey && e.key === 'Enter'){ return jumpFrom(el); }   // 元のノードへ（↗ と同じ）
   if (e.altKey && !e.ctrlKey && !e.shiftKey && e.key === 'ArrowDown'){
     const cell = el.closest('.wk-cell');
     const col = cell && cell.dataset.col;
@@ -656,6 +657,33 @@ export function onWeeklyKey(e){
     return moveCardWeek(el, e.key === 'ArrowRight' ? 1 : -1);
   }
   return false;
+}
+// コマンドパレット等から、カーソル位置のアイテムに対してキー操作と同じ処理を行う。
+// パレットを開くとフォーカスは外れるが、カーソル（_cursor）は保持しているので applyCursor で戻してから実行する。
+// 対象のアイテムが無い/対象外の種別なら false ＝呼び出し側が理由を通知できる。
+export function weeklyCursorAction(kind){
+  if (!_store || !_shape.rows.length) return false;
+  applyCursor();
+  const el = document.activeElement;
+  if (!el || !el.classList || !el.classList.contains('wk-item')) return false;
+  if (kind === 'jump') return jumpFrom(el);
+  if (kind === 'ms')   { if (el.dataset.act !== 'card') return false; toggleMsAt(el); return true; }
+  if (kind === 'next') return moveCardWeek(el, 1);
+  if (kind === 'prev') return moveCardWeek(el, -1);
+  if (kind === 'expand'){
+    const cell = el.closest('.wk-cell'), col = cell && cell.dataset.col;
+    if (!col || col === 'proj' || col === 'link') return false;
+    syncCursorFrom(el); expandCell(el.closest('.wk-row').dataset.row, col); return true;
+  }
+  return false;
+}
+
+// 元のノード（デイリー／PJページ）へ飛ぶ。カード行のみ対象で、繰越の参照行でも同じ挙動。
+// 対象外の行では false を返して他のキー処理（ビュー切替など）に譲る。
+function jumpFrom(el){
+  if (el.dataset.act !== 'card' || !_onJump || !el.dataset.body) return false;
+  _onJump(el.dataset.body);
+  return true;
 }
 function toggleDoneAt(el){
   if (el.dataset.act !== 'card') return;

@@ -6,14 +6,14 @@ const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getD
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
-const { renderWeeklyView, loadWeeklyPrefs, setWeeklyHandlers, pageWeeks, gotoThisWeek, onWeeklyKey } = await import('./weekly.js' + _q);
+const { renderWeeklyView, loadWeeklyPrefs, setWeeklyHandlers, pageWeeks, gotoThisWeek, onWeeklyKey, weeklyCursorAction } = await import('./weekly.js' + _q);
 const { groupToFlatQuery, flatQueryToGroup } = await import('./query.js' + _q);   // 表⇄アウトラインの条件受け渡し
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.95.2';
+export const APP_VERSION = '0.95.3';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -400,6 +400,11 @@ function installDividerDrag(){            // ディバイダのドラッグで�
   });
 }
 
+// 週次のカーソル位置に対する操作をパレットから実行（キー操作と同じ実体を呼ぶ）
+function weeklyAction(kind){
+  if (!weeklyCursorAction(kind)) showToast('週次ビューでタスク（またはセル）を選んでから実行してください');
+}
+
 function buildCommands(cardRef){
   const cmds = [
     { cat:'表示', label:'デイリーを表示', hint:'Alt+2', roma:'deiri hyouji daily', run: () => selectView('daily') },
@@ -409,6 +414,14 @@ function buildCommands(cardRef){
     { cat:'週次', label:'前の週へ', hint:'Alt+Shift+←', roma:'zenshuu mae week prev', run: () => { showView('weekly'); pageWeeks(weeklyState, renderAll, -1); } },
     { cat:'週次', label:'次の週へ', hint:'Alt+Shift+→', roma:'jishuu tsugi week next', run: () => { showView('weekly'); pageWeeks(weeklyState, renderAll, 1); } },
     { cat:'週次', label:'今週へ', hint:'Alt+0', roma:'konshuu ima week today', run: () => { selectView('weekly'); gotoThisWeek(weeklyState, renderAll); } },
+    // 週次のカーソル位置に対する操作（キー操作と実装を共有）。対象が無いときは理由を通知する
+    ...(currentView === 'weekly' ? [
+      { cat:'週次', label:'選択中のタスクを元のノードへ（デイリー）', hint:'Alt+Enter', roma:'moto no basho e jump node original', run: () => weeklyAction('jump') },
+      { cat:'週次', label:'選択中のセルを展開（実体アウトライン）', hint:'Alt+↓', roma:'tenkai cell expand outline', run: () => weeklyAction('expand') },
+      { cat:'週次', label:'選択中のタスクを翌週へ移動（延期）', hint:'Ctrl+Shift+→', roma:'yokushuu enki idou postpone move week', run: () => weeklyAction('next') },
+      { cat:'週次', label:'選択中のタスクを前週へ移動', hint:'Ctrl+Shift+←', roma:'zenshuu maedaoshi idou move week', run: () => weeklyAction('prev') },
+      { cat:'週次', label:'選択中のタスクをマイルストーンに', hint:'Alt+M', roma:'mairusuto-n milestone toggle', run: () => weeklyAction('ms') },
+    ] : []),
     { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', roma:'bunkatsu hyouji kirikae split', run: toggleSplit },
     { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', roma:'kanryou hyouji kakusu done hide show', run: toggleDone },
     { cat:'表示', label:'今日の日にズーム', hint:'Alt+D', roma:'kyou zumu today zoom', run: zoomTodayToggle },
