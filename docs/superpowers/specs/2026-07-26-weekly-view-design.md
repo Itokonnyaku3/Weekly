@@ -81,7 +81,7 @@ buildWeeklyGrid(store, { weeks, today, msTag='マイルストーン', hideEmpty=
     kids:  [{ ref, body }],       // PJ直下ノード（「リンク」ノードは除く）
     links: [{ ref, body }],       // 「リンク」ノードの子
     cells: { [wk]: { ms:[], todo:[], done:[], memo:[], over:[] } },
-    total,                        // 表示範囲内の件数（hideEmpty 判定用・over は数えない）
+    total,                        // 表示範囲内の件数（hideEmpty 判定用。over も数える＝期限切れだけの行を隠さない）
   }],
 }
 entry = { ref, body, day, wk }    // day=出所日 / wk=所属週
