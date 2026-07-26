@@ -9,6 +9,7 @@ const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非�
 const { cardTags, TAG_RE, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
 const { defaultGroup, matchGroup, dueGroupMatch, projMatch } = await import('./query.js' + _q);   // 絞り込みの照合は共通クエリ基盤に委譲（表/アウトラインで同一ロジック）
 const { projColor } = await import('./colors.js' + _q);   // プロジェクト色（週次ビューと共通）
+const { todayStr, dateOf } = await import('./time.js' + _q);   // 「今日」「作成日」は日本時間（UTC+9）基準
 export { dueGroupMatch, projMatch };   // 既存テスト・search.js からの参照互換のため再エクスポート（実体は query.js）
 
 // ── 純ロジック（テスト対象）──
@@ -23,7 +24,7 @@ export function midsForProject(store, projId){
 
 // 今日の day カード直下に task を作成（グループの proj/mid を継承）。today 省略時は当日。
 export function addTaskToday(store, { proj, mid } = {}, today){
-  const date = today || new Date().toISOString().slice(0, 10);
+  const date = today || todayStr();
   const day = store.ensureDayCard(date);
   const attrs = { kind:'task', content:'', parentRefId: day.ref.id };
   if (proj) attrs.proj = proj;
@@ -292,7 +293,7 @@ export function renderList(store, mount, requestRender, state, onJump, onOpenPro
   if (onOpenProject) _onOpenProject = onOpenProject;
   if (onOpenAsOutline) _onOpenAsOutline = onOpenAsOutline;
   _listCtx = { store, requestRender, state };
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr();
   const all = store.queryBodies(b => b.kind === 'task');
   const { subtaskIds, descCount, descIncomplete } = subtaskIndex(store);   // サブタスク判定＋配下タスク数（バッジ用）
   _listCtx.descCount = descCount;                          // cellTitle が （未完了/全体）表示に参照
@@ -974,7 +975,7 @@ function cellDue(store, requestRender, t){
 }
 function cellCreated(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-created cell-muted';
-  td.textContent = (t.createdAt || '').slice(0, 10) || '—';
+  td.textContent = dateOf(t.createdAt) || '—';
   return td;
 }
 // プロパティ列セル（タグスキーマ由来）。表示はチップ、ダブルクリックでその場編集（date/select）。

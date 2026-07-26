@@ -6,6 +6,7 @@
 
 const _q = new URL(import.meta.url).search;
 const { cardTags } = await import('./props.js' + _q);
+const { dateOf } = await import('./time.js' + _q);   // doneAt（UTCのISO）→ JSTの完了日
 
 export function defaultGroup(){
   return {
@@ -69,7 +70,7 @@ export function doneGroupMatch(body, cond, today){
   if (!body.done) return false;
   if (cond.from == null && cond.to == null) return true;   // 完了日は問わない
   if (!body.doneAt) return false;                   // 完了日時が未記録（過去に完了したカード）
-  const d = dayDiff(body.doneAt.slice(0, 10), today);
+  const d = dayDiff(dateOf(body.doneAt), today);
   if (cond.from != null && d < cond.from) return false;
   if (cond.to   != null && d > cond.to)   return false;
   return true;

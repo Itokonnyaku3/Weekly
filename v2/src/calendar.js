@@ -1,4 +1,7 @@
 // 月カレンダー（日付へ移動）。日付クリック→onPick(YYYY-MM-DD)。カードのある日は印。
+const _q = new URL(import.meta.url).search;
+const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準
+
 let _panel = null, _closer = null;
 
 export function closeCalendar(){
@@ -7,13 +10,12 @@ export function closeCalendar(){
 }
 
 const pad = (n) => String(n).padStart(2, '0');
-const ymd = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
 export function openCalendar({ store, onPick }){
   closeCalendar();
-  const today = new Date();
-  const todayStr = ymd(today);
-  let viewY = today.getFullYear(), viewM = today.getMonth();   // 0-11
+  const today = todayStr();
+  const [ty, tm] = today.split('-').map(Number);
+  let viewY = ty, viewM = tm - 1;   // 0-11
 
   const overlay = document.createElement('div'); overlay.className = 'cal-overlay';
   const box = document.createElement('div'); box.className = 'cal-box';
@@ -36,7 +38,7 @@ export function openCalendar({ store, onPick }){
     const next = document.createElement('button'); next.className = 'btn'; next.textContent = '›';
     next.onclick = () => { if (++viewM > 11){ viewM = 0; viewY++; } render(); };
     const todayBtn = document.createElement('button'); todayBtn.className = 'btn'; todayBtn.textContent = '今日';
-    todayBtn.onclick = () => pick(todayStr);
+    todayBtn.onclick = () => pick(today);
     head.append(prev, title, next, todayBtn);
     box.appendChild(head);
 
@@ -48,7 +50,7 @@ export function openCalendar({ store, onPick }){
     for (let d = 1; d <= daysIn; d++){
       const s = viewY + '-' + pad(viewM + 1) + '-' + pad(d);
       const cell = document.createElement('button'); cell.className = 'cal-day'; cell.textContent = d;
-      if (s === todayStr) cell.classList.add('today');
+      if (s === today) cell.classList.add('today');
       if (dayHasCard(s)) cell.classList.add('has');
       cell.onclick = () => pick(s);
       grid.appendChild(cell);

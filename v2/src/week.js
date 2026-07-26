@@ -3,6 +3,7 @@
 // 週は月曜始まり。週キーはその週の月曜 'YYYY-MM-DD'（辞書順＝時系列順でソートできる）。
 const _q = new URL(import.meta.url).search;
 const { cardTags, TAG_RE } = await import('./props.js' + _q);
+const { dateOf } = await import('./time.js' + _q);       // createdAt/doneAt（UTCのISO）→ JSTの日付
 
 export const WEEK_COUNT = 6;                  // 同時に表示する週数
 export const WEEK_BACK  = 1;                  // 表示範囲に含める過去週数（先週を1つ）
@@ -43,7 +44,7 @@ export function cardWeekOf(body, ref, dayDate){
   if (ref && ref.gridWk) return ref.gridWk;
   if (body && body.due) return weekStart(body.due);
   if (dayDate) return weekStart(dayDate);
-  if (body && body.createdAt) return weekStart(body.createdAt);
+  if (body && body.createdAt) return weekStart(dateOf(body.createdAt));
   return null;
 }
 
@@ -174,7 +175,7 @@ export function buildWeeklyGrid(store, { weeks, today, hideEmpty = false } = {})
     if (isMilestone(b)){                                   // マイルストーンは所属週の先頭・繰越しない
       if (wkSet.has(wk)){ row.cells[wk].ms.push(e); row.total++; }
     } else if (b.kind === 'task' && b.done){
-      const dw = b.doneAt ? weekStart(b.doneAt) : wk;       // やったこと＝完了週
+      const dw = b.doneAt ? weekStart(dateOf(b.doneAt)) : wk;   // やったこと＝完了週（JSTの完了日で判定）
       if (wkSet.has(dw)){ row.cells[dw].done.push(e); row.total++; }
     } else if (b.kind === 'task'){
       if (wkSet.has(wk)){ row.cells[wk].todo.push(e); row.total++; }

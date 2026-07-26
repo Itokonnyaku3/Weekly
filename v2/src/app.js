@@ -7,18 +7,19 @@ const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
 const { renderSearchView } = await import('./search.js' + _q);
 const { renderWeeklyView, loadWeeklyPrefs, setWeeklyHandlers, pageWeeks, gotoThisWeek, onWeeklyKey, weeklyCursorAction } = await import('./weekly.js' + _q);
+const { todayStr } = await import('./time.js' + _q);      // 「今日」は日本時間（UTC+9）基準に一本化
+const { shiftDays } = await import('./week.js' + _q);     // 日付文字列の加減（既存の純ロジックを再利用）
 const { groupToFlatQuery, flatQueryToGroup } = await import('./query.js' + _q);   // 表⇄アウトラインの条件受け渡し
 const { openCommandPalette, openSearchPalette } = await import('./palette.js' + _q);
 const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.95.3';
+export const APP_VERSION = '0.95.4';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
 
-const todayStr = () => new Date().toISOString().slice(0, 10);
 let currentView = 'daily';                            // 現在アクティブなビュー（非分割の単一表示／分割時はフォーカス中ペイン）
 const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice() };
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
@@ -269,7 +270,7 @@ function zoomToCard(bodyId){
   renderAll();
   focusCard(ref.id, -1);
 }
-const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+const addDays = (n) => shiftDays(todayStr(), n);
 function dispatchCardKey(refId, init){              // フォーカス中カードへキーを発火（既存のキー操作を再利用）
   focusCard(refId, -1);
   const el = document.querySelector(`.card-txt[data-ref="${refId}"]`);

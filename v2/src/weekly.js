@@ -14,7 +14,7 @@ const { renderChildren, setNavContainer, focusCard, getHideDone } = await import
 const { showToast, copyRichText } = await import('./clipboard.js' + _q);
 const { projColor, tintRgba } = await import('./colors.js' + _q);   // リストと共通のプロジェクト色
 
-const todayStr = () => new Date().toISOString().slice(0, 10);
+const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準
 const cssEsc = (s) => (window.CSS && CSS.escape) ? CSS.escape(String(s)) : String(s);
 // 表示用テキスト: #マイルストーン は 🏁 ブロックで表しているので本文からは落とす（他のタグは情報なので残す）。
 // 生テキストは span.dataset.raw に持ち、編集開始時にそれを戻す（list.js のタグ表示と同じ流儀＝直列化を壊さない）。

@@ -6,6 +6,9 @@
 // 「⋯」で行メニュー（メモ⇄タスク・優先度・期限・プロジェクト割当・削除）。
 // 描画方針: テキスト入力では再描画しない（caret保持）。構造変更だけ requestRender＋caret復元。
 
+const _q = new URL(import.meta.url).search;
+const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
+
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
 let _menuKey = null;        // Esc で閉じる document リスナ（フォーカス位置に依らず効く）
@@ -880,8 +883,7 @@ function onKey(e, store, ref, body, requestRender){
   if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key === '/'){
     e.preventDefault();
     const el0 = e.target, t = serializeEditable(el0), p = caretOffset(el0);
-    const d = new Date();
-    const ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+    const ymd = todayStr().replace(/-/g, '').slice(2);       // YYYY-MM-DD → YYMMDD
     const ins = '【📅' + ymd + '】 ';
     store.updateBody(body.id, { content: t.slice(0, p) + ins + t.slice(p) });
     requestRender();
@@ -1362,11 +1364,10 @@ function closeMention(){
 }
 function parseDateQuery(q){
   q = q.trim(); const p = (n) => String(n).padStart(2, '0');
-  const fmt = (d) => d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
   if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(q)){ const [y, mo, d] = q.split('-').map(Number); return y + '-' + p(mo) + '-' + p(d); }
-  if (/^\d{1,2}\/\d{1,2}$/.test(q)){ const [mo, d] = q.split('/').map(Number); return new Date().getFullYear() + '-' + p(mo) + '-' + p(d); }
-  if (q === '今日') return fmt(new Date());
-  if (q === '明日'){ const d = new Date(); d.setDate(d.getDate() + 1); return fmt(d); }
+  if (/^\d{1,2}\/\d{1,2}$/.test(q)){ const [mo, d] = q.split('/').map(Number); return todayStr().slice(0, 4) + '-' + p(mo) + '-' + p(d); }
+  if (q === '今日') return todayStr();
+  if (q === '明日') return shiftDate(todayStr(), 1);
   return null;
 }
 function openMentionSearch(store, anchorEl, onPick){

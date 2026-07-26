@@ -3,6 +3,9 @@
 // v2 専用パス（既定 v2-data/tracker.json・backups は v2-data/backups/）で v1 の data.json には触れない。
 // 設定/SHA/バックアップ日付は localStorage の pwt2_gh_* に保管（v1 の pwt_gh_* と別）。
 
+const _q = new URL(import.meta.url).search;
+const { todayStr } = await import('./time.js' + _q);   // バックアップ日付も日本時間（UTC+9）基準
+
 const K = {
   token:'pwt2_gh_token', repo:'pwt2_gh_repo', file:'pwt2_gh_file',
   enabled:'pwt2_gh_enabled', sha:'pwt2_gh_sha', lastBackup:'pwt2_gh_last_backup',
@@ -123,7 +126,7 @@ export async function ghSyncSave(store, { manual=false, onStatus=()=>{} } = {}){
 }
 
 // ── 日次バックアップ（v2-data/backups/data_YYYY-MM-DD.json・新しい順 keep 件）──
-const stamp = () => { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const stamp = () => todayStr();
 
 async function pruneBackups(g, keep){
   try {

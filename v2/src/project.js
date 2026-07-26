@@ -2,6 +2,7 @@
 // ノートページは daily の renderOutlinePage を共用（編集・ナビ・@メンション・バックリンクをそのまま再利用）。
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, renderChildren, focusCard, isDoneHidden } = await import('./daily.js' + _q);
+const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準
 
 // 割当カード（📌）の簡易フィルタ状態（セッション内・#6）
 let _mirrorFilter = { kw: '', hideDone: false, due: 'all' };
@@ -210,7 +211,7 @@ function renderMirrorSection(store, mount, requestRender, projId, pageRootId, on
     sec.appendChild(e); mount.appendChild(sec); return;
   }
   sec.appendChild(buildMirrorFilter(requestRender));          // #6 簡易フィルタ（キーワード/完了を隠す/期限）
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr();
   let roots = filterMirrorRoots(allRoots, _mirrorFilter, today);
   roots = roots.filter(r => !isDoneHidden(store, r.ref.id));   // 全ビュー共通の完了非表示（Alt+H）にも追随＝空グループを出さない
   if (!roots.length){

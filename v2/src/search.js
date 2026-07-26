@@ -3,6 +3,7 @@ const _q = new URL(import.meta.url).search;
 const { matchQuery } = await import('./query.js' + _q);   // 照合はリスト（表）と共通の query.js に一本化
 const { renderChildren, setNavContainer } = await import('./daily.js' + _q);
 const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
+const { todayStr } = await import('./time.js' + _q);    // 「今日」は日本時間（UTC+9）基準
 export { cardTags };                                     // 既存の利用元（テスト等）との互換
 // カードが query に AND で一致するか。対象は memo/task のみ。
 // query は単一のフラット条件（= 1グループ）。グループ配列との差は query.js の toGroups が吸収する。
@@ -34,7 +35,7 @@ export function sourceDay(store, refId){
 export function renderSearchView(store, mount, requestRender, state, onJump, onOpenAsTable){
   mount.innerHTML = '';
   setNavContainer(mount, requestRender);   // ↑↓等の nav がこのビューのコンテナ内で機能するように同期
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr();
   const q = state.query;
 
   const head = document.createElement('div'); head.className = 'search-title'; head.textContent = '🔍 検索';

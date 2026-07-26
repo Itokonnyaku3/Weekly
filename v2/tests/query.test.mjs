@@ -170,6 +170,15 @@ assert.equal(
   doneGroupMatch({ done:true, doneAt:'2026-07-01T10:00:00' }, { mode:'done', from:0, to:0 }, today),
   false, 'doneAt基準で範囲外'
 );
+// doneAt は UTC の ISO で保存される。JST 00:00〜08:59 の完了を前日と数えない
+assert.equal(
+  doneGroupMatch({ done:true, doneAt:'2026-07-06T23:00:00.000Z' }, { mode:'done', from:0, to:0 }, '2026-07-07'),
+  true, 'JST 7/7 08:00 完了（UTC は 7/6）は「今日完了」'
+);
+assert.equal(
+  doneGroupMatch({ done:true, doneAt:'2026-07-06T14:59:00.000Z' }, { mode:'done', from:0, to:0 }, '2026-07-07'),
+  false, 'JST 7/6 23:59 完了は「今日」に含めない'
+);
 
 // --- matchGroup（AND） -----------------------------------------------------------
 

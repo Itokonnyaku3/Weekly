@@ -12,6 +12,8 @@ assert.equal(cardWeekOf({}, {}, day), '2026-07-20',
   '期限がなければ書き込まれた日の週');
 assert.equal(cardWeekOf({ createdAt:'2026-06-10T09:00:00.000Z' }, {}, null), '2026-06-08',
   '出所日が取れなければ作成日の週');
+assert.equal(cardWeekOf({ createdAt:'2026-06-07T20:00:00.000Z' }, {}, null), '2026-06-08',
+  'createdAt は JST で日付を出す（JST 6/8(月) 05:00 ＝ UTC 6/7(日) → 前週にしない）');
 assert.equal(cardWeekOf({}, {}, null), null, '何も手がかりが無ければ null');
 assert.equal(cardWeekOf({}, null, day), '2026-07-20', 'ref が無くても落ちない');
 
