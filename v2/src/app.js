@@ -13,7 +13,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.95.0';
+export const APP_VERSION = '0.95.1';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -289,12 +289,17 @@ function openProject(projId){             // プロジェクトのノートペ�
   showView('project');
   renderAll();
 }
-// PJページをそのノードにズームして開く（週次ビューの直下ノード/リンクのクリック先）
+// PJページを開き、そのノードにフォーカスした状態で遷移（週次ビューの直下ノード/リンクのクリック先）。
+// ズームはしない＝周りの文脈を保ったままカーソルがそのノードに乗る。折りたたまれた祖先は開く。
 function openProjectAt(projId, refId){
   navPush();
-  projState.projId = projId; projState.rootRef = refId || null;
+  projState.projId = projId; projState.rootRef = null;
   showView('project');
+  const ref = refId ? store.getRef(refId) : null;
+  let p = ref && ref.parentRefId ? store.getRef(ref.parentRefId) : null;
+  while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
   renderAll();
+  if (ref) focusCard(ref.id, -1);
 }
 function openSavedSearch(viewId){         // ⟦s:id⟧ チップ→ 検索ビューでその保存検索を実行
   const v = store.listViews().find(x => x.id === viewId && x.kind === 'search');

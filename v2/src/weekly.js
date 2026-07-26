@@ -60,7 +60,9 @@ export function renderWeeklyView(store, mount, requestRender, state){
 
   const scroll = document.createElement('div'); scroll.className = 'wk-scroll';
   const table = document.createElement('table'); table.className = 'wk-table';
-  table.appendChild(buildHead(grid));
+  if (!state.cols) state.cols = { ...COL_DEFAULTS };      // 古い保存状態でも落ちない
+  applyColWidths(table, state);
+  table.appendChild(buildHead(grid, state));
   const tbody = document.createElement('tbody');
   for (const row of grid.rows) tbody.appendChild(buildRow(store, requestRender, state, row, grid));
   table.appendChild(tbody);
@@ -139,32 +141,89 @@ function savePrefs(state){
     localStorage.setItem('pwt2_wkHideEmpty', state.hideEmpty ? '1' : '0');
   } catch {}
 }
+// ── 列幅（ヘッダ右端のドラッグで変更・localStorage に保存）──
+// 既定値と可動範囲。week は全週列に一律で効く（週ごとに違う幅にはしない＝比較しやすさを保つ）
+export const COL_DEFAULTS = { proj: 200, link: 160, week: 240 };
+const COL_RANGE = { proj: [120, 520], link: [60, 520], week: [140, 640] };
+const COL_VAR = { proj: '--wk-w-proj', link: '--wk-w-link', week: '--wk-w-week' };
+const clampCol = (which, px) => Math.round(Math.min(Math.max(px, COL_RANGE[which][0]), COL_RANGE[which][1]));
+
+function applyColWidths(table, state){
+  for (const which of ['proj', 'link', 'week']){
+    table.style.setProperty(COL_VAR[which], (state.cols[which] || COL_DEFAULTS[which]) + 'px');
+  }
+}
+function saveCols(state){
+  try { localStorage.setItem('pwt2_wkCols', JSON.stringify(state.cols)); } catch {}
+}
+// ヘッダ右端のドラッグハンドル。ドラッグ中は再描画せず CSS 変数だけ書き換える（滑らかに動かすため）
+function addResizeHandle(th, which, state){
+  const h = document.createElement('div');
+  h.className = 'wk-resize';
+  h.title = 'ドラッグで幅を変更（ダブルクリックで既定に戻す）'
+          + (which === 'week' ? ' ※すべての週列に適用' : '');
+  h.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const table = th.closest('.wk-table');
+    const x0 = e.clientX, w0 = state.cols[which] || COL_DEFAULTS[which];
+    h.setPointerCapture(e.pointerId);
+    h.classList.add('dragging');
+    const onMove = (ev) => {
+      state.cols[which] = clampCol(which, w0 + (ev.clientX - x0));
+      applyColWidths(table, state);
+    };
+    const onUp = () => {
+      h.classList.remove('dragging');
+      try { h.releasePointerCapture(e.pointerId); } catch {}
+      h.removeEventListener('pointermove', onMove);
+      h.removeEventListener('pointerup', onUp);
+      saveCols(state);
+    };
+    h.addEventListener('pointermove', onMove);
+    h.addEventListener('pointerup', onUp);
+  });
+  h.addEventListener('dblclick', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    state.cols[which] = COL_DEFAULTS[which];
+    applyColWidths(th.closest('.wk-table'), state);
+    saveCols(state);
+  });
+  th.appendChild(h);
+}
+
 // UI設定として localStorage に保存（undo履歴・GitHub同期には乗せない）
 export function loadWeeklyPrefs(){
-  const st = { wkOff: 0, hideEmpty: false, expanded: null };
+  const st = { wkOff: 0, hideEmpty: false, expanded: null, cols: { ...COL_DEFAULTS } };
   try {
     const o = parseInt(localStorage.getItem('pwt2_wkOff'), 10);
     if (Number.isFinite(o)) st.wkOff = o;
     st.hideEmpty = localStorage.getItem('pwt2_wkHideEmpty') === '1';
+    const c = JSON.parse(localStorage.getItem('pwt2_wkCols') || 'null');
+    if (c) for (const which of ['proj', 'link', 'week']){
+      if (Number.isFinite(c[which])) st.cols[which] = clampCol(which, c[which]);   // 壊れた値は既定/範囲内に補正
+    }
   } catch {}
   return st;
 }
 
 // ── ヘッダ行 ──
-function buildHead(grid){
+function buildHead(grid, state){
   const thead = document.createElement('thead');
   const tr = document.createElement('tr');
   const th1 = document.createElement('th'); th1.className = 'wk-th wk-c-proj'; th1.textContent = 'プロジェクト';
   const th2 = document.createElement('th'); th2.className = 'wk-th wk-c-link'; th2.textContent = 'リンク';
+  addResizeHandle(th1, 'proj', state);
+  addResizeHandle(th2, 'link', state);
   tr.appendChild(th1); tr.appendChild(th2);
-  for (const w of grid.weeks){
+  grid.weeks.forEach((w, i) => {
     const th = document.createElement('th');
     th.className = 'wk-th wk-c-week' + (w.isCurrent ? ' wk-current' : '');
     const l = document.createElement('div'); l.className = 'wk-th-label'; l.textContent = w.label;
     th.appendChild(l);
     if (w.isCurrent){ const n = document.createElement('div'); n.className = 'wk-th-now'; n.textContent = '今週'; th.appendChild(n); }
+    if (i === 0) addResizeHandle(th, 'week', state);      // 先頭の週列で全週列の幅を調整
     tr.appendChild(th);
-  }
+  });
   thead.appendChild(tr);
   return thead;
 }
