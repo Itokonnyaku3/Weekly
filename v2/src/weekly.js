@@ -8,8 +8,8 @@
 // 繰越（over）は「参照行」として描き data-ref を付けない
 //  ＝同一 refId が DOM に2つあると focusCard が誤爆するため（元の週と繰越先の両方に出るので必須の制約）。
 const _q = new URL(import.meta.url).search;
-const { buildWeeklyGrid, weeksFor, weekLabel, weekAdd, weekStart, moveCursor,
-        toggleMsContent, buildWeekReport, FIRST_WEEK_COL, MS_TAG } = await import('./week.js' + _q);
+const { buildWeeklyGrid, weeksFor, weekLabel, weekAdd, weekStart, moveCursor, rowCollapseStep,
+        toggleMsContent, buildWeekReport, FIRST_WEEK_COL, MS_TAG, SORT_MODES } = await import('./week.js' + _q);
 const { renderChildren, setNavContainer, focusCard, getHideDone } = await import('./daily.js' + _q);
 const { showToast, copyRichText } = await import('./clipboard.js' + _q);
 const { projColor, tintRgba } = await import('./colors.js' + _q);   // リストと共通のプロジェクト色
@@ -34,13 +34,19 @@ export function setWeeklyHandlers({ openProject, openProjectAt, jump, navPush } 
 }
 
 // ブロックの定義（表示順）。add はブロックの「＋」で作るカードの種類・ref:true は参照行（編集不可）
+// icon は折りたたみ行のサマリ（🏁1 □3 …）にも使う
 const BLOCKS = [
-  { key:'ms',   label:'🏁 マイルストーン', cls:'wk-b-ms' },
-  { key:'todo', label:'□ やること',        cls:'wk-b-todo', add:'todo' },
-  { key:'done', label:'✓ やったこと',      cls:'wk-b-done', add:'done' },
-  { key:'memo', label:'📝 メモ',           cls:'wk-b-memo', add:'memo' },
-  { key:'over', label:'↩ 期限切れ',        cls:'wk-b-over', ref:true },
+  { key:'ms',   icon:'🏁', label:'🏁 マイルストーン', cls:'wk-b-ms' },
+  { key:'todo', icon:'□',  label:'□ やること',        cls:'wk-b-todo', add:'todo' },
+  { key:'done', icon:'✓',  label:'✓ やったこと',      cls:'wk-b-done', add:'done' },
+  { key:'memo', icon:'📝', label:'📝 メモ',           cls:'wk-b-memo', add:'memo' },
+  { key:'over', icon:'↩',  label:'↩ 期限切れ',        cls:'wk-b-over', ref:true },
 ];
+// セル内で実際に見えている件数（完了非表示の絞り込みを効かせる。「やったこと」は完了専用なので対象外）
+function visibleItems(cell, B, hideDone){
+  const items = (cell && cell[B.key]) || [];
+  return (hideDone && B.key !== 'done') ? items.filter(e => !e.body.done) : items;
+}
 
 // ── モジュール状態（描画のたびに差し替え）──
 let _mount = null, _store = null, _render = null, _state = null;
@@ -52,7 +58,7 @@ let _dragItem = null, _dropHi = null;
 export function renderWeeklyView(store, mount, requestRender, state){
   const today = todayStr();
   const weeks = weeksFor(today, state.wkOff || 0);
-  const grid = buildWeeklyGrid(store, { weeks, today, hideEmpty: !!state.hideEmpty });
+  const grid = buildWeeklyGrid(store, { weeks, today, hideEmpty: !!state.hideEmpty, sort: state.sort || 'default' });
 
   _mount = mount; _store = store; _render = requestRender; _state = state;
   _editing = null;                                    // 再描画で編集中の要素は失われる
@@ -108,6 +114,18 @@ function buildBar(store, requestRender, state, grid, weeks, today){
 
   const sp = document.createElement('span'); sp.className = 'spacer'; bar.appendChild(sp);
 
+  const srt = document.createElement('label'); srt.className = 'wk-chk';
+  srt.appendChild(document.createTextNode('並び '));
+  const sel = document.createElement('select'); sel.className = 'wk-sort';
+  sel.title = 'セル内のカードの並び順（全セル共通・この端末に保存）';
+  for (const [v, t] of SORT_MODES){
+    const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o);
+  }
+  sel.value = state.sort || 'default';
+  sel.onchange = () => { state.sort = sel.value; savePrefs(state); requestRender(); };
+  srt.appendChild(sel);
+  bar.appendChild(srt);
+
   const chk = document.createElement('label'); chk.className = 'wk-chk';
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !state.hideEmpty;
   cb.onchange = () => { state.hideEmpty = !cb.checked; savePrefs(state); requestRender(); };
@@ -140,6 +158,8 @@ function savePrefs(state){
   try {
     localStorage.setItem('pwt2_wkOff', String(state.wkOff || 0));
     localStorage.setItem('pwt2_wkHideEmpty', state.hideEmpty ? '1' : '0');
+    localStorage.setItem('pwt2_wkSort', state.sort || 'default');
+    localStorage.setItem('pwt2_wkCollapsed', JSON.stringify(state.collapsed || []));
   } catch {}
 }
 // ── 列幅（ヘッダ右端のドラッグで変更・localStorage に保存）──
@@ -194,11 +214,15 @@ function addResizeHandle(th, which, state){
 
 // UI設定として localStorage に保存（undo履歴・GitHub同期には乗せない）
 export function loadWeeklyPrefs(){
-  const st = { wkOff: 0, hideEmpty: false, expanded: null, cols: { ...COL_DEFAULTS } };
+  const st = { wkOff: 0, hideEmpty: false, expanded: null, sort: 'default', collapsed: [], cols: { ...COL_DEFAULTS } };
   try {
     const o = parseInt(localStorage.getItem('pwt2_wkOff'), 10);
     if (Number.isFinite(o)) st.wkOff = o;
     st.hideEmpty = localStorage.getItem('pwt2_wkHideEmpty') === '1';
+    const s = localStorage.getItem('pwt2_wkSort');
+    if (s && SORT_MODES.some(([v]) => v === s)) st.sort = s;                       // 未知の値は既定へ
+    const cl = JSON.parse(localStorage.getItem('pwt2_wkCollapsed') || 'null');
+    if (Array.isArray(cl)) st.collapsed = cl.filter(x => typeof x === 'string');
     const c = JSON.parse(localStorage.getItem('pwt2_wkCols') || 'null');
     if (c) for (const which of ['proj', 'link', 'week']){
       if (Number.isFinite(c[which])) st.cols[which] = clampCol(which, c[which]);   // 壊れた値は既定/範囲内に補正
@@ -235,26 +259,63 @@ function buildHead(grid, state){
 const TINT_ALPHA = 0.10, TINT_ALPHA_PROJ = 0.18;
 
 function buildRow(store, requestRender, state, row, grid){
+  const rowId = row.projId || '__none';
+  const collapsed = isRowCollapsed(state, rowId);
   const tr = document.createElement('tr');
-  tr.className = 'wk-row' + (row.projId ? '' : ' wk-row-none');
-  tr.dataset.row = row.projId || '__none';
+  tr.className = 'wk-row' + (row.projId ? '' : ' wk-row-none') + (collapsed ? ' wk-row-collapsed' : '');
+  tr.dataset.row = rowId;
   const color = projColor(row.projId);                       // 未割当は PROJ_NONE_COLOR（グレー）
   tr.style.setProperty('--pjc', color);
   tr.style.setProperty('--wk-tint', tintRgba(color, TINT_ALPHA));
   tr.style.setProperty('--wk-tint2', tintRgba(color, TINT_ALPHA_PROJ));
-  tr.appendChild(buildProjCell(store, requestRender, row));
-  tr.appendChild(buildLinkCell(row));
-  for (const w of grid.weeks) tr.appendChild(buildWeekCell(store, requestRender, state, row, w));
+  tr.appendChild(buildProjCell(store, requestRender, state, row, collapsed));
+  tr.appendChild(buildLinkCell(row, collapsed));
+  for (const w of grid.weeks){
+    tr.appendChild(collapsed ? buildSumCell(store, requestRender, row, w, rowId)
+                             : buildWeekCell(store, requestRender, state, row, w));
+  }
   return tr;
 }
+// 折りたたみ中の週セル: 1行のサマリ（🏁1 □3 ✓2 …）だけ。Enter/クリックでその行を開く。
+// スロットは必ず1つ置く＝カーソル（shape.counts）が壊れない。
+// ドロップは通常のセルと同じく受ける（畳んだ行が D&D の死角にならないように）。
+function buildSumCell(store, requestRender, row, w, rowId){
+  const td = document.createElement('td');
+  td.className = 'wk-cell wk-c-week wk-c-sum' + (w.isCurrent ? ' wk-current' : '');
+  td.dataset.col = w.wk; td.dataset.row = rowId;
+  setupCellDrop(td, store, requestRender, rowId, w.wk);
+  const it = document.createElement('div');
+  it.className = 'wk-item wk-sum'; it.tabIndex = -1;
+  it.dataset.act = 'rowexp'; it.dataset.row = rowId;
+  const hideDone = getHideDone();
+  for (const B of BLOCKS){
+    const n = visibleItems(row.cells[w.wk], B, hideDone).length;
+    if (!n) continue;
+    const b = document.createElement('span');
+    b.className = 'wk-badge wk-sum-b ' + B.cls;
+    b.textContent = B.icon + n;
+    b.title = B.label.replace(/^\S+\s*/, '') + ' ' + n + '件';
+    it.appendChild(b);
+  }
+  it.title = 'Enter / クリックでこのプロジェクトを開く（Ctrl+↓）';
+  it.onclick = () => setRowCollapsed(rowId, false);
+  td.appendChild(it);
+  return td;
+}
 
-function buildProjCell(store, requestRender, row){
+function buildProjCell(store, requestRender, state, row, collapsed){
   const td = document.createElement('td'); td.className = 'wk-cell wk-c-proj';
-  td.dataset.col = 'proj'; td.dataset.row = row.projId || '__none';
+  const rowId = row.projId || '__none';
+  td.dataset.col = 'proj'; td.dataset.row = rowId;
   const title = document.createElement('div');
   title.className = 'wk-item wk-proj-title'; title.tabIndex = -1;
   title.dataset.act = row.projId ? 'proj' : 'none';
   title.dataset.proj = row.projId || '';
+  const tog = document.createElement('span');                // ▾/▸ 行の折りたたみ（キーは Ctrl+↑/↓）
+  tog.className = 'wk-rtog'; tog.textContent = collapsed ? '▸' : '▾';
+  tog.title = (collapsed ? '展開（Ctrl+↓）' : '折りたたみ（Ctrl+↑）') + ' ※2回目で全プロジェクトに適用';
+  tog.onclick = (e) => { e.stopPropagation(); setRowCollapsed(rowId, !collapsed); };
+  title.appendChild(tog);
   const nm = document.createElement('span'); nm.className = 'wk-tx';
   nm.textContent = row.proj ? ('📕 ' + (row.proj.content || '(無題)')) : '未割当';
   title.appendChild(nm);
@@ -272,6 +333,7 @@ function buildProjCell(store, requestRender, row){
     title.appendChild(mv);
   }
   td.appendChild(title);
+  if (collapsed) return td;                                  // 折りたたみ中は直下ノードを出さない（1行に収める）
   for (const k of row.kids){
     const it = document.createElement('div');
     it.className = 'wk-item wk-proj-kid'; it.tabIndex = -1;
@@ -286,10 +348,10 @@ function buildProjCell(store, requestRender, row){
   return td;
 }
 
-function buildLinkCell(row){
+function buildLinkCell(row, collapsed){
   const td = document.createElement('td'); td.className = 'wk-cell wk-c-link';
   td.dataset.col = 'link'; td.dataset.row = row.projId || '__none';
-  if (!row.links.length){
+  if (collapsed || !row.links.length){
     const ph = document.createElement('div');
     ph.className = 'wk-item wk-ph'; ph.tabIndex = -1; ph.dataset.act = 'none';
     td.appendChild(ph);
@@ -346,9 +408,8 @@ function buildWeekCell(store, requestRender, state, row, w){
   const hideDone = getHideDone();
   let n = 0;
   for (const B of BLOCKS){
-    let items = cell[B.key] || [];
     // 完了非表示（Alt+H）は「やったこと」には適用しない（完了専用ブロックなので常に空になる）
-    if (hideDone && B.key !== 'done') items = items.filter(e => !e.body.done);
+    const items = visibleItems(cell, B, hideDone);
     if (!items.length) continue;
     const bl = document.createElement('div'); bl.className = 'wk-block ' + B.cls;
     const h = document.createElement('div'); h.className = 'wk-block-h';
@@ -494,6 +555,7 @@ function activate(el){
     case 'kid':  if (_onOpenProjectAt) _onOpenProjectAt(el.dataset.proj, el.dataset.kidRef); return;
     case 'link': openLink(el); return;
     case 'add':  addToCell(el.dataset.row, el.dataset.wk, 'todo'); return;
+    case 'rowexp': setRowCollapsed(el.dataset.row, false); return;   // 折りたたみ行のサマリ＝開く
     case 'card':
       if (el.dataset.overRef){ if (_onJump) _onJump(el.dataset.body); return; }   // 参照行は元の場所へ
       startEdit(el);
@@ -561,6 +623,37 @@ export function addToCell(rowId, wk, blockKey){
   const el = _mount && _mount.querySelector(`.wk-item[data-body="${cssEsc(body.id)}"]`);
   if (el){ syncCursorFrom(el); el.focus(); startEdit(el); }
   else showToast('追加しました（現在の表示範囲では見えません）');
+}
+
+// ── プロジェクト行の折りたたみ ──
+// 状態は state.collapsed（行IDの配列・localStorage 保存）。undo履歴・GitHub同期には乗せない表示設定。
+function isRowCollapsed(state, rowId){
+  return !!(state && state.collapsed && state.collapsed.includes(rowId));
+}
+// 行を畳むと、その行の展開中セル（実体アウトライン）は行ごと消えるので展開状態も解除する
+function dropExpandedIn(rowIds){
+  if (!_state || !_state.expanded) return;
+  const r = String(_state.expanded).split('|')[0];
+  if (rowIds.includes(r)) _state.expanded = null;
+}
+function applyCollapsed(next){
+  dropExpandedIn(next);
+  _state.collapsed = next;
+  savePrefs(_state);
+  _render();
+  applyCursor();
+}
+function setRowCollapsed(rowId, collapsed){
+  const cur = (_state.collapsed || []).filter(id => id !== rowId);
+  applyCollapsed(collapsed ? [...cur, rowId] : cur);
+}
+// キー操作（Ctrl+↑/↓）: 1回目はフォーカス行だけ・2回目で全行（week.js の rowCollapseStep が判定）
+function collapseStepAt(el, action){
+  const rowEl = el.closest('.wk-row');
+  if (!rowEl || !_shape.rows.length) return false;
+  syncCursorFrom(el);
+  applyCollapsed(rowCollapseStep(_shape.rows, _state.collapsed || [], rowEl.dataset.row, action));
+  return true;
 }
 
 // ── セルの展開 ──
@@ -656,6 +749,10 @@ export function onWeeklyKey(e){
   if (e.ctrlKey && e.shiftKey && !e.altKey && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')){
     return moveCardWeek(el, e.key === 'ArrowRight' ? 1 : -1);
   }
+  // Ctrl+↑ 折りたたみ / Ctrl+↓ 展開（デイリーのカスケード折りたたみと同じキー）
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
+    return collapseStepAt(el, e.key === 'ArrowUp' ? 'collapse' : 'expand');
+  }
   return false;
 }
 // コマンドパレット等から、カーソル位置のアイテムに対してキー操作と同じ処理を行う。
@@ -670,6 +767,8 @@ export function weeklyCursorAction(kind){
   if (kind === 'ms')   { if (el.dataset.act !== 'card') return false; toggleMsAt(el); return true; }
   if (kind === 'next') return moveCardWeek(el, 1);
   if (kind === 'prev') return moveCardWeek(el, -1);
+  if (kind === 'collapse') return collapseStepAt(el, 'collapse');
+  if (kind === 'rowexpand') return collapseStepAt(el, 'expand');
   if (kind === 'expand'){
     const cell = el.closest('.wk-cell'), col = cell && cell.dataset.col;
     if (!col || col === 'proj' || col === 'link') return false;

@@ -8,6 +8,8 @@ const { dateOf } = await import('./time.js' + _q);       // createdAt/doneAt（U
 export const WEEK_COUNT = 6;                  // 同時に表示する週数
 export const WEEK_BACK  = 1;                  // 表示範囲に含める過去週数（先週を1つ）
 export const MS_TAG = 'マイルストーン';        // マイルストーン判定に使うタグ名
+// 表示用テキスト（#マイルストーン は 🏁 で表しているので落とす）。並び替えと週報で共通に使う。
+const _label = (s) => String(s || '').replace(new RegExp('\\s*#' + MS_TAG + '(?=\\s|$)', 'g'), '').trim();
 
 const _parse = (s) => Date.parse(String(s || '').slice(0, 10) + 'T00:00:00');
 const _fmt = (d) => {
@@ -118,10 +120,33 @@ const CMP = {
   over: (a, b) => _cmp(a.wk, b.wk) || (b.body.prio || 0) - (a.body.prio || 0) || _cmp(a.body.content, b.body.content),
 };
 export const BLOCK_KEYS = ['ms', 'todo', 'done', 'memo', 'over'];
+
+// ── セル内の並び順 ──
+// 既定はブロックごとの意味に沿った順（上の CMP）。「期限が同じだと出所日で決まる」ため
+// 一覧としては順序が読みにくいので、全ブロック共通の分かりやすい順も選べるようにする。
+// どのモードでも最後は名前で決着させる＝同じデータなら常に同じ並び（再描画でも入れ替わらない）。
+export const SORT_MODES = [
+  ['default', '既定（優先度→期限）'],
+  ['name',    '名前順'],
+  ['due',     '期限順'],
+  ['new',     '新しい順'],
+];
+// 名前の比較は表示テキスト（#マイルストーン を除いたもの）で、数字は数値として扱う（項目2 < 項目10）
+const _nameCmp = (a, b) => {
+  const x = _label(a.body.content), y = _label(b.body.content);
+  return x.localeCompare(y, 'ja', { numeric: true }) || _cmp(a.body.id, b.body.id);
+};
+const SORTERS = {
+  name: _nameCmp,
+  due:  (a, b) => _dueCmp(a, b) || _nameCmp(a, b),
+  new:  (a, b) => _cmp(b.body.createdAt, a.body.createdAt) || _nameCmp(a, b),
+};
+// 並び順モードとブロックから比較関数を返す（未知のモードは既定＝壊れた保存値でも落ちない）
+export function cellSorter(mode, blockKey){ return SORTERS[mode] || CMP[blockKey] || CMP.todo; }
 const LINK_NODE = 'リンク';                // この名前の直下ノードの「子」がリンク列になる
 
 // PJ×週のグリッドデータを作る（DOM非依存）。weeks は weeksFor() の結果。
-export function buildWeeklyGrid(store, { weeks, today, hideEmpty = false } = {}){
+export function buildWeeklyGrid(store, { weeks, today, hideEmpty = false, sort = 'default' } = {}){
   const wkSet = new Set(weeks);
   const curWk = weekStart(today);
   const projs = store.listProjects();
@@ -189,14 +214,31 @@ export function buildWeeklyGrid(store, { weeks, today, hideEmpty = false } = {})
   const rows = [];
   for (const p of projs){
     const row = rowByProj.get(p.id);
-    for (const w of weeks) for (const k of BLOCK_KEYS) row.cells[w][k].sort(CMP[k]);
+    for (const w of weeks) for (const k of BLOCK_KEYS) row.cells[w][k].sort(cellSorter(sort, k));
     if (!hideEmpty || row.total > 0) rows.push(row);
   }
   if (unassigned.total){
-    for (const w of weeks) unassigned.cells[w].todo.sort(CMP.todo);
+    for (const w of weeks) unassigned.cells[w].todo.sort(cellSorter(sort, 'todo'));
     rows.push(unassigned);
   }
   return { weeks: weeks.map(w => ({ wk: w, label: weekLabel(w), isCurrent: w === curWk })), rows };
+}
+
+// ── プロジェクト行の折りたたみ（段階操作）──
+// デイリーのカスケード折りたたみ（Ctrl+↑/↓）と同じ発想で、1回目は手元だけ・2回目で全体に効かせる。
+//   collapse: フォーカス行が開いている → その行だけ畳む / すでに畳まれている → 全部畳む
+//   expand  : フォーカス行が畳まれている → その行だけ開く / すでに開いている → 全部開く
+// rows=表示中の行ID配列 / collapsed=現在畳まれている行IDの配列 → 新しい配列を返す（元は変更しない）。
+export function rowCollapseStep(rows, collapsed, rowId, action){
+  const known = new Set(rows || []);
+  const set = new Set((collapsed || []).filter(id => known.has(id)));   // 消えたPJの残骸は落とす
+  const has = set.has(rowId);
+  if (action === 'collapse'){
+    if (!has && known.has(rowId)){ set.add(rowId); return [...set]; }
+    return [...known];                       // すでに畳まれている（or 対象外）→ 全部畳む
+  }
+  if (has){ set.delete(rowId); return [...set]; }
+  return [];                                 // すでに開いている → 全部開く
 }
 
 // ── カーソル移動（グリッドのキー操作）──
@@ -253,7 +295,6 @@ export function moveCursor(shape, cursor, key){
 // 表示用テキストは #マイルストーン タグを落とす（読み物として不要なため）。
 const _escHtml = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const _label = (s) => String(s || '').replace(new RegExp('\\s*#' + MS_TAG + '(?=\\s|$)', 'g'), '').trim();
 const REPORT_BLOCKS = [
   ['ms',   'マイルストーン', '🏁 '],
   ['done', 'やったこと',    '・'],

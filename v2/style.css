@@ -459,6 +459,7 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .wk-btn{padding:2px 8px;font-size:12px}
 .wk-range{font-size:12px;color:var(--tx3)}
 .wk-chk{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:4px;user-select:none}
+.wk-sort{font-size:12px;padding:1px 3px;border:1px solid var(--bd2);border-radius:3px;background:var(--panel);color:var(--tx)}
 .wk-empty{padding:16px;font-size:13px;color:var(--tx3)}
 
 .wk-scroll{flex:1 1 auto;overflow:auto;min-height:0}
@@ -524,6 +525,15 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 
 .wk-proj-title{font-weight:700;cursor:pointer}
 .wk-proj-title:hover .wk-tx{text-decoration:underline}
+/* 行の折りたたみ（Ctrl+↑/↓）。畳んだ行は週セルを件数サマリ1行だけにして高さを詰める */
+.wk-rtog{flex:0 0 auto;width:11px;font-size:9px;color:var(--tx3);cursor:pointer;user-select:none;line-height:1.5}
+.wk-rtog:hover{color:var(--tx)}
+.wk-row-collapsed .wk-proj-title .wk-tx{opacity:.85}
+.wk-row-collapsed .wk-cell{padding-top:2px;padding-bottom:2px}
+.wk-sum{gap:3px;min-height:16px;cursor:pointer;flex-wrap:nowrap;overflow:hidden}
+.wk-sum-b{font-variant-numeric:tabular-nums}
+.wk-sum-b.wk-b-ms{color:#c8871a;border-color:#c8871a}
+.wk-sum-b.wk-b-over{color:#d9534f;border-color:#d9534f}
 .wk-proj-kid{color:var(--tx3);cursor:pointer;padding-left:8px}
 .wk-proj-kid::before{content:'・';color:var(--tx3);flex:0 0 auto}
 .wk-proj-kid:hover .wk-tx{text-decoration:underline}

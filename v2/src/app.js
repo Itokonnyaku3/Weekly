@@ -15,7 +15,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.95.4';
+export const APP_VERSION = '0.96.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -422,6 +422,8 @@ function buildCommands(cardRef){
       { cat:'週次', label:'選択中のタスクを翌週へ移動（延期）', hint:'Ctrl+Shift+→', roma:'yokushuu enki idou postpone move week', run: () => weeklyAction('next') },
       { cat:'週次', label:'選択中のタスクを前週へ移動', hint:'Ctrl+Shift+←', roma:'zenshuu maedaoshi idou move week', run: () => weeklyAction('prev') },
       { cat:'週次', label:'選択中のタスクをマイルストーンに', hint:'Alt+M', roma:'mairusuto-n milestone toggle', run: () => weeklyAction('ms') },
+      { cat:'週次', label:'プロジェクト行を折りたたむ（2回目で全PJ）', hint:'Ctrl+↑', roma:'oritatamu collapse project row', run: () => weeklyAction('collapse') },
+      { cat:'週次', label:'プロジェクト行を展開（2回目で全PJ）', hint:'Ctrl+↓', roma:'tenkai expand project row', run: () => weeklyAction('rowexpand') },
     ] : []),
     { cat:'表示', label:'分割表示の切替（リスト＋デイリー）', hint:'Alt+0', roma:'bunkatsu hyouji kirikae split', run: toggleSplit },
     { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', roma:'kanryou hyouji kakusu done hide show', run: toggleDone },

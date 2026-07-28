@@ -388,10 +388,14 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
 
 const PRIO_LABEL = ['なし', '低', '中', '高'];
 
+// 属性の小バッジ。優先度/期限はタスク固有だが、所属PJはメモも持てるので両方に出す
+// （メモだけPJが見えないと、どのPJの話か行だけでは分からなかった）。
 function appendBadges(row, store, body){
-  if (body.kind !== 'task') return;
-  if (body.prio){ const b = document.createElement('span'); b.className = 'cd-badge prio-' + body.prio; b.textContent = PRIO_LABEL[body.prio]; row.appendChild(b); }
-  if (body.due){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '📅' + body.due.slice(5); row.appendChild(b); }
+  if (body.kind !== 'task' && body.kind !== 'memo') return;
+  if (body.kind === 'task'){
+    if (body.prio){ const b = document.createElement('span'); b.className = 'cd-badge prio-' + body.prio; b.textContent = PRIO_LABEL[body.prio]; row.appendChild(b); }
+    if (body.due){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '📅' + body.due.slice(5); row.appendChild(b); }
+  }
   if (body.proj){ const p = store.getBody(body.proj); if (p){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '#' + (p.content || 'PJ'); row.appendChild(b); } }
 }
 
