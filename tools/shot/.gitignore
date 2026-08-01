@@ -1,0 +1,6 @@
+# 起動時に自動生成されるもの
+config.json
+icon.ico
+shot.log
+__pycache__/
+.pytest_cache/
