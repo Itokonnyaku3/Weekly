@@ -1,8 +1,13 @@
-# shot をスタートアップに登録／解除する。
-#   登録: powershell -ExecutionPolicy Bypass -File install_startup.ps1
-#   解除: powershell -ExecutionPolicy Bypass -File install_startup.ps1 -Remove
+# Register / unregister "shot" in the Windows Startup folder.
+#   register:   powershell -ExecutionPolicy Bypass -File install_startup.ps1
+#   unregister: powershell -ExecutionPolicy Bypass -File install_startup.ps1 -Remove
 #
-# pythonw.exe で起動するのでコンソール窓は出ない。
+# Launched with pythonw.exe so no console window appears.
+#
+# NOTE: This file is intentionally ASCII only. Windows PowerShell 5.1 reads a
+# .ps1 without a BOM as ANSI (cp932 here), which corrupts non-ASCII text and
+# breaks parsing. Keeping it ASCII removes the dependency on the BOM surviving
+# edits and version control.
 
 param([switch]$Remove)
 
@@ -15,23 +20,25 @@ $lnk = Join-Path $startup 'shot.lnk'
 if ($Remove) {
     if (Test-Path $lnk) {
         Remove-Item $lnk -Force
-        Write-Output "解除しました: $lnk"
+        Write-Output "Removed: $lnk"
     } else {
-        Write-Output '登録されていません'
+        Write-Output 'Not registered.'
     }
     exit 0
 }
 
-# コンソール窓を出さない pythonw.exe を探す
+# Prefer pythonw.exe: it has no console window.
 $pyw = (Get-Command pythonw.exe -ErrorAction SilentlyContinue).Source
 if (-not $pyw) {
     $py = (Get-Command python.exe -ErrorAction SilentlyContinue).Source
-    if (-not $py) { throw 'Python が見つかりません' }
+    if (-not $py) { throw 'Python not found.' }
     $candidate = Join-Path (Split-Path -Parent $py) 'pythonw.exe'
     if (Test-Path $candidate) { $pyw = $candidate } else { $pyw = $py }
 }
 
-if (-not (Test-Path $startup)) { New-Item -ItemType Directory -Path $startup -Force | Out-Null }
+if (-not (Test-Path $startup)) {
+    New-Item -ItemType Directory -Path $startup -Force | Out-Null
+}
 
 $shell = New-Object -ComObject WScript.Shell
 $sc = $shell.CreateShortcut($lnk)
@@ -39,8 +46,8 @@ $sc.TargetPath = $pyw
 $sc.Arguments = '"' + (Join-Path $here 'shot.py') + '"'
 $sc.WorkingDirectory = $here
 $sc.IconLocation = Join-Path $here 'icon.ico'
-$sc.Description = 'shot - スクリーンショット常駐'
+$sc.Description = 'shot - screenshot daemon'
 $sc.Save()
 
-Write-Output "登録しました: $lnk"
+Write-Output "Registered: $lnk"
 Write-Output "  -> $pyw $($sc.Arguments)"
