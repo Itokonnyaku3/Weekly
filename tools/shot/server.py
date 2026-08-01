@@ -271,20 +271,23 @@ class Handler(BaseHTTPRequestHandler):
             {"Cache-Control": "no-store"},
         )
 
-    def _file(self, path: Path, ctype: str, cache: bool = True):
+    def _file(self, path: Path, ctype: str):
+        """ETag を付けて返し、変わっていなければ 304 で済ませる。
+
+        Cache-Control を付けないと、ブラウザは独自の判断で勝手にキャッシュする。
+        ビューアの HTML/JS/CSS がそれに当たると、更新しても古い版が動き続ける。
+        no-cache は「使う前に必ず確認する」という意味で、キャッシュ禁止ではない。
+        中身が変わっていなければ 304 が返るので、転送量はほぼゼロで済む。
+        """
         st = path.stat()
         etag = f'"{st.st_mtime_ns:x}-{st.st_size:x}"'
-        if cache and self.headers.get("If-None-Match") == etag:
+        if self.headers.get("If-None-Match") == etag:
             self.send_response(304)
             self.send_header("ETag", etag)
+            self.send_header("Cache-Control", "no-cache")
             self.end_headers()
             return
-        self._send(
-            200,
-            path.read_bytes(),
-            ctype,
-            {"ETag": etag, "Cache-Control": "no-cache"} if cache else {},
-        )
+        self._send(200, path.read_bytes(), ctype, {"ETag": etag, "Cache-Control": "no-cache"})
 
     def _body(self) -> dict:
         length = int(self.headers.get("Content-Length") or 0)
@@ -325,7 +328,7 @@ class Handler(BaseHTTPRequestHandler):
 
         if path in STATIC:
             name, ctype = STATIC[path]
-            return self._file(VIEWER_DIR / name, ctype, cache=False)
+            return self._file(VIEWER_DIR / name, ctype)
 
         if path == "/api/dates":
             return self._json(self.api.dates())

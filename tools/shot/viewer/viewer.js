@@ -100,8 +100,9 @@ function decorateAuto(article, shot) {
   article.querySelector(".auto-frame")?.remove();
   article.querySelector(".auto-badge")?.remove();
 
+  const box = article.querySelector(".shot");
   const auto = shot.auto;
-  if (!auto || !shot.w || !shot.h) return;
+  if (!box || !auto || !shot.w || !shot.h) return;
 
   const [x, y, w, h] = auto.rect;
   const frame = document.createElement("div");
@@ -119,7 +120,7 @@ function decorateAuto(article, shot) {
   badge.textContent = `⌗ ${auto.kind}`;
   badge.title = "この枠で切り抜く（右クリックのメニューから微調整もできます）";
 
-  article.querySelector(".shot").append(frame, badge);
+  box.append(frame, badge);
 }
 
 // 一覧の中身を表す文字列。これが同じなら DOM を作り直す必要はない。
@@ -219,17 +220,18 @@ async function fillAuto() {
     for (let i = 0; i < state.shots.length; i++) {
       if (state.date !== forDate) return;  // 日付が切り替わったらやめる
       const shot = state.shots[i];
-      if ("auto" in shot) continue;
+      if (!shot || "auto" in shot) continue;
+      // 1枚でつまずいても残りは続ける。ここで抜けると以降が全部止まってしまう。
       try {
         const { auto } = await api(
           `/api/autocrop?date=${forDate}&name=${encodeURIComponent(shot.name)}`
         );
         shot.auto = auto;
+        const node = el.list.querySelector(`.card[data-index="${i}"]`);
+        if (node) decorateAuto(node, shot);
       } catch {
-        shot.auto = null;  // 失敗しても次へ。提案が出ないだけで害はない。
+        shot.auto = null;  // 提案が出ないだけで害はない
       }
-      const node = el.list.querySelector(`.card[data-index="${i}"]`);
-      if (node) decorateAuto(node, shot);
     }
   } finally {
     autoRunning = false;
