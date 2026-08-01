@@ -8,12 +8,17 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
+import subprocess
 import threading
+from collections import deque
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+
+from PIL import Image
 
 import clipboard
 import imageops
@@ -38,12 +43,24 @@ class NotFound(Exception):
     pass
 
 
+class BadRequest(Exception):
+    pass
+
+
+# 上書き前の画像を何枚ぶん覚えておくか（Ctrl+Z 用。プロセスを終えると消える）
+UNDO_DEPTH = 5
+
+
 class Api:
     """HTTP から切り離した処理本体。root と設定だけに依存する。"""
 
     def __init__(self, root: Path, cfg: dict):
         self.root = root
         self.cfg = cfg
+        # 編集は元ファイルを上書きするので、直前の状態だけメモリに退避しておく。
+        # ディスク上のファイルは増やさない。
+        self._undo: deque[tuple[str, str, bytes]] = deque(maxlen=UNDO_DEPTH)
+        self._lock = threading.Lock()
 
     # -- パスの検証 --
 
@@ -118,6 +135,71 @@ class Api:
         clipboard.copy_file(self.resolve(date, name))
         return {"ok": True}
 
+    def reveal(self, date: str, name: str) -> dict:
+        path = self.resolve(date, name)
+        # explorer は選択できても終了コード 1 を返すことがあるので結果は見ない
+        subprocess.Popen(["explorer", "/select,", str(path)])
+        return {"ok": True}
+
+    # -- メモ --
+
+    def note(self, date: str, name: str, text: str) -> dict:
+        self.resolve(date, name)
+        storage.update_entry(self.root / date, name, note=str(text or ""))
+        return {"ok": True}
+
+    # -- 編集（上書き保存） --
+
+    def edit(self, date: str, name: str, op: str, params: dict) -> dict:
+        """`op` で操作を選ぶ形にしてある。描き込み注釈を足すときも
+        新しい op を1つ増やすだけで、既存の呼び出しは変わらない。"""
+        path = self.resolve(date, name)
+
+        with self._lock:
+            original = path.read_bytes()
+            with Image.open(path) as img:
+                img.load()
+                if op == "crop":
+                    rect = params.get("rect")
+                    if not (isinstance(rect, (list, tuple)) and len(rect) == 4):
+                        raise BadRequest("rect は [x, y, w, h] で指定してください")
+                    out = imageops.crop(img, rect)
+                elif op == "rotate":
+                    out = imageops.rotate(img, params.get("degrees", 90))
+                else:
+                    raise BadRequest(f"未対応の操作: {op}")
+
+            self._write(path, out)
+            self._undo.append((date, name, original))
+            storage.update_entry(self.root / date, name, w=out.width, h=out.height)
+            return {"w": out.width, "h": out.height}
+
+    def undo(self) -> dict:
+        with self._lock:
+            if not self._undo:
+                raise BadRequest("戻せる編集がありません")
+            date, name, data = self._undo.pop()
+            path = self.root / date / name
+            tmp = path.with_suffix(".png.part")
+            tmp.write_bytes(data)
+            os.replace(tmp, path)
+
+            with Image.open(path) as img:
+                w, h = img.size
+            storage.update_entry(self.root / date, name, w=w, h=h)
+            return {"date": date, "name": name, "w": w, "h": h}
+
+    def delete(self, date: str, name: str) -> dict:
+        self.resolve(date, name)
+        storage.move_to_trash(self.root, date, name)
+        return {"ok": True}
+
+    def _write(self, path: Path, img: Image.Image) -> None:
+        """書きかけの PNG を読まれないよう、一時ファイル経由で置き換える。"""
+        tmp = path.with_suffix(".png.part")
+        img.save(tmp, format="PNG", compress_level=self.cfg.get("png_compress_level", 1))
+        os.replace(tmp, path)
+
 
 class Handler(BaseHTTPRequestHandler):
     api: Api = None  # start() で差し込む
@@ -178,6 +260,8 @@ class Handler(BaseHTTPRequestHandler):
             self._route_get()
         except NotFound as e:
             self._json({"error": str(e)}, 404)
+        except (BadRequest, ValueError) as e:
+            self._json({"error": str(e)}, 400)
         except Exception as e:
             log.exception("GET %s", self.path)
             self._json({"error": f"{type(e).__name__}: {e}"}, 500)
@@ -187,6 +271,8 @@ class Handler(BaseHTTPRequestHandler):
             self._route_post()
         except NotFound as e:
             self._json({"error": str(e)}, 404)
+        except (BadRequest, ValueError) as e:
+            self._json({"error": str(e)}, 400)
         except Exception as e:
             log.exception("POST %s", self.path)
             self._json({"error": f"{type(e).__name__}: {e}"}, 500)
@@ -220,9 +306,20 @@ class Handler(BaseHTTPRequestHandler):
     def _route_post(self):
         path = urlparse(self.path).path
         body = self._body()
+        date, name = body.get("date"), body.get("name")
 
         if path == "/api/copy":
-            return self._json(self.api.copy(body.get("date"), body.get("name")))
+            return self._json(self.api.copy(date, name))
+        if path == "/api/reveal":
+            return self._json(self.api.reveal(date, name))
+        if path == "/api/note":
+            return self._json(self.api.note(date, name, body.get("note", "")))
+        if path == "/api/edit":
+            return self._json(self.api.edit(date, name, body.get("op"), body))
+        if path == "/api/undo":
+            return self._json(self.api.undo())
+        if path == "/api/delete":
+            return self._json(self.api.delete(date, name))
 
         raise NotFound(path)
 

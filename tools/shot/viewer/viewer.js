@@ -1,15 +1,23 @@
 // ビューア。フレームワークは使わず、素の DOM で組む。
-// 数千枚を扱うので、サムネは loading="lazy" にして描画も一括で流し込む。
+// 数千枚を扱うので、サムネは loading="lazy" にし、内容が変わったときだけ描き直す。
 
 const $ = (id) => document.getElementById(id);
-const el = { date: $("date"), count: $("count"), refresh: $("refresh"),
-             list: $("list"), empty: $("empty"), toast: $("toast") };
+const el = {
+  date: $("date"), count: $("count"), refresh: $("refresh"),
+  list: $("list"), empty: $("empty"), toast: $("toast"), menu: $("menu"),
+  overlay: $("overlay"), ovImg: $("ovImg"), ovSel: $("ovSel"),
+  ovStage: $("ovStage"), ovTitle: $("ovTitle"), ovHint: $("ovHint"),
+};
 
 const state = {
   date: null,
   shots: [],
-  selected: -1,   // 選択中のインデックス
+  selected: -1,   // 一覧で選択中のインデックス
   signature: "",  // 描画済みの内容。変化がなければ作り直さない。
+  rev: {},        // ファイル名 -> 編集回数。画像の再取得に使う。
+  menuFor: -1,    // 右クリックメニューの対象
+  open: -1,       // 拡大表示中のインデックス。-1 なら閉じている。
+  crop: null,     // 選択中の範囲（表示座標）
 };
 
 // --- 通信 ---------------------------------------------------------------
@@ -39,7 +47,16 @@ function toast(message, isError = false) {
   el.toast.style.background = isError ? "#b91c1c" : "";
   el.toast.style.color = isError ? "#fff" : "";
   clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => el.toast.classList.remove("show"), 1400);
+  toast.timer = setTimeout(() => el.toast.classList.remove("show"), 1600);
+}
+
+const rev = (name) => state.rev[name] || 0;
+const thumbUrl = (name) => `/thumb/${state.date}/${name}?r=${rev(name)}`;
+const imgUrl = (name) => `/img/${state.date}/${name}?r=${rev(name)}`;
+
+function autoGrow(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = `${textarea.scrollHeight}px`;
 }
 
 function card(shot, index) {
@@ -58,28 +75,39 @@ function card(shot, index) {
   img.loading = "lazy";
   img.decoding = "async";
   img.alt = `${shot.time} のスクリーンショット`;
-  img.src = `/thumb/${state.date}/${shot.name}`;
+  img.src = thumbUrl(shot.name);
   // 読み込み前から高さを確保しておき、スクロール位置が飛ばないようにする
   if (shot.w && shot.h) img.style.aspectRatio = `${shot.w} / ${shot.h}`;
 
-  article.append(head, img);
+  const note = document.createElement("textarea");
+  note.className = "note";
+  note.rows = 1;
+  note.placeholder = "メモ…";
+  note.value = shot.note || "";
+  note.dataset.index = index;
 
-  if (shot.note) {
-    const note = document.createElement("div");
-    note.className = "note";
-    note.textContent = shot.note;
-    article.append(note);
-  }
+  article.append(head, img, note);
   return article;
 }
 
 // 一覧の中身を表す文字列。これが同じなら DOM を作り直す必要はない。
 const signature = () =>
-  state.date + "|" + state.shots.map((s) => `${s.name}:${s.w}x${s.h}:${s.note}`).join(",");
+  state.date + "|" +
+  state.shots.map((s) => `${s.name}:${s.w}x${s.h}:${rev(s.name)}`).join(",");
+
+let pendingRender = false;
 
 function render() {
   const next = signature();
   if (next === state.signature) return;  // 定期更新で毎回作り直さない
+
+  // メモを書いている最中に作り直すと、書きかけの文字ごと消えてしまう。
+  // 入力が終わってから改めて描く。
+  if (isTyping(document.activeElement)) {
+    pendingRender = true;
+    return;
+  }
+  pendingRender = false;
   state.signature = next;
 
   // 作り直すとスクロールが先頭へ戻ってしまうので、位置を持ち越す
@@ -98,6 +126,7 @@ function render() {
 
   el.list.replaceChildren(frag);
   el.list.scrollTop = scroll;
+  el.list.querySelectorAll(".note").forEach(autoGrow);
   el.empty.hidden = state.shots.length > 0;
   el.count.textContent = state.shots.length ? `${state.shots.length} 枚` : "";
   select(state.shots.length ? Math.min(state.selected, state.shots.length - 1) : -1, false);
@@ -155,8 +184,17 @@ async function refresh() {
 
 // --- 操作 ---------------------------------------------------------------
 
+const shotAt = (index) => state.shots[index];
+
+// イベントの発生元は Element とは限らない（document に届くこともある）。
+// closest / matches は Element にしかないので、ここで吸収しておく。
+const closestOf = (target, selector) =>
+  target instanceof Element ? target.closest(selector) : null;
+const isTyping = (target) =>
+  target instanceof Element && target.matches("textarea, input");
+
 async function copy(index) {
-  const shot = state.shots[index];
+  const shot = shotAt(index);
   if (!shot) return;
   try {
     await post("/api/copy", { date: state.date, name: shot.name });
@@ -170,12 +208,257 @@ async function copy(index) {
   }
 }
 
+// メモは入力が止まったところで自動保存する。フォーカスが外れるのを待つと、
+// 書きかけのまま別アプリへ移ったときに消えてしまう。
+let noteTimer = null;
+
+function scheduleNoteSave(index, text) {
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => saveNote(index, text), 600);
+}
+
+async function saveNote(index, text, quiet = false) {
+  clearTimeout(noteTimer);
+  const shot = shotAt(index);
+  if (!shot || shot.note === text) return;
+  try {
+    await post("/api/note", { date: state.date, name: shot.name, note: text });
+    shot.note = text;  // 手元も合わせておき、次の更新で作り直さない
+    if (!quiet) toast("メモを保存しました");
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function edit(index, op, params) {
+  const shot = shotAt(index);
+  if (!shot) return;
+  try {
+    const size = await post("/api/edit", { date: state.date, name: shot.name, op, ...params });
+    shot.w = size.w;
+    shot.h = size.h;
+    state.rev[shot.name] = rev(shot.name) + 1;
+    render();
+    if (state.open === index) showOverlay(index);
+    toast(op === "crop" ? "切り抜きました（Ctrl+Z で戻せます）" : "回転しました");
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function undo() {
+  try {
+    const r = await post("/api/undo", {});
+    state.rev[r.name] = rev(r.name) + 1;
+    const i = state.shots.findIndex((s) => s.name === r.name);
+    if (i >= 0) { state.shots[i].w = r.w; state.shots[i].h = r.h; }
+    render();
+    if (state.open >= 0) showOverlay(state.open);
+    toast(`${r.name.slice(0, 3)} を元に戻しました`);
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function remove(index) {
+  const shot = shotAt(index);
+  if (!shot) return;
+  if (!confirm(`${shot.no} (${shot.time}) を削除します。\n保存先の _trash フォルダへ移動します。`)) return;
+  try {
+    await post("/api/delete", { date: state.date, name: shot.name });
+    closeOverlay();
+    await refresh();
+    toast("削除しました");
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function reveal(index) {
+  const shot = shotAt(index);
+  if (!shot) return;
+  try {
+    await post("/api/reveal", { date: state.date, name: shot.name });
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+// --- 右クリックメニュー -------------------------------------------------
+
+function openMenu(index, x, y) {
+  state.menuFor = index;
+  el.menu.hidden = false;
+  // 画面からはみ出さない位置に置く
+  const box = el.menu.getBoundingClientRect();
+  el.menu.style.left = `${Math.min(x, innerWidth - box.width - 6)}px`;
+  el.menu.style.top = `${Math.min(y, innerHeight - box.height - 6)}px`;
+}
+
+function closeMenu() {
+  el.menu.hidden = true;
+  state.menuFor = -1;
+}
+
+el.menu.addEventListener("click", (ev) => {
+  const act = ev.target.closest("button")?.dataset.act;
+  const index = state.menuFor;
+  closeMenu();
+  if (!act || index < 0) return;
+  runAction(act, index);
+});
+
+function runAction(act, index) {
+  switch (act) {
+    case "crop": showOverlay(index); break;
+    case "rotR": edit(index, "rotate", { degrees: 90 }); break;
+    case "rotL": edit(index, "rotate", { degrees: 270 }); break;
+    case "copy": copy(index); break;
+    case "note": el.list.querySelector(`.note[data-index="${index}"]`)?.focus(); break;
+    case "reveal": reveal(index); break;
+    case "delete": remove(index); break;
+  }
+}
+
+// --- 拡大表示とトリミング -----------------------------------------------
+
+function showOverlay(index) {
+  const shot = shotAt(index);
+  if (!shot) return;
+  state.open = index;
+  state.crop = null;
+  el.ovSel.hidden = true;
+  el.ovImg.src = imgUrl(shot.name);
+  el.ovTitle.textContent = `${String(shot.no).padStart(3, "0")}  ${shot.time}  ${shot.w}×${shot.h}`;
+  el.overlay.hidden = false;
+}
+
+function closeOverlay() {
+  el.overlay.hidden = true;
+  state.open = -1;
+  state.crop = null;
+  el.ovSel.hidden = true;
+}
+
+el.overlay.addEventListener("click", (ev) => {
+  const act = ev.target.closest("button")?.dataset.act;
+  if (!act) return;
+  if (act === "close") return closeOverlay();
+  runAction(act, state.open);
+});
+
+// ドラッグで範囲を選ぶ。画像の外へはみ出しても画像内に丸める。
+let dragFrom = null;
+
+el.ovImg.addEventListener("pointerdown", (ev) => {
+  ev.preventDefault();
+  // 画像の外へドラッグしても追い続けたいだけなので、捕捉できなくても続行する
+  try { el.ovImg.setPointerCapture(ev.pointerId); } catch { /* 無視 */ }
+  dragFrom = { x: ev.clientX, y: ev.clientY };
+  state.crop = null;
+  el.ovSel.hidden = true;
+});
+
+el.ovImg.addEventListener("pointermove", (ev) => {
+  if (!dragFrom) return;
+  const img = el.ovImg.getBoundingClientRect();
+  const clampX = (v) => Math.min(Math.max(v, img.left), img.right);
+  const clampY = (v) => Math.min(Math.max(v, img.top), img.bottom);
+
+  const x1 = clampX(dragFrom.x), y1 = clampY(dragFrom.y);
+  const x2 = clampX(ev.clientX), y2 = clampY(ev.clientY);
+  const box = {
+    left: Math.min(x1, x2), top: Math.min(y1, y2),
+    width: Math.abs(x2 - x1), height: Math.abs(y2 - y1),
+  };
+
+  const stage = el.ovStage.getBoundingClientRect();
+  Object.assign(el.ovSel.style, {
+    left: `${box.left - stage.left}px`,
+    top: `${box.top - stage.top}px`,
+    width: `${box.width}px`,
+    height: `${box.height}px`,
+  });
+  el.ovSel.hidden = false;
+  state.crop = box;
+});
+
+el.ovImg.addEventListener("pointerup", () => {
+  dragFrom = null;
+  // 誤クリック程度の大きさなら選択とみなさない
+  if (state.crop && (state.crop.width < 8 || state.crop.height < 8)) {
+    state.crop = null;
+    el.ovSel.hidden = true;
+  }
+  el.ovHint.textContent = state.crop
+    ? "Enter で切り抜き ・ もう一度ドラッグで選び直し ・ Esc で閉じる"
+    : "ドラッグで範囲を選び Enter で切り抜き";
+});
+
+function applyCrop() {
+  if (state.crop === null || state.open < 0) return;
+  const img = el.ovImg.getBoundingClientRect();
+  // 表示倍率から原寸の座標へ戻す。切り抜きはサーバ側が原寸に対して行う。
+  const scale = el.ovImg.naturalWidth / img.width;
+  const rect = [
+    (state.crop.left - img.left) * scale,
+    (state.crop.top - img.top) * scale,
+    state.crop.width * scale,
+    state.crop.height * scale,
+  ].map(Math.round);
+  state.crop = null;
+  el.ovSel.hidden = true;
+  edit(state.open, "crop", { rect });
+}
+
+// --- イベント -----------------------------------------------------------
+
 el.list.addEventListener("click", (ev) => {
+  if (ev.target.closest(".note")) return;  // メモ欄のクリックでコピーしない
   const node = ev.target.closest(".card");
   if (!node) return;
   const index = Number(node.dataset.index);
   select(index, false);
   copy(index);
+});
+
+el.list.addEventListener("dblclick", (ev) => {
+  if (ev.target.closest(".note")) return;
+  const node = ev.target.closest(".card");
+  if (node) showOverlay(Number(node.dataset.index));
+});
+
+el.list.addEventListener("contextmenu", (ev) => {
+  const node = ev.target.closest(".card");
+  if (!node) return;
+  ev.preventDefault();
+  const index = Number(node.dataset.index);
+  select(index, false);
+  openMenu(index, ev.clientX, ev.clientY);
+});
+
+el.list.addEventListener("input", (ev) => {
+  if (!ev.target.classList.contains("note")) return;
+  autoGrow(ev.target);
+  scheduleNoteSave(Number(ev.target.dataset.index), ev.target.value);
+});
+
+el.list.addEventListener("blur", async (ev) => {
+  if (!ev.target.classList?.contains("note")) return;
+  await saveNote(Number(ev.target.dataset.index), ev.target.value, true);
+  if (pendingRender) render();  // 入力中に見送った更新をここで反映する
+}, true);
+
+// 別アプリへ移るときも、書きかけを取りこぼさないよう先に保存する
+window.addEventListener("blur", () => {
+  const note = document.activeElement;
+  if (isTyping(note) && note.classList.contains("note")) {
+    saveNote(Number(note.dataset.index), note.value, true);
+  }
+});
+
+document.addEventListener("pointerdown", (ev) => {
+  if (!el.menu.hidden && !closestOf(ev.target, ".menu")) closeMenu();
 });
 
 el.date.addEventListener("change", () => {
@@ -187,15 +470,41 @@ el.date.addEventListener("change", () => {
 el.refresh.addEventListener("click", refresh);
 
 document.addEventListener("keydown", (ev) => {
+  const typing = isTyping(ev.target);
+
+  if (ev.key === "Escape") {
+    if (!el.menu.hidden) return closeMenu();
+    if (typing) return ev.target.blur();
+    if (state.open >= 0) return closeOverlay();
+    return;
+  }
+  if (ev.key === "z" && ev.ctrlKey && !typing) { ev.preventDefault(); return undo(); }
+  if (typing) return;
+
+  if (state.open >= 0) {
+    if (ev.key === "Enter") { ev.preventDefault(); applyCrop(); }
+    else if (ev.key === "r" || ev.key === "R") edit(state.open, "rotate", { degrees: ev.shiftKey ? 270 : 90 });
+    else if (ev.key === "c" && ev.ctrlKey) { ev.preventDefault(); copy(state.open); }
+    else if (ev.key === "Delete") remove(state.open);
+    return;
+  }
+
   if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
     if (!state.shots.length) return;
     ev.preventDefault();
+    const step = ev.key === "ArrowDown" ? 1 : -1;
     const next = state.selected < 0
       ? 0
-      : Math.min(state.shots.length - 1, Math.max(0, state.selected + (ev.key === "ArrowDown" ? 1 : -1)));
+      : Math.min(state.shots.length - 1, Math.max(0, state.selected + step));
     select(next);
-  } else if (ev.key === "c" && ev.ctrlKey) {
-    if (state.selected >= 0) { ev.preventDefault(); copy(state.selected); }
+  } else if (ev.key === "Enter" && state.selected >= 0) {
+    ev.preventDefault();
+    showOverlay(state.selected);
+  } else if (ev.key === "c" && ev.ctrlKey && state.selected >= 0) {
+    ev.preventDefault();
+    copy(state.selected);
+  } else if (ev.key === "Delete" && state.selected >= 0) {
+    remove(state.selected);
   } else if (ev.key === "F5") {
     ev.preventDefault();
     refresh();

@@ -16,6 +16,37 @@
   <main id="list" class="list" tabindex="-1"></main>
 
   <p id="empty" class="empty" hidden>まだ1枚もありません。<br><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> で撮ってみてください。</p>
+
+  <!-- 右クリックメニュー -->
+  <nav id="menu" class="menu" hidden>
+    <button data-act="crop">トリミング</button>
+    <button data-act="rotR">右に回転</button>
+    <button data-act="rotL">左に回転</button>
+    <hr>
+    <button data-act="copy">コピー</button>
+    <button data-act="note">メモを書く</button>
+    <button data-act="reveal">フォルダで表示</button>
+    <hr>
+    <button data-act="delete" class="danger">削除</button>
+  </nav>
+
+  <!-- 拡大表示・トリミング -->
+  <div id="overlay" class="overlay" hidden>
+    <div class="ov-bar">
+      <span id="ovTitle"></span>
+      <span class="grow"></span>
+      <button data-act="rotL" title="左に回転 (Shift+R)">↺</button>
+      <button data-act="rotR" title="右に回転 (R)">↻</button>
+      <button data-act="copy" title="コピー (Ctrl+C)">コピー</button>
+      <button data-act="close" title="閉じる (Esc)">✕</button>
+    </div>
+    <div id="ovStage" class="ov-stage">
+      <img id="ovImg" alt="">
+      <div id="ovSel" class="ov-sel" hidden></div>
+    </div>
+    <p id="ovHint" class="ov-hint">ドラッグで範囲を選び <kbd>Enter</kbd> で切り抜き</p>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="/viewer.js"></script>
