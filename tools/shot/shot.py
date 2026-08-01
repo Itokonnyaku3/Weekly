@@ -29,6 +29,7 @@ import startup  # noqa: E402
 import storage  # noqa: E402
 import viewerwin  # noqa: E402
 import winapi  # noqa: E402
+from flash import Flash  # noqa: E402
 from saver import Saver  # noqa: E402
 from server import ViewerServer  # noqa: E402
 from tray import Tray  # noqa: E402
@@ -76,6 +77,11 @@ class App:
             on_saved=self._on_saved,
         )
         self.server = ViewerServer(self.root, self.cfg)
+        self.flash = (
+            Flash(self.cfg["flash_alpha"], self.cfg["flash_ms"])
+            if self.cfg["flash"]
+            else None
+        )
         self.tray = Tray(
             hotkey=self.cfg["hotkey"],
             on_capture=self.capture,
@@ -113,6 +119,10 @@ class App:
             threading.Timer(delay, self._grab).start()
 
     def _grab(self) -> None:
+        # 前の撮影のフラッシュが残っていたら消す。連写したときに写り込むため。
+        if self.flash:
+            self.flash.hide()
+
         # ビューアは画面右端に貼り付いているので、開いたままだと写り込む。
         # 表示中のときだけ画面外へどける（合成が追いつくまで数フレーム待つ）。
         hidden = viewerwin.hide_for_capture() if self.cfg["hide_viewer_on_capture"] else None
@@ -130,6 +140,10 @@ class App:
         finally:
             viewerwin.unhide(hidden)
         self.saver.submit(raw, taken_at)
+
+        # 撮り終わってから光らせる。先に出すとフラッシュ自体が写る。
+        if self.flash:
+            self.flash.show(raw.rect)
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         if elapsed_ms > self.cfg.get("log_slow_capture_ms", 100):
@@ -160,6 +174,8 @@ class App:
     def quit(self) -> None:
         self.saver.stop()
         self.server.stop()
+        if self.flash:
+            self.flash.stop()
 
     # -- 起動 --
 
@@ -170,6 +186,13 @@ class App:
         except OSError as e:
             # ポートが塞がっていても撮影だけは続けられるようにする
             log.error("server start failed: %s", e)
+        if self.flash:
+            try:
+                self.flash.start()
+            except OSError as e:
+                # 光らせられなくても撮影には影響しない
+                log.error("flash init failed: %s", e)
+                self.flash = None
         self.tray.start()
         self.tray.refresh_tip()
         log.info("started (hotkey=%s, root=%s)", self.tray.hotkey_spec, self.root)

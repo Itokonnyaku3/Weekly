@@ -24,6 +24,10 @@ DEFAULTS: dict = {
     "png_compress_level": 1,
     # 撮影時に短いビープ音を鳴らす
     "beep": True,
+    # 撮影した範囲を一瞬だけ白く光らせて、撮れたことを知らせる
+    "flash": True,
+    "flash_ms": 70,
+    "flash_alpha": 160,  # 1-255。大きいほど強く光る
     # トレイクリック経由のときだけ入れる遅延（ツールチップの写り込み防止）
     "tray_click_delay_ms": 150,
     # ビューアのローカルサーバ
@@ -39,13 +43,24 @@ DEFAULTS: dict = {
 
 def load() -> dict:
     cfg = dict(DEFAULTS)
-    if CONFIG_PATH.exists():
-        try:
-            cfg.update(json.loads(CONFIG_PATH.read_text(encoding="utf-8")))
-        except (OSError, ValueError):
-            # 壊れていても起動は止めない。既定値で動かす。
-            pass
-    else:
+    if not CONFIG_PATH.exists():
+        save(cfg)
+        return cfg
+
+    try:
+        # utf-8-sig にしておく。メモ帳や PowerShell で編集すると先頭に BOM が付き、
+        # ただの utf-8 として読むと解析に失敗して設定が丸ごと無視されてしまう。
+        saved = json.loads(CONFIG_PATH.read_text(encoding="utf-8-sig"))
+    except (OSError, ValueError):
+        # 壊れていても起動は止めない。既定値で動かす。
+        return cfg
+    if not isinstance(saved, dict):
+        return cfg
+
+    cfg.update(saved)
+    # 設定項目が増えたときは書き戻す。config.json を見れば
+    # 何を変えられるかが分かる状態を保つため。
+    if any(key not in saved for key in DEFAULTS):
         save(cfg)
     return cfg
 

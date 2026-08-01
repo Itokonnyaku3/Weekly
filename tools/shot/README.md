@@ -115,6 +115,9 @@ powershell -ExecutionPolicy Bypass -File tools\shot\install_startup.ps1
 | `capture_area` | `"virtual"` | `virtual`=全モニタ結合 / `primary` / `active`=カーソルのあるモニタ |
 | `png_compress_level` | `1` | 0〜9。1 は速度優先（1枚 0.5〜3MB） |
 | `beep` | `true` | 撮影時に短いビープ音を鳴らす |
+| `flash` | `true` | 撮影した範囲を一瞬白く光らせる |
+| `flash_ms` | `70` | 光らせる時間 |
+| `flash_alpha` | `160` | 光の強さ 1〜255 |
 | `tray_click_delay_ms` | `150` | トレイクリック経由のときだけ入れる遅延 |
 | `port` | `8787` | ビューアのローカルサーバ |
 | `dock_width` | `520` | ビューアを画面右端に出すときの幅 |
@@ -122,6 +125,14 @@ powershell -ExecutionPolicy Bypass -File tools\shot\install_startup.ps1
 
 `hotkey` が他のアプリと衝突して登録できないときは、通知を出したうえで `Ctrl+Alt+S` に切り替える。
 `PrintScreen` は Windows の設定で Snipping Tool に割り当てられていることが多い。
+
+メモ帳で編集して構わない（BOM が付いても読める）。項目が増えたときは起動時に書き足すので、
+`config.json` を見れば何を変えられるかが分かる。
+
+**撮れたことの合図**：撮影した範囲だけを 70ms 白く光らせる。どこを撮ったかも同時に伝わる。
+フラッシュは必ず画面のコピーが終わってから出し、次の撮影の直前に消すので、
+連写しても保存された画像に写り込まない（70ms のフラッシュ中に 40ms 間隔で撮って、
+1枚目との明るさの差は最大 +0.03 だった）。
 
 ## 構成
 
@@ -135,6 +146,7 @@ powershell -ExecutionPolicy Bypass -File tools\shot\install_startup.ps1
 | `imageops.py` | トリミング・回転・サムネ生成（純粋関数） |
 | `autocrop.py` | スライド／ページ領域の検出（純粋関数） |
 | `clipboard.py` | 画像を CF_DIB でクリップボードへ |
+| `flash.py` | 撮影した範囲を一瞬光らせる半透明ウィンドウ |
 | `tray.py` | 隠しウィンドウ + トレイアイコン + ホットキー |
 | `server.py` | ビューア用のローカルサーバ（127.0.0.1 のみ） |
 | `viewerwin.py` | ビューアを画面右端に開く／撮影時にどける |

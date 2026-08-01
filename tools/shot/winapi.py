@@ -67,7 +67,18 @@ SW_RESTORE = 9
 SWP_NOSIZE = 0x0001
 SWP_NOZORDER = 0x0004
 SWP_NOACTIVATE = 0x0010
+SWP_SHOWWINDOW = 0x0040
 HWND_TOP = 0
+HWND_TOPMOST = -1
+
+# 撮影を知らせる一瞬のフラッシュ用ウィンドウ
+WS_POPUP = 0x80000000
+WS_EX_LAYERED = 0x00080000
+WS_EX_TRANSPARENT = 0x00000020  # クリックが下のウィンドウへ抜ける
+WS_EX_TOOLWINDOW = 0x00000080   # タスクバーに出さない
+WS_EX_NOACTIVATE = 0x08000000   # 前面に出てもフォーカスを奪わない
+WS_EX_TOPMOST = 0x00000008
+LWA_ALPHA = 0x00000002
 
 # LoadImage
 IMAGE_ICON = 1
@@ -348,6 +359,17 @@ user32.SetForegroundWindow.restype = wintypes.BOOL
 
 user32.GetWindowRect.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.RECT)]
 user32.GetWindowRect.restype = wintypes.BOOL
+
+user32.SetLayeredWindowAttributes.argtypes = [
+    wintypes.HWND,
+    wintypes.COLORREF,
+    wintypes.BYTE,
+    wintypes.DWORD,
+]
+user32.SetLayeredWindowAttributes.restype = wintypes.BOOL
+
+gdi32.CreateSolidBrush.argtypes = [wintypes.COLORREF]
+gdi32.CreateSolidBrush.restype = wintypes.HBRUSH
 
 
 def enable_dpi_awareness() -> None:

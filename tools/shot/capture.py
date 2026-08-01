@@ -35,6 +35,13 @@ class RawShot:
     width: int
     height: int
     data: bytes
+    # 撮った範囲の画面上の位置。撮影後にその範囲だけ光らせるのに使う。
+    x: int = 0
+    y: int = 0
+
+    @property
+    def rect(self) -> tuple[int, int, int, int]:
+        return self.x, self.y, self.width, self.height
 
 
 class CaptureError(RuntimeError):
@@ -105,7 +112,7 @@ def grab(area: str = "virtual") -> RawShot:
         if got == 0:
             raise CaptureError("GetDIBits に失敗しました")
 
-        return RawShot(width=w, height=h, data=buf.raw)
+        return RawShot(width=w, height=h, data=buf.raw, x=x, y=y)
     finally:
         if hdc_mem and old:
             gdi32.SelectObject(hdc_mem, old)
