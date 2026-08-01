@@ -15,7 +15,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.97.0';
+export const APP_VERSION = '0.97.1';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -298,6 +298,44 @@ function ensureViewFocus(anchor){
   }, 0);
 }
 
+// ── 着地フラッシュ（UI改善 Phase 4）──
+// ジャンプで移動したとき「どこに着地したか分からない」への対処。移動先を画面中央に置き、1.1秒だけ光らせる。
+// 光らせる見た目は CSS 側（style.css の @keyframes flashRing / [data-flash="1"]）。ここは付けて外すだけ。
+const FLASH_MS = 1300;                        // アニメーション 1.1s ＋ 取りこぼし防止の余白
+let _flashTimer = null, _flashEl = null;
+const reduceMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function scrollerOf(el){                      // el を含む直近のスクロール可能な祖先（#app / 分割ペイン / .wk-scroll）
+  for (let p = el.parentElement; p; p = p.parentElement){
+    if (p.scrollHeight > p.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(p).overflowY)) return p;
+  }
+  return null;
+}
+// el を中央に寄せて光らせる。center=false なら位置はそのまま（呼び出し側が既にスクロール済みのとき）。
+function flashEl(el, { center = true } = {}){
+  if (!el) return;
+  if (center){
+    const host = scrollerOf(el);
+    if (host){
+      const hr = host.getBoundingClientRect(), er = el.getBoundingClientRect();
+      const top = host.scrollTop + (er.top - hr.top) - host.clientHeight / 2 + er.height / 2;
+      host.scrollTo({ top: Math.max(0, top), behavior: reduceMotion() ? 'auto' : 'smooth' });
+    }
+  }
+  clearTimeout(_flashTimer);
+  if (_flashEl) delete _flashEl.dataset.flash;   // 連続ジャンプでも毎回光るよう、前のフラッシュを先に消す
+  void el.offsetWidth;                           // アニメーションを頭から再生させる
+  el.dataset.flash = '1';
+  _flashEl = el;
+  _flashTimer = setTimeout(() => { if (_flashEl) delete _flashEl.dataset.flash; _flashEl = null; }, FLASH_MS);
+}
+// カードの ref から着地演出。行（.card-row）があればそちらを光らせる＝1行まるごと光って見つけやすい。
+function landOn(refId, opts){
+  if (!refId) return;
+  const esc = (window.CSS && CSS.escape) ? CSS.escape(refId) : refId;
+  const el = document.querySelector(`.card-txt[data-ref="${esc}"], .card-block[data-ref="${esc}"]`);
+  if (el) flashEl(el.closest('.card-row') || el, opts);
+}
+
 function addToday(){
   const day = store.ensureDayCard(todayStr());
   const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: day.ref.id });
@@ -329,6 +367,7 @@ function jumpToCard(bodyId){
   showView('daily');
   renderAll();
   focusCard(ref.id, -1);
+  landOn(ref.id);                   // 着地点を中央に置いて光らせる（Phase 4）
 }
 // リスト↗: そのノードにズームした状態でデイリーを開く（分割中は右ペインをデイリーに）
 function zoomToCard(bodyId){
@@ -341,6 +380,7 @@ function zoomToCard(bodyId){
   showView('daily');
   renderAll();
   focusCard(ref.id, -1);
+  landOn(ref.id, { center: false }); // ズーム後はその行が見出しとして先頭に来るので、中央寄せはせず光らせるだけ（Phase 4）
 }
 const addDays = (n) => shiftDays(todayStr(), n);
 function dispatchCardKey(refId, init){              // フォーカス中カードへキーを発火（既存のキー操作を再利用）
@@ -372,7 +412,7 @@ function openProjectAt(projId, refId){
   let p = ref && ref.parentRefId ? store.getRef(ref.parentRefId) : null;
   while (p){ if (p.collapsed) store.updateRef(p.id, { collapsed: false }); p = p.parentRefId ? store.getRef(p.parentRefId) : null; }
   renderAll();
-  if (ref) focusCard(ref.id, -1);
+  if (ref){ focusCard(ref.id, -1); landOn(ref.id); }   // 着地点を中央に置いて光らせる（Phase 4）
 }
 function openSavedSearch(viewId){         // ⟦s:id⟧ チップ→ 検索ビューでその保存検索を実行
   const v = store.listViews().find(x => x.id === viewId && x.kind === 'search');
@@ -411,6 +451,8 @@ function gotoDate(date){                  // カレンダー/コマンドから�
     sec.scrollIntoView({ block: 'start', behavior: 'smooth' });
     const fc = sec.querySelector('.card-txt');
     if (fc) focusCard(fc.dataset.ref, 0);
+    // 日付見出しを光らせる（Phase 4）。位置は上の scrollIntoView に任せる＝中央寄せで打ち消さない
+    flashEl(sec.querySelector('.day-head'), { center: false });
   }
 }
 // Alt+D: 今日の日にズーム（単日フォーカス）。トグル＝既に今日をズーム中なら全体表示へ戻す。

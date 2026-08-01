@@ -579,6 +579,13 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
   100%{box-shadow:0 0 0 0   transparent;background:transparent}
 }
 [data-flash="1"]{animation:flashRing 1.1s ease;border-radius:4px}
+/* 日付見出しは position:sticky で下の内容が透けてはいけないので、背景は触らずリングだけ光らせる */
+@keyframes flashRingOnly{
+  0%  {box-shadow:0 0 0 2px var(--flash-ring)}
+  70% {box-shadow:0 0 0 2px var(--flash-ring)}
+  100%{box-shadow:0 0 0 0   transparent}
+}
+.day-head[data-flash="1"]{animation:flashRingOnly 1.1s ease}
 
 /* PJ名は「薄いから副次情報」ではなく「小さいから副次情報」にする＝灰色をやめて PJ カラー。
    色は colors.js の projColor() を --pjc で渡す（リスト・週次と同じ色）。未指定なら従来の灰色。 */
