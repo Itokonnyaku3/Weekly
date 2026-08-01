@@ -2,11 +2,14 @@
   --bg:#f7f8fa; --panel:#fff; --tx:#1c2530; --tx3:#8a96a3;
   --bd:#e3e7ec; --bd2:#cfd6de; --pc:#2c3e50; --accent:#2c6df0; --accent-soft:#eaf1fe;
   --wk-now:rgba(44,109,240,.09);      /* 週次ビュー: 今週列の重ね色（半透明＝PJカラーの上に乗せる） */
+  /* 着地フラッシュ（ジャンプ先を1.1秒だけ光らせる）。テーマごとに値を持つ＝ダークでも白飛びしない */
+  --flash-ring:rgba(44,109,240,.95); --flash-bg:#d9e6ff; --flash-bg2:#eaf1fe;
 }
 :root.dark{
   --bg:#11151a; --panel:#171c23; --tx:#e6eaef; --tx3:#7e8a98;
   --bd:#252c35; --bd2:#333c47; --pc:#9fb3c8; --accent:#5b8cff; --accent-soft:#1b2740;
   --wk-now:rgba(91,140,255,.16);
+  --flash-ring:rgba(91,140,255,.95); --flash-bg:#26406e; --flash-bg2:#1b2740;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -555,3 +558,33 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .wk-exp-head span{flex:1}
 .wk-exp-empty{font-size:11px;color:var(--tx3)}
 .wk-cell.wk-expanded .card-row{font-size:12px}
+
+/* ── UI改善 Phase 1: モーション統一とフォーカス可視化 ───────────────────────────
+   設計: v2/design_handoff_tracker_ui/README.md。状態遷移は .2s / ease に統一し、
+   `transition: all` は使わない（再描画のたびに全プロパティを補間して重くなるため）。
+   再描画で DOM ノードは作り直されるので、この遷移が走るのは「同じノードのままフォーカスが移る」
+   ケースだけ＝描画コストは増えない。 */
+.card-row,.proj-land-row,.wk-item,.wk-cell,.list-table tbody tr>td{transition:background-color .2s ease,box-shadow .2s ease}
+
+/* デイリーのフォーカス行にも左端3pxの青ライン（選択行 .card-row.selected と同じ手掛かり）。
+   「今どこにカーソルがあるか」を淡い面だけでなく線でも示す＝痛点①への対処。
+   .card-row.selected と詳細度が同じで値も同じなので、どちらが勝っても見た目は変わらない。 */
+.card-row:focus-within{box-shadow:inset 3px 0 0 var(--accent)}
+
+/* 着地フラッシュ。Phase 4 の flashTo() が data-flash="1" を付け、約1.3秒後に外す。
+   アニメーションは通常宣言より優先されるので、行の背景色（focus-within 等）の上に出る。 */
+@keyframes flashRing{
+  0%  {box-shadow:0 0 0 2px var(--flash-ring);background:var(--flash-bg)}
+  70% {box-shadow:0 0 0 2px var(--flash-ring);background:var(--flash-bg2)}
+  100%{box-shadow:0 0 0 0   transparent;background:transparent}
+}
+[data-flash="1"]{animation:flashRing 1.1s ease;border-radius:4px}
+
+/* PJ名は「薄いから副次情報」ではなく「小さいから副次情報」にする＝灰色をやめて PJ カラー。
+   色は colors.js の projColor() を --pjc で渡す（リスト・週次と同じ色）。未指定なら従来の灰色。 */
+.cd-badge.cd-badge-proj{color:var(--pjc,var(--tx3))}
+
+/* OSで「視差効果を減らす」を選んでいる利用者にはモーションを実質無効化する */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}

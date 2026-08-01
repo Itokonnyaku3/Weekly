@@ -8,6 +8,7 @@
 
 const _q = new URL(import.meta.url).search;
 const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
+const { projColor } = await import('./colors.js' + _q); // PJバッジの色（リスト・週次と同じ色を使う）
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
@@ -396,7 +397,8 @@ function appendBadges(row, store, body){
     if (body.prio){ const b = document.createElement('span'); b.className = 'cd-badge prio-' + body.prio; b.textContent = PRIO_LABEL[body.prio]; row.appendChild(b); }
     if (body.due){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '📅' + body.due.slice(5); row.appendChild(b); }
   }
-  if (body.proj){ const p = store.getBody(body.proj); if (p){ const b = document.createElement('span'); b.className = 'cd-badge'; b.textContent = '#' + (p.content || 'PJ'); row.appendChild(b); } }
+  // PJバッジは灰色をやめて PJ カラー（リスト・週次と同じ projColor）＝どのPJの話かを一目で読める
+  if (body.proj){ const p = store.getBody(body.proj); if (p){ const b = document.createElement('span'); b.className = 'cd-badge cd-badge-proj'; b.style.setProperty('--pjc', projColor(p.id)); b.textContent = '#' + (p.content || 'PJ'); row.appendChild(b); } }
 }
 
 // ── 表ブロック（kind:'table'・content は {rows:[[...]]} のJSON）──

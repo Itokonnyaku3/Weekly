@@ -15,7 +15,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.96.0';
+export const APP_VERSION = '0.96.1';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル

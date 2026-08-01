@@ -1,5 +1,29 @@
 # Tracker v2 — CHANGELOG
 
+## v0.96.1 — UI改善 Phase 1: モーション統一・フォーカス可視化・PJ名の可読性（2026-08-01）
+
+UI改善ハンドオフ（`v2/design_handoff_tracker_ui/README.md`）の **Phase 1**。**CSS と PJバッジの色指定だけ**で、
+既存ロジックには一切触れていない＝問題があれば当該ルールを消すだけで完全に元へ戻せる。
+
+- **状態遷移を .2s / ease に統一（`style.css`）**: `.card-row` / `.proj-land-row` / `.wk-item` / `.wk-cell` /
+  リストの `td` に `transition: background-color .2s ease, box-shadow .2s ease` を指定。
+  `transition: all` は使わない（全プロパティを補間して重くなるため）。再描画では DOM ノードが作り直されるので、
+  この遷移が走るのは**同じノードのままフォーカスが移るときだけ**＝描画コストは増えない。
+- **デイリーのフォーカス行にも左端3pxの青ライン（`style.css`）**: `.card-row:focus-within` はこれまで淡い面
+  （`--accent-soft`）だけで、選択行（`.card-row.selected`）にある左端のラインが無かった。同じ手掛かりを付けて
+  「今どこにカーソルがあるか」を線でも示す。値は `.selected` と同一なので、どちらの規則が勝っても見た目は変わらない。
+- **着地フラッシュの土台（`style.css`）**: `@keyframes flashRing` と `[data-flash="1"]` を追加（点ける JS は Phase 4）。
+  リング色・背景色はテーマ変数 `--flash-ring` / `--flash-bg` / `--flash-bg2` に持たせ、**ダークテーマでも白飛びしない**。
+- **PJバッジを灰色からPJカラーへ（`daily.js`・`style.css`）**: デイリー行末の `#PJ名` が `--tx3`（灰）だったため、
+  「薄い＝副次情報」で読み飛ばされていた。`colors.js` の `projColor()` を `--pjc` で渡し、**リスト・週次と同じ色**に統一。
+  「小さいから副次情報」で階層を作る方針。色が引けない場合は従来の灰色にフォールバックする。
+- **`prefers-reduced-motion` に対応（`style.css`）**: OSで「視差効果を減らす」を選んでいる場合はアニメーションと
+  遷移を実質無効化（`.01ms`）。
+- 検証: 単体テスト43ファイル全PASS（純ロジック不変）。実機（実データ 78行・PJバッジ25個）で、
+  バッジがPJごとに色分けされること（`#TEC新レジ`=緑 / `#プロジェクト未満`=橙、リスト・週次と同色）、
+  `.card-row` の遷移が `background-color .2s, box-shadow .2s` になっていること、
+  フォーカス行が `#eaf1fe` ＋ `inset 3px 0 0 #2c6df0` になることを確認。コンソールエラーなし。
+
 ## v0.96.0 — メモにもPJバッジ／週次セルの並び順を選べるように／週次のPJ行を折りたたみ（2026-07-28）
 
 - **メモにも所属PJのバッジを出す（`daily.js`）**: `appendBadges()` が `kind !== 'task'` で即 return していたため、
