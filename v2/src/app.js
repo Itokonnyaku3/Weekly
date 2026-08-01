@@ -15,7 +15,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.97.1';
+export const APP_VERSION = '0.97.2';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -336,6 +336,36 @@ function landOn(refId, opts){
   if (el) flashEl(el.closest('.card-row') || el, opts);
 }
 
+// ── 余白クリックで最寄りへフォーカスを戻す（UI改善 Phase 5）──
+// フォーカスを見失ったとき、何もない所をクリックすれば近くの項目に戻る。矩形距離で最近傍を選ぶだけ。
+// 項目自体・操作できるもの（ボタン／入力／`＋追加` などクリックで動く箇所）のクリックは通常処理に譲る。
+const CLICKABLE = 'input, textarea, select, button, a, label, [contenteditable="true"], [role="button"]';
+function isClickable(el, host){                 // cursor:pointer を「押せるもの」の目印として使う（＋追加・チップ等を拾える）
+  for (let p = el; p && p !== host; p = p.parentElement){
+    if (p.matches && p.matches(CLICKABLE)) return true;
+    if (getComputedStyle(p).cursor === 'pointer') return true;
+  }
+  return false;
+}
+function nearestFocus(e){
+  const host = e.currentTarget;
+  if (e.button !== 0 || e.detail > 1) return;               // 左クリックの単クリックのみ（ダブルクリック等は通常処理）
+  if (e.target.closest(NAV_SEL)) return;                    // 項目自体のクリックは通常処理へ
+  if (isClickable(e.target, host)) return;
+  const sel = window.getSelection();
+  if (sel && !sel.isCollapsed) return;                      // 本文をドラッグ選択した直後はフォーカスを奪わない
+  let best = null, bd = Infinity;
+  for (const el of navTargets(host)){
+    const r = el.getBoundingClientRect();
+    if (!r.width && !r.height) continue;                    // 非表示（折りたたみ中など）は対象外
+    const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+    const dy = Math.max(r.top  - e.clientY, 0, e.clientY - r.bottom);
+    const d = dx * dx + dy * dy;
+    if (d < bd){ bd = d; best = el; }
+  }
+  if (best) best.focus({ preventScroll: true });            // 押した場所は動かさない＝クリックで画面が跳ねない
+}
+
 function addToday(){
   const day = store.ensureDayCard(todayStr());
   const { ref } = store.createCard({ kind:'memo', content:'', parentRefId: day.ref.id });
@@ -648,6 +678,11 @@ function boot(){
     const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search,#view-weekly');
     if (c){ _lastPane = c.id; captureFocus(); }             // ビュー内に居る間だけ記憶を更新（Phase 3）
   });
+  // 余白クリックで最寄りへフォーカスを戻す（Phase 5）。ビューの器は再描画で作り直されないので登録は1回だけ。
+  // 既存の各ハンドラ（カードの mousedown で選択解除 等）より後に走るよう、器側のバブリングで受ける。
+  for (const id of ['view-daily','view-list','view-project','view-search','view-weekly']){
+    document.getElementById(id)?.addEventListener('click', nearestFocus);
+  }
   document.addEventListener('keydown', (e) => {              // Alt+1/2/3/4=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E
     if (currentView === 'weekly' && !splitOn){               // 週次のグリッド操作（矢印/Enter/Space等）を先に処理
       if (onWeeklyKey(e)){ e.preventDefault(); return; }
