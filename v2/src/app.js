@@ -15,7 +15,7 @@ const { openCalendar } = await import('./calendar.js' + _q);
 const { installClipboard, showToast } = await import('./clipboard.js' + _q);
 const GH = await import('./github.js' + _q);
 
-export const APP_VERSION = '0.96.1';
+export const APP_VERSION = '0.97.0';
 
 const store = createStore(loadState() || undefined);
 window.__store = store;                          // preview 検証用ハンドル
@@ -136,8 +136,10 @@ function restoreFocus(v){
     const key = focusMem.list;
     let el = key ? document.querySelector(`#view-list [data-fkey="${(window.CSS && CSS.escape) ? CSS.escape(key) : key}"]`) : null;
     // 記憶が無い時はリスト本体（テーブル内の先頭行）にフォーカス。ビューバー/条件バーの入力は対象外（#3）
-    if (!el) el = document.querySelector('#view-list .list-table .nav-head, #view-list .list-table .cell-chip, #view-list .list-table input, #view-list .list-table [tabindex]');
-    el && el.focus();
+    // 先頭行への退避でスクロールを先頭へ飛ばさない（Phase 3）。記憶した行が見つかった場合は従来どおり。
+    if (el){ el.focus(); return; }
+    el = document.querySelector('#view-list .list-table .nav-head, #view-list .list-table .cell-chip, #view-list .list-table input, #view-list .list-table [tabindex]');
+    el && el.focus({ preventScroll: true });
     return;
   }
   const cont = v === 'project' ? '#view-project' : '#view-daily';
@@ -145,8 +147,70 @@ function restoreFocus(v){
   if (tok && tok.kind === 'ref' && document.querySelector(`${cont} [data-ref="${tok.id}"]`)){ focusCard(tok.id, -1); return; }
   if (tok && tok.kind === 'date'){ const d = document.querySelector(`${cont} .day-head[data-date="${tok.date}"]`); if (d){ d.focus(); return; } }
   if (tok && tok.kind === 'proj'){ const r = document.querySelector(`${cont} .proj-land-row[data-proj="${tok.id}"]`); if (r){ r.focus(); return; } }
+  // 最後の砦（記憶した対象が見つからない）。ここで普通に focus() するとビュー先頭までスクロールが飛ぶので、
+  // 保持したスクロール位置を尊重する（Phase 3）。狙った対象へ戻す上の分岐は従来どおりスクロールさせる。
   const el = document.querySelector(`${cont} .zoom-title-txt, ${cont} .card-txt, ${cont} .day-head, ${cont} .card-block, ${cont} .proj-land-row`);
-  el && el.focus();
+  el && el.focus({ preventScroll: true });
+}
+
+// ── 再描画をまたぐスクロール位置の保持（UI改善 Phase 3）──
+// 再描画は各ビューの innerHTML を作り直すため、中身が一瞬 0 高になってブラウザが scrollTop を 0 にクランプする。
+// これが「完了にすると先頭へ飛ぶ」の正体。描画の前後で控えて戻すだけ＝既存の描画ロジックには触れない。
+// scrollIntoView は使わない（親コンテナごと動いて別のズレを生むため）。
+// 非分割時のスクローラは #app 1つを全ビューで共有しているので、ビューが変わる再描画では持ち越さない
+// （デイリーの位置をリストへ持ち込むと的外れな位置に着地する）。ビュー専用のスクローラは常に保持してよい。
+const SCROLLERS = ['#view-list', '#view-daily', '#view-project', '#view-search', '#view-weekly .wk-scroll'];
+let _lastRenderView = null;                   // 直近の描画時のビュー（#app の持ち越し可否の判定用）
+function captureScroll(keepApp){
+  const m = [];
+  for (const sel of (keepApp ? ['#app', ...SCROLLERS] : SCROLLERS)){
+    const el = document.querySelector(sel);
+    if (el && (el.scrollTop || el.scrollLeft)) m.push([sel, el.scrollTop, el.scrollLeft]);
+  }
+  return m;
+}
+function restoreScroll(m){
+  for (const [sel, top, left] of m){
+    const el = document.querySelector(sel);     // 週次の .wk-scroll は毎回作り直されるので都度引き直す
+    if (!el) continue;
+    // 内容が縮んでいればブラウザ側でクランプされる＝行き過ぎない。0 は書かない（無駄な再レイアウトを避ける）
+    if (top && el.scrollTop !== top) el.scrollTop = top;
+    if (left && el.scrollLeft !== left) el.scrollLeft = left;
+  }
+}
+
+// ── 再描画をまたぐフォーカスの拠り所（UI改善 Phase 3）──
+// ref があればそれを優先し、消えていたら「同じ並び順の位置」＝次の兄弟が繰り上がった要素へ。
+// 呼び出し側が自分でフォーカスを戻す場合はこの経路を通らない（ensureViewFocus が何もしない）。
+const NAV_SEL = '.day-head, .card-txt, .card-block, .proj-land-row, .wk-item, .list-table .cell-chip, .list-table .nav-head, .search-kw';
+function navTargets(cont){ return [...cont.querySelectorAll(NAV_SEL)]; }
+function focusAnchor(){
+  const ae = document.activeElement;
+  if (!ae || !ae.closest) return null;
+  const cont = ae.closest('#view-daily, #view-list, #view-project, #view-search');   // 週次は weekly.js の _cursor に任せる
+  if (!cont) return null;
+  // チェックボックスや行内ボタンにフォーカスがある場合（＝クリックで完了にした直後など）は、
+  // その行の本文をアンカーにする。そうしないと戻り先が見つからずビュー先頭へ飛んでしまう。
+  let el = ae.closest(NAV_SEL);
+  if (!el){ const host = ae.closest('.card-row, .list-table tbody tr, .proj-land-row'); el = host && (host.matches(NAV_SEL) ? host : host.querySelector(NAV_SEL)); }
+  if (!el) return null;
+  return { view: cont.id, ref: (el.dataset && el.dataset.ref) || null, idx: navTargets(cont).indexOf(el) };
+}
+function restoreAnchor(a){
+  if (!a) return false;
+  const cont = document.getElementById(a.view);
+  if (!cont || cont.hidden) return false;
+  if (a.ref){
+    const esc = (window.CSS && CSS.escape) ? CSS.escape(a.ref) : a.ref;
+    const el = cont.querySelector(`.card-txt[data-ref="${esc}"], .card-block[data-ref="${esc}"], [data-ref="${esc}"]`);
+    if (el){ el.focus({ preventScroll: true }); return true; }   // スクロールは restoreScroll の値を尊重する
+  }
+  const els = navTargets(cont);
+  if (!els.length || a.idx < 0) return false;
+  const el = els[Math.min(a.idx, els.length - 1)];               // 消えていたら同じ位置＝次の兄弟／末尾なら前の兄弟
+  if (!el) return false;
+  el.focus({ preventScroll: true });
+  return true;
 }
 
 // 変更 → ローカル保存（デバウンス）＋ GitHub自動送信（有効時・デバウンス）
@@ -159,6 +223,9 @@ function scheduleGhSync(){
 store.subscribe(() => { saveState(store); scheduleGhSync(); });
 
 function renderAll(){
+  const _vkey = splitOn ? 'split:' + splitRight : currentView;
+  const _scroll = captureScroll(_vkey === _lastRenderView);   // 描画で内容が作り直される前に控える（Phase 3）
+  const _anchor = focusAnchor();       // フォーカスが消えたときの戻り先（呼び出し側が戻すなら使われない）
   const app = document.getElementById('app');
   const dv = document.getElementById('view-daily');
   const lv = document.getElementById('view-list');
@@ -205,7 +272,9 @@ function renderAll(){
   document.getElementById('view-search-btn')?.classList.toggle('active', currentView === 'search');
   document.getElementById('view-weekly-btn')?.classList.toggle('active', currentView === 'weekly');
   persistView();
-  ensureViewFocus();               // どのビューでもキー操作用フォーカスを失わない安全網
+  restoreScroll(_scroll);          // レイアウト確定後に同期で戻す（Phase 3）
+  _lastRenderView = _vkey;
+  ensureViewFocus(_anchor);        // どのビューでもキー操作用フォーカスを失わない安全網
 }
 // フォーカスが app 外（body等）へ落ちていたら、現在ビューの先頭要素へ戻す。編集中など app 内に在れば何もしない。
 // 分割中は「最後に触れていたペイン」を優先＝片方の操作後にもう片方へフォーカスが飛ぶのを防ぐ（#4）。
@@ -217,12 +286,15 @@ function focusActiveViewFirst(){
   // 本文コンテンツを最優先（querySelectorは記述順でなくDOM出現順で返すため、ビューバーのselectを先に掴まないよう2段構え）
   const el = cont.querySelector('.wk-item, .list-table .title-chip, .list-table .nav-head, .card-txt, .day-head, .card-block, .zoom-title-txt, .proj-land-row, .search-kw, .card-add, .proj-land-add')
           || cont.querySelector('input, select, button, [tabindex]');
-  if (el) el.focus();
+  if (el) el.focus({ preventScroll: true });   // 保持したスクロール位置を安全網が動かさない（Phase 3）
 }
-function ensureViewFocus(){
+// anchor: 再描画前のフォーカス位置。先頭へ飛ばす前に、まず元居た場所（消えていれば同じ並び順の位置）へ戻す。
+function ensureViewFocus(anchor){
   setTimeout(() => {
     const ae = document.activeElement;
-    if (!ae || ae === document.body || !(ae.closest && ae.closest('#app'))) focusActiveViewFirst();
+    if (!ae || ae === document.body || !(ae.closest && ae.closest('#app'))){
+      if (!restoreAnchor(anchor)) focusActiveViewFirst();
+    }
   }, 0);
 }
 
@@ -532,7 +604,7 @@ function boot(){
   document.getElementById('add-proj')?.addEventListener('click', addProject);
   document.addEventListener('focusin', (e) => {             // 直近に触れたペインを記録（分割時のフォーカス復帰先・#4）
     const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search,#view-weekly');
-    if (c) _lastPane = c.id;
+    if (c){ _lastPane = c.id; captureFocus(); }             // ビュー内に居る間だけ記憶を更新（Phase 3）
   });
   document.addEventListener('keydown', (e) => {              // Alt+1/2/3/4=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E
     if (currentView === 'weekly' && !splitOn){               // 週次のグリッド操作（矢印/Enter/Space等）を先に処理
