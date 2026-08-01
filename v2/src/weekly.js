@@ -787,7 +787,9 @@ function jumpFrom(el){
 function toggleDoneAt(el){
   if (el.dataset.act !== 'card') return;
   const b = _store.getBody(el.dataset.body);
-  if (!b || b.kind !== 'task') return;
+  if (!b) return;
+  // メモ／表／画像に Space を押しても何も起きず、キーが効いていないのか対象外なのか分からなかった（Phase 2）
+  if (b.kind !== 'task'){ showToast('メモ／表／画像は完了にできません（デイリーで Ctrl+Enter でタスクに変換）'); return; }
   syncCursorFrom(el);
   _store.updateBody(b.id, { done: !b.done });
   _render(); applyCursor();
