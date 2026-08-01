@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, urlparse
 
 from PIL import Image
 
+import autocrop
 import clipboard
 import imageops
 import storage
@@ -93,23 +94,41 @@ class Api:
         out = []
         prev: datetime | None = None
         for name in storage.list_shots(day):
-            meta = index.get(name, {})
+            meta = self._ensure_size(day, name, index.get(name, {}))
             ts = self._timestamp(date, name, meta)
-            out.append(
-                {
-                    "name": name,
-                    "no": int(name.split("_")[0]),
-                    "time": ts.strftime("%H:%M:%S"),
-                    "ts": ts.isoformat(timespec="seconds"),
-                    "w": meta.get("w", 0),
-                    "h": meta.get("h", 0),
-                    "note": meta.get("note", ""),
-                    # 直前の撮影から間があいたら、一覧で区切り線を引く
-                    "gap": prev is None or (ts - prev).total_seconds() >= gap,
-                }
-            )
+            entry = {
+                "name": name,
+                "no": int(name.split("_")[0]),
+                "time": ts.strftime("%H:%M:%S"),
+                "ts": ts.isoformat(timespec="seconds"),
+                "w": meta.get("w", 0),
+                "h": meta.get("h", 0),
+                "note": meta.get("note", ""),
+                # 直前の撮影から間があいたら、一覧で区切り線を引く
+                "gap": prev is None or (ts - prev).total_seconds() >= gap,
+            }
+            # 未検出（キーが無い）と、検出したが何も無かった（null）を区別する。
+            # 前者だけビューアが検出を依頼してくる。
+            if "auto" in meta:
+                entry["auto"] = meta["auto"]
+            out.append(entry)
             prev = ts
         return {"date": date, "shots": out}
+
+    def _ensure_size(self, day: Path, name: str, meta: dict) -> dict:
+        """幅・高さが分からないエントリを、実ファイルから補って覚え直す。
+
+        フォルダに画像を直接置いた場合や index.json を失った場合に効く。
+        寸法が無いと、自動トリミングの枠をサムネのどこに重ねるか決められない。
+        """
+        if meta.get("w") and meta.get("h"):
+            return meta
+        try:
+            with Image.open(day / name) as img:
+                w, h = img.size
+        except (OSError, ValueError):
+            return meta
+        return storage.update_entry(day, name, w=w, h=h)
 
     @staticmethod
     def _timestamp(date: str, name: str, meta: dict) -> datetime:
@@ -134,6 +153,27 @@ class Api:
     def copy(self, date: str, name: str) -> dict:
         clipboard.copy_file(self.resolve(date, name))
         return {"ok": True}
+
+    # -- 自動トリミングの候補 --
+
+    def autocrop(self, date: str, name: str) -> dict:
+        """スライド／ページらしい領域を探して返す。結果は index.json に覚えておく。
+
+        1枚あたり数十msかかるので、同じ画像で二度は計算しない。
+        編集すると当然変わるので、そのときに覚えた結果を捨てる（_forget_auto）。
+        """
+        path = self.resolve(date, name)
+        day = self.root / date
+        meta = storage.load_index(day)["shots"].get(name, {})
+        if "auto" in meta:
+            return {"auto": meta["auto"]}
+
+        found = autocrop.detect_file(path)
+        storage.update_entry(day, name, auto=found)
+        return {"auto": found}
+
+    def _forget_auto(self, date: str, name: str) -> None:
+        storage.drop_fields(self.root / date, name, "auto")
 
     def reveal(self, date: str, name: str) -> dict:
         path = self.resolve(date, name)
@@ -172,6 +212,7 @@ class Api:
             self._write(path, out)
             self._undo.append((date, name, original))
             storage.update_entry(self.root / date, name, w=out.width, h=out.height)
+            self._forget_auto(date, name)  # 画像が変わったので候補は計算し直す
             return {"w": out.width, "h": out.height}
 
     def undo(self) -> dict:
@@ -187,6 +228,7 @@ class Api:
             with Image.open(path) as img:
                 w, h = img.size
             storage.update_entry(self.root / date, name, w=w, h=h)
+            self._forget_auto(date, name)
             return {"date": date, "name": name, "w": w, "h": h}
 
     def delete(self, date: str, name: str) -> dict:
@@ -290,6 +332,13 @@ class Handler(BaseHTTPRequestHandler):
 
         if path == "/api/shots":
             return self._json(self.api.shots((query.get("date") or [""])[0]))
+
+        if path == "/api/autocrop":
+            return self._json(
+                self.api.autocrop(
+                    (query.get("date") or [""])[0], (query.get("name") or [""])[0]
+                )
+            )
 
         for prefix, kind in (("/thumb/", "thumb"), ("/img/", "img")):
             if path.startswith(prefix):

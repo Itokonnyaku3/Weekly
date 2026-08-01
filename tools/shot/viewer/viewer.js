@@ -79,6 +79,10 @@ function card(shot, index) {
   // 読み込み前から高さを確保しておき、スクロール位置が飛ばないようにする
   if (shot.w && shot.h) img.style.aspectRatio = `${shot.w} / ${shot.h}`;
 
+  const box = document.createElement("div");
+  box.className = "shot";
+  box.append(img);
+
   const note = document.createElement("textarea");
   note.className = "note";
   note.rows = 1;
@@ -86,8 +90,36 @@ function card(shot, index) {
   note.value = shot.note || "";
   note.dataset.index = index;
 
-  article.append(head, img, note);
+  article.append(head, box, note);
+  decorateAuto(article, shot);
   return article;
+}
+
+// 自動トリミングの候補を、サムネの上に破線の枠とバッジで重ねる。
+function decorateAuto(article, shot) {
+  article.querySelector(".auto-frame")?.remove();
+  article.querySelector(".auto-badge")?.remove();
+
+  const auto = shot.auto;
+  if (!auto || !shot.w || !shot.h) return;
+
+  const [x, y, w, h] = auto.rect;
+  const frame = document.createElement("div");
+  frame.className = "auto-frame";
+  Object.assign(frame.style, {
+    left: `${(x / shot.w) * 100}%`,
+    top: `${(y / shot.h) * 100}%`,
+    width: `${(w / shot.w) * 100}%`,
+    height: `${(h / shot.h) * 100}%`,
+  });
+
+  const badge = document.createElement("button");
+  badge.className = "auto-badge";
+  badge.type = "button";
+  badge.textContent = `⌗ ${auto.kind}`;
+  badge.title = "この枠で切り抜く（右クリックのメニューから微調整もできます）";
+
+  article.querySelector(".shot").append(frame, badge);
 }
 
 // 一覧の中身を表す文字列。これが同じなら DOM を作り直す必要はない。
@@ -172,6 +204,36 @@ async function loadShots() {
   const { shots } = await api(`/api/shots?date=${state.date}`);
   state.shots = shots;
   render();
+  fillAuto();
+}
+
+// 自動トリミングの候補を裏で1枚ずつ求めていく。1枚あたり数十msかかるので
+// まとめて走らせず、結果が出たカードから順に枠を足す（一覧は作り直さない）。
+let autoRunning = false;
+
+async function fillAuto() {
+  if (autoRunning) return;
+  autoRunning = true;
+  const forDate = state.date;
+  try {
+    for (let i = 0; i < state.shots.length; i++) {
+      if (state.date !== forDate) return;  // 日付が切り替わったらやめる
+      const shot = state.shots[i];
+      if ("auto" in shot) continue;
+      try {
+        const { auto } = await api(
+          `/api/autocrop?date=${forDate}&name=${encodeURIComponent(shot.name)}`
+        );
+        shot.auto = auto;
+      } catch {
+        shot.auto = null;  // 失敗しても次へ。提案が出ないだけで害はない。
+      }
+      const node = el.list.querySelector(`.card[data-index="${i}"]`);
+      if (node) decorateAuto(node, shot);
+    }
+  } finally {
+    autoRunning = false;
+  }
 }
 
 async function refresh() {
@@ -237,8 +299,10 @@ async function edit(index, op, params) {
     const size = await post("/api/edit", { date: state.date, name: shot.name, op, ...params });
     shot.w = size.w;
     shot.h = size.h;
+    delete shot.auto;  // 画像が変わったので候補は求め直す
     state.rev[shot.name] = rev(shot.name) + 1;
     render();
+    fillAuto();
     if (state.open === index) showOverlay(index);
     toast(op === "crop" ? "切り抜きました（Ctrl+Z で戻せます）" : "回転しました");
   } catch (e) {
@@ -251,8 +315,13 @@ async function undo() {
     const r = await post("/api/undo", {});
     state.rev[r.name] = rev(r.name) + 1;
     const i = state.shots.findIndex((s) => s.name === r.name);
-    if (i >= 0) { state.shots[i].w = r.w; state.shots[i].h = r.h; }
+    if (i >= 0) {
+      state.shots[i].w = r.w;
+      state.shots[i].h = r.h;
+      delete state.shots[i].auto;
+    }
     render();
+    fillAuto();
     if (state.open >= 0) showOverlay(state.open);
     toast(`${r.name.slice(0, 3)} を元に戻しました`);
   } catch (e) {
@@ -288,6 +357,8 @@ async function reveal(index) {
 
 function openMenu(index, x, y) {
   state.menuFor = index;
+  // 候補が見つかったものにだけ「自動トリミング」を出す
+  el.menu.querySelector('[data-act="auto"]').hidden = !shotAt(index)?.auto;
   el.menu.hidden = false;
   // 画面からはみ出さない位置に置く
   const box = el.menu.getBoundingClientRect();
@@ -311,6 +382,7 @@ el.menu.addEventListener("click", (ev) => {
 function runAction(act, index) {
   switch (act) {
     case "crop": showOverlay(index); break;
+    case "auto": showOverlay(index, shotAt(index)?.auto?.rect); break;
     case "rotR": edit(index, "rotate", { degrees: 90 }); break;
     case "rotL": edit(index, "rotate", { degrees: 270 }); break;
     case "copy": copy(index); break;
@@ -322,15 +394,44 @@ function runAction(act, index) {
 
 // --- 拡大表示とトリミング -----------------------------------------------
 
-function showOverlay(index) {
+function showOverlay(index, preset = null) {
   const shot = shotAt(index);
   if (!shot) return;
   state.open = index;
   state.crop = null;
   el.ovSel.hidden = true;
+  el.ovHint.textContent = "ドラッグで範囲を選び Enter で切り抜き";
+  // 画像の寸法が確定してからでないと、候補の枠を置く位置を計算できない
+  el.ovImg.onload = preset ? () => selectRect(preset) : null;
   el.ovImg.src = imgUrl(shot.name);
   el.ovTitle.textContent = `${String(shot.no).padStart(3, "0")}  ${shot.time}  ${shot.w}×${shot.h}`;
   el.overlay.hidden = false;
+}
+
+/** 原寸座標の矩形を、いま表示している倍率に合わせて選択範囲として置く。 */
+function selectRect([x, y, w, h]) {
+  const img = el.ovImg.getBoundingClientRect();
+  if (!el.ovImg.naturalWidth || !img.width) return;
+  const scale = img.width / el.ovImg.naturalWidth;
+  drawSelection({
+    left: img.left + x * scale,
+    top: img.top + y * scale,
+    width: w * scale,
+    height: h * scale,
+  });
+  el.ovHint.textContent = "Enter で切り抜き ・ ドラッグで選び直し ・ Esc で閉じる";
+}
+
+function drawSelection(box) {
+  const stage = el.ovStage.getBoundingClientRect();
+  Object.assign(el.ovSel.style, {
+    left: `${box.left - stage.left}px`,
+    top: `${box.top - stage.top}px`,
+    width: `${box.width}px`,
+    height: `${box.height}px`,
+  });
+  el.ovSel.hidden = false;
+  state.crop = box;
 }
 
 function closeOverlay() {
@@ -367,20 +468,10 @@ el.ovImg.addEventListener("pointermove", (ev) => {
 
   const x1 = clampX(dragFrom.x), y1 = clampY(dragFrom.y);
   const x2 = clampX(ev.clientX), y2 = clampY(ev.clientY);
-  const box = {
+  drawSelection({
     left: Math.min(x1, x2), top: Math.min(y1, y2),
     width: Math.abs(x2 - x1), height: Math.abs(y2 - y1),
-  };
-
-  const stage = el.ovStage.getBoundingClientRect();
-  Object.assign(el.ovSel.style, {
-    left: `${box.left - stage.left}px`,
-    top: `${box.top - stage.top}px`,
-    width: `${box.width}px`,
-    height: `${box.height}px`,
   });
-  el.ovSel.hidden = false;
-  state.crop = box;
 });
 
 el.ovImg.addEventListener("pointerup", () => {
@@ -418,6 +509,15 @@ el.list.addEventListener("click", (ev) => {
   const node = ev.target.closest(".card");
   if (!node) return;
   const index = Number(node.dataset.index);
+
+  // バッジは「この枠で切り抜く」。カードのコピーとは別扱いにする。
+  if (ev.target.closest(".auto-badge")) {
+    ev.stopPropagation();
+    const auto = shotAt(index)?.auto;
+    if (auto) edit(index, "crop", { rect: auto.rect });
+    return;
+  }
+
   select(index, false);
   copy(index);
 });

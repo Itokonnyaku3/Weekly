@@ -98,6 +98,17 @@ def update_entry(day: Path, name: str, **fields) -> dict:
     return entry
 
 
+def drop_fields(day: Path, name: str, *fields: str) -> None:
+    """エントリから項目を取り除く。「まだ計算していない」状態に戻すときに使う。"""
+    data = load_index(day)
+    entry = data["shots"].get(name)
+    if not entry or not any(f in entry for f in fields):
+        return
+    for f in fields:
+        entry.pop(f, None)
+    save_index(day, data)
+
+
 # --- 一覧 -----------------------------------------------------------------
 
 

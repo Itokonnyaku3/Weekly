@@ -152,12 +152,44 @@ body {
 
 .card .size { margin-left: auto; }
 
+.card .shot {
+  position: relative;
+  line-height: 0;
+}
+
 .card img {
   display: block;
   width: 100%;
   height: auto;
   background: var(--line);
 }
+
+/* --- 自動トリミングの候補 --- */
+
+.auto-frame {
+  position: absolute;
+  border: 1px dashed #fff;
+  outline: 1px dashed rgb(0 0 0 / 0.55);  /* 明暗どちらの画面の上でも見えるように */
+  pointer-events: none;
+}
+
+.auto-badge {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 999px;
+  background: rgb(37 99 235 / 0.92);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.auto-badge:hover { background: rgb(29 78 216 / 0.98); }
 
 /* メモ欄。枠を出さず、書くときだけ主張させる。 */
 .card .note {
