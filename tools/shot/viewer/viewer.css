@@ -1,0 +1,204 @@
+/* 幅 520px の縦長ドックで見ることを前提にしたレイアウト。
+   横に並べる余裕はないので、縦1列のカードにする。 */
+
+:root {
+  --bg: #ffffff;
+  --bg-sub: #f4f5f7;
+  --fg: #1a1d21;
+  --fg-dim: #6b7280;
+  --line: #e2e5e9;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181d;
+    --bg-sub: #1e2127;
+    --fg: #e6e8eb;
+    --fg-dim: #9aa1ab;
+    --line: #2c3038;
+    --accent: #60a5fa;
+    --accent-soft: #1e3a8a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.5 "Segoe UI", "Yu Gothic UI", system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* --- 上のバー --- */
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-sub);
+  flex: 0 0 auto;
+}
+
+.bar select {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+}
+
+.count {
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.icon {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 5px 8px;
+}
+
+.icon:hover { background: var(--accent-soft); }
+
+/* --- 一覧 --- */
+
+.list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px;
+  outline: none;
+}
+
+.gap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 2px 8px;
+  color: var(--fg-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gap::before,
+.gap::after {
+  content: "";
+  flex: 1 1 auto;
+  border-top: 1px solid var(--line);
+}
+
+.gap:first-child { margin-top: 0; }
+
+.card {
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-sub);
+  cursor: pointer;
+}
+
+.card:hover { border-color: var(--accent); }
+
+.card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* コピー直後の合図。派手にせず一瞬だけ光らせる。 */
+.card.flash { animation: flash 0.5s ease-out; }
+
+@keyframes flash {
+  from { box-shadow: 0 0 0 3px var(--accent); }
+  to   { box-shadow: 0 0 0 3px transparent; }
+}
+
+.card .head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 8px;
+  color: var(--fg-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.card .no {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.card .size { margin-left: auto; }
+
+.card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--line);
+}
+
+.card .note {
+  padding: 5px 8px;
+  border-top: 1px solid var(--line);
+  color: var(--fg);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- その他 --- */
+
+.empty {
+  margin: auto;
+  padding: 20px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+
+kbd {
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg-sub);
+  font: inherit;
+  font-size: 11px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.toast.show { opacity: 0.92; }

@@ -27,8 +27,10 @@ import capture  # noqa: E402
 import config  # noqa: E402
 import startup  # noqa: E402
 import storage  # noqa: E402
+import viewerwin  # noqa: E402
 import winapi  # noqa: E402
 from saver import Saver  # noqa: E402
+from server import ViewerServer  # noqa: E402
 from tray import Tray  # noqa: E402
 
 MUTEX_NAME = "Global\\ShotScreenshotDaemon"
@@ -73,6 +75,7 @@ class App:
             compress_level=self.cfg["png_compress_level"],
             on_saved=self._on_saved,
         )
+        self.server = ViewerServer(self.root, self.cfg)
         self.tray = Tray(
             hotkey=self.cfg["hotkey"],
             on_capture=self.capture,
@@ -110,6 +113,12 @@ class App:
             threading.Timer(delay, self._grab).start()
 
     def _grab(self) -> None:
+        # ビューアは画面右端に貼り付いているので、開いたままだと写り込む。
+        # 表示中のときだけ画面外へどける（合成が追いつくまで数フレーム待つ）。
+        hidden = viewerwin.hide_for_capture() if self.cfg["hide_viewer_on_capture"] else None
+        if hidden:
+            time.sleep(0.06)
+
         t0 = time.perf_counter()
         taken_at = datetime.now()
         try:
@@ -118,6 +127,8 @@ class App:
             log.error("capture failed: %s", e)
             self.tray.notify("撮影に失敗しました", str(e), warn=True)
             return
+        finally:
+            viewerwin.unhide(hidden)
         self.saver.submit(raw, taken_at)
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
@@ -140,17 +151,25 @@ class App:
         )
 
     def open_viewer(self) -> None:
-        # Phase 2 でローカルサーバとビューアに置き換える
-        self.tray.notify("編集ビュー", "次のフェーズで実装します。いまは保存フォルダを開きます。")
-        open_in_explorer(self.root)
+        threading.Thread(
+            target=viewerwin.open_dock,
+            args=(self.cfg["port"], self.cfg["dock_width"]),
+            daemon=True,
+        ).start()
 
     def quit(self) -> None:
         self.saver.stop()
+        self.server.stop()
 
     # -- 起動 --
 
     def run(self) -> None:
         self.saver.start()
+        try:
+            self.server.start()
+        except OSError as e:
+            # ポートが塞がっていても撮影だけは続けられるようにする
+            log.error("server start failed: %s", e)
         self.tray.start()
         self.tray.refresh_tip()
         log.info("started (hotkey=%s, root=%s)", self.tray.hotkey_spec, self.root)
@@ -189,8 +208,11 @@ def main() -> int:
     setup_logging()
 
     if already_running():
-        # スタートアップの二重登録やショートカットの再実行でも事故らないようにする
-        log.info("already running; exiting")
+        # スタートアップの二重登録やショートカットの再実行でも事故らないようにする。
+        # 二重起動はせず、代わりに既に動いている側のビューアを開く。
+        log.info("already running; opening viewer instead")
+        cfg = config.load()
+        viewerwin.open_dock(cfg["port"], cfg["dock_width"])
         return 0
 
     try:

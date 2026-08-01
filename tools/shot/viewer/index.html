@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shot — スクリーンショット</title>
+<link rel="stylesheet" href="/viewer.css">
+</head>
+<body>
+  <header class="bar">
+    <select id="date" aria-label="日付"></select>
+    <span id="count" class="count"></span>
+    <button id="refresh" class="icon" title="更新 (F5)" aria-label="更新">⟳</button>
+  </header>
+
+  <main id="list" class="list" tabindex="-1"></main>
+
+  <p id="empty" class="empty" hidden>まだ1枚もありません。<br><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> で撮ってみてください。</p>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="/viewer.js"></script>
+</body>
+</html>

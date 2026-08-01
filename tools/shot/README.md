@@ -24,6 +24,25 @@ pythonw tools\shot\shot.py
 保存先は `%USERPROFILE%\Pictures\Shots\<日付>\NNN_HHMMSS.png`。
 連番は日付ごとに 001 から振り直す。
 
+## 編集ビュー
+
+トレイメニューの「編集ビューを開く」で、**画面右端に貼り付いたパネル**として開く。
+Edge / Chrome の `--app` モードなので、タブバーもアドレスバーも出ない。
+
+| 操作 | 動作 |
+|---|---|
+| サムネをクリック | 原寸をクリップボードへコピー（そのまま Word や Teams に貼れる） |
+| `↑` `↓` | 選択を移動 |
+| `Ctrl+C` | 選択中の1枚をコピー |
+| `F5` / 右上の ⟳ | 一覧を更新 |
+
+- 30分以上あいたところに区切り線が入り、「作業の山」が分かるようになっている
+- 他のアプリから戻ってくると自動で更新される。中身が変わっていなければ作り直さないので、
+  スクロール位置と選択は保たれる
+- ビューアを開いたまま撮ると写り込むので、**撮影の瞬間だけビューアを画面外へどけている**
+  （`ShowWindow(SW_HIDE)` はフェードアウトの演出が写り込み、DWM のクロークは
+  他プロセスのウィンドウには権限がなく使えなかった）
+
 ### トレイアイコンが見当たらないとき
 
 Windows 11 は新しいトレイアイコンを既定でオーバーフロー（`^`）の中に入れる。
@@ -70,7 +89,12 @@ powershell -ExecutionPolicy Bypass -File tools\shot\install_startup.ps1
 | `capture.py` | BitBlt + GetDIBits で生ピクセルを取り出す |
 | `saver.py` | PNG 化とディスク書き込みのワーカースレッド |
 | `storage.py` | 保存先の解決・連番採番・`index.json` の読み書き |
+| `imageops.py` | トリミング・回転・サムネ生成（純粋関数） |
+| `clipboard.py` | 画像を CF_DIB でクリップボードへ |
 | `tray.py` | 隠しウィンドウ + トレイアイコン + ホットキー |
+| `server.py` | ビューア用のローカルサーバ（127.0.0.1 のみ） |
+| `viewerwin.py` | ビューアを画面右端に開く／撮影時にどける |
+| `viewer/` | ビューアの HTML・CSS・JS |
 | `startup.py` / `install_startup.ps1` | スタートアップ登録の ON/OFF |
 
 pystray は使っていない。Windows で独自のメッセージループを回すため `RegisterHotKey` の
