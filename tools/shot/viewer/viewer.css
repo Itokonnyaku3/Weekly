@@ -285,6 +285,15 @@ body {
 
 .ov-bar button:hover { background: rgb(255 255 255 / 0.16); }
 
+/* 範囲を選んだときだけ出る確定ボタン。次にやることが一目で分かるようにする。 */
+.ov-bar button.primary {
+  border-color: transparent;
+  background: var(--accent);
+  font-weight: 600;
+}
+
+.ov-bar button.primary:hover { background: #1d4ed8; }
+
 .ov-stage {
   position: relative;
   flex: 1 1 auto;

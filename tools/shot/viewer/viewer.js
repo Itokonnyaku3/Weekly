@@ -7,6 +7,7 @@ const el = {
   list: $("list"), empty: $("empty"), toast: $("toast"), menu: $("menu"),
   overlay: $("overlay"), ovImg: $("ovImg"), ovSel: $("ovSel"),
   ovStage: $("ovStage"), ovTitle: $("ovTitle"), ovHint: $("ovHint"),
+  ovApply: $("ovApply"), ovCancel: $("ovCancel"),
 };
 
 const state = {
@@ -400,9 +401,7 @@ function showOverlay(index, preset = null) {
   const shot = shotAt(index);
   if (!shot) return;
   state.open = index;
-  state.crop = null;
-  el.ovSel.hidden = true;
-  el.ovHint.textContent = "ドラッグで範囲を選び Enter で切り抜き";
+  clearSelection();
   // 画像の寸法が確定してからでないと、候補の枠を置く位置を計算できない
   el.ovImg.onload = preset ? () => selectRect(preset) : null;
   el.ovImg.src = imgUrl(shot.name);
@@ -434,19 +433,37 @@ function drawSelection(box) {
   });
   el.ovSel.hidden = false;
   state.crop = box;
+  updateSelectionUi();
+}
+
+function clearSelection() {
+  state.crop = null;
+  el.ovSel.hidden = true;
+  updateSelectionUi();
+}
+
+/** 範囲を選んでいるかどうかを、ボタンと説明文に反映する。 */
+function updateSelectionUi() {
+  const has = state.crop !== null;
+  el.ovApply.hidden = !has;
+  el.ovCancel.hidden = !has;
+  el.ovHint.textContent = has
+    ? "「この範囲で切り抜く」または Enter で確定 ・ ドラッグで選び直し ・ Esc で閉じる"
+    : "ドラッグで範囲を選ぶと、切り抜くボタンが出ます";
 }
 
 function closeOverlay() {
   el.overlay.hidden = true;
   state.open = -1;
-  state.crop = null;
-  el.ovSel.hidden = true;
+  clearSelection();
 }
 
 el.overlay.addEventListener("click", (ev) => {
   const act = ev.target.closest("button")?.dataset.act;
   if (!act) return;
   if (act === "close") return closeOverlay();
+  if (act === "apply") return applyCrop();
+  if (act === "cancelSel") return clearSelection();
   runAction(act, state.open);
 });
 
@@ -458,8 +475,7 @@ el.ovImg.addEventListener("pointerdown", (ev) => {
   // 画像の外へドラッグしても追い続けたいだけなので、捕捉できなくても続行する
   try { el.ovImg.setPointerCapture(ev.pointerId); } catch { /* 無視 */ }
   dragFrom = { x: ev.clientX, y: ev.clientY };
-  state.crop = null;
-  el.ovSel.hidden = true;
+  clearSelection();
 });
 
 el.ovImg.addEventListener("pointermove", (ev) => {
@@ -480,12 +496,8 @@ el.ovImg.addEventListener("pointerup", () => {
   dragFrom = null;
   // 誤クリック程度の大きさなら選択とみなさない
   if (state.crop && (state.crop.width < 8 || state.crop.height < 8)) {
-    state.crop = null;
-    el.ovSel.hidden = true;
+    clearSelection();
   }
-  el.ovHint.textContent = state.crop
-    ? "Enter で切り抜き ・ もう一度ドラッグで選び直し ・ Esc で閉じる"
-    : "ドラッグで範囲を選び Enter で切り抜き";
 });
 
 function applyCrop() {
@@ -499,8 +511,7 @@ function applyCrop() {
     state.crop.width * scale,
     state.crop.height * scale,
   ].map(Math.round);
-  state.crop = null;
-  el.ovSel.hidden = true;
+  clearSelection();
   edit(state.open, "crop", { rect });
 }
 
@@ -577,7 +588,10 @@ document.addEventListener("keydown", (ev) => {
   if (ev.key === "Escape") {
     if (!el.menu.hidden) return closeMenu();
     if (typing) return ev.target.blur();
-    if (state.open >= 0) return closeOverlay();
+    if (state.open >= 0) {
+      // 選択中ならまず選択だけ取り消す。いきなり閉じると選び直しが面倒。
+      return state.crop ? clearSelection() : closeOverlay();
+    }
     return;
   }
   if (ev.key === "z" && ev.ctrlKey && !typing) { ev.preventDefault(); return undo(); }

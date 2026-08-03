@@ -84,22 +84,57 @@ class App:
         )
         self.tray = Tray(
             hotkey=self.cfg["hotkey"],
+            hotkey_window=self.cfg["hotkey_window"],
             on_capture=self.capture,
             on_viewer=self.open_viewer,
             on_folder=lambda: open_in_explorer(self.root),
             on_toggle_pause=self.toggle_pause,
             on_toggle_startup=self.toggle_startup,
             on_quit=self.quit,
+            on_area=self.set_area,
+            areas=self.areas,
             status=self.status,
         )
+
+    # -- 撮影範囲 --
+
+    def areas(self) -> list[tuple[str, str]]:
+        """選べる撮影範囲。モニタ構成が変わるので呼ばれるたびに作る。"""
+        items = [
+            ("virtual", "全モニタ"),
+            ("window", "前面のウィンドウ"),
+            ("cursor", "カーソルのあるモニタ"),
+        ]
+        monitors = capture.list_monitors()
+        if len(monitors) > 1:
+            items += [(f"monitor:{m.index}", m.label) for m in monitors]
+        else:
+            items.append(("primary", "主モニタ"))
+        return items
+
+    def area_label(self, value: str) -> str:
+        for v, label in self.areas():
+            if v == value:
+                return label
+        if value == "active":  # 旧称
+            return "カーソルのあるモニタ"
+        return value
+
+    def set_area(self, value: str) -> None:
+        self.cfg["capture_area"] = value
+        config.save(self.cfg)  # 次の起動でも同じ範囲になるように残す
+        log.info("capture area -> %s", value)
 
     # -- トレイに見せる状態 --
 
     def status(self) -> dict:
+        area = self.cfg["capture_area"]
         return {
             "count": storage.count_on(self.root, datetime.now()),
             "paused": self.paused,
             "startup": startup.is_enabled(),
+            "area": area,
+            "area_label": self.area_label(area),
         }
 
     def _on_saved(self, path: Path) -> None:
@@ -107,32 +142,40 @@ class App:
 
     # -- 撮影 --
 
-    def capture(self, source: str = "hotkey") -> None:
+    def capture(self, source: str = "hotkey", area: str | None = None,
+                window: int | None = None) -> None:
         if self.paused:
             return
+        area = area or self.cfg["capture_area"]
         if source == "hotkey":
             # 最短経路。メッセージスレッドで撮ってすぐ返す。
-            self._grab()
+            self._grab(area, window)
         else:
             # トレイのツールチップやメニューが画面に残っているので、消えるのを待つ。
             delay = max(0, int(self.cfg["tray_click_delay_ms"])) / 1000
-            threading.Timer(delay, self._grab).start()
+            threading.Timer(delay, self._grab, args=(area, window)).start()
 
-    def _grab(self) -> None:
+    def _grab(self, area: str, window: int | None = None) -> None:
         # 前の撮影のフラッシュが残っていたら消す。連写したときに写り込むため。
         if self.flash:
             self.flash.hide()
 
         # ビューアは画面右端に貼り付いているので、開いたままだと写り込む。
         # 表示中のときだけ画面外へどける（合成が追いつくまで数フレーム待つ）。
-        hidden = viewerwin.hide_for_capture() if self.cfg["hide_viewer_on_capture"] else None
+        # ただしビューア自身を撮ろうとしているときは、どけたら意味がない。
+        target_is_viewer = area == "window" and (window or 0) == (viewerwin.hwnd() or -1)
+        hidden = (
+            viewerwin.hide_for_capture()
+            if self.cfg["hide_viewer_on_capture"] and not target_is_viewer
+            else None
+        )
         if hidden:
             time.sleep(0.06)
 
         t0 = time.perf_counter()
         taken_at = datetime.now()
         try:
-            raw = capture.grab(self.cfg["capture_area"])
+            raw = capture.grab(area, window)
         except capture.CaptureError as e:
             log.error("capture failed: %s", e)
             self.tray.notify("撮影に失敗しました", str(e), warn=True)

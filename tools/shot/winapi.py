@@ -13,6 +13,7 @@ user32 = ctypes.WinDLL("user32", use_last_error=True)
 gdi32 = ctypes.WinDLL("gdi32", use_last_error=True)
 kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
 shell32 = ctypes.WinDLL("shell32", use_last_error=True)
+dwmapi = ctypes.WinDLL("dwmapi", use_last_error=True)
 
 LRESULT = ctypes.c_ssize_t
 ULONG_PTR = ctypes.c_size_t
@@ -55,8 +56,11 @@ MF_STRING = 0x0000
 MF_SEPARATOR = 0x0800
 MF_CHECKED = 0x0008
 MF_GRAYED = 0x0001
+MF_POPUP = 0x0010
 TPM_RIGHTBUTTON = 0x0002
 TPM_RETURNCMD = 0x0100
+
+WM_TIMER = 0x0113
 
 # ShowWindow
 SW_HIDE = 0
@@ -370,6 +374,59 @@ user32.SetLayeredWindowAttributes.restype = wintypes.BOOL
 
 gdi32.CreateSolidBrush.argtypes = [wintypes.COLORREF]
 gdi32.CreateSolidBrush.restype = wintypes.HBRUSH
+
+# --- モニタの列挙・前面ウィンドウ ---------------------------------------
+
+MONITORENUMPROC = ctypes.WINFUNCTYPE(
+    wintypes.BOOL, wintypes.HANDLE, wintypes.HDC, ctypes.POINTER(wintypes.RECT),
+    wintypes.LPARAM,
+)
+user32.EnumDisplayMonitors.argtypes = [
+    wintypes.HDC, ctypes.POINTER(wintypes.RECT), MONITORENUMPROC, wintypes.LPARAM,
+]
+user32.EnumDisplayMonitors.restype = wintypes.BOOL
+
+user32.GetForegroundWindow.restype = wintypes.HWND
+user32.FindWindowW.argtypes = [wintypes.LPCWSTR, wintypes.LPCWSTR]
+user32.FindWindowW.restype = wintypes.HWND
+user32.GetClassNameW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+user32.GetClassNameW.restype = ctypes.c_int
+user32.IsIconic.argtypes = [wintypes.HWND]
+user32.IsIconic.restype = wintypes.BOOL
+user32.GetWindowThreadProcessId.argtypes = [
+    wintypes.HWND, ctypes.POINTER(wintypes.DWORD),
+]
+user32.GetWindowThreadProcessId.restype = wintypes.DWORD
+
+user32.SetTimer.argtypes = [wintypes.HWND, ULONG_PTR, wintypes.UINT, ctypes.c_void_p]
+user32.SetTimer.restype = ULONG_PTR
+user32.KillTimer.argtypes = [wintypes.HWND, ULONG_PTR]
+
+# GetWindowRect は Windows 10/11 では見えない余白（リサイズ用の枠）まで含む。
+# ウィンドウだけを撮ると左右下に灰色の帯が入るので、見た目どおりの矩形を返す
+# DWM の値を使う。
+DWMWA_EXTENDED_FRAME_BOUNDS = 9
+dwmapi.DwmGetWindowAttribute.argtypes = [
+    wintypes.HWND, wintypes.DWORD, ctypes.c_void_p, wintypes.DWORD,
+]
+dwmapi.DwmGetWindowAttribute.restype = ctypes.c_long  # HRESULT
+
+
+def window_class(hwnd: int) -> str:
+    buf = ctypes.create_unicode_buffer(256)
+    user32.GetClassNameW(hwnd, buf, 256)
+    return buf.value
+
+
+def visible_window_rect(hwnd: int) -> tuple[int, int, int, int] | None:
+    """ウィンドウの「見た目どおり」の矩形を (x, y, w, h) で返す。"""
+    r = wintypes.RECT()
+    hr = dwmapi.DwmGetWindowAttribute(
+        hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, ctypes.byref(r), ctypes.sizeof(r)
+    )
+    if hr != 0 and not user32.GetWindowRect(hwnd, ctypes.byref(r)):
+        return None
+    return r.left, r.top, r.right - r.left, r.bottom - r.top
 
 
 def enable_dpi_awareness() -> None:

@@ -18,7 +18,14 @@ DEFAULTS: dict = {
     "root": "",
     # 撮影ホットキー。"Ctrl+Alt+S" / "PrintScreen" / "Ctrl+Shift+F12" など
     "hotkey": "Ctrl+Alt+S",
-    # "virtual"(全モニタ結合) / "primary" / "active"(カーソルのあるモニタ)
+    # 前面のウィンドウだけを撮るホットキー。"" なら登録しない
+    "hotkey_window": "Ctrl+Alt+W",
+    # 既定の撮影範囲。トレイメニューからも切り替えられる。
+    #   "virtual"   全モニタをつないだ範囲
+    #   "primary"   主モニタ
+    #   "cursor"    カーソルがあるモニタ
+    #   "window"    前面のウィンドウ
+    #   "monitor:2" 2番目のモニタ（1 始まり）
     "capture_area": "virtual",
     # PNG 圧縮レベル 0-9。1 は速度優先（1枚あたり数MB）
     "png_compress_level": 1,

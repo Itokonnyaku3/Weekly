@@ -11,12 +11,13 @@ import ctypes
 from ctypes import wintypes
 from pathlib import Path
 
+import capture
 from winapi import (
-    HWND_TOP,
     IMAGE_ICON,
     LR_DEFAULTSIZE,
     LR_LOADFROMFILE,
     MF_GRAYED,
+    MF_POPUP,
     MF_SEPARATOR,
     MF_STRING,
     MOD_ALT,
@@ -43,6 +44,7 @@ from winapi import (
     WM_LBUTTONUP,
     WM_NULL,
     WM_RBUTTONUP,
+    WM_TIMER,
     WM_TRAY,
     WNDCLASSEXW,
     WNDPROC,
@@ -55,7 +57,8 @@ HERE = Path(__file__).resolve().parent
 ICON_PATH = HERE / "icon.ico"
 
 WINDOW_CLASS = "ShotTrayWindow"
-HOTKEY_ID = 1
+HOTKEY_ID = 1          # 設定した撮影範囲で撮る
+HOTKEY_WINDOW_ID = 2   # 前面のウィンドウだけを撮る
 
 ID_CAPTURE = 1001
 ID_VIEWER = 1002
@@ -64,9 +67,16 @@ ID_COUNT = 1004
 ID_PAUSE = 1005
 ID_STARTUP = 1006
 ID_QUIT = 1007
+ID_CAPTURE_WINDOW = 1008
+ID_AREA_BASE = 1100  # 撮影範囲の選択（1100 + 並び順）
 
 # ワーカースレッドから「メニュー表示を更新して」と伝えるための独自メッセージ
 WM_REFRESH_TIP = WM_APP + 2
+
+# 前面のウィンドウを覚えておく間隔。トレイをクリックした瞬間はタスクバーが
+# 前面になっていることがあるので、少し前の状態を持っておく必要がある。
+FOREGROUND_POLL_MS = 300
+FOREGROUND_TIMER_ID = 1
 
 
 # --- アイコン -------------------------------------------------------------
@@ -149,21 +159,35 @@ class Tray:
     呼び出し側は on_* コールバックと、メニュー表示に使う status() を渡す。
     """
 
-    def __init__(self, *, hotkey: str, on_capture, on_viewer, on_folder,
-                 on_toggle_pause, on_toggle_startup, on_quit, status):
+    def __init__(self, *, hotkey: str, hotkey_window: str, on_capture, on_viewer,
+                 on_folder, on_toggle_pause, on_toggle_startup, on_quit,
+                 on_area, areas, status):
         self.hotkey_spec = hotkey
+        self.hotkey_window_spec = hotkey_window
         self.on_capture = on_capture
         self.on_viewer = on_viewer
         self.on_folder = on_folder
         self.on_toggle_pause = on_toggle_pause
         self.on_toggle_startup = on_toggle_startup
         self.on_quit = on_quit
-        self.status = status  # () -> dict(count=int, paused=bool, startup=bool)
+        self.on_area = on_area   # (値) -> None
+        self.areas = areas       # () -> [(値, 表示名), ...]
+        self.status = status     # () -> dict(count, paused, startup, area, area_label)
 
         self.hwnd = None
         self._nid = None
         self._wndproc = WNDPROC(self._on_message)  # GC されないよう保持する
         self._hotkey_ok = False
+        self._hotkey_window_ok = False
+        self._area_ids: dict[int, str] = {}
+        self._last_window = None  # 直近に見えていた「撮れる」前面ウィンドウ
+
+    def foreground_window(self) -> int | None:
+        """いま撮るべき前面ウィンドウ。タスクバー等なら少し前のものを返す。"""
+        hwnd = user32.GetForegroundWindow()
+        if capture.is_capturable_window(hwnd):
+            return hwnd
+        return self._last_window
 
     # -- 起動 --
 
@@ -188,6 +212,9 @@ class Tray:
 
         self._add_icon()
         self._register_hotkey()
+        self._register_window_hotkey()
+        # 前面のウィンドウを定期的に覚えておく（トレイクリック用）
+        user32.SetTimer(self.hwnd, FOREGROUND_TIMER_ID, FOREGROUND_POLL_MS, None)
 
     def _add_icon(self) -> None:
         hicon = user32.LoadImageW(
@@ -236,6 +263,19 @@ class Tray:
             warn=True,
         )
 
+    def _register_window_hotkey(self) -> None:
+        """「前面のウィンドウだけ撮る」用のキー。取れなくても致命的ではない。"""
+        if not self.hotkey_window_spec:
+            return
+        try:
+            mods, vk = parse_hotkey(self.hotkey_window_spec)
+        except ValueError:
+            return
+        if user32.RegisterHotKey(self.hwnd, HOTKEY_WINDOW_ID, mods, vk):
+            self._hotkey_window_ok = True
+        else:
+            self.hotkey_window_spec = ""  # メニューにキー名を出さない
+
     # -- 通知 --
 
     def notify(self, title: str, message: str, warn: bool = False) -> None:
@@ -264,20 +304,28 @@ class Tray:
     # -- メッセージ処理 --
 
     def _on_message(self, hwnd, msg, wparam, lparam):
-        if msg == WM_HOTKEY and wparam == HOTKEY_ID:
-            self.on_capture("hotkey")
+        if msg == WM_HOTKEY:
+            if wparam == HOTKEY_ID:
+                self.on_capture("hotkey", window=self.foreground_window())
+            elif wparam == HOTKEY_WINDOW_ID:
+                self.on_capture("hotkey", area="window", window=self.foreground_window())
             return 0
         if msg == WM_TRAY:
             event = lparam & 0xFFFF
             if event == WM_LBUTTONUP:
-                self.on_capture("tray")
+                self.on_capture("tray", window=self.foreground_window())
             elif event == WM_RBUTTONUP:
                 self._show_menu()
+            return 0
+        if msg == WM_TIMER and wparam == FOREGROUND_TIMER_ID:
+            hwnd_fg = user32.GetForegroundWindow()
+            if capture.is_capturable_window(hwnd_fg):
+                self._last_window = hwnd_fg
             return 0
         if msg == WM_REFRESH_TIP:
             st = self.status()
             state = "（一時停止中）" if st["paused"] else ""
-            self.set_tip(f"shot — 今日 {st['count']} 枚{state}")
+            self.set_tip(f"shot — {st['area_label']} / 今日 {st['count']} 枚{state}")
             return 0
         if msg == WM_COMMAND:
             self._invoke(wparam & 0xFFFF)
@@ -287,11 +335,28 @@ class Tray:
             return 0
         return user32.DefWindowProcW(hwnd, msg, wparam, lparam)
 
+    def _area_submenu(self, current: str) -> int:
+        """撮影範囲を選ぶサブメニュー。モニタ構成は変わるので毎回作り直す。"""
+        sub = user32.CreatePopupMenu()
+        self._area_ids.clear()
+        for i, (value, label) in enumerate(self.areas()):
+            item_id = ID_AREA_BASE + i
+            self._area_ids[item_id] = value
+            flags = MF_STRING | (MF_CHECKED if value == current else 0)
+            user32.AppendMenuW(sub, flags, item_id, label)
+        return sub
+
     def _show_menu(self) -> None:
         st = self.status()
         menu = user32.CreatePopupMenu()
         user32.AppendMenuW(menu, MF_STRING, ID_CAPTURE,
                            f"スクリーンショットを撮る\t{self.hotkey_spec}")
+        user32.AppendMenuW(menu, MF_STRING, ID_CAPTURE_WINDOW,
+                           "前面のウィンドウを撮る"
+                           + (f"\t{self.hotkey_window_spec}" if self.hotkey_window_spec else ""))
+        user32.AppendMenuW(menu, MF_POPUP, self._area_submenu(st["area"]),
+                           f"撮影範囲：{st['area_label']}")
+        user32.AppendMenuW(menu, MF_SEPARATOR, 0, None)
         user32.AppendMenuW(menu, MF_STRING, ID_VIEWER, "編集ビューを開く")
         user32.AppendMenuW(menu, MF_STRING, ID_FOLDER, "保存フォルダを開く")
         user32.AppendMenuW(menu, MF_SEPARATOR, 0, None)
@@ -317,8 +382,13 @@ class Tray:
             self._invoke(cmd)
 
     def _invoke(self, cmd: int) -> None:
-        if cmd == ID_CAPTURE:
-            self.on_capture("menu")
+        if cmd in self._area_ids:
+            self.on_area(self._area_ids[cmd])
+            self.refresh_tip()
+        elif cmd == ID_CAPTURE:
+            self.on_capture("menu", window=self.foreground_window())
+        elif cmd == ID_CAPTURE_WINDOW:
+            self.on_capture("menu", area="window", window=self.foreground_window())
         elif cmd == ID_VIEWER:
             self.on_viewer()
         elif cmd == ID_FOLDER:
@@ -344,8 +414,12 @@ class Tray:
 
     def stop(self) -> None:
         self.on_quit()
+        if self.hwnd:
+            user32.KillTimer(self.hwnd, FOREGROUND_TIMER_ID)
         if self._hotkey_ok:
             user32.UnregisterHotKey(self.hwnd, HOTKEY_ID)
+        if self._hotkey_window_ok:
+            user32.UnregisterHotKey(self.hwnd, HOTKEY_WINDOW_ID)
         if self._nid:
             shell32.Shell_NotifyIconW(NIM_DELETE, ctypes.byref(self._nid))
             self._nid = None
