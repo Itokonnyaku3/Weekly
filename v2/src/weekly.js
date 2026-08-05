@@ -235,8 +235,10 @@ export function loadWeeklyPrefs(){
 function buildHead(grid, state){
   const thead = document.createElement('thead');
   const tr = document.createElement('tr');
-  const th1 = document.createElement('th'); th1.className = 'wk-th wk-c-proj'; th1.textContent = 'プロジェクト';
-  const th2 = document.createElement('th'); th2.className = 'wk-th wk-c-link'; th2.textContent = 'リンク';
+  const th1 = document.createElement('th'); th1.className = 'wk-th wk-c-proj';
+  const l1 = document.createElement('div'); l1.className = 'wk-th-label'; l1.textContent = 'プロジェクト'; th1.appendChild(l1);
+  const th2 = document.createElement('th'); th2.className = 'wk-th wk-c-link';
+  const l2 = document.createElement('div'); l2.className = 'wk-th-label'; l2.textContent = 'リンク'; th2.appendChild(l2);
   addResizeHandle(th1, 'proj', state);
   addResizeHandle(th2, 'link', state);
   tr.appendChild(th1); tr.appendChild(th2);
