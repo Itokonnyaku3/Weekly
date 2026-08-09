@@ -19,6 +19,7 @@ pythonw tools\shot\shot.py
 |---|---|
 | `Ctrl+Alt+S` | 設定した範囲を撮って保存 |
 | `Ctrl+Alt+W` | **前面のウィンドウだけ**を撮る（設定に関係なく、その場だけ） |
+| `Ctrl+Alt+V` | **撮った一覧を開く**（開いていればそれを前面に出す） |
 | トレイアイコンを**左クリック** | 設定した範囲を撮る（ツールチップが写らないよう 150ms 待ってから撮る） |
 | トレイアイコンを**右クリック** | メニュー（撮影範囲・編集ビュー・保存フォルダ・一時停止・スタートアップ登録・終了） |
 
@@ -47,10 +48,15 @@ pythonw tools\shot\shot.py
 保存先は `%USERPROFILE%\Pictures\Shots\<日付>\NNN_HHMMSS.png`。
 連番は日付ごとに 001 から振り直す。
 
-## 編集ビュー
+## 撮った一覧（編集ビュー）
 
-トレイメニューの「編集ビューを開く」で、**画面右端に貼り付いたパネル**として開く。
+`Ctrl+Alt+V`、またはトレイメニューの「撮った一覧を開く」で、
+**画面右端に貼り付いたパネル**として開く。
 Edge / Chrome の `--app` モードなので、タブバーもアドレスバーも出ない。
+
+ブラウザは起動後に前回のウィンドウ位置を自分で復元することがあり、一度位置を
+指定しただけでは上書きされて元に戻る。狙った位置に収まったのを確かめるまで
+繰り返し押し込んでいる。
 
 | 操作 | 動作 |
 |---|---|
@@ -138,6 +144,7 @@ powershell -ExecutionPolicy Bypass -File tools\shot\install_startup.ps1
 | `root` | `""` | 保存先。空なら `%USERPROFILE%\Pictures\Shots` |
 | `hotkey` | `"Ctrl+Alt+S"` | 撮影ホットキー。`"PrintScreen"`, `"Ctrl+Shift+F12"` なども可 |
 | `hotkey_window` | `"Ctrl+Alt+W"` | 前面のウィンドウだけを撮るキー。`""` で無効 |
+| `hotkey_viewer` | `"Ctrl+Alt+V"` | 撮った一覧を開くキー。`""` で無効 |
 | `capture_area` | `"virtual"` | 既定の撮影範囲。`virtual` / `primary` / `cursor` / `window` / `monitor:2`。トレイメニューからも切り替わる（旧称 `active` は `cursor` として扱う） |
 | `png_compress_level` | `1` | 0〜9。1 は速度優先（1枚 0.5〜3MB） |
 | `beep` | `true` | 撮影時に短いビープ音を鳴らす |

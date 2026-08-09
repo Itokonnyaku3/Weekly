@@ -20,6 +20,8 @@ DEFAULTS: dict = {
     "hotkey": "Ctrl+Alt+S",
     # 前面のウィンドウだけを撮るホットキー。"" なら登録しない
     "hotkey_window": "Ctrl+Alt+W",
+    # 撮った一覧（編集ビュー）を開くホットキー。"" なら登録しない
+    "hotkey_viewer": "Ctrl+Alt+V",
     # 既定の撮影範囲。トレイメニューからも切り替えられる。
     #   "virtual"   全モニタをつないだ範囲
     #   "primary"   主モニタ

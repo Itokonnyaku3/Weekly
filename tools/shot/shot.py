@@ -85,6 +85,7 @@ class App:
         self.tray = Tray(
             hotkey=self.cfg["hotkey"],
             hotkey_window=self.cfg["hotkey_window"],
+            hotkey_viewer=self.cfg["hotkey_viewer"],
             on_capture=self.capture,
             on_viewer=self.open_viewer,
             on_folder=lambda: open_in_explorer(self.root),

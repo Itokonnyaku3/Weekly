@@ -15,7 +15,6 @@ import subprocess
 import time
 import webbrowser
 from ctypes import wintypes
-from pathlib import Path
 
 from winapi import (
     ENUMWINDOWSPROC,
@@ -101,12 +100,40 @@ def hwnd() -> int | None:
     return _hwnd
 
 
-def dock(h: int, width: int) -> None:
+DOCK_TOLERANCE = 4      # ぴったり同じにならないことがあるので少し許す
+DOCK_ATTEMPTS = 8
+DOCK_INTERVAL = 0.2
+
+
+def _rect_of(h: int) -> tuple[int, int, int, int] | None:
+    r = wintypes.RECT()
+    if not user32.GetWindowRect(h, ctypes.byref(r)):
+        return None
+    return r.left, r.top, r.right - r.left, r.bottom - r.top
+
+
+def dock(h: int, width: int) -> bool:
+    """画面右端に貼り付ける。落ち着くまで何度か押し直す。
+
+    ブラウザは起動のあと、前回のウィンドウ位置を自分で復元することがある。
+    一度 SetWindowPos しただけだと、その復元に上書きされて元の位置に戻ってしまう。
+    狙った位置に収まったのを確かめるまで繰り返す。
+    """
     ax, ay, aw, ah = work_area()
     w = min(width, aw)
-    user32.SetWindowPos(
-        h, HWND_TOP, ax + aw - w, ay, w, ah, SWP_NOZORDER | SWP_NOACTIVATE
-    )
+    target = (ax + aw - w, ay, w, ah)
+
+    for _ in range(DOCK_ATTEMPTS):
+        user32.SetWindowPos(
+            h, HWND_TOP, *target, SWP_NOZORDER | SWP_NOACTIVATE
+        )
+        time.sleep(DOCK_INTERVAL)
+        got = _rect_of(h)
+        if got is None:
+            return False
+        if all(abs(a - b) <= DOCK_TOLERANCE for a, b in zip(got, target)):
+            return True
+    return False
 
 
 def open_dock(port: int, width: int = 520) -> None:
