@@ -57,3 +57,13 @@ export function propsPatch(body, key, value){
   else props[key] = value;
   return { props: Object.keys(props).length ? props : undefined };
 }
+
+// 表のセルの文字を連結する（検索用）。矩形への正規化は不要なので、
+// daily.js の tableRows とは別に、ここでは取り出しだけ行う。
+export function tableCellText(body){
+  try {
+    const o = JSON.parse(body.content || '{}');
+    return (Array.isArray(o.rows) ? o.rows : []).flat()
+      .map(c => (c == null ? '' : String(c))).join(' ');
+  } catch { return ''; }
+}

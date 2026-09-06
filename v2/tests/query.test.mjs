@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {
   defaultGroup, toGroups,
-  keywordMatch, tagsMatch, projMatch, midMatch, prioMatch,
-  dueGroupMatch, doneGroupMatch,
+  keywordMatch, tagsMatch, projMatch, midMatch, prioMatch, kindMatch,
+  dueGroupMatch, doneGroupMatch, searchableText,
   matchGroup, matchQuery,
   groupToFlatQuery, flatQueryToGroup,
 } from '../src/query.js';
@@ -21,6 +21,7 @@ const b = (o) => Object.assign({ kind:'task', content:'', proj:undefined, due:''
   assert.deepEqual(g.due, { mode:'any', from:null, to:null });
   assert.deepEqual(g.done, { mode:'any', from:null, to:null });
   assert.equal(g.prio, 'all');
+  assert.equal(g.kind, 'all', '種類の既定は「すべて」（既存の保存検索・リストの挙動を変えない）');
 }
 
 // 呼ぶたびに別オブジェクト（状態共有バグ防止）
@@ -111,6 +112,47 @@ assert.equal(prioMatch(1, '3'), false);
 assert.equal(prioMatch(undefined, '0'), true, 'prio未設定は0扱い');
 assert.equal(prioMatch(undefined, '3'), false);
 assert.equal(prioMatch(0, '0'), true);
+
+// --- kindMatch -----------------------------------------------------------
+
+assert.equal(kindMatch('memo', 'all'), true, 'all は条件なし');
+assert.equal(kindMatch('memo', undefined), true, '未指定は条件なし（既存クエリの後方互換）');
+assert.equal(kindMatch('memo', ''), true, '空文字も条件なし');
+assert.equal(kindMatch('image', 'image'), true);
+assert.equal(kindMatch('memo', 'image'), false);
+assert.equal(kindMatch(undefined, 'image'), false, 'kind未設定は特定種類には非該当');
+
+// --- searchableText -----------------------------------------------------------
+
+assert.equal(searchableText({ kind:'memo', content:'議事メモ' }), '議事メモ', 'memoは本文そのまま');
+assert.equal(searchableText({ kind:'task', content:'見積対応' }), '見積対応', 'taskは本文そのまま');
+assert.equal(searchableText({ kind:'memo' }), '', 'content未設定でも空文字（例外なし）');
+assert.equal(searchableText(null), '', 'bodyがnullでも空文字');
+assert.equal(searchableText(undefined), '', 'bodyがundefinedでも空文字');
+
+// image: 本文はリポジトリ内パスなので照合対象にしない（「img」「2026」で全画像が誤ヒットするのを防ぐ）
+assert.equal(searchableText({ kind:'image', content:'v2-data/img/img_1782356143821.png' }), '', '画像は空');
+// OCR の差し込み口: body.ocr があればそれを返す（本仕様では書き込まない）
+assert.equal(
+  searchableText({ kind:'image', content:'v2-data/img/img_1.png', ocr:'HACCP追加改修 稟議' }),
+  'HACCP追加改修 稟議', '画像はOCRがあればそれを返す'
+);
+
+// table: セルの文字を連結
+assert.equal(
+  searchableText({ kind:'table', content:'{"rows":[["HACCP追加改修","富士通3,500,000"],["備考",""]]}' }),
+  'HACCP追加改修 富士通3,500,000 備考 ', '表はセルを空白区切りで連結'
+);
+assert.equal(searchableText({ kind:'table', content:'{}' }), '', 'rowsが無い表は空');
+assert.equal(searchableText({ kind:'table', content:'{"rows":[]}' }), '', '空のrowsは空');
+assert.equal(
+  searchableText({ kind:'table', content:'{"rows":[[null,1,"x"]]}' }),
+  ' 1 x', 'null/数値のセルも例外なく文字列化'
+);
+// 壊れた JSON でも例外を投げず空文字（保存データが壊れていても検索が落ちない）
+assert.equal(searchableText({ kind:'table', content:'{"rows":[[' }), '', '壊れたJSONは空文字');
+assert.equal(searchableText({ kind:'table', content:'これはJSONではない' }), '', 'JSONでない文字列も空文字');
+assert.equal(searchableText({ kind:'table' }), '', 'content未設定の表も空文字');
 
 // --- dueGroupMatch (today基準) -----------------------------------------------------------
 
@@ -222,6 +264,69 @@ assert.equal(
   // body null
   assert.equal(matchQuery(null, query, today), false, 'bodyがnullならfalse');
   assert.equal(matchQuery(undefined, query, today), false);
+}
+
+// --- matchGroup（種類ごとの照合対象） -----------------------------------------------------------
+
+{
+  const table = b({ kind:'table', content:'{"rows":[["HACCP追加改修","富士通3,500,000"]]}' });
+  const image = b({ kind:'image', content:'v2-data/img/img_1782356143821.png' });
+  const ocr   = b({ kind:'image', content:'v2-data/img/img_1782356143821.png', ocr:'HACCP追加改修の稟議 #請求処理' });
+
+  // 表はセルの文字でキーワード一致する
+  assert.equal(matchGroup(table, { keyword:'HACCP追加改修' }, today), true, '表はセルの文字で引ける');
+  assert.equal(matchGroup(table, { keyword:'富士通' }, today), true);
+  assert.equal(matchGroup(table, { keyword:'rows' }, today), false, 'JSONのキーには誤ヒットしない');
+
+  // 画像は content（パス）に誤ヒットしない
+  assert.equal(matchGroup(image, { keyword:'img' }, today), false, '画像はパスに誤ヒットしない');
+  assert.equal(matchGroup(image, { keyword:'png' }, today), false);
+  assert.equal(matchGroup(image, { keyword:'v2-data' }, today), false);
+  assert.equal(matchGroup(image, {}, today), true, '条件なしなら画像も一致する');
+
+  // OCR を入れた画像はキーワード／タグで一致する（差し込み口が機能すること）
+  assert.equal(matchGroup(ocr, { keyword:'HACCP追加改修' }, today), true, 'OCRがあればキーワードで引ける');
+  assert.equal(matchGroup(ocr, { tags:['請求処理'] }, today), true, 'OCR内の#タグも照合対象');
+  assert.equal(matchGroup(image, { tags:['請求処理'] }, today), false, 'OCRなしの画像はタグで引けない');
+
+  // 壊れた JSON の表でも例外を投げない
+  const broken = b({ kind:'table', content:'{"rows":[[' });
+  assert.equal(matchGroup(broken, { keyword:'HACCP' }, today), false, '壊れた表は非該当（例外なし）');
+  assert.equal(matchGroup(broken, {}, today), true, '壊れた表も条件なしなら一致');
+}
+
+// --- matchQuery（kind 条件） -----------------------------------------------------------
+
+{
+  const memo  = b({ kind:'memo',  content:'議事メモ' });
+  const task  = b({ kind:'task',  content:'見積対応' });
+  const image = b({ kind:'image', content:'v2-data/img/img_1.png' });
+  const table = b({ kind:'table', content:'{"rows":[["HACCP追加改修"]]}' });
+  const all = [memo, task, image, table];
+
+  // kind:'all' は全種類に一致（既定値の後方互換）
+  for (const x of all) assert.equal(matchQuery(x, { kind:'all' }, today), true, 'kind:all は ' + x.kind + ' に一致');
+  // kind 未指定の既存クエリも全種類に一致（デグレ検出）
+  for (const x of all) assert.equal(matchQuery(x, {}, today), true, 'kind未指定は ' + x.kind + ' に一致');
+  for (const x of all) assert.equal(matchQuery(x, null, today), true, 'query null は ' + x.kind + ' に一致');
+
+  // kind:'image' は画像だけ
+  assert.equal(matchQuery(image, { kind:'image' }, today), true);
+  assert.equal(matchQuery(memo,  { kind:'image' }, today), false);
+  assert.equal(matchQuery(task,  { kind:'image' }, today), false);
+  assert.equal(matchQuery(table, { kind:'image' }, today), false);
+
+  // kind:'table' は表だけ
+  assert.equal(matchQuery(table, { kind:'table' }, today), true);
+  assert.equal(matchQuery(memo,  { kind:'table' }, today), false);
+
+  // kind と他条件は AND
+  assert.equal(matchQuery(table, { kind:'table', keyword:'HACCP追加改修' }, today), true);
+  assert.equal(matchQuery(table, { kind:'table', keyword:'zzz' }, today), false);
+
+  // opts.kinds（表ビュー側の絞り込み）と併用しても壊れない
+  assert.equal(matchQuery(task, { kind:'all' }, today, { kinds:['task'] }), true);
+  assert.equal(matchQuery(image, { kind:'all' }, today, { kinds:['task'] }), false);
 }
 
 // --- groupToFlatQuery -----------------------------------------------------------
