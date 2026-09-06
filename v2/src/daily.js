@@ -777,7 +777,9 @@ function crumbSep(){ const s = document.createElement('span'); s.className = 'cr
 function dailyZoomHandlers(store, requestRender){
   return {
     onZoomIn: (refId) => zoomIn(store, refId, requestRender),
-    onZoomOut: (refId, pos) => { zoomOut(store); requestRender(); focusCard(refId, pos); },
+    // 出た先のフォーカスは「いま出てきたノード自身」に置く。編集中だったカード(refId)へ
+    // 戻すと、そのカードは畳まれた親の中なので描画されず、位置が引きずられて見える。
+    onZoomOut: (refId, pos) => { const from = _focusRef; zoomOut(store); requestRender(); focusCard(from || refId, -1); },
   };
 }
 function renderZoomed(store, mount, requestRender, fref, fbody){

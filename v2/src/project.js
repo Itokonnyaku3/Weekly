@@ -141,7 +141,8 @@ function projZoomHandlers(store, requestRender, projState, pageRootId, mount){
       const cur = store.getRef(curRoot);
       const parent = cur && cur.parentRefId ? store.getRef(cur.parentRefId) : null;
       projState.rootRef = parent ? parent.id : pageRootId;
-      requestRender(); focusCard(refId, pos);
+      // PJルート→一覧の分岐と揃えて、出た先では「出てきたノード自身」にフォーカスする
+      requestRender(); focusCard(curRoot, -1);
     },
   };
 }
