@@ -1009,10 +1009,10 @@ function onKey(e, store, ref, body, requestRender){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
     if (store.childRefs(ref.id).length && !confirm('子を含めて削除しますか？')) return;
-    store.deleteRef(ref.id);
+    if (!deleteCard(store, ref.id, currentScope())) return;   // ページの見出し自体は消さない
     requestRender();
     const target = flat[idx - 1] || flat[idx + 1];
-    if (target) focusCard(target, -1);
+    if (target && store.getRef(target)) focusCard(target, -1);
     return;
   }
   if (e.key === 'Backspace' && pos === 0 && window.getSelection().isCollapsed){
@@ -1030,15 +1030,9 @@ function onKey(e, store, ref, body, requestRender){
     e.preventDefault();                              // 兄弟内で上下に並べ替え
     const _mr = el.closest && el.closest('.card-row');
     if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行は移動しない（見えない実兄弟を動かさない）
-    const sibs = store.siblings(ref.id);
-    const i = sibs.findIndex(x => x.id === ref.id);
-    const j = e.key === 'ArrowUp' ? i - 1 : i + 1;
-    if (j < 0 || j >= sibs.length) return;
-    const oi = sibs[i].order, oj = sibs[j].order;   // 入れ替え前に値を退避（更新で参照が変わるため）
-    store.updateRef(sibs[i].id, { order: oj });
-    store.updateRef(sibs[j].id, { order: oi });
-    requestRender();
-    focusCard(ref.id, pos);
+    if (moveSibling(store, ref.id, e.key === 'ArrowUp' ? -1 : 1, currentScope())){
+      requestRender(); focusCard(ref.id, pos);
+    }
     return;
   }
   // ←→ がリンク(@チップ/検索チップ)をまたいで一気に飛び越えてしまう問題: またぐ直前でリンクへフォーカスを止める。
@@ -1247,11 +1241,10 @@ function onBlockKey(e, store, ref, requestRender){
     e.preventDefault();
     const _mr = e.currentTarget.closest && e.currentTarget.closest('.card-row');
     if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行（ブロック）は移動しない
-    const sibs = store.siblings(ref.id); const i = sibs.findIndex(x => x.id === ref.id);
-    const j = e.key === 'ArrowUp' ? i - 1 : i + 1; if (j < 0 || j >= sibs.length) return;
-    const oi = sibs[i].order, oj = sibs[j].order;
-    store.updateRef(sibs[i].id, { order: oj }); store.updateRef(sibs[j].id, { order: oi });
-    requestRender(); focusCard(ref.id); return;
+    if (moveSibling(store, ref.id, e.key === 'ArrowUp' ? -1 : 1, currentScope())){
+      requestRender(); focusCard(ref.id);
+    }
+    return;
   }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, 0); return; }
   if (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){   // 行メニュー（表/画像は削除のみ）
