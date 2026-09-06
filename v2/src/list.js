@@ -12,6 +12,34 @@ const { projColor } = await import('./colors.js' + _q);   // プロジェクト�
 const { todayStr, dateOf } = await import('./time.js' + _q);   // 「今日」「作成日」は日本時間（UTC+9）基準
 export { dueGroupMatch, projMatch };   // 既存テスト・search.js からの参照互換のため再エクスポート（実体は query.js）
 
+// ── ポップオーバー（details.pop-close）を外側クリックと Esc で閉じる ──
+// Esc のリスナを details 自身に付けると、フォーカスがポップオーバーの外へ出た時点で
+// 届かなくなり閉じられなくなる（実際にそうなっていた）。daily.js の行メニューと同じく
+// document の capture で拾う。閉じると各 details の toggle リスナが state を更新するので、
+// ここでは open だけを触る。再描画で DOM が作り直されても効くよう対象は class で引く。
+let _popWatchOn = false;
+function ensurePopoverWatch(){
+  if (_popWatchOn) return;
+  _popWatchOn = true;
+  const closeOpen = (except) => {
+    let last = null;
+    for (const d of document.querySelectorAll('details.pop-close[open]')){
+      if (except && d.contains(except)) continue;   // 自分の中の操作では閉じない
+      d.open = false; last = d;
+    }
+    return last;
+  };
+  document.addEventListener('mousedown', (e) => closeOpen(e.target));
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const closed = closeOpen(null);
+    if (!closed) return;                            // 開いていなければ他の Esc 処理を妨げない
+    e.preventDefault();
+    const sum = closed.querySelector('summary');
+    if (sum) sum.focus();                           // 閉じたら歯車へフォーカスを戻す
+  }, true);
+}
+
 // ── 純ロジック（テスト対象）──
 // 指定PJ（body.proj===projId）のタスクの中項目を重複排除・ソートして返す。projId 空＝未所属タスクの中項目。
 export function midsForProject(store, projId){
@@ -578,10 +606,10 @@ function buildQuickViews(store, requestRender, state){
 }
 // スロットへの割り当てUI（各スロット＝保存ビューのプルダウン）。歯車で開閉。
 function buildQuickAssign(store, requestRender, state, slots, views){
-  const det = document.createElement('details'); det.className = 'quick-assign';
+  const det = document.createElement('details'); det.className = 'quick-assign pop-close';
   det.open = !!state._qaOpen;
   det.addEventListener('toggle', () => { state._qaOpen = det.open; });
-  det.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ e.preventDefault(); det.open = false; state._qaOpen = false; const s = det.querySelector('summary'); if (s) s.focus(); } });
+  ensurePopoverWatch();   // 外側クリック / Esc で閉じる（フォーカス位置に依らない）
   const sum = document.createElement('summary'); sum.className = 'quick-assign-sum'; sum.textContent = '⚙'; sum.title = 'ボタンに保存ビューを割り当て';
   det.appendChild(sum);
   const box = document.createElement('div'); box.className = 'quick-assign-box';
@@ -606,10 +634,10 @@ function buildQuickAssign(store, requestRender, state, slots, views){
 // ── プロジェクト管理（作成・改名・削除）──
 function buildProjectManager(store, requestRender, state){
   const det = document.createElement('details');
-  det.className = 'proj-manager';
+  det.className = 'proj-manager pop-close';
   det.open = !!state._pmOpen;
   det.addEventListener('toggle', () => { state._pmOpen = det.open; });
-  det.addEventListener('keydown', (e) => { if (e.key === 'Escape'){ e.preventDefault(); det.open = false; state._pmOpen = false; const su = det.querySelector('summary'); if (su) su.focus(); } });   // Esc で閉じる
+  ensurePopoverWatch();   // 外側クリック / Esc で閉じる（フォーカス位置に依らない）
   const sum = document.createElement('summary');
   sum.textContent = 'プロジェクト ▾';
   det.appendChild(sum);
@@ -805,9 +833,10 @@ function buildControls(store, requestRender, state, shown, total){
 }
 function buildColumnPicker(state, touch){
   const det = document.createElement('details');
-  det.className = 'col-picker';
+  det.className = 'col-picker pop-close';
   det.open = !!state._colOpen;
   det.addEventListener('toggle', () => { state._colOpen = det.open; });
+  ensurePopoverWatch();   // 外側クリック / Esc で閉じる（フォーカス位置に依らない）
   const sum = document.createElement('summary');
   sum.textContent = '列 ▾';
   det.appendChild(sum);
