@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createStore } from '../src/store.js';
 import { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard,
-         inScope, wouldEscape, dayRefIdOf } from '../src/outline-ops.js';
+         inScope, wouldEscape, dayRefIdOf, deletableRoots } from '../src/outline-ops.js';
 
 // ツリー:  day(2026-09-06) > P > A > A1
 //                          > Q
@@ -178,6 +178,29 @@ const parentOf = (s, r) => s.getRef(r).parentRefId;
   assert.equal(deleteCard(s, A.ref.id, zoom), true);
   assert.equal(s.getRef(A.ref.id), undefined, 'A が消える');
   assert.equal(s.getRef(A1.ref.id), undefined, '子 A1 も連鎖削除される');
+}
+
+// ── 複数選択の削除: 境界のルートが混ざっていても消さない ────
+// ズーム中は visibleFlat の先頭がルート自身なので、Shift+↑ でルートまで
+// 選択できてしまう。その状態の Delete でページごと消えないようにする。
+{
+  const { s, P, A, A1, Q } = fixture();
+  const zoom = { rootRef: P.ref.id };
+  // ルートが混ざっていても、ルートは削除対象に入らない
+  assert.deepEqual(deletableRoots(s, [P.ref.id, A.ref.id], zoom), [A.ref.id],
+                   'ズームのルートは除外される');
+  // 親と子孫が両方選ばれていたら親だけ（deleteRef が子を連鎖削除するため）
+  assert.deepEqual(deletableRoots(s, [A.ref.id, A1.ref.id], zoom), [A.ref.id],
+                   '子孫は除外され親だけ残る');
+  // 全日表示では day カード自身が除外される
+  assert.deepEqual(deletableRoots(s, [P.ref.id, Q.ref.id], ALLDAYS), [P.ref.id, Q.ref.id],
+                   '日の中のカードはどちらも対象');
+}
+{
+  const { s, day, P } = fixture();
+  assert.deepEqual(deletableRoots(s, [day.ref.id, P.ref.id], ALLDAYS), [P.ref.id],
+                   '全日表示では day カード自身が除外される');
+  assert.deepEqual(deletableRoots(s, [], { rootRef: null }), [], '空なら空');
 }
 
 console.log('PASS outline.ops');

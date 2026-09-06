@@ -9,7 +9,7 @@
 const _q = new URL(import.meta.url).search;
 const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
 const { projColor } = await import('./colors.js' + _q); // PJバッジの色（リスト・週次と同じ色を使う）
-const { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard } = await import('./outline-ops.js' + _q);
+const { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard, deletableRoots } = await import('./outline-ops.js' + _q);
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
@@ -1450,13 +1450,14 @@ export function clearSelection(){
 // 選択中カードを削除（子孫を含む「根」だけ削除・複数/子持ちは確認）。Delete/Backspace から呼ぶ。
 function deleteSelection(store, requestRender){
   const sel = [..._sel]; if (!sel.length) return;
-  const set = new Set(sel);
-  const roots = sel.filter(id => { let p = store.getRef(id)?.parentRefId; while (p){ if (set.has(p)) return false; p = store.getRef(p)?.parentRefId; } return true; });
+  const scope = currentScope();
+  const roots = deletableRoots(store, sel, scope);   // ページの見出し自体は選択に混ざっていても消さない
+  if (!roots.length){ clearSelection(); applySelStyles(); return; }
   const hasKids = roots.some(id => store.childRefs(id).length);
   if ((roots.length > 1 || hasKids) && !confirm(`${roots.length}件のカード${hasKids ? '（子を含む）' : ''}を削除しますか？`)) return;
   const flat = visibleFlat(store);
   const firstIdx = Math.min(...roots.map(id => flat.indexOf(id)).filter(i => i >= 0));
-  for (const id of roots) store.deleteRef(id);
+  for (const id of roots) deleteCard(store, id, scope);
   clearSelection();
   requestRender();
   const t = flat[firstIdx - 1];

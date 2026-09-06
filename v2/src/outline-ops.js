@@ -147,6 +147,23 @@ export function mergeCard(store, refId, targetRefId, text, scope){
   return { focusRefId: targetRefId, focusPos: mergePos };
 }
 
+// 選択されたカード群のうち、実際に削除すべきルートだけを返す。
+// ・子孫が同時に選ばれていれば親だけ（deleteRef が子を連鎖削除するため）
+// ・境界のルート（ズームの rootRef / 全日表示の day カード）は除外する
+//   ズーム中は visibleFlat の先頭がルート自身なので Shift+↑ で選択できてしまう
+export function deletableRoots(store, refIds, scope){
+  // 先に境界外（ルート自身）を除いてから親子デデュープする。順序を逆にすると、
+  // 「ルートとその子」が両方選ばれたとき、ルートは削除されないのに子まで
+  // 「ルートの子だから」という理由で誤って除外されてしまう。
+  const inside = refIds.filter(id => inScope(store, id, scope, { strict:true }));
+  const set = new Set(inside);
+  return inside.filter(id => {
+    let p = store.getRef(id)?.parentRefId;
+    while (p){ if (set.has(p)) return false; p = store.getRef(p)?.parentRefId; }
+    return true;
+  });
+}
+
 // Ctrl+Shift+Backspace: 子ごと削除する
 export function deleteCard(store, refId, scope){
   if (!refId || isRoot(refId, scope)) return false;
