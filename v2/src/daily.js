@@ -9,6 +9,7 @@
 const _q = new URL(import.meta.url).search;
 const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
 const { projColor } = await import('./colors.js' + _q); // PJバッジの色（リスト・週次と同じ色を使う）
+const { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard, deletableRoots } = await import('./outline-ops.js' + _q);
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
@@ -792,6 +793,32 @@ function renderZoomed(store, mount, requestRender, fref, fbody){
   }
   renderOutlinePage(store, mount, requestRender, fref, fbody, { crumb, ...dailyZoomHandlers(store, requestRender) });
 }
+// ── ズーム/PJページのタイトル行 ──────────────────────────────────
+// タイトルはカードではなくページの見出しなので、構造を変えるキーは受け付けない。
+// 以前はここに onKey をそのまま繋いでいたため、Enter で見出しの前半が
+// 可視範囲の外へ飛んだり、Ctrl+Shift+Backspace で開いているページごと消えたりした。
+// 許可するキーはこの配列だけ。増やすときは1行足す。
+const TITLE_ALLOWED = [
+  (e) => e.altKey && !e.shiftKey && e.key === 'ArrowUp',                            // ズームを出る
+  (e) => (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key === '/',     // 日付挿入
+  (e) => e.key === '@' && !e.ctrlKey && !e.metaKey,                                 // メンション
+  (e) => e.key === '#' && !e.ctrlKey && !e.metaKey && !e.altKey,                    // タグ
+  (e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown')
+         && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey,                   // 子カードとの往復
+  (e) => (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
+         && !e.altKey && !e.ctrlKey && !e.metaKey,                                  // メンションチップの前後
+  (e) => e.key === 'Escape',
+];
+export function isTitleAllowedKey(e){ return TITLE_ALLOWED.some(fn => fn(e)); }
+
+function onTitleKey(e, store, ref, body, requestRender){
+  if (e.isComposing || e.keyCode === 229) return;      // IME変換中は素通り（変換確定の Enter を奪わない）
+  if (isTitleAllowedKey(e)){ onKey(e, store, ref, body, requestRender); return; }
+  if (e.key === 'Enter' || e.key === 'Tab') e.preventDefault();   // 改行・フォーカス移動の既定動作も抑止
+  // それ以外（文字入力、Backspace/Delete による文字削除）はブラウザ既定に任せる。
+  // input リスナが本体へ保存する。
+}
+
 // 1つのルート参照を「ページ」として描画（デイリーのズーム／プロジェクトノートで共用）。
 // opts: { crumb:[{label,onClick}], inheritProj, onZoomIn(refId), onZoomOut(refId,pos) }
 export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts){
@@ -812,7 +839,7 @@ export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts
   tt.className = 'card-txt zoom-title-txt'; tt.contentEditable = 'true'; tt.spellcheck = false;
   tt.dataset.ref = fref.id; tt.textContent = fbody.content || '';
   tt.addEventListener('input', () => store.updateBody(fbody.id, { content: tt.textContent }));
-  tt.addEventListener('keydown', (e) => onKey(e, store, fref, fbody, requestRender));   // タイトルからも Alt+↑ で出る等
+  tt.addEventListener('keydown', (e) => onTitleKey(e, store, fref, fbody, requestRender));   // 見出しは構造を変えない
   title.appendChild(tt);
   mount.appendChild(title);
 
@@ -982,24 +1009,8 @@ function onKey(e, store, ref, body, requestRender){
   }
   if (e.key === 'Enter'){
     e.preventDefault();
-    const prefix = text.slice(0, pos), suffix = text.slice(pos);
-    if (!suffix){                                          // 行末: 従来どおり下に空ノードを作りそこへ（新規入力の継続）
-      store.updateBody(body.id, { content: prefix });
-      const created = store.createCard({
-        kind: body.kind, content: '', proj: body.proj,
-        parentRefId: ref.parentRefId, order: store.orderAfter(ref.id),
-      });
-      requestRender();
-      focusCard(created.ref.id, 0);
-    } else {                                               // 行頭/行中: カーソル前で新ノードを直前に作り、カーソル以降＋リンク/子は元ノードに残して下へ（Workflowy風）
-      store.updateBody(body.id, { content: suffix });
-      store.createCard({
-        kind: body.kind, content: prefix, proj: body.proj, mid: body.mid,
-        parentRefId: ref.parentRefId, order: store.orderBefore(ref.id),
-      });
-      requestRender();
-      focusCard(ref.id, 0);
-    }
+    const r = splitCard(store, ref.id, pos, text, currentScope());
+    if (r){ requestRender(); focusCard(r.focusRefId, r.focusPos); }
     return;
   }
   if (e.key === 'Tab'){
@@ -1013,19 +1024,9 @@ function onKey(e, store, ref, body, requestRender){
     if (e.shiftKey && _ctx.container && ref.parentRefId &&                // ルート直下の子はアウトデントでルート同階層へ出さない
         _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)){ e.preventDefault(); return; }
     e.preventDefault();
-    if (ref.id === _ctx.rootRef) return;   // ズーム/ページのタイトル（ルート）はインデント・アウトデントしない
-    if (e.shiftKey){
-      const parentRef = store.getRef(ref.parentRefId);
-      if (!parentRef) return;
-      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
-      store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
-    } else {
-      const prev = store.prevSiblingRef(ref.id);
-      if (!prev) return;
-      store.updateRef(ref.id, { parentRefId: prev.id, order: store.endOrder(prev.id) });
-    }
-    requestRender();
-    focusCard(ref.id, pos);
+    const ok = e.shiftKey ? outdent(store, ref.id, currentScope())
+                          : indent(store, ref.id, currentScope());
+    if (ok){ requestRender(); focusCard(ref.id, pos); }
     return;
   }
   // Workflowy: 削除（Ctrl/⌘+Shift+Backspace）
@@ -1034,43 +1035,30 @@ function onKey(e, store, ref, body, requestRender){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
     if (store.childRefs(ref.id).length && !confirm('子を含めて削除しますか？')) return;
-    store.deleteRef(ref.id);
+    if (!deleteCard(store, ref.id, currentScope())) return;   // ページの見出し自体は消さない
     requestRender();
     const target = flat[idx - 1] || flat[idx + 1];
-    if (target) focusCard(target, -1);
+    if (target && store.getRef(target)) focusCard(target, -1);
     return;
   }
   if (e.key === 'Backspace' && pos === 0 && window.getSelection().isCollapsed){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
     if (idx <= 0) return;
-    const prevRefId = flat[idx - 1];
-    const prevBody = store.getBody(store.getRef(prevRefId).bodyId);
-    if (prevBody.kind === 'table' || prevBody.kind === 'image') return;   // 表/画像へは結合しない
+    const r = mergeCard(store, ref.id, flat[idx - 1], text, currentScope());
+    if (!r) return;                 // 境界越え・表/画像への結合は既定動作に任せる（何も起きない）
     e.preventDefault();
-    const mergePos = (prevBody.content || '').length;
-    store.updateBody(prevBody.id, { content: (prevBody.content || '') + text });
-    for (const child of store.childRefs(ref.id)){
-      store.updateRef(child.id, { parentRefId: prevRefId, order: store.endOrder(prevRefId) });
-    }
-    store.deleteRef(ref.id);
     requestRender();
-    focusCard(prevRefId, mergePos);
+    focusCard(r.focusRefId, r.focusPos);
     return;
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
     e.preventDefault();                              // 兄弟内で上下に並べ替え
     const _mr = el.closest && el.closest('.card-row');
     if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行は移動しない（見えない実兄弟を動かさない）
-    const sibs = store.siblings(ref.id);
-    const i = sibs.findIndex(x => x.id === ref.id);
-    const j = e.key === 'ArrowUp' ? i - 1 : i + 1;
-    if (j < 0 || j >= sibs.length) return;
-    const oi = sibs[i].order, oj = sibs[j].order;   // 入れ替え前に値を退避（更新で参照が変わるため）
-    store.updateRef(sibs[i].id, { order: oj });
-    store.updateRef(sibs[j].id, { order: oi });
-    requestRender();
-    focusCard(ref.id, pos);
+    if (moveSibling(store, ref.id, e.key === 'ArrowUp' ? -1 : 1, currentScope())){
+      requestRender(); focusCard(ref.id, pos);
+    }
     return;
   }
   // ←→ がリンク(@チップ/検索チップ)をまたいで一気に飛び越えてしまう問題: またぐ直前でリンクへフォーカスを止める。
@@ -1270,25 +1258,19 @@ function onBlockKey(e, store, ref, requestRender){
     if (_mr && _mr.dataset.mirrorRoot) return;   // ミラーのルート（ブロック）は構造を変えない
     if (e.shiftKey && _ctx.container && ref.parentRefId &&
         _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)) return;   // ルート直下は脱出させない
-    if (e.shiftKey){
-      const parentRef = store.getRef(ref.parentRefId); if (!parentRef) return;
-      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
-      store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
-    } else {
-      const prev = store.prevSiblingRef(ref.id); if (!prev) return;
-      store.updateRef(ref.id, { parentRefId: prev.id, order: store.endOrder(prev.id) });
-    }
-    requestRender(); focusCard(ref.id); return;
+    const ok = e.shiftKey ? outdent(store, ref.id, currentScope())
+                          : indent(store, ref.id, currentScope());
+    if (ok){ requestRender(); focusCard(ref.id); }
+    return;
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){   // 兄弟内で上下移動
     e.preventDefault();
     const _mr = e.currentTarget.closest && e.currentTarget.closest('.card-row');
     if (_mr && _mr.dataset.mirrorRoot) return;       // ミラーのタイトル行（ブロック）は移動しない
-    const sibs = store.siblings(ref.id); const i = sibs.findIndex(x => x.id === ref.id);
-    const j = e.key === 'ArrowUp' ? i - 1 : i + 1; if (j < 0 || j >= sibs.length) return;
-    const oi = sibs[i].order, oj = sibs[j].order;
-    store.updateRef(sibs[i].id, { order: oj }); store.updateRef(sibs[j].id, { order: oi });
-    requestRender(); focusCard(ref.id); return;
+    if (moveSibling(store, ref.id, e.key === 'ArrowUp' ? -1 : 1, currentScope())){
+      requestRender(); focusCard(ref.id);
+    }
+    return;
   }
   if (e.altKey && !e.shiftKey && e.key === 'ArrowUp'){ e.preventDefault(); if (_ctx.onZoomOut) _ctx.onZoomOut(ref.id, 0); return; }
   if (e.key === 'Enter' && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey){   // 行メニュー（表/画像は削除のみ）
@@ -1494,13 +1476,14 @@ export function clearSelection(){
 // 選択中カードを削除（子孫を含む「根」だけ削除・複数/子持ちは確認）。Delete/Backspace から呼ぶ。
 function deleteSelection(store, requestRender){
   const sel = [..._sel]; if (!sel.length) return;
-  const set = new Set(sel);
-  const roots = sel.filter(id => { let p = store.getRef(id)?.parentRefId; while (p){ if (set.has(p)) return false; p = store.getRef(p)?.parentRefId; } return true; });
+  const scope = currentScope();
+  const roots = deletableRoots(store, sel, scope);   // ページの見出し自体は選択に混ざっていても消さない
+  if (!roots.length){ clearSelection(); applySelStyles(); return; }
   const hasKids = roots.some(id => store.childRefs(id).length);
   if ((roots.length > 1 || hasKids) && !confirm(`${roots.length}件のカード${hasKids ? '（子を含む）' : ''}を削除しますか？`)) return;
   const flat = visibleFlat(store);
   const firstIdx = Math.min(...roots.map(id => flat.indexOf(id)).filter(i => i >= 0));
-  for (const id of roots) store.deleteRef(id);
+  for (const id of roots) deleteCard(store, id, scope);
   clearSelection();
   requestRender();
   const t = flat[firstIdx - 1];
@@ -1531,6 +1514,8 @@ function shiftClickSelect(store, refId){
   rebuildSelRange(store);
   applySelStyles();
 }
+// 現在の可視範囲。ズーム/PJページなら rootRef、全日表示なら null（境界は day）
+function currentScope(){ return { rootRef: _ctx.rootRef || null }; }
 function visibleFlat(store){
   const out = [];
   const walk = (refId) => { for (const r of store.childRefs(refId)){ if (isHiddenByDone(store, r, store.getBody(r.bodyId))) continue; out.push(r.id); if (!r.collapsed) walk(r.id); } };
