@@ -793,6 +793,32 @@ function renderZoomed(store, mount, requestRender, fref, fbody){
   }
   renderOutlinePage(store, mount, requestRender, fref, fbody, { crumb, ...dailyZoomHandlers(store, requestRender) });
 }
+// ── ズーム/PJページのタイトル行 ──────────────────────────────────
+// タイトルはカードではなくページの見出しなので、構造を変えるキーは受け付けない。
+// 以前はここに onKey をそのまま繋いでいたため、Enter で見出しの前半が
+// 可視範囲の外へ飛んだり、Ctrl+Shift+Backspace で開いているページごと消えたりした。
+// 許可するキーはこの配列だけ。増やすときは1行足す。
+const TITLE_ALLOWED = [
+  (e) => e.altKey && !e.shiftKey && e.key === 'ArrowUp',                            // ズームを出る
+  (e) => (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key === '/',     // 日付挿入
+  (e) => e.key === '@' && !e.ctrlKey && !e.metaKey,                                 // メンション
+  (e) => e.key === '#' && !e.ctrlKey && !e.metaKey && !e.altKey,                    // タグ
+  (e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown')
+         && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey,                   // 子カードとの往復
+  (e) => (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
+         && !e.altKey && !e.ctrlKey && !e.metaKey,                                  // メンションチップの前後
+  (e) => e.key === 'Escape',
+];
+export function isTitleAllowedKey(e){ return TITLE_ALLOWED.some(fn => fn(e)); }
+
+function onTitleKey(e, store, ref, body, requestRender){
+  if (e.isComposing || e.keyCode === 229) return;      // IME変換中は素通り（変換確定の Enter を奪わない）
+  if (isTitleAllowedKey(e)){ onKey(e, store, ref, body, requestRender); return; }
+  if (e.key === 'Enter' || e.key === 'Tab') e.preventDefault();   // 改行・フォーカス移動の既定動作も抑止
+  // それ以外（文字入力、Backspace/Delete による文字削除）はブラウザ既定に任せる。
+  // input リスナが本体へ保存する。
+}
+
 // 1つのルート参照を「ページ」として描画（デイリーのズーム／プロジェクトノートで共用）。
 // opts: { crumb:[{label,onClick}], inheritProj, onZoomIn(refId), onZoomOut(refId,pos) }
 export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts){
@@ -813,7 +839,7 @@ export function renderOutlinePage(store, mount, requestRender, fref, fbody, opts
   tt.className = 'card-txt zoom-title-txt'; tt.contentEditable = 'true'; tt.spellcheck = false;
   tt.dataset.ref = fref.id; tt.textContent = fbody.content || '';
   tt.addEventListener('input', () => store.updateBody(fbody.id, { content: tt.textContent }));
-  tt.addEventListener('keydown', (e) => onKey(e, store, fref, fbody, requestRender));   // タイトルからも Alt+↑ で出る等
+  tt.addEventListener('keydown', (e) => onTitleKey(e, store, fref, fbody, requestRender));   // 見出しは構造を変えない
   title.appendChild(tt);
   mount.appendChild(title);
 
