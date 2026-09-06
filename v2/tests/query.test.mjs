@@ -21,7 +21,8 @@ const b = (o) => Object.assign({ kind:'task', content:'', proj:undefined, due:''
   assert.deepEqual(g.due, { mode:'any', from:null, to:null });
   assert.deepEqual(g.done, { mode:'any', from:null, to:null });
   assert.equal(g.prio, 'all');
-  assert.equal(g.kind, 'all', '種類の既定は「すべて」（既存の保存検索・リストの挙動を変えない）');
+  // kind はクエリ全体の条件でグループには属さない。リストのグループに余計な項目を持たせない。
+  assert.equal('kind' in g, false, 'kind はグループの項目ではない');
 }
 
 // 呼ぶたびに別オブジェクト（状態共有バグ防止）
@@ -412,3 +413,10 @@ assert.equal(
 }
 
 console.log('PASS query');
+
+// --- flatQueryToGroup は kind を落とす（表はタスク専用なので種類条件を持ち込まない）---
+{
+  const g = flatQueryToGroup({ keyword:'x', kind:'image' });
+  assert.equal('kind' in g, false, '種類はグループへ持ち込まない');
+  assert.equal(g.keyword, 'x', '他の条件は保たれる');
+}

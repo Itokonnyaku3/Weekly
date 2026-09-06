@@ -1,8 +1,9 @@
 // 絞り込み条件の照合を1本化（リスト＝表 と 検索＝アウトラインで共用）。
 // 条件モデル: group（グループ内AND）を groups 配列で持ち、グループ間はOR。
-//   group = { keyword, tags[], proj, mid, due, done, prio, kind }
-//   kind: 'all'（既定）| 'memo' | 'task' | 'image' | 'table'
+//   group = { keyword, tags[], proj, mid, due, done, prio }
 //   query = { groups:[group,…] } … 単一 group をそのまま渡してもよい（toGroups が吸収）
+// クエリ全体にかかる条件（グループごとではない）:
+//   query.kind: 'all'（既定・未指定も同じ）| 'memo' | 'task' | 'image' | 'table'
 // 表示（列/並べ替え/アウトライン）は各ビューの担当。ここは純ロジックのみ＝依存は props.js だけ（循環なし）。
 
 const _q = new URL(import.meta.url).search;
@@ -18,7 +19,6 @@ export function defaultGroup(){
     due:  { mode: 'any', from: null, to: null },
     done: { mode: 'any', from: null, to: null },
     prio: 'all',
-    kind: 'all',
   };
 }
 // キーワード/タグ照合に使うテキスト。「文言」の在りかは種類ごとに違う。
@@ -132,5 +132,8 @@ export function groupToFlatQuery(g){
   };
 }
 export function flatQueryToGroup(q){
-  return { ...defaultGroup(), ...(q || {}), mid: '' };
+  // kind はクエリ全体の条件でグループには属さない。表（リスト）はタスク専用なので
+  // 検索の「種類」は持ち込まず、mid と同じく落とす。
+  const { kind, ...rest } = q || {};
+  return { ...defaultGroup(), ...rest, mid: '' };
 }

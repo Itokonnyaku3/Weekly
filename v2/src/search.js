@@ -8,12 +8,12 @@ export { cardTags };                                     // 既存の利用元�
 // 検索の対象外: day と project は「器」なので結果に出さない。
 // 特に day を含めると、条件なし検索で全 day が最上位一致になり、
 // runQuery の祖先除外によって配下すべてが消える（＝検索が壊れる）。
-const SEARCHABLE = new Set(['memo', 'task', 'image', 'table']);
-// カードが query に AND で一致するか。対象は SEARCHABLE の種類のみ。
+// 種類の制限は query.js の opts.kinds に委ねる（同じ目的の仕組みを二重に持たない）。
+const SEARCHABLE_KINDS = ['memo', 'task', 'image', 'table'];
+// カードが query に AND で一致するか。対象は SEARCHABLE_KINDS のみ。
 // query は単一のフラット条件（= 1グループ）。グループ配列との差は query.js の toGroups が吸収する。
 export function matchCard(body, query, today){
-  if (!body || !SEARCHABLE.has(body.kind)) return false;
-  return matchQuery(body, query, today);
+  return matchQuery(body, query, today, { kinds: SEARCHABLE_KINDS });
 }
 // 一致カードのうち「祖先も一致するもの」は除外し、最上位の一致だけを {ref, body} で返す（ミラー重複除外）。
 export function runQuery(store, query, today){
