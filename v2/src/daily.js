@@ -295,6 +295,62 @@ function renderDaySection(store, day, requestRender, focusable, oldDefault, forc
   return sec;
 }
 
+// ── ミラー行の「元の場所」（パンくず）─────────────────────────────
+// 出所の日付は呼び出し側が見出しに出しているので、day より下の祖先だけを出す。
+// 日の直下のカードは祖先が無い＝何も付かないので、余計な表示が増えない。
+const PATH_MAX = 2;     // 行内に出す祖先の数。増やすと行が混む
+const SEG_CHARS = 18;   // 祖先1つあたりの文字数上限
+
+export function pathLabel(body){
+  if (!body) return '';
+  if (body.kind === 'image') return '画像';
+  if (body.kind === 'table') return '表';
+  const s = (body.content || '')
+    .replace(MENTION_RE, '')        // ⟦id⟧ のリンク記法は文脈として読めないので落とす
+    .replace(/【📅\d+】/g, '')      // Ctrl+/ で挿した日付マーカー
+    .replace(/#\S*/g, '')           // タグは文脈としては冗長（単独の # も落とす）
+    .replace(/\s+/g, ' ')
+    .replace(/[\s、。,.:：>＞›-]+$/, '')   // 末尾に残った区切りを落とす
+    .trim();
+  if (!s) return '(空)';
+  return s.length > SEG_CHARS ? s.slice(0, SEG_CHARS) + '…' : s;
+}
+// day より下の祖先を、日に近い順（＝上から）で返す。純ロジック（テスト対象）
+export function mirrorPath(store, refId){
+  const chain = [];
+  const first = store.getRef(refId);
+  let r = first && first.parentRefId ? store.getRef(first.parentRefId) : null;
+  while (r){
+    const b = store.getBody(r.bodyId);
+    if (!b || b.kind === 'day') break;
+    chain.unshift(b);
+    r = r.parentRefId ? store.getRef(r.parentRefId) : null;
+  }
+  return chain;
+}
+// 表示する区切りの並び。深いときは間を null（＝…）で省く。純ロジック（テスト対象）
+export function pathSegments(chain, max = PATH_MAX){
+  if (chain.length <= max) return chain.slice();
+  return [chain[0], null, chain[chain.length - 1]];
+}
+function appendMirrorPath(row, store, ref){
+  const chain = mirrorPath(store, ref.id);
+  if (!chain.length) return;
+  const wrap = document.createElement('span');
+  wrap.className = 'mirror-path';
+  wrap.title = '元の場所: ' + chain.map(pathLabel).join(' › ');
+  for (const [i, b] of pathSegments(chain).entries()){
+    if (i){ const s = document.createElement('span'); s.className = 'mp-sep'; s.textContent = '›'; wrap.appendChild(s); }
+    if (!b){ const e = document.createElement('span'); e.className = 'mp-sep'; e.textContent = '…'; wrap.appendChild(e); continue; }
+    const seg = document.createElement('span');
+    seg.className = 'mp-seg'; seg.textContent = pathLabel(b);
+    seg.addEventListener('mousedown', (e) => e.preventDefault());   // 編集中の caret を奪わない
+    seg.addEventListener('click', (e) => { e.stopPropagation(); if (_mentionJump) _mentionJump(b.id); });
+    wrap.appendChild(seg);
+  }
+  row.appendChild(wrap);
+}
+
 export function renderChildren(store, parentRefId, mountEl, depth, requestRender, opts){
   const refs = (opts && opts.refs) ? opts.refs : store.childRefs(parentRefId);   // 明示 ref 指定（ミラー集約）にも対応
   for (const ref of refs){
@@ -389,6 +445,10 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
       // 属性の小バッジ（設定済みのみ・控えめ表示）
       appendBadges(row, store, body);
     }
+
+    // ミラー行（検索結果・PJの割当カード・アジェンダ・週次）は元の場所の文脈が無いと
+    // 「何のことか分からない」。行内の文末へ控えめに添える＝行数が増えず並びを乱さない。
+    if (opts && opts.mirrorRoot) appendMirrorPath(row, store, ref);
 
     // ⋯ メニュー
     const menuBtn = document.createElement('button');

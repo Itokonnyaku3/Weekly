@@ -651,3 +651,11 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
   .list-table tbody tr.done-out-tr .title-chip::before,
   .card-row.fold-up{animation:none!important}
 }
+
+/* ミラー行の「元の場所」（検索結果・PJの割当カード・アジェンダ・週次）。
+   行を増やさずに文末へ添える＝並びの高さが変わらない。狭い幅では縮む。 */
+.mirror-path{flex:0 1 auto;min-width:0;display:inline-flex;align-items:baseline;gap:3px;
+  font-size:11px;line-height:1.9;color:var(--tx3);white-space:nowrap;overflow:hidden;opacity:.85}
+.mirror-path .mp-seg{cursor:pointer;overflow:hidden;text-overflow:ellipsis}
+.mirror-path .mp-seg:hover{color:var(--accent);text-decoration:underline}
+.mirror-path .mp-sep{opacity:.55;flex:none}
