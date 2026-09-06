@@ -10,6 +10,8 @@ const _q = new URL(import.meta.url).search;
 const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
 const { projColor } = await import('./colors.js' + _q); // PJバッジの色（リスト・週次と同じ色を使う）
 const { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard, deletableRoots } = await import('./outline-ops.js' + _q);
+const { playDoneOut, playFoldUp, descendantRows } = await import('./anim.js' + _q);   // 完了・折り畳みの演出（DOMのみ）
+const { showToast } = await import('./clipboard.js' + _q);   // 完了で行が消えたときの通知
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
@@ -82,6 +84,17 @@ function isHiddenByDone(store, ref, body){
   if (!_hideDone) return false;
   if (!body || body.kind !== 'task' || !body.done) return false;
   return !hasIncompleteDesc(store, ref.id);
+}
+// 完了の反映。完了非表示中に消える行だけ退場の演出を挟み、消えない行は即反映（従来どおり）。
+// 状態更新は必ず commit で行うので、演出が途中で止まっても完了は失われない。
+function commitDone(store, ref, body, nextDone, row, requestRender){
+  const vanishes = nextDone && isHiddenByDone(store, ref, { ...body, done: true });
+  const commit = () => {
+    store.updateBody(body.id, { done: nextDone });
+    requestRender();
+    if (vanishes) showToast('1件を完了にしました（Ctrl+Z で戻せます）');   // 前触れなく消えた印象を消す
+  };
+  if (vanishes && row) playDoneOut(row, commit); else commit();
 }
 // 外部（プロジェクトの割当カード集約など）から同じ判定を使うための公開版（完了非表示OFF時は常に false）。
 export function isDoneHidden(store, refId){
@@ -317,7 +330,12 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
       tog.innerHTML = CHEVRON_SVG;
       if (!ref.collapsed) tog.classList.add('expanded');   // 展開中は下向き
       tog.title = ref.collapsed ? '展開' : '折りたたみ';
-      tog.onclick = () => { store.updateRef(ref.id, { collapsed: !ref.collapsed }); requestRender(); };
+      // 折り畳むときは、いま出ている子孫行を上へ吸い込んでから畳む（畳んだことが分かるように）。
+      // 展開はそのまま（出てくる側は待たせない）。
+      tog.onclick = () => {
+        const apply = () => { store.updateRef(ref.id, { collapsed: !ref.collapsed }); requestRender(); };
+        if (ref.collapsed) apply(); else playFoldUp(descendantRows(row), apply);
+      };
     } else { tog.classList.add('leaf'); }
     row.appendChild(tog);
 
@@ -339,7 +357,7 @@ export function renderChildren(store, parentRefId, mountEl, depth, requestRender
       if (body.kind === 'task'){
         const cb = document.createElement('input');
         cb.type = 'checkbox'; cb.className = 'card-cb'; cb.checked = !!body.done;
-        cb.onchange = () => { store.updateBody(body.id, { done: cb.checked }); requestRender(); };
+        cb.onchange = () => commitDone(store, ref, body, cb.checked, row, requestRender);
         row.appendChild(cb);
       }
 
@@ -1002,8 +1020,11 @@ function onKey(e, store, ref, body, requestRender){
   // （完了の単純トグルはチェックボックスのクリックで可能）
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
     e.preventDefault();
-    if (body.kind !== 'task')   store.updateBody(body.id, { kind: 'task', done: false });
-    else if (!body.done)        store.updateBody(body.id, { done: true });
+    if (body.kind !== 'task'){  store.updateBody(body.id, { kind: 'task', done: false }); }
+    else if (!body.done){       // 未完 → 完了。完了非表示で消える行はここで演出が入る
+      commitDone(store, ref, body, true, el.closest('.card-row'), requestRender);
+      return;
+    }
     else                        store.updateBody(body.id, { kind: 'memo', done: false });
     requestRender();
     focusCard(ref.id, pos);

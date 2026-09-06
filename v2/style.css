@@ -595,3 +595,51 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
 }
+
+/* ── 完了・折り畳みの演出（src/anim.js が class を付ける）──────────────
+   時間はこの4つを変えれば全部に効く。「きびきび」= 120/60/160/140ms。
+   段は ①取り消し線 → ②そのまま見せる → ③ふわっと消える → ④下が詰まる。 */
+:root{
+  --t1:120ms; --t2:60ms; --t3:160ms; --t4:140ms;
+  --ease-out:cubic-bezier(.22,.61,.36,1);
+  --d3:calc(var(--t1) + var(--t2));                     /* ③の開始 */
+  --d4:calc(var(--t1) + var(--t2) + var(--t3));         /* ④の開始 */
+}
+@keyframes an-strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes an-mute{to{color:var(--tx3)}}
+@keyframes an-vanish{to{opacity:0;filter:blur(1.5px);transform:translateY(-3px)}}
+@keyframes an-squeeze{from{height:var(--done-h)}to{height:0;padding-top:0;padding-bottom:0}}
+@keyframes an-squeeze-cell{to{padding-top:0;padding-bottom:0;line-height:0;font-size:0}}
+@keyframes an-up{to{opacity:0;transform:translateY(-6px);height:0;padding-top:0;padding-bottom:0}}
+
+/* アウトラインのカード（.card-row は flex の div＝高さを補間できる） */
+.card-row.done-out{overflow:hidden;
+  animation:an-vanish var(--t3) var(--ease-out) var(--d3) both,
+            an-squeeze var(--t4) var(--ease-out) var(--d4) both}
+/* 取り消し線は text-decoration では動かせないので1pxの線を伸ばす。
+   .card-row>* が position:relative なので .card-txt を基準にできる */
+.card-row.done-out .card-txt{animation:an-mute var(--t1) var(--ease-out) both}
+.card-row.done-out .card-txt::before{content:"";position:absolute;left:0;top:.72em;
+  height:1px;width:100%;background:currentColor;opacity:.6;transform-origin:left;
+  animation:an-strike var(--t1) var(--ease-out) both}
+
+/* リストの表（tr は height を補間できないので、セルを潰して行高を詰める） */
+.list-table tbody tr.done-out-tr{animation:an-vanish var(--t3) var(--ease-out) var(--d3) both}
+.list-table tbody tr.done-out-tr>td{overflow:hidden;
+  animation:an-squeeze-cell var(--t4) var(--ease-out) var(--d4) both}
+.list-table tbody tr.done-out-tr .list-title,
+.list-table tbody tr.done-out-tr .title-chip{position:relative}
+.list-table tbody tr.done-out-tr .title-chip::before{content:"";position:absolute;left:0;top:.72em;
+  height:1px;width:100%;background:currentColor;opacity:.6;transform-origin:left;
+  animation:an-strike var(--t1) var(--ease-out) both}
+
+/* 折り畳み: 中身が上へ吸い込まれて消える（速め） */
+.card-row.fold-up{overflow:hidden;
+  animation:an-up var(--t4) var(--ease-out) both}
+
+@media (prefers-reduced-motion:reduce){
+  .card-row.done-out,.card-row.done-out .card-txt,.card-row.done-out .card-txt::before,
+  .list-table tbody tr.done-out-tr,.list-table tbody tr.done-out-tr>td,
+  .list-table tbody tr.done-out-tr .title-chip::before,
+  .card-row.fold-up{animation:none!important}
+}
