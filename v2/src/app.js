@@ -5,7 +5,8 @@ const { loadState, saveState } = await import('./persist.js' + _q);
 const { renderDaily, focusCard, resetZoom, clearDayFocus, setZoom, getZoom, getDayFocus, setDayFocus, revealDay, setMentionJump, setSavedSearchOpener, setImageLoader, clearSelection, serializeEditable, caretOffset, getHideDone, toggleHideDone, setAgendaJump } = await import('./daily.js' + _q);
 const { renderList, DEFAULT_COLUMNS } = await import('./list.js' + _q);
 const { renderProjectView } = await import('./project.js' + _q);
-const { renderSearchView } = await import('./search.js' + _q);
+const { renderTriageView, setTriageJump } = await import('./triage.js' + _q);   // 無タグの塊の棚卸し（ツールバーには出さずパレット/検索から開く）
+const { setTriageOpener, renderSearchView } = await import('./search.js' + _q);
 const { renderWeeklyView, loadWeeklyPrefs, setWeeklyHandlers, pageWeeks, gotoThisWeek, onWeeklyKey, weeklyCursorAction } = await import('./weekly.js' + _q);
 const { todayStr } = await import('./time.js' + _q);      // 「今日」は日本時間（UTC+9）基準に一本化
 const { shiftDays } = await import('./week.js' + _q);     // 日付文字列の加減（既存の純ロジックを再利用）
@@ -23,6 +24,7 @@ window.__store = store;                          // preview 検証用ハンド�
 let currentView = 'daily';                            // 現在アクティブなビュー（非分割の単一表示／分割時はフォーカス中ペイン）
 const listState = { sort:'proj', sortDir:'asc', columns: DEFAULT_COLUMNS.slice() };
 const projState = { projId: null, rootRef: null };   // プロジェクトビュー: 開いているPJ＋ページ内ルート
+const triageState = { showSolo: false };   // 棚卸し: 1件だけの塊も出すか（セッション内）
 const searchState = { query: { keyword:'', tags:[], proj:'all', due:{mode:'any'}, done:{mode:'any'}, prio:'all' } };   // 検索ビューのクエリ（セッション）
 const weeklyState = loadWeeklyPrefs();               // 週次ビュー: { wkOff, hideEmpty, expanded }
 
@@ -48,7 +50,7 @@ function applySplitRatio(){ document.getElementById('app')?.style.setProperty('-
 
 // ビューを選択（分割対応）。状態だけ更新し描画はしない（呼び出し側で renderAll）。
 function showView(v){
-  if (v === 'weekly') splitOn = false;                                                   // 週次は全幅で使う（分割を解除）
+  if (v === 'weekly' || v === 'triage') splitOn = false;                                 // 週次/棚卸しは全幅で使う（分割を解除）
   if (splitOn && (v === 'daily' || v === 'project' || v === 'search')) splitRight = v;   // 分割中はリスト以外＝右ペインの内容
   currentView = v;
 }
@@ -159,7 +161,7 @@ function restoreFocus(v){
 // scrollIntoView は使わない（親コンテナごと動いて別のズレを生むため）。
 // 非分割時のスクローラは #app 1つを全ビューで共有しているので、ビューが変わる再描画では持ち越さない
 // （デイリーの位置をリストへ持ち込むと的外れな位置に着地する）。ビュー専用のスクローラは常に保持してよい。
-const SCROLLERS = ['#view-list', '#view-daily', '#view-project', '#view-search', '#view-weekly .wk-scroll'];
+const SCROLLERS = ['#view-list', '#view-daily', '#view-project', '#view-search', '#view-weekly .wk-scroll', '#view-triage'];
 let _lastRenderView = null;                   // 直近の描画時のビュー（#app の持ち越し可否の判定用）
 function captureScroll(keepApp){
   const m = [];
@@ -232,10 +234,12 @@ function renderAll(){
   const pv = document.getElementById('view-project');
   const sv = document.getElementById('view-search');
   const wv = document.getElementById('view-weekly');
+  const tv = document.getElementById('view-triage');
   app?.classList.toggle('split', splitOn);
   app?.classList.toggle('weekly', !splitOn && currentView === 'weekly');   // 週次は #app 自体をスクロールさせない（表の内側でスクロール）
   if (splitOn){
     if (wv) wv.hidden = true;                        // 週次は分割に参加しない（全幅で使う）
+    if (tv) tv.hidden = true;                        // 棚卸しも分割に参加しない（表を広く使う）
     // 左=リスト固定 / 右=デイリー・プロジェクトまたは検索（splitRight）。両ペインを毎回再描画＝片側の変更がもう片側へ反映
     if (lv) lv.hidden = false;
     if (dv) dv.hidden = splitRight !== 'daily';
@@ -252,11 +256,13 @@ function renderAll(){
     if (pv) pv.hidden = currentView !== 'project';
     if (sv) sv.hidden = currentView !== 'search';
     if (wv) wv.hidden = currentView !== 'weekly';
+    if (tv) tv.hidden = currentView !== 'triage';
     if (currentView === 'weekly' && wv) renderWeeklyView(store, wv, renderAll, weeklyState);
     if (currentView === 'daily' && dv) renderDaily(store, dv, renderAll, jumpToMention);
     if (currentView === 'list'  && lv) renderList(store, lv, renderAll, listState, zoomToCard, openProject, openAsOutline);
     if (currentView === 'project' && pv) renderProjectView(store, pv, renderAll, projState, jumpToCard);
     if (currentView === 'search' && sv) renderSearchView(store, sv, renderAll, searchState, jumpToCard, openAsTable);
+    if (currentView === 'triage' && tv) renderTriageView(store, tv, renderAll, triageState);
   }
   const doneBtn = document.getElementById('toggle-done-btn');
   if (doneBtn){
@@ -573,6 +579,7 @@ function buildCommands(cardRef){
     { cat:'表示', label: getHideDone() ? '完了を表示' : '完了を隠す', hint:'Alt+H', roma:'kanryou hyouji kakusu done hide show', run: toggleDone },
     { cat:'表示', label:'今日の日にズーム', hint:'Alt+D', roma:'kyou zumu today zoom', run: zoomTodayToggle },
     { cat:'表示', label:'今日へ移動（全体表示）', roma:'kyou idou today', run: () => gotoDate(todayStr()) },
+    { cat:'整理', label:'無タグの塊を棚卸し', roma:'mutagu tanaoroshi seiri triage katazuke', run: () => selectView('triage') },
     { cat:'表示', label:'日付へ移動（カレンダー）', roma:'hiduke idou karenda- calendar', run: () => openCalendar({ store, onPick: gotoDate }) },
     { cat:'追加', label:'今日に追加', roma:'kyou tsuika today add', run: addToday },
     { cat:'追加', label:'プロジェクトを追加', roma:'purojekuto tsuika project add', run: addProject },
@@ -668,6 +675,8 @@ function boot(){
   document.getElementById('toggle-done-btn')?.addEventListener('click', toggleDone);
   installDividerDrag();
   setMentionJump(jumpToMention);                 // @チップ/バックリンクのクリック先（全ビュー共通）
+  setTriageJump(jumpToMention);                  // 棚卸しの「塊の頭」のクリック先
+  setTriageOpener(() => selectView('triage'));   // 検索ビューからの入口
   setWeeklyHandlers({ openProject, openProjectAt, jump: jumpToCard, navPush });   // 週次ビューの遷移先＋週送りのナビ履歴
   setAgendaJump(jumpToCard);                      // アジェンダ↗（元の場所へ）＝該当カードへジャンプ
   setSavedSearchOpener(openSavedSearch);         // ⟦s:id⟧ チップ→保存検索を開く
@@ -675,12 +684,12 @@ function boot(){
   document.getElementById('add-today')?.addEventListener('click', addToday);
   document.getElementById('add-proj')?.addEventListener('click', addProject);
   document.addEventListener('focusin', (e) => {             // 直近に触れたペインを記録（分割時のフォーカス復帰先・#4）
-    const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search,#view-weekly');
+    const c = e.target.closest && e.target.closest('#view-list,#view-daily,#view-project,#view-search,#view-weekly,#view-triage');
     if (c){ _lastPane = c.id; captureFocus(); }             // ビュー内に居る間だけ記憶を更新（Phase 3）
   });
   // 余白クリックで最寄りへフォーカスを戻す（Phase 5）。ビューの器は再描画で作り直されないので登録は1回だけ。
   // 既存の各ハンドラ（カードの mousedown で選択解除 等）より後に走るよう、器側のバブリングで受ける。
-  for (const id of ['view-daily','view-list','view-project','view-search','view-weekly']){
+  for (const id of ['view-daily','view-list','view-project','view-search','view-weekly','view-triage']){
     document.getElementById(id)?.addEventListener('click', nearestFocus);
   }
   document.addEventListener('keydown', (e) => {              // Alt+1/2/3/4=ビュー切替 / Alt+0=分割 / Alt+D=今日 / Ctrl/⌘+K,E

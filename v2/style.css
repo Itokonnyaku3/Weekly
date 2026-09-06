@@ -659,3 +659,32 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .mirror-path .mp-seg{cursor:pointer;overflow:hidden;text-overflow:ellipsis}
 .mirror-path .mp-seg:hover{color:var(--accent);text-decoration:underline}
 .mirror-path .mp-sep{opacity:.55;flex:none}
+
+/* ── 無タグの塊の棚卸し（表で上から埋める）───────────────────── */
+#view-triage{max-width:1100px}
+.tri-title{font-size:15px;font-weight:700;margin:0 0 6px}
+.tri-note{font-size:12px;color:var(--tx3);margin:0 0 10px;line-height:1.7;max-width:720px}
+.tri-bar{display:flex;align-items:center;gap:12px;margin:0 0 10px}
+.tri-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);cursor:pointer}
+.tri-check input{accent-color:var(--accent);cursor:pointer}
+.tri-empty{font-size:13px;color:var(--tx3)}
+.tri-table{border-collapse:collapse;width:100%;font-size:13px}
+.tri-table th{text-align:left;font-weight:700;font-size:11px;color:var(--tx3);letter-spacing:.03em;
+  padding:5px 8px;border-bottom:1px solid var(--bd2);white-space:nowrap;position:sticky;top:0;background:var(--bg)}
+.tri-table td{padding:4px 8px;border-bottom:1px solid var(--bd);vertical-align:top}
+.tri-table tbody tr:hover{background:var(--accent-soft)}
+.tri-table .c-n{width:52px;text-align:right;font-variant-numeric:tabular-nums;color:var(--tx3)}
+.tri-table td.c-n{font-weight:700;color:var(--tx)}
+.tri-table .c-head{min-width:200px}
+.tri-table .c-where{width:110px;color:var(--tx3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tri-table .c-kinds{width:150px;color:var(--tx3);white-space:nowrap}
+.tri-table .c-proj{width:170px}
+.tri-table .c-tags{width:190px}
+.tri-head-link{cursor:pointer}
+.tri-head-link:hover{color:var(--accent);text-decoration:underline}
+.tri-sel,.tri-tags{font:inherit;font-size:12px;width:100%;padding:2px 5px;
+  border:1px solid var(--bd2);border-radius:5px;background:var(--panel);color:var(--tx)}
+.tri-sel:focus,.tri-tags:focus{outline:none;border-color:var(--accent)}
+.tri-link{background:none;border:none;font:inherit;font-size:12px;color:var(--accent);
+  cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+.tri-link:hover{filter:brightness(1.15)}

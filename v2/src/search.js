@@ -5,6 +5,8 @@ const { renderChildren, setNavContainer } = await import('./daily.js' + _q);
 const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
 const { todayStr } = await import('./time.js' + _q);    // 「今日」は日本時間（UTC+9）基準
 export { cardTags };                                     // 既存の利用元（テスト等）との互換
+let _openTriage = null;
+export function setTriageOpener(fn){ _openTriage = fn; }   // 検索から棚卸しへの入口（app から設定）
 // 検索の対象外: day と project は「器」なので結果に出さない。
 // 特に day を含めると、条件なし検索で全 day が最上位一致になり、
 // runQuery の祖先除外によって配下すべてが消える（＝検索が壊れる）。
@@ -46,6 +48,15 @@ export function renderSearchView(store, mount, requestRender, state, onJump, onO
   mount.appendChild(head);
   const hint = document.createElement('div'); hint.className = 'search-hint';
   hint.textContent = '下の条件を指定すると全カード（メモ/タスク/画像/表）から絞り込み（AND）。結果は下に出て、その場で編集できます。条件を組んだら右の「名前」→「保存」で保存検索に。';
+  // 「見失ったものを拾う」入口。検索で拾えないカードは棚卸しへ（ツールバーは増やさない）
+  if (_openTriage){
+    const tl = document.createElement('button');
+    tl.type = 'button'; tl.className = 'tri-link'; tl.textContent = '🧹 検索でも辿れないカードを棚卸しする';
+    tl.title = '無タグの塊に、まとめてプロジェクト/タグを付ける';
+    tl.onclick = () => _openTriage();
+    hint.appendChild(document.createElement('br'));
+    hint.appendChild(tl);
+  }
   mount.appendChild(hint);
 
   const bar = document.createElement('div'); bar.className = 'search-bar';
