@@ -5,11 +5,15 @@ const { renderChildren, setNavContainer } = await import('./daily.js' + _q);
 const { cardTags } = await import('./props.js' + _q);   // タグ抽出は props.js へ移設（list.js との循環import回避）
 const { todayStr } = await import('./time.js' + _q);    // 「今日」は日本時間（UTC+9）基準
 export { cardTags };                                     // 既存の利用元（テスト等）との互換
-// カードが query に AND で一致するか。対象は memo/task のみ。
+// 検索の対象外: day と project は「器」なので結果に出さない。
+// 特に day を含めると、条件なし検索で全 day が最上位一致になり、
+// runQuery の祖先除外によって配下すべてが消える（＝検索が壊れる）。
+// 種類の制限は query.js の opts.kinds に委ねる（同じ目的の仕組みを二重に持たない）。
+const SEARCHABLE_KINDS = ['memo', 'task', 'image', 'table'];
+// カードが query に AND で一致するか。対象は SEARCHABLE_KINDS のみ。
 // query は単一のフラット条件（= 1グループ）。グループ配列との差は query.js の toGroups が吸収する。
 export function matchCard(body, query, today){
-  if (!body || (body.kind !== 'memo' && body.kind !== 'task')) return false;
-  return matchQuery(body, query, today);
+  return matchQuery(body, query, today, { kinds: SEARCHABLE_KINDS });
 }
 // 一致カードのうち「祖先も一致するもの」は除外し、最上位の一致だけを {ref, body} で返す（ミラー重複除外）。
 export function runQuery(store, query, today){
@@ -41,7 +45,7 @@ export function renderSearchView(store, mount, requestRender, state, onJump, onO
   const head = document.createElement('div'); head.className = 'search-title'; head.textContent = '🔍 検索';
   mount.appendChild(head);
   const hint = document.createElement('div'); hint.className = 'search-hint';
-  hint.textContent = '下の条件を指定すると全カード（メモ/タスク）から絞り込み（AND）。結果は下に出て、その場で編集できます。条件を組んだら右の「名前」→「保存」で保存検索に。';
+  hint.textContent = '下の条件を指定すると全カード（メモ/タスク/画像/表）から絞り込み（AND）。結果は下に出て、その場で編集できます。条件を組んだら右の「名前」→「保存」で保存検索に。';
   mount.appendChild(hint);
 
   const bar = document.createElement('div'); bar.className = 'search-bar';
@@ -62,6 +66,9 @@ export function renderSearchView(store, mount, requestRender, state, onJump, onO
   ], duePreset(q.due), v => { q.due = presetToDue(v); requestRender(); })));
   bar.appendChild(labelWrap('完了', selectEl([['any','すべて'], ['notDone','未完了'], ['done','完了']], (q.done && q.done.mode) || 'any', v => { q.done = { mode: v }; requestRender(); })));
   bar.appendChild(labelWrap('優先度', selectEl([['all','すべて'], ['3','高'], ['2','中'], ['1','低'], ['0','なし']], q.prio || 'all', v => { q.prio = v; requestRender(); })));
+  bar.appendChild(labelWrap('種類', selectEl([
+    ['all','すべて'], ['memo','メモ'], ['task','タスク'], ['image','画像'], ['table','表'],
+  ], q.kind || 'all', v => { q.kind = v; requestRender(); })));
   // 同じ条件のままリスト（表）へ。変換と画面遷移は呼び出し側（app.js）の責務。
   const toTable = document.createElement('button'); toTable.type = 'button'; toTable.className = 'btn'; toTable.textContent = '▤ 表で表示';
   toTable.title = '今の条件のままリスト（表）で開く';

@@ -2,10 +2,12 @@
 // 条件モデル: group（グループ内AND）を groups 配列で持ち、グループ間はOR。
 //   group = { keyword, tags[], proj, mid, due, done, prio }
 //   query = { groups:[group,…] } … 単一 group をそのまま渡してもよい（toGroups が吸収）
+// クエリ全体にかかる条件（グループごとではない）:
+//   query.kind: 'all'（既定・未指定も同じ）| 'memo' | 'task' | 'image' | 'table'
 // 表示（列/並べ替え/アウトライン）は各ビューの担当。ここは純ロジックのみ＝依存は props.js だけ（循環なし）。
 
 const _q = new URL(import.meta.url).search;
-const { cardTags } = await import('./props.js' + _q);
+const { cardTags, tableCellText } = await import('./props.js' + _q);
 const { dateOf } = await import('./time.js' + _q);   // doneAt（UTCのISO）→ JSTの完了日
 
 export function defaultGroup(){
@@ -18,6 +20,17 @@ export function defaultGroup(){
     done: { mode: 'any', from: null, to: null },
     prio: 'all',
   };
+}
+// キーワード/タグ照合に使うテキスト。「文言」の在りかは種類ごとに違う。
+//   memo/task … 本文そのまま
+//   table      … セルの文字を連結（稟議・請求の管理が表に入っているため検索対象にする）
+//   image      … 現状テキストを持たないので空。OCR を入れたらここで返す
+//                （body.content は v2-data/img/… のパスなので照合対象にしない）
+export function searchableText(body){
+  if (!body) return '';
+  if (body.kind === 'table') return tableCellText(body);
+  if (body.kind === 'image') return body.ocr || '';
+  return body.content || '';
 }
 // 単一 group / { groups:[…] } のどちらでも group 配列に正規化（空は「条件なし」の1グループ）
 export function toGroups(query){
@@ -52,6 +65,11 @@ export function prioMatch(prio, filter){
   if (!filter || filter === 'all') return true;
   return String(prio || 0) === String(filter);
 }
+// 種類条件。未指定/'all' は条件なし（既存の保存検索・リストの挙動を変えない）。
+export function kindMatch(kind, filter){
+  if (!filter || filter === 'all') return true;
+  return kind === filter;
+}
 export function dueGroupMatch(due, cond, today){
   if (!cond || !cond.mode || cond.mode === 'any') return true;   // mode 未指定/未知は「条件なし」（壊れた保存データで全件消えるのを防ぐ）
   if (cond.mode === 'none') return !due;
@@ -78,8 +96,9 @@ export function doneGroupMatch(body, cond, today){
 // 1グループ（AND）。未指定の項目は条件なし＝毎回のオブジェクト生成を避けて各判定側で吸収する（描画ごとに全カード分呼ばれる）。
 export function matchGroup(body, g, today){
   g = g || {};
-  return keywordMatch(body.content, g.keyword)
-      && tagsMatch(body.content, g.tags)
+  const text = searchableText(body);   // 照合対象は種類ごとに違う（画像は body.content がパスなので使わない）
+  return keywordMatch(text, g.keyword)
+      && tagsMatch(text, g.tags)
       && projMatch(body.proj, g.proj)
       && midMatch(body.mid, g.mid)
       && dueGroupMatch(body.due, g.due, today)
@@ -91,6 +110,7 @@ export function matchQuery(body, query, today, opts){
   if (!body) return false;
   const kinds = opts && opts.kinds;
   if (kinds && !kinds.includes(body.kind)) return false;
+  if (!kindMatch(body.kind, query && query.kind)) return false;   // 条件バーの「種類」（既定 'all' は無条件で通す）
   return toGroups(query).some(g => matchGroup(body, g, today));
 }
 
@@ -112,5 +132,8 @@ export function groupToFlatQuery(g){
   };
 }
 export function flatQueryToGroup(q){
-  return { ...defaultGroup(), ...(q || {}), mid: '' };
+  // kind はクエリ全体の条件でグループには属さない。表（リスト）はタスク専用なので
+  // 検索の「種類」は持ち込まず、mid と同じく落とす。
+  const { kind, ...rest } = q || {};
+  return { ...defaultGroup(), ...rest, mid: '' };
 }
