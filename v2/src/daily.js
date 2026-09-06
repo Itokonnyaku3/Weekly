@@ -1019,18 +1019,11 @@ function onKey(e, store, ref, body, requestRender){
     const flat = visibleFlat(store);
     const idx = flat.indexOf(ref.id);
     if (idx <= 0) return;
-    const prevRefId = flat[idx - 1];
-    const prevBody = store.getBody(store.getRef(prevRefId).bodyId);
-    if (prevBody.kind === 'table' || prevBody.kind === 'image') return;   // 表/画像へは結合しない
+    const r = mergeCard(store, ref.id, flat[idx - 1], text, currentScope());
+    if (!r) return;                 // 境界越え・表/画像への結合は既定動作に任せる（何も起きない）
     e.preventDefault();
-    const mergePos = (prevBody.content || '').length;
-    store.updateBody(prevBody.id, { content: (prevBody.content || '') + text });
-    for (const child of store.childRefs(ref.id)){
-      store.updateRef(child.id, { parentRefId: prevRefId, order: store.endOrder(prevRefId) });
-    }
-    store.deleteRef(ref.id);
     requestRender();
-    focusCard(prevRefId, mergePos);
+    focusCard(r.focusRefId, r.focusPos);
     return;
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
