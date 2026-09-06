@@ -609,7 +609,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 @keyframes an-mute{to{color:var(--tx3)}}
 @keyframes an-vanish{to{opacity:0;filter:blur(1.5px);transform:translateY(-3px)}}
 @keyframes an-squeeze{from{height:var(--done-h)}to{height:0;padding-top:0;padding-bottom:0}}
-@keyframes an-squeeze-cell{to{padding-top:0;padding-bottom:0;line-height:0;font-size:0}}
+@keyframes an-squeeze-cell{to{padding-top:0;padding-bottom:0;line-height:0;font-size:0;border-bottom-width:0}}
+@keyframes an-squeeze-box{to{height:0;margin:0;padding-top:0;padding-bottom:0;transform:scale(0)}}
 @keyframes an-up{to{opacity:0;transform:translateY(-6px);height:0;padding-top:0;padding-bottom:0}}
 
 /* アウトラインのカード（.card-row は flex の div＝高さを補間できる） */
@@ -627,6 +628,11 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .list-table tbody tr.done-out-tr{animation:an-vanish var(--t3) var(--ease-out) var(--d3) both}
 .list-table tbody tr.done-out-tr>td{overflow:hidden;
   animation:an-squeeze-cell var(--t4) var(--ease-out) var(--d4) both}
+/* チェックボックスは font-size では縮まないので個別に潰す（④の時点で既に透明） */
+.list-table tbody tr.done-out-tr input,
+.list-table tbody tr.done-out-tr .cell-chip,
+.list-table tbody tr.done-out-tr .title-subcount{
+  animation:an-squeeze-box var(--t4) var(--ease-out) var(--d4) both}
 .list-table tbody tr.done-out-tr .list-title,
 .list-table tbody tr.done-out-tr .title-chip{position:relative}
 .list-table tbody tr.done-out-tr .title-chip::before{content:"";position:absolute;left:0;top:.72em;
@@ -640,6 +646,8 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 @media (prefers-reduced-motion:reduce){
   .card-row.done-out,.card-row.done-out .card-txt,.card-row.done-out .card-txt::before,
   .list-table tbody tr.done-out-tr,.list-table tbody tr.done-out-tr>td,
+  .list-table tbody tr.done-out-tr input,.list-table tbody tr.done-out-tr .cell-chip,
+  .list-table tbody tr.done-out-tr .title-subcount,
   .list-table tbody tr.done-out-tr .title-chip::before,
   .card-row.fold-up{animation:none!important}
 }

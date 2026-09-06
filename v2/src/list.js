@@ -6,6 +6,7 @@
 const _q = new URL(import.meta.url).search;
 const { renderOutlinePage, getHideDone } = await import('./daily.js' + _q);   // ポップアップの本文ミラーで共用／完了非表示の共通状態
 const { showToast } = await import('./clipboard.js' + _q);   // 追加後の非表示通知に使用
+const { playDoneOut } = await import('./anim.js' + _q);      // 完了で行が消えるときの退場（デイリーと共通）
 const { cardTags, TAG_RE, TAG_SCHEMAS, schemaTagsInGroups, propColKey, parsePropColKey, propDef, propsPatch } = await import('./props.js' + _q);   // タグプロパティ（タグ条件・動的列・セル編集）
 const { defaultGroup, matchGroup, dueGroupMatch, projMatch } = await import('./query.js' + _q);   // 絞り込みの照合は共通クエリ基盤に委譲（表/アウトラインで同一ロジック）
 const { projColor } = await import('./colors.js' + _q);   // プロジェクト色（週次ビューと共通）
@@ -895,12 +896,18 @@ function siblingTaskId(tr){
 // 完了トグルの共通処理。完了非表示中に完了すると行が消えるため、消える前に隣の行を控え、
 // 再描画後は「そのタイトル→隣のタイトル→リスト本体」の順で復帰する（現在の条件selへ飛ばさない）。
 function toggleDone(store, requestRender, t, tr, nextDone){
-  const neighbor = (getHideDone() && nextDone) ? siblingTaskId(tr) : null;   // 完了で行が消える時だけ隣を控える
-  store.updateBody(t.id, { done: nextDone });
-  requestRender();
-  if (focusTitle(t.id)) return;                  // 通常＝行が残る（完了非表示OFF/未完了へ戻す）
-  if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ
-  focusListBody();                               // 最後の砦もリスト本体に限定
+  const vanishes = !!(getHideDone() && nextDone && tr);   // この行はこの操作で消える（333行の絞り込みと同じ条件）
+  const neighbor = vanishes ? siblingTaskId(tr) : null;   // 完了で行が消える時だけ隣を控える
+  const commit = () => {
+    store.updateBody(t.id, { done: nextDone });
+    requestRender();
+    if (vanishes) showToast('1件を完了にしました（Ctrl+Z で戻せます）');   // 前触れなく消えた印象を消す
+    if (focusTitle(t.id)) return;                  // 通常＝行が残る（完了非表示OFF/未完了へ戻す）
+    if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ
+    focusListBody();                               // 最後の砦もリスト本体に限定
+  };
+  // 消える行だけ退場の演出を挟む（アウトラインと同じ4段・時間は style.css の --t1..--t4）
+  if (vanishes) playDoneOut(tr, commit); else commit();
 }
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
