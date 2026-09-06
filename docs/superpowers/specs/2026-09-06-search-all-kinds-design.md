@@ -69,19 +69,40 @@ const SEARCHABLE = new Set(['memo', 'task', 'image', 'table']);
 
 `defaultGroup()` に `kind: 'all'` を追加。`matchQuery` に照合を追加する。既定が `'all'` なので、**既存の保存検索とリスト（表）の挙動は変わらない**（`list.js` は独自に `kind === 'task'` で絞っているため影響なし）。
 
-### 3. キーワードは画像・表に適用しない
+### 3. 「そのカードの文言」の在りかを種類ごとに定義する
 
-画像の `body.content` は `v2-data/img/img_1782356143821.png` のようなリポジトリ内パス。これをキーワード照合の対象にすると「img」「2026」等で全画像が誤ヒットする。
+キーワードとタグの照合対象を `body.content` 直読みから、種類ごとの取り出しに変える。
 
 ```js
-// 画像/表は本文を持たない（content はパスや表データ）。キーワード条件が
-// 指定されているときは一致させない。パス文字列へのヒットは意味がなく
-// ノイズになるため。種類・タグ・PJ・期限の条件では通常どおり対象になる。
+// キーワード/タグ照合に使うテキスト。「文言」の在りかは種類ごとに違う。
+//   memo/task … 本文そのまま
+//   table      … セルの文字を連結（稟議・請求の管理が表に入っているため検索対象にする）
+//   image      … 現状テキストを持たないので空。OCR を入れたらここで返す
+export function searchableText(body){
+  if (!body) return '';
+  if (body.kind === 'table') return tableCellText(body);
+  if (body.kind === 'image') return body.ocr || '';
+  return body.content || '';
+}
 ```
 
-したがって「種類=画像 かつ キーワード=バーコード」は0件になる。論理的には正しい（画像は文言を持たない）。
+**画像を「キーワードで引けない」と固定しない。** ユーザーは次のステップで AI による画像の文字認識（OCR）を検討している（[BACKLOG-ai.md](../../BACKLOG-ai.md)）。上の形にしておけば、OCR 結果を `body.ocr` に入れるだけでキーワード検索が効くようになり、照合側の作り直しが不要になる。**`body.ocr` は本仕様では書き込まない**（常に未定義＝空文字）。差し込み口だけ用意する。
 
-**将来の改良案（本仕様では実装しない）:** 画像・表を「親カードの文言」で引けるようにする。`runQuery` は store を持つので祖先の文言を取れるが、`matchCard` の引数が増えてテストにも波及する。まず種類フィルタだけで運用し、必要が確認できてから足す。
+画像の `body.content` は `v2-data/img/img_1782356143821.png` というリポジトリ内パスなので、**照合対象にしない**。含めると「img」「2026」等で全画像が誤ヒットする。
+
+`tableCellText` は `props.js` に置く。`query.js` の依存は `props.js` と `time.js` だけに保つ必要があり（`query.js` 冒頭のコメント参照）、`daily.js` の `tableRows` を import すると循環する。矩形への正規化は不要なので、最小限の取り出しを別に持つ。
+
+```js
+// 表のセルの文字を連結する（検索用）。矩形への正規化は不要なので、
+// daily.js の tableRows とは別に、ここでは取り出しだけ行う。
+export function tableCellText(body){
+  try {
+    const o = JSON.parse(body.content || '{}');
+    return (Array.isArray(o.rows) ? o.rows : []).flat()
+      .map(c => (c == null ? '' : String(c))).join(' ');
+  } catch { return ''; }
+}
+```
 
 ### 4. 検索バーに「種類」のドロップダウンを足す
 
@@ -102,7 +123,11 @@ const SEARCHABLE = new Set(['memo', 'task', 'image', 'table']);
 - `matchCard`: memo/task/image/table は対象、`day` と `project` は対象外
 - `kind: 'all'` は全種類に一致（既定値の後方互換）
 - `kind: 'image'` は画像だけに一致
-- キーワード指定時、画像・表は一致しない（パスへの誤ヒットが無いこと）
+- `searchableText`: memo/task は本文、table はセル連結、image は空
+- キーワード指定時、画像は一致しない（`content` のパスに誤ヒットしないこと）
+- **`body.ocr` を入れた画像はキーワードで一致する**（OCR の差し込み口が機能すること）
+- 表はセルの文字でキーワード一致する（例: 「HACCP追加改修」で引ける）
+- 壊れた JSON の表でも例外を投げず空文字を返す
 - `kind` 未指定の既存クエリが従来どおり動く（デグレ検出）
 - `runQuery`: `day` を除外しているため、条件なしでも配下のカードが消えないこと
 
@@ -111,5 +136,6 @@ const SEARCHABLE = new Set(['memo', 'task', 'image', 'table']);
 ## スコープ外
 
 - リスト（表）の対象拡大。タスクの表に画像を並べても意味がないため、リストは `kind === 'task'` のままにする。全種類の受け皿は検索ビューとする
-- 画像・表を親の文言で引く改良（上記3の将来案）
+- **OCR の実行と `body.ocr` への書き込み**（AI機能。本仕様は読む側の差し込み口だけ用意する）
+- 画像を「親カードの文言」で引く改良。OCR が入れば不要になる可能性が高いため、先に OCR の結果を見てから判断する
 - 会議の表記揺れの自動吸収（AI機能①）
