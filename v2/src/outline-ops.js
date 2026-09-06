@@ -30,14 +30,17 @@ export function dayRefIdOf(store, refId){
   return null;
 }
 
-// refId が scope の内側にあるか。strict=true はルート自身を除く（ページの見出しは編集対象外）
+// refId が scope の内側にあるか。strict=true は境界のルート自身を除く
+// （ズームなら rootRef、全日表示なら day カード。どちらもページの器であって編集対象ではない）
 export function inScope(store, refId, scope, { strict = false } = {}){
   const root = scope && scope.rootRef;
   if (root){
     if (refId === root) return !strict;
     return ancestorRefIds(store, refId).includes(root);
   }
-  return dayRefIdOf(store, refId) !== null;
+  const d = dayRefIdOf(store, refId);
+  if (d === null) return false;
+  return !(strict && d === refId);
 }
 
 // refId を newParentRefId の下へ移したとき、scope の外へ出るか

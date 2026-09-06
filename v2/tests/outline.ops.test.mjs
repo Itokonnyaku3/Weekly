@@ -39,6 +39,17 @@ const parentOf = (s, r) => s.getRef(r).parentRefId;
   assert.equal(wouldEscape(s, A1.ref.id, P.ref.id,  zoom), false, 'ルート直下は範囲内');
 }
 
+// ── wouldEscape: 全日表示では日をまたぐ移動を弾く ──────
+// 現在の indent/outdent/splitCard からは到達しないが、この関数が
+// 境界判定の唯一の窓口なので、全日表示側の分岐も直接検証しておく。
+{
+  const { s, d1, d2, X, Y } = twoDays();
+  assert.equal(wouldEscape(s, X.ref.id, d1.ref.id, ALLDAYS), false, '同じ日の中は範囲内');
+  assert.equal(wouldEscape(s, X.ref.id, d2.ref.id, ALLDAYS), true,  '別の日へ移すと範囲外');
+  assert.equal(wouldEscape(s, X.ref.id, Y.ref.id,  ALLDAYS), true,  '別の日のカードの下も範囲外');
+  assert.equal(wouldEscape(s, X.ref.id, null,      ALLDAYS), true,  '親なしは範囲外');
+}
+
 // ── A1: ズームのルート直下からアウトデントできない ────
 {
   const { s, P, A } = fixture();
@@ -99,6 +110,15 @@ const parentOf = (s, r) => s.getRef(r).parentRefId;
   const zoom = { rootRef: P.ref.id };
   assert.equal(deleteCard(s, P.ref.id, zoom), false, 'ルートの削除は no-op');
   assert.ok(s.getRef(P.ref.id), 'P がまだ存在する');
+}
+
+// ── 全日表示では day カード自身を消せない ────────────
+{
+  const { s, day, P } = fixture();
+  assert.equal(inScope(s, day.ref.id, ALLDAYS, { strict:true }), false, 'day 自身は strict の外');
+  assert.equal(deleteCard(s, day.ref.id, ALLDAYS), false, 'day カードの削除は no-op');
+  assert.ok(s.getRef(day.ref.id), 'day がまだ存在する');
+  assert.equal(deleteCard(s, P.ref.id, ALLDAYS), true, '日の中のカードは削除できる');
 }
 
 // ── B3: ルートへは結合できない ──────────────────
