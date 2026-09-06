@@ -9,6 +9,7 @@
 const _q = new URL(import.meta.url).search;
 const { todayStr } = await import('./time.js' + _q);   // 「今日」は日本時間（UTC+9）基準に一本化
 const { projColor } = await import('./colors.js' + _q); // PJバッジの色（リスト・週次と同じ色を使う）
+const { indent, outdent, splitCard, mergeCard, moveSibling, deleteCard } = await import('./outline-ops.js' + _q);
 
 let _openMenu = null;       // 行メニューを開いている ref.id（再描画をまたいで保持）
 let _menuCloser = null;     // 外側クリックで閉じる document リスナ
@@ -1013,19 +1014,9 @@ function onKey(e, store, ref, body, requestRender){
     if (e.shiftKey && _ctx.container && ref.parentRefId &&                // ルート直下の子はアウトデントでルート同階層へ出さない
         _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)){ e.preventDefault(); return; }
     e.preventDefault();
-    if (ref.id === _ctx.rootRef) return;   // ズーム/ページのタイトル（ルート）はインデント・アウトデントしない
-    if (e.shiftKey){
-      const parentRef = store.getRef(ref.parentRefId);
-      if (!parentRef) return;
-      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
-      store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
-    } else {
-      const prev = store.prevSiblingRef(ref.id);
-      if (!prev) return;
-      store.updateRef(ref.id, { parentRefId: prev.id, order: store.endOrder(prev.id) });
-    }
-    requestRender();
-    focusCard(ref.id, pos);
+    const ok = e.shiftKey ? outdent(store, ref.id, currentScope())
+                          : indent(store, ref.id, currentScope());
+    if (ok){ requestRender(); focusCard(ref.id, pos); }
     return;
   }
   // Workflowy: 削除（Ctrl/⌘+Shift+Backspace）
@@ -1270,15 +1261,10 @@ function onBlockKey(e, store, ref, requestRender){
     if (_mr && _mr.dataset.mirrorRoot) return;   // ミラーのルート（ブロック）は構造を変えない
     if (e.shiftKey && _ctx.container && ref.parentRefId &&
         _ctx.container.querySelector(`.card-row[data-mirror-root="${ref.parentRefId}"]`)) return;   // ルート直下は脱出させない
-    if (e.shiftKey){
-      const parentRef = store.getRef(ref.parentRefId); if (!parentRef) return;
-      if (store.getBody(parentRef.bodyId)?.kind === 'day') return;
-      store.updateRef(ref.id, { parentRefId: parentRef.parentRefId, order: store.orderAfter(parentRef.id) });
-    } else {
-      const prev = store.prevSiblingRef(ref.id); if (!prev) return;
-      store.updateRef(ref.id, { parentRefId: prev.id, order: store.endOrder(prev.id) });
-    }
-    requestRender(); focusCard(ref.id); return;
+    const ok = e.shiftKey ? outdent(store, ref.id, currentScope())
+                          : indent(store, ref.id, currentScope());
+    if (ok){ requestRender(); focusCard(ref.id); }
+    return;
   }
   if (e.altKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){   // 兄弟内で上下移動
     e.preventDefault();
@@ -1531,6 +1517,8 @@ function shiftClickSelect(store, refId){
   rebuildSelRange(store);
   applySelStyles();
 }
+// 現在の可視範囲。ズーム/PJページなら rootRef、全日表示なら null（境界は day）
+function currentScope(){ return { rootRef: _ctx.rootRef || null }; }
 function visibleFlat(store){
   const out = [];
   const walk = (refId) => { for (const r of store.childRefs(refId)){ if (isHiddenByDone(store, r, store.getBody(r.bodyId))) continue; out.push(r.id); if (!r.collapsed) walk(r.id); } };
