@@ -688,3 +688,15 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 .tri-link{background:none;border:none;font:inherit;font-size:12px;color:var(--accent);
   cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
 .tri-link:hover{filter:brightness(1.15)}
+.tri-table .c-ok{width:96px;white-space:nowrap}
+.tri-table .c-tags{width:230px}
+.tri-pick{margin-bottom:3px}
+.tri-btn{font:inherit;font-size:12px;padding:2px 8px;border:1px solid var(--bd2);border-radius:5px;
+  background:var(--panel);color:var(--tx);cursor:pointer}
+.tri-btn:hover:not(:disabled){border-color:var(--accent)}
+.tri-btn:disabled{opacity:.4;cursor:default}
+.tri-ok{border-color:var(--accent);color:var(--accent);font-weight:700}
+.tri-ok:not(:disabled){background:var(--accent-soft)}
+.tri-skip{margin-left:4px;color:var(--tx3)}
+/* 画像・表を含む塊＝文字が無く検索でも辿れない。左に印を付けて優先度を示す */
+.tri-table tbody tr.tri-media td:first-child{box-shadow:inset 3px 0 0 var(--accent)}

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createStore } from '../src/store.js';
-import { untaggedIslands, kindsSummary, withTags } from '../src/triage.js';
+import { untaggedIslands, kindsSummary, withTags, allTags, parseTagInput } from '../src/triage.js';
 
 // ツリー:
 //  day > 会議 > A, B(>B1)        … 無タグの塊（頭=会議・4件）
@@ -96,3 +96,60 @@ assert.equal(withTags(null, ['A']), '#A', 'null でも落ちない');
 assert.equal(withTags('会議メモ', ['  ']), '会議メモ', '空白だけは無視');
 
 console.log('PASS triage');
+
+// --- 済（棚卸し済み）: triaged が付いた塊は triaged:true で返る ---
+{
+  const s6 = createStore();
+  const d6 = s6.createCard({ kind:'day', content:'2026-09-06' });
+  const h6 = s6.createCard({ kind:'memo', content:'ただのメモ', parentRefId: d6.ref.id });
+  assert.equal(untaggedIslands(s6)[0].triaged, false, '既定は未処理');
+  s6.updateBody(h6.body.id, { triaged: true });
+  assert.equal(untaggedIslands(s6)[0].triaged, true, '済の印が読める');
+  s6.updateBody(h6.body.id, { triaged: false });
+  assert.equal(untaggedIslands(s6)[0].triaged, false, '戻せる');
+}
+
+// --- hasMedia: 画像・表を含む塊は印が付く（文字が無く検索でも辿れない） ---
+{
+  const s7 = createStore();
+  const d7 = s7.createCard({ kind:'day', content:'2026-09-06' });
+  const a7 = s7.createCard({ kind:'memo', content:'文字だけの塊', parentRefId: d7.ref.id });
+  s7.createCard({ kind:'memo', content:'子', parentRefId: a7.ref.id });
+  const b7 = s7.createCard({ kind:'memo', content:'画像を含む塊', parentRefId: d7.ref.id });
+  s7.createCard({ kind:'image', content:'v2-data/img/a.png', parentRefId: b7.ref.id });
+  const g = Object.fromEntries(untaggedIslands(s7).map(x => [x.label, x]));
+  assert.equal(g['文字だけの塊'].hasMedia, false);
+  assert.equal(g['画像を含む塊'].hasMedia, true, '画像を含む塊に印');
+}
+{
+  const s8 = createStore();
+  const d8 = s8.createCard({ kind:'day', content:'2026-09-06' });
+  const h8 = s8.createCard({ kind:'memo', content:'表を含む塊', parentRefId: d8.ref.id });
+  s8.createCard({ kind:'table', content:'{"rows":[["x"]]}', parentRefId: h8.ref.id });
+  assert.equal(untaggedIslands(s8)[0].hasMedia, true, '表でも印が付く');
+}
+
+// --- allTags: 既存タグを多い順に（棚卸しの選択肢） ---
+{
+  const s9 = createStore();
+  const d9 = s9.createCard({ kind:'day', content:'2026-09-06' });
+  s9.createCard({ kind:'memo', content:'a #HACCP',        parentRefId: d9.ref.id });
+  s9.createCard({ kind:'memo', content:'b #HACCP #稟議',  parentRefId: d9.ref.id });
+  s9.createCard({ kind:'memo', content:'c #稟議',         parentRefId: d9.ref.id });
+  s9.createCard({ kind:'memo', content:'d #会議',         parentRefId: d9.ref.id });
+  const t = allTags(s9);
+  assert.deepEqual(t.map(x => x.tag), ['HACCP', '稟議', '会議'], '多い順。同数は名前順');
+  assert.deepEqual(t.map(x => x.count), [2, 2, 1]);
+  assert.deepEqual(allTags(createStore()), [], 'タグが無ければ空');
+}
+
+// --- parseTagInput: 入力欄の文字列 → タグ配列 ---
+assert.deepEqual(parseTagInput('会議 HACCP'), ['会議', 'HACCP'], '空白区切り');
+assert.deepEqual(parseTagInput('会議,HACCP'), ['会議', 'HACCP'], 'カンマ区切り');
+assert.deepEqual(parseTagInput('#会議 #HACCP'), ['会議', 'HACCP'], '# は外す');
+assert.deepEqual(parseTagInput('  会議   '), ['会議'], '前後の空白を無視');
+assert.deepEqual(parseTagInput(''), [], '空');
+assert.deepEqual(parseTagInput(null), [], 'null でも落ちない');
+assert.deepEqual(parseTagInput('#'), [], '# だけは無視');
+
+console.log('PASS triage (追加分)');

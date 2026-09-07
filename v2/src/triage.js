@@ -19,8 +19,10 @@ const hasHandle = (b) => !!(b && (b.proj || cardTags(b.content).size));
 
 // ── 純ロジック（テスト対象）─────────────────────────────────────
 // 到達不能な塊を件数の降順で返す。
-//   [{ headRefId, headBodyId, label, count, day, kinds }]
+//   [{ headRefId, headBodyId, label, count, day, kinds, hasMedia, triaged }]
 // kinds は種類ごとの件数（{memo:3, image:2} 等）。
+// hasMedia = 画像/表を含む＝文字が無く検索でも辿れないので優先度が高い。
+// triaged = 頭カードに「タグ不要」の印が付いている（呼び出し側で出す/出さないを決める）。
 export function untaggedIslands(store){
   const groups = new Map();
   for (const b of store.queryBodies(x => x.kind !== 'day' && x.kind !== 'project')){
@@ -42,13 +44,26 @@ export function untaggedIslands(store){
     if (!g){
       const hb = store.getBody(head.bodyId);
       g = { headRefId: head.id, headBodyId: head.bodyId, label: pathLabel(hb),
-            headKind: hb ? hb.kind : '', count: 0, day, kinds: {} };
+            headKind: hb ? hb.kind : '', count: 0, day, kinds: {},
+            hasMedia: false, triaged: !!(hb && hb.triaged) };
       groups.set(head.id, g);
     }
     g.count++;
     g.kinds[b.kind] = (g.kinds[b.kind] || 0) + 1;
+    if (b.kind === 'image' || b.kind === 'table') g.hasMedia = true;   // 文字を持たない＝検索でも辿れない
   }
   return [...groups.values()].sort((a, b) => b.count - a.count || (a.day < b.day ? 1 : -1));
+}
+
+// 既存の #タグを使用回数の多い順に返す（棚卸しの選択肢用）。
+export function allTags(store){
+  const n = new Map();
+  for (const b of store.queryBodies(() => true)){
+    for (const t of cardTags(b.content)) n.set(t, (n.get(t) || 0) + 1);
+  }
+  return [...n.entries()]
+    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))
+    .map(([tag, count]) => ({ tag, count }));
 }
 
 // 種類の内訳を「メモ3 / 画像2」の形にする。多い順。
@@ -71,62 +86,89 @@ export function withTags(content, tags){
   return cur + sep + add.map(t => '#' + t).join(' ');
 }
 
+// 入力欄の文字列をタグ配列にする（空白/カンマ区切り・# は付けても良い）。
+export function parseTagInput(text){
+  return String(text || '').split(/[\s,]+/).map(s => s.replace(/^#/, '')).filter(Boolean);
+}
+
 // ── 描画 ───────────────────────────────────────────────────────
+// 編集はいったん state.pending に溜め、OK を押したときだけ本体へ書く。
+// 選んだ瞬間に反映すると「油断すると消える」ので、確定は明示的にする。
 let _jump = null;
 export function setTriageJump(fn){ _jump = fn; }   // 塊の頭をクリックしたときの移動（app から設定）
+
+const pendingOf = (state, id) => (state.pending || (state.pending = {}))[id] || { proj:'', tags:'' };
+function setPending(state, id, patch){
+  state.pending[id] = { ...pendingOf(state, id), ...patch };
+}
 
 export function renderTriageView(store, mount, requestRender, state){
   mount.innerHTML = '';
   const all = untaggedIslands(store);
+  const open = all.filter(g => !g.triaged);
+  const doneCount = all.length - open.length;
+  const showTriaged = !!state.showTriaged;
   const showSolo = !!state.showSolo;
-  const rows = showSolo ? all : all.filter(g => g.count >= 2);
 
-  const head = document.createElement('div'); head.className = 'tri-title';
-  head.textContent = '🧹 無タグの塊の棚卸し';
-  mount.appendChild(head);
+  let rows = showTriaged ? all.filter(g => g.triaged) : open;
+  if (!showTriaged && !showSolo) rows = rows.filter(g => g.count >= 2);
+
+  const title = document.createElement('div'); title.className = 'tri-title';
+  title.textContent = '🧹 無タグの塊の棚卸し';
+  mount.appendChild(title);
 
   const note = document.createElement('p'); note.className = 'tri-note';
-  const total = all.reduce((a, g) => a + g.count, 0);
-  note.textContent = '検索やプロジェクトから辿れないカードを、塊ごとにまとめています。'
-    + '頭の1枚にプロジェクトかタグを付ければ、配下ごと拾えるようになります。'
-    + `　残り ${all.length} 塊 / ${total} 件`;
+  const total = open.reduce((a, g) => a + g.count, 0);
+  const media = open.filter(g => g.hasMedia).length;
+  note.textContent = '検索やプロジェクトから辿れないカードを塊ごとにまとめています。'
+    + '頭の1枚にプロジェクトかタグを指定して OK を押すと、配下ごと拾えるようになります。'
+    + '　残り ' + open.length + ' 塊 / ' + total + ' 件'
+    + (media ? '　うち ' + media + ' 塊は画像・表を含みます（文字が無いので検索でも辿れません。ここが最優先）' : '');
   mount.appendChild(note);
 
   const bar = document.createElement('div'); bar.className = 'tri-bar';
-  const lab = document.createElement('label'); lab.className = 'tri-check';
-  const cbx = document.createElement('input'); cbx.type = 'checkbox'; cbx.checked = showSolo;
-  cbx.onchange = () => { state.showSolo = cbx.checked; requestRender(); };
-  lab.appendChild(cbx);
-  lab.appendChild(document.createTextNode(`1件だけの塊も表示（${all.filter(g => g.count === 1).length}件）`));
-  bar.appendChild(lab);
+  const check = (label, key, on) => {
+    const l = document.createElement('label'); l.className = 'tri-check';
+    const c = document.createElement('input'); c.type = 'checkbox'; c.checked = on;
+    c.onchange = () => { state[key] = c.checked; requestRender(); };
+    l.appendChild(c); l.appendChild(document.createTextNode(label));
+    return l;
+  };
+  bar.appendChild(check('1件だけの塊も表示（' + open.filter(g => g.count === 1).length + '塊）', 'showSolo', showSolo));
+  bar.appendChild(check('棚卸し済みを表示（' + doneCount + '塊）', 'showTriaged', showTriaged));
   mount.appendChild(bar);
 
   if (!rows.length){
     const e = document.createElement('p'); e.className = 'tri-empty';
-    e.textContent = all.length ? '2件以上の塊は片付きました。上のチェックで単発も表示できます。'
-                               : '到達できないカードはありません。';
+    e.textContent = showTriaged ? '棚卸し済みの塊はありません。'
+      : open.length ? '2件以上の塊は片付きました。上のチェックで単発も表示できます。'
+      : '辿れないカードはありません。';
     mount.appendChild(e);
     return;
   }
 
   const projects = store.listProjects();
+  const tags = allTags(store);
   const table = document.createElement('table'); table.className = 'tri-table';
-  const thead = document.createElement('thead');
-  const htr = document.createElement('tr');
-  for (const [t, cls] of [['件数','c-n'], ['塊の頭','c-head'], ['元の場所','c-where'],
-                          ['内訳','c-kinds'], ['プロジェクト','c-proj'], ['タグ','c-tags']]){
+  const thead = document.createElement('thead'); const htr = document.createElement('tr');
+  const cols = showTriaged
+    ? [['件数','c-n'], ['塊の頭','c-head'], ['元の場所','c-where'], ['内訳','c-kinds'], ['','c-ok']]
+    : [['件数','c-n'], ['塊の頭','c-head'], ['元の場所','c-where'], ['内訳','c-kinds'],
+       ['プロジェクト','c-proj'], ['タグ','c-tags'], ['','c-ok']];
+  for (const [t, cls] of cols){
     const th = document.createElement('th'); th.textContent = t; th.className = cls; htr.appendChild(th);
   }
   thead.appendChild(htr); table.appendChild(thead);
 
   const tbody = document.createElement('tbody');
-  for (const g of rows) tbody.appendChild(buildRow(store, requestRender, g, projects));
+  for (const g of rows) tbody.appendChild(buildRow(store, requestRender, state, g, projects, tags, showTriaged));
   table.appendChild(tbody);
   mount.appendChild(table);
 }
 
-function buildRow(store, requestRender, g, projects){
+function buildRow(store, requestRender, state, g, projects, tags, showTriaged){
   const tr = document.createElement('tr');
+  if (g.hasMedia) tr.classList.add('tri-media');   // 画像/表を含む＝検索でも辿れない
 
   const n = document.createElement('td'); n.className = 'c-n'; n.textContent = g.count; tr.appendChild(n);
 
@@ -139,38 +181,84 @@ function buildRow(store, requestRender, g, projects){
 
   const w = document.createElement('td'); w.className = 'c-where'; w.textContent = g.day || '—'; tr.appendChild(w);
 
-  const k = document.createElement('td'); k.className = 'c-kinds'; k.textContent = kindsSummary(g.kinds); tr.appendChild(k);
+  const k = document.createElement('td'); k.className = 'c-kinds';
+  k.textContent = kindsSummary(g.kinds);
+  if (g.hasMedia) k.title = '画像・表は文字を持たないので検索にかかりません';
+  tr.appendChild(k);
 
-  // プロジェクト: 選んだ瞬間に頭カードへ付ける＝その塊は一覧から消える
+  if (showTriaged){                                 // 棚卸し済みの一覧＝戻すだけ
+    const back = document.createElement('td'); back.className = 'c-ok';
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tri-btn'; b.textContent = '↩ 戻す';
+    b.onclick = () => { store.updateBody(g.headBodyId, { triaged: false }); requestRender(); };
+    back.appendChild(b); tr.appendChild(back);
+    return tr;
+  }
+
+  const pend = pendingOf(state, g.headBodyId);
+
+  // プロジェクト（選んでも即書きしない）
   const p = document.createElement('td'); p.className = 'c-proj';
   const sel = document.createElement('select'); sel.className = 'tri-sel';
   for (const [v, label] of [['', '（未割当）'], ...projects.map(x => [x.id, x.content || '(名前なし)'])]){
     const o = document.createElement('option'); o.value = v; o.textContent = label; sel.appendChild(o);
   }
-  sel.value = '';
-  sel.onchange = () => {
-    if (!sel.value) return;
-    store.updateBody(g.headBodyId, { proj: sel.value });
-    requestRender();
-  };
+  sel.value = pend.proj || '';
+  sel.onchange = () => { setPending(state, g.headBodyId, { proj: sel.value }); requestRender(); };
   p.appendChild(sel); tr.appendChild(p);
 
-  // タグ: Enter か離れたときに本文末尾へ追記
+  // タグ（既存から選ぶ＋自由入力。どちらも即書きしない）
   const t = document.createElement('td'); t.className = 'c-tags';
+  const pick = document.createElement('select'); pick.className = 'tri-sel tri-pick';
+  const opt0 = document.createElement('option');
+  opt0.value = ''; opt0.textContent = tags.length ? '既存から選ぶ…' : '既存タグなし';
+  pick.appendChild(opt0);
+  for (const { tag, count } of tags){
+    const o = document.createElement('option');
+    o.value = tag; o.textContent = '#' + tag + '（' + count + '）';
+    pick.appendChild(o);
+  }
+  pick.disabled = !tags.length;
   const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'tri-tags';
-  inp.placeholder = '空白区切り（#不要）';
-  const apply = () => {
-    const tags = inp.value.split(/[\s,]+/).filter(Boolean);
-    if (!tags.length) return;
-    const b = store.getBody(g.headBodyId); if (!b) return;
-    const next = withTags(b.content, tags);
-    if (next === b.content){ inp.value = ''; return; }
-    store.updateBody(g.headBodyId, { content: next });
+  inp.placeholder = '空白区切り（#不要）'; inp.value = pend.tags || '';
+  pick.onchange = () => {
+    if (!pick.value) return;
+    const cur = parseTagInput(inp.value);
+    if (!cur.includes(pick.value)) cur.push(pick.value);
+    setPending(state, g.headBodyId, { tags: cur.join(' ') });
     requestRender();
   };
-  inp.onkeydown = (e) => { if (e.key === 'Enter'){ e.preventDefault(); apply(); } };
-  inp.onblur = apply;
-  t.appendChild(inp); tr.appendChild(t);
+  inp.oninput = () => setPending(state, g.headBodyId, { tags: inp.value });   // 再描画しない（caret を保つ）
+  t.appendChild(pick); t.appendChild(inp); tr.appendChild(t);
+
+  // OK（明示的に確定）と 済（タグ不要と判断）
+  const ok = document.createElement('td'); ok.className = 'c-ok';
+  const tagList = parseTagInput(pend.tags);
+  const btn = document.createElement('button'); btn.type = 'button';
+  btn.className = 'tri-btn tri-ok'; btn.textContent = 'OK';
+  btn.disabled = !pend.proj && !tagList.length;
+  btn.title = btn.disabled ? 'プロジェクトかタグを指定してください' : 'この塊に反映する';
+  btn.onclick = () => {
+    const b = store.getBody(g.headBodyId); if (!b) return;
+    const patch = {};
+    if (pend.proj) patch.proj = pend.proj;
+    if (tagList.length){
+      const next = withTags(b.content, tagList);
+      if (next !== b.content) patch.content = next;
+    }
+    if (Object.keys(patch).length) store.updateBody(g.headBodyId, patch);
+    delete state.pending[g.headBodyId];
+    requestRender();
+  };
+  const skip = document.createElement('button'); skip.type = 'button';
+  skip.className = 'tri-btn tri-skip'; skip.textContent = '済';
+  skip.title = 'タグは不要と判断した（「棚卸し済みを表示」で戻せます）';
+  skip.onclick = () => {
+    store.updateBody(g.headBodyId, { triaged: true });
+    delete state.pending[g.headBodyId];
+    requestRender();
+  };
+  ok.appendChild(btn); ok.appendChild(skip); tr.appendChild(ok);
 
   return tr;
 }
