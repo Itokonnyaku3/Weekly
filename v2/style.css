@@ -32,8 +32,12 @@ body{margin:0;font-family:"BIZ UDPGothic",system-ui,sans-serif;background:var(--
 /* 最小デイリービュー */
 .day-sec{margin:0 0 18px;max-width:760px}
 /* 日付の区切り＝目立つバー（上端に吸着）＋折りたたみトグル */
+/* position:sticky で吸着中、上マージンの帯は背景が塗られておらず透明＝スクロールで隠れたはずの前セクションの
+   内容が隙間から透けて見えてしまう。::before で同じ帯を #app の背景色で塗って隙間を封じる（レイアウトは変えない）。 */
 .day-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:7px 12px;margin:16px 0 8px;background:var(--panel);border:1px solid var(--bd);border-left:4px solid var(--accent);border-radius:7px;position:sticky;top:0;z-index:3}
+.day-head::before{content:'';position:absolute;left:0;right:0;top:-16px;height:16px;background:var(--bg)}
 .day-sec:first-child .day-head{margin-top:2px}
+.day-sec:first-child .day-head::before{top:-2px;height:2px}
 .day-tog{flex:none;width:16px;text-align:center;color:var(--tx3);font-size:11px;cursor:pointer;user-select:none}
 .day-tog:hover{color:var(--accent)}
 .day-head-label{flex:1}

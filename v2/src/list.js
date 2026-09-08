@@ -893,21 +893,21 @@ function siblingTaskId(tr){
   if (!n){ n = tr.previousElementSibling; while (n && !(n.dataset && n.dataset.task)) n = n.previousElementSibling; }
   return (n && n.dataset && n.dataset.task) || null;
 }
-// 完了トグルの共通処理。完了非表示中に完了すると行が消えるため、消える前に隣の行を控え、
-// 再描画後は「そのタイトル→隣のタイトル→リスト本体」の順で復帰する（現在の条件selへ飛ばさない）。
+// 完了トグルの共通処理。完了で行が消える（グローバル「完了を隠す」／リスト自体の絞り込み条件のどちらでも起こりうる）ため、
+// 理由を問わず消える前に隣の行を控えておき、再描画後は「そのタイトル→隣のタイトル→リスト本体」の順で復帰する。
 function toggleDone(store, requestRender, t, tr, nextDone){
-  const vanishes = !!(getHideDone() && nextDone && tr);   // この行はこの操作で消える（333行の絞り込みと同じ条件）
-  const neighbor = vanishes ? siblingTaskId(tr) : null;   // 完了で行が消える時だけ隣を控える
+  const globalVanish = !!(getHideDone() && nextDone && tr);   // グローバル「完了を隠す」による退場（演出アニメの対象）
+  const neighbor = tr ? siblingTaskId(tr) : null;   // 消える理由（グローバル/条件どちらでも）を問わず常に復帰先を控える
   const commit = () => {
     store.updateBody(t.id, { done: nextDone });
     requestRender();
-    if (vanishes) showToast('1件を完了にしました（Ctrl+Z で戻せます）');   // 前触れなく消えた印象を消す
+    if (globalVanish) showToast('1件を完了にしました（Ctrl+Z で戻せます）');   // 前触れなく消えた印象を消す
     if (focusTitle(t.id)) return;                  // 通常＝行が残る（完了非表示OFF/未完了へ戻す）
-    if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ
+    if (neighbor && focusTitle(neighbor)) return;  // 行が消えた＝隣の残存タスクへ（リストの絞り込み条件で消えた場合も含む）
     focusListBody();                               // 最後の砦もリスト本体に限定
   };
-  // 消える行だけ退場の演出を挟む（アウトラインと同じ4段・時間は style.css の --t1..--t4）
-  if (vanishes) playDoneOut(tr, commit); else commit();
+  // 退場の演出はグローバル「完了を隠す」で消えるときだけ（アウトラインと同じ4段・時間は style.css の --t1..--t4）
+  if (globalVanish) playDoneOut(tr, commit); else commit();
 }
 function cellStatus(store, requestRender, t){
   const td = document.createElement('td'); td.className = 'c-st';
